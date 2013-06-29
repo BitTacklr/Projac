@@ -1,34 +1,34 @@
 ﻿using System;
+using NUnit.Framework;
 using Projac.Tests.Builders;
-using Xunit;
 
 namespace Projac.Tests {
+  [TestFixture]
   public class SqlStatementCollectorTests {
-    [Fact]
+    [Test]
     public void IsSqlStatementObserver() {
-      Assert.
-        IsAssignableFrom<IObserver<SqlStatement>>(NewCollector().Build());
+      Assert.That(NewCollector().Build(), Is.InstanceOf<IObserver<SqlStatement>>());
     }
 
-    [Fact]
+    [Test]
     public void InitialStatementsAreEmpty() {
-      Assert.Equal(
-        new SqlStatement[0],
-        NewCollector().Build().Statements);
+      Assert.That(
+        NewCollector().Build().Statements,
+        Is.Empty);
     }
 
-    [Fact]
+    [Test]
     public void OnNextCollectsStatement() {
       var sut = NewCollector().Build();
       sut.OnNext(NewStatement().Build());
-      Assert.Equal(
-        new [] {
+      Assert.That(
+        sut.Statements,
+        Is.EquivalentTo(new[] {
           NewStatement().Build(), 
-        },
-        sut.Statements);
+        }));
     }
 
-    [Fact]
+    [Test]
     public void OnNextAppendsToExistingStatements() {
       var sut = NewCollector().
         WithStatements(new[] {
@@ -37,21 +37,21 @@ namespace Projac.Tests {
         }).
         Build();
       sut.OnNext(NewStatement().WithText("Text3").Build());
-      Assert.Equal(
-        new[] {
-          NewStatement().WithText("Text1").Build(), 
-          NewStatement().WithText("Text2").Build(),
-          NewStatement().WithText("Text3").Build() 
-        },
-        sut.Statements);
+      Assert.That(
+        sut.Statements, Is.EquivalentTo(
+          new[] {
+            NewStatement().WithText("Text1").Build(),
+            NewStatement().WithText("Text2").Build(),
+            NewStatement().WithText("Text3").Build()
+          }));
     }
 
-    [Fact]
+    [Test]
     public void OnErrorDoesNotThrow() {
       Assert.DoesNotThrow(() => NewCollector().Build().OnError(new Exception()));
     }
 
-    [Fact]
+    [Test]
     public void OnCompletedDoesNotThrow() {
       Assert.DoesNotThrow(() => NewCollector().Build().OnCompleted());
     }

@@ -1,38 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 using Projac.Tests.Builders;
-using Xunit;
 
 namespace Projac.Tests {
+  [TestFixture]
   public class SqlTests {
-    [Fact]
+    [Test]
     public void TextOnlyStatementReturnsInstanceWithExpectedTextAndNoParameters() {
-      Assert.Equal(
-        New().
+      Assert.That(
+        Sql.Statement("Text"),
+        Is.EqualTo(New().
           WithText("Text").
           WithParameters(new Tuple<string, object>[0]).
-          Build(),
-        Sql.Statement("Text"));
+          Build()));
     }
 
-    [Fact]
+    [Test]
     public void ParameterizedStatementReturnsInstanceWithExtractedPropertiesAsParameters() {
-      Assert.Equal(
-        New().
+      Assert.That(
+        Sql.Statement("Text", AllSupportedDataTypesAsAnonymousParameter()),
+        Is.EqualTo(New().
           WithText("Text").
           WithParameters(AllSupportedDataTypesAsParameters()).
-          Build(),
-        Sql.Statement("Text", AllSupportedDataTypesAsAnonymousParameter()));
+          Build()));
     }
 
-    [Fact]
+    [Test]
     public void ParameterizedStatementReturnsInstanceWithEmptyParameters() {
-      Assert.Equal(
-        New().
+      Assert.That(
+        Sql.Statement("Text", new {}),
+        Is.EqualTo(New().
           WithText("Text").
           WithParameters(new Tuple<string, object>[0]).
-          Build(),
-        Sql.Statement("Text", new {}));
+          Build()));
     }
 
     private static IEnumerable<Tuple<string, object>> AllSupportedDataTypesAsParameters() {

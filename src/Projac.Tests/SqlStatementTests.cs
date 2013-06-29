@@ -1,45 +1,48 @@
 ﻿using System;
+using NUnit.Framework;
 using Projac.Tests.Builders;
-using Xunit;
 
 namespace Projac.Tests {
+  [TestFixture]
   public class SqlStatementTests {
-    [Fact]
+    [Test]
     public void TextCannotBeNull() {
       Assert.Throws<ArgumentNullException>(() => New().WithText(null).Build());
     }
 
-    [Fact]
+    [Test]
     public void ParametersCanNotBeNull() {
       Assert.Throws<ArgumentNullException>(() => New().WithParameters(null).Build());
     }
 
-    [Fact]
+    [Test]
     public void TextReturnsExpectedInitialValue() {
-      Assert.Equal("Text", New().WithText("Text").Build().Text);
+      Assert.That(New().WithText("Text").Build().Text, Is.EqualTo("Text"));
     }
 
-    [Fact]
+    [Test]
     public void ParametersReturnsExpectedInitialValue() {
-      Assert.Equal(new[] {
-        new Tuple<string, object>("P1", DBNull.Value),
-        new Tuple<string, object>("P2", "Test"),
-      }, New().WithParameters(new[] {
-        new Tuple<string, object>("P1", DBNull.Value),
-        new Tuple<string, object>("P2", "Test"),
-      }).Build().Parameters);
+      Assert.That(
+        New().WithParameters(new[] {
+          new Tuple<string, object>("P1", DBNull.Value),
+          new Tuple<string, object>("P2", "Test"),
+        }).Build().Parameters,
+        Is.EqualTo(new[] {
+          new Tuple<string, object>("P1", DBNull.Value),
+          new Tuple<string, object>("P2", "Test"),
+        }));
     }
 
-    [Fact]
+    [Test]
     public void EmptyParametersReturnsExpectedInitialValue() {
-      Assert.Equal(
-        new Tuple<string, object>[0],
-        New().WithParameters(new Tuple<string, object>[0]).Build().Parameters);
+      Assert.That(
+        New().WithParameters(new Tuple<string, object>[0]).Build().Parameters,
+        Is.EqualTo(new Tuple<string, object>[0]));
     }
 
-    [Fact]
+    [Test]
     public void TwoInstancesAreEqualWhenTheyHaveTheSameTextAndProperties() {
-      Assert.Equal(
+      Assert.That(
         New().
           WithText("Text").
           WithParameters(new[] {
@@ -47,72 +50,72 @@ namespace Projac.Tests {
             new Tuple<string, object>("P2", "Test"),
           }).
           Build(),
-        New().
+        Is.EqualTo(New().
           WithText("Text").
           WithParameters(new[] {
             new Tuple<string, object>("P1", DBNull.Value),
             new Tuple<string, object>("P2", "Test"),
           }).
-          Build());
+          Build()));
     }
 
-    [Fact]
+    [Test]
     public void TwoInstancesAreNotEqualWhenTheirTextDiffers() {
-      Assert.NotEqual(
+      Assert.That(
         New().WithText("Text1").Build(),
-        New().WithText("Text2").Build());
+        Is.Not.EqualTo(New().WithText("Text2").Build()));
     }
 
-    [Fact]
+    [Test]
     public void TwoInstancesAreNotEqualWhenTheirParameterNamesDiffer() {
-      Assert.NotEqual(
+      Assert.That(
         New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", DBNull.Value)
           }).
           Build(),
-        New().
+        Is.Not.EqualTo(New().
           WithParameters(new[] {
             new Tuple<string, object>("P2", DBNull.Value)
           }).
-          Build());
+          Build()));
     }
 
-    [Fact]
+    [Test]
     public void TwoInstancesAreNotEqualWhenTheirParameterValuesDiffer() {
-      Assert.NotEqual(
+      Assert.That(
         New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", 0)
           }).
           Build(),
-        New().
+        Is.Not.EqualTo(New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", DBNull.Value)
           }).
-          Build());
+          Build()));
     }
 
-    [Fact]
+    [Test]
     public void TwoInstancesAreNotEqualWhenTheirParameterCountsDiffer() {
-      Assert.NotEqual(
+      Assert.That(
         New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", 0),
             new Tuple<string, object>("P2", 0)
           }).
           Build(),
-        New().
+        Is.Not.EqualTo(New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", 0)
           }).
-          Build());
+          Build()));
     }
 
 
-    [Fact]
+    [Test]
     public void TwoInstancesHaveTheSameHashCodeWhenTheyHaveTheSameTextAndProperties() {
-      Assert.Equal(
+      Assert.That(
         New().
           WithText("Text").
           WithParameters(new[] {
@@ -120,66 +123,66 @@ namespace Projac.Tests {
             new Tuple<string, object>("P2", "Test"),
           }).
           Build().GetHashCode(),
-        New().
+        Is.EqualTo(New().
           WithText("Text").
           WithParameters(new[] {
             new Tuple<string, object>("P1", DBNull.Value),
             new Tuple<string, object>("P2", "Test"),
           }).
-          Build().GetHashCode());
+          Build().GetHashCode()));
     }
 
-    [Fact]
+    [Test]
     public void TwoInstancesDoNotHaveTheSameHashCodeWhenTheirTextDiffers() {
-      Assert.NotEqual(
+      Assert.That(
         New().WithText("Text1").Build().GetHashCode(),
-        New().WithText("Text2").Build().GetHashCode());
+        Is.Not.EqualTo(New().WithText("Text2").Build().GetHashCode()));
     }
 
-    [Fact]
+    [Test]
     public void TwoInstancesDoNotHaveTheSameHashCodeWhenTheirParameterNamesDiffer() {
-      Assert.NotEqual(
+      Assert.That(
         New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", DBNull.Value)
           }).
           Build().GetHashCode(),
-        New().
+        Is.Not.EqualTo(New().
           WithParameters(new[] {
             new Tuple<string, object>("P2", DBNull.Value)
           }).
-          Build().GetHashCode());
+          Build().GetHashCode()));
     }
 
-    [Fact]
+    [Test]
     public void TwoInstancesDoNotHaveTheSameHashCodeWhenTheirParameterValuesDiffer() {
-      Assert.NotEqual(
+      Assert.That(
         New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", 0)
           }).
           Build().GetHashCode(),
-        New().
+        Is.Not.EqualTo(New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", DBNull.Value)
           }).
-          Build().GetHashCode());
+          Build().GetHashCode()));
     }
 
-    [Fact]
+    [Test]
     public void TwoInstancesDoNotHaveTheSameHashCodeWhenTheirParameterCountsDiffer() {
-      Assert.NotEqual(
+      Assert.That(
         New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", 0),
             new Tuple<string, object>("P2", 0)
           }).
           Build().GetHashCode(),
-        New().
+        Is.Not.EqualTo(New().
           WithParameters(new[] {
             new Tuple<string, object>("P1", 0)
           }).
-          Build().GetHashCode());
+          Build().GetHashCode()));
     }
 
     private static SqlStatementBuilder New() {

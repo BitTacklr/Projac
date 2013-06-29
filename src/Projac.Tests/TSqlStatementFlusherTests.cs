@@ -1,26 +1,26 @@
 ﻿using System;
-using System.Data.SqlClient;
+using NUnit.Framework;
 using Projac.Tests.Builders;
-using Xunit;
 
 namespace Projac.Tests {
+  [TestFixture]
   public class TSqlStatementFlusherTests {
-    [Fact]
+    [Test]
     public void IsSqlStatementFlusher() {
-      Assert.IsAssignableFrom<ISqlStatementFlusher>(NewFlusher().Build());
+      Assert.That(NewFlusher().Build(), Is.InstanceOf<ISqlStatementFlusher>());
     }
 
-    [Fact]
+    [Test]
     public void SqlConnectionStringBuilderCanNotBeNull() {
       Assert.Throws<ArgumentNullException>(() => NewFlusher().WithConnectionStringBuilder(null).Build());
     }
 
-    [Fact]
+    [Test]
     public void FlushSqlStatementsCanNotBeNull() {
       Assert.Throws<ArgumentNullException>(() => NewFlusher().Build().Flush(null));
     }
 
-    [Fact]
+    [Test]
     public void FlushingNoSqlStatementsDoesNothing() {
       Assert.DoesNotThrow(() => NewFlusher().Build().Flush(new SqlStatement[0]));
     }
@@ -29,7 +29,7 @@ namespace Projac.Tests {
     //Need to figure out how I'm going to organize that
 
 #if WORKSONMYMACHINE
-    [Fact]
+    [Test]
     public void IntegrationTest() {
       var builder = new SqlConnectionStringBuilder {
         DataSource = "(localdb)\\Projects",
