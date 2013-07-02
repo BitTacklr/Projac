@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!-- 
+This tokenized .nuspec manifest file is targeting the latest NuGet namespace,
+which ensures you can benefit from the latest packaging features.
+
+If desired, you can change the XML-namespace and target the original XSD.
+To do so, replace the current package declaration by the following:
+
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+
+Run "nuget.exe pack <project>" to build a nuget package for this project
+using this tokenized nuspec file.
+
+-->
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Projac</id>
+    <version>0.0.0</version>
+    <authors>Yves Reynhout</authors>
+    <owners>Yves Reynhout</owners>
+    <title>Projac</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
+    <description>Projac provides lightweight infrastructure for collecting statements that manipulate a sql based read model.</description>
+    <projectUrl>https://github.com/yreynhout/AggregateSource</projectUrl>
+    <releaseNotes>A first release. Warning! The API is still in flux.</releaseNotes>
+    <copyright>Copyright 2013, BitTacklr. All rights reserved.</copyright>
+    <tags>eventsourcing DDDesign</tags>
+  </metadata>
+  <files>
+    <file src="output\Projac.dll" target="lib\net45\Projac.dll" />
+    <file src="output\Projac.pdb" target="lib\net45\Projac.pdb" />
+    <file src="output\Projac.xml" target="lib\net45\Projac.xml" />
+    <file src="..\src\Projac\*.cs" target="src\Projac" />
+    <file src="..\src\Projac\Properties\*.cs" target="src\Projac\Properties" />
+  </files>
+</package>
