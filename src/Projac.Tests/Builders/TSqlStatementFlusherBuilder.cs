@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using Projac.SqlServer;
 
 namespace Projac.Tests.Builders {
   public class TSqlStatementFlusherBuilder {

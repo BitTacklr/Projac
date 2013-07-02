@@ -1,4 +1,4 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("Projac")]
+[assembly: AssemblyTitle("Projac.SqlServer")]
 [assembly: AssemblyDescription("")]

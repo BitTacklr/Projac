@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac", "Projac\Projac.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.Tests", "Projac.Tests\Projac.Tests.csproj", "{CDFFD254-1A58-430E-8298-4C873A0F1849}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.SqlServer", "Projac.SqlServer\Projac.SqlServer.csproj", "{0A1567B8-9B58-4AA7-9FDE-3252C336893D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{CDFFD254-1A58-430E-8298-4C873A0F1849}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDFFD254-1A58-430E-8298-4C873A0F1849}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDFFD254-1A58-430E-8298-4C873A0F1849}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A1567B8-9B58-4AA7-9FDE-3252C336893D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A1567B8-9B58-4AA7-9FDE-3252C336893D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A1567B8-9B58-4AA7-9FDE-3252C336893D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A1567B8-9B58-4AA7-9FDE-3252C336893D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

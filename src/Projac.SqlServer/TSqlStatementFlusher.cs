@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Projac {
+namespace Projac.SqlServer {
   public class TSqlStatementFlusher : ISqlStatementFlusher {
     private readonly SqlConnectionStringBuilder _builder;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TSqlStatementFlusher"/> class.
+    /// </summary>
+    /// <param name="builder">The connection string builder.</param>
+    /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="builder"/> is <c>null</c>.</exception>
     public TSqlStatementFlusher(SqlConnectionStringBuilder builder) {
       if (builder == null) throw new ArgumentNullException("builder");
       _builder = builder;
@@ -27,6 +32,7 @@ namespace Projac {
               while (moved) {
                 var statement = enumerator.Current;
                 command.CommandText = statement.Text;
+                command.Parameters.Clear();
                 foreach (var parameter in statement.Parameters) {
                   command.Parameters.AddWithValue("@" + parameter.Item1, parameter.Item2);
                 }

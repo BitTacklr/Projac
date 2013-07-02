@@ -21,6 +21,10 @@ namespace Projac.Tests.Builders {
       return this;
     }
 
+    public SqlStatementBuilder WithEmptyParameters() {
+      return WithParameters(new Tuple<string, object>[0]);
+    }
+
     public SqlStatement Build() {
       return new SqlStatement(_text, _parameters);  
     }

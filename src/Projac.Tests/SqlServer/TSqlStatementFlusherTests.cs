@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Projac.Tests.Builders;
 
-namespace Projac.Tests {
+namespace Projac.Tests.SqlServer {
   [TestFixture]
   public class TSqlStatementFlusherTests {
     [Test]
