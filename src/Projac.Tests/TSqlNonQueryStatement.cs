@@ -32,6 +32,12 @@ namespace Projac.Tests
         }
 
         [Test]
+        public void ParameterCountLimitedTo2098()
+        {
+            Assert.Throws<ArgumentException>(() => SutFactory(new SqlParameter[2099]));
+        }
+
+        [Test]
         public void PropertiesReturnExpectedValues()
         {
             var sut = SutFactory("text", new SqlParameter[0]);

@@ -10,6 +10,7 @@ namespace Projac
     {
         private readonly string _text;
         private readonly SqlParameter[] _parameters;
+        const int MaxParameterCount = 2098;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TSqlNonQueryStatement"/> class.
@@ -19,8 +20,14 @@ namespace Projac
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="text"/> or <paramref name="parameters"/> is <c>null</c>.</exception>
         public TSqlNonQueryStatement(string text, SqlParameter[] parameters)
         {
-            if (text == null) throw new ArgumentNullException("text");
-            if (parameters == null) throw new ArgumentNullException("parameters");
+            if (text == null) 
+                throw new ArgumentNullException("text");
+            if (parameters == null) 
+                throw new ArgumentNullException("parameters");
+            if (parameters.Length > MaxParameterCount)
+                throw new ArgumentException(
+                    string.Format("The parameter count is limited to {0}.", MaxParameterCount),
+                    "parameters");
             _text = text;
             _parameters = parameters;
         }

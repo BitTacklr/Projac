@@ -62,6 +62,7 @@
     <Compile Include="TSqlUniqueIdentifierValueTests.cs" />
     <Compile Include="TSqlVarCharSizeTest.cs" />
     <Compile Include="TSqlVarCharValueTests.cs" />
+    <Compile Include="Usage\TSqlNonQueryStatementFlusher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
