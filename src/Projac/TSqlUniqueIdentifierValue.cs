@@ -32,7 +32,7 @@ namespace Projac
             return new SqlParameter(
                 parameterName,
                 SqlDbType.UniqueIdentifier,
-                8,
+                16,
                 ParameterDirection.Input,
                 false,
                 0,

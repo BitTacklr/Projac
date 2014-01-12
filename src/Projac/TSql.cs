@@ -1,4 +1,6 @@
-﻿namespace Projac
+﻿using System;
+
+namespace Projac
 {
     /// <summary>
     /// Fluent T-SQL syntax.
@@ -6,54 +8,110 @@
     public static class TSql
     {
         /// <summary>
-        /// Returns the NULL parameter value.
+        /// Returns a NULL parameter value.
         /// </summary>
-        /// <returns>A <see cref="TSqlNullValue"/> instance.</returns>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
         public static ITSqlParameterValue Null()
         {
             return TSqlNullValue.Instance;
         }
 
         /// <summary>
-        /// Returns the VARCHAR parameter value.
+        /// Returns a VARCHAR parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <param name="size">The parameter size.</param>
-        /// <returns>A <see cref="TSqlVarCharValue"/>.</returns>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
         public static ITSqlParameterValue VarChar(string value, TSqlVarCharSize size)
         {
-            return new TSqlVarCharValue(value, size);
+            return value == null ? 
+                Null() : 
+                new TSqlVarCharValue(value, size);
         }
 
         /// <summary>
-        /// Returns the VARCHAR(MAX) parameter value.
+        /// Returns a VARCHAR(MAX) parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="TSqlVarCharValue"/>.</returns>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
         public static ITSqlParameterValue VarCharMax(string value)
         {
-            return new TSqlVarCharValue(value, TSqlVarCharSize.Max);
+            return value == null ? 
+                Null() : 
+                new TSqlVarCharValue(value, TSqlVarCharSize.Max);
         }
 
         /// <summary>
-        /// Returns the NVARCHAR parameter value.
+        /// Returns a NVARCHAR parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <param name="size">The parameter size.</param>
-        /// <returns>A <see cref="TSqlNVarCharValue"/>.</returns>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
         public static ITSqlParameterValue NVarChar(string value, TSqlNVarCharSize size)
         {
-            return new TSqlNVarCharValue(value, size);
+            return value == null ?
+                Null() : 
+                new TSqlNVarCharValue(value, size);
         }
 
         /// <summary>
-        /// Returns the NVARCHAR(MAX) parameter value.
+        /// Returns a NVARCHAR(MAX) parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="TSqlNVarCharValue"/>.</returns>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
         public static ITSqlParameterValue NVarCharMax(string value)
         {
-            return new TSqlNVarCharValue(value, TSqlNVarCharSize.Max);
+            return value == null ?
+                Null() : 
+                new TSqlNVarCharValue(value, TSqlNVarCharSize.Max);
+        }
+
+        /// <summary>
+        /// Returns a BIGINT parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue BigInt(long? value)
+        {
+            return !value.HasValue
+                ? Null()
+                : new TSqlBigIntValue(value.Value);
+        }
+
+        /// <summary>
+        /// Returns a INT parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue Int(int? value)
+        {
+            return !value.HasValue
+                ? Null()
+                : new TSqlIntValue(value.Value);
+        }
+
+        /// <summary>
+        /// Returns a BIT parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue Bit(bool? value)
+        {
+            return !value.HasValue
+                ? Null()
+                : new TSqlBitValue(value.Value);
+        }
+
+        /// <summary>
+        /// Returns a UNIQUEIDENTIFIER parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue UniqueIdentifier(Guid? value)
+        {
+            return !value.HasValue
+                ? Null()
+                : new TSqlUniqueIdentifierValue(value.Value);
         }
     }
 }
