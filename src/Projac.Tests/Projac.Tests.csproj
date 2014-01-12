@@ -49,9 +49,11 @@
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Framework\SqlParameterAssertions.cs" />
+    <Compile Include="Framework\SqlParameterEqualityComparer.cs" />
     <Compile Include="TSqlBigIntValueTests.cs" />
     <Compile Include="TSqlBitValueTests.cs" />
     <Compile Include="TSqlIntValueTests.cs" />
+    <Compile Include="TSqlNonQueryStatement.cs" />
     <Compile Include="TSqlNullValueTests.cs" />
     <Compile Include="TSqlNVarCharSizeTest.cs" />
     <Compile Include="TSqlNVarCharValueTests.cs" />

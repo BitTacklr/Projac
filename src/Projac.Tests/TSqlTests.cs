@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using NUnit.Framework;
+using Projac.Tests.Framework;
 
 namespace Projac.Tests
 {
@@ -106,6 +109,39 @@ namespace Projac.Tests
         public void UniqueIdentifierNullReturnsExpectedInstance()
         {
             Assert.That(TSql.UniqueIdentifier(null), Is.EqualTo(TSqlNullValue.Instance));
+        }
+
+        [TestCaseSource("StatementCases")]
+        public void StatementReturnsExpectedInstance(TSqlNonQueryStatement actual, TSqlNonQueryStatement expected)
+        {
+            Assert.That(actual.Text, Is.EqualTo(expected.Text));
+            Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
+        }
+
+        private IEnumerable<TestCaseData> StatementCases()
+        {
+            yield return new TestCaseData(
+                TSql.Statement("text"),
+                new TSqlNonQueryStatement("text", new SqlParameter[0]));
+            yield return new TestCaseData(
+                TSql.Statement("text", parameters: null),
+                new TSqlNonQueryStatement("text", new SqlParameter[0]));
+            yield return new TestCaseData(
+                TSql.Statement("text", new { }),
+                new TSqlNonQueryStatement("text", new SqlParameter[0]));
+            yield return new TestCaseData(
+                TSql.Statement("text", new { Parameter = TSql.Bit(true) }),
+                new TSqlNonQueryStatement("text", new []
+                {
+                    new TSqlBitValue(true).ToSqlParameter("@Parameter")
+                }));
+            yield return new TestCaseData(
+                TSql.Statement("text", new { Parameter1 = TSql.Bit(true), Parameter2 = TSql.Bit(null) }),
+                new TSqlNonQueryStatement("text", new[]
+                {
+                    new TSqlBitValue(true).ToSqlParameter("@Parameter1"),
+                    TSqlNullValue.Instance.ToSqlParameter("@Parameter2")
+                }));
         }
     }
 }

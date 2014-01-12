@@ -50,6 +50,7 @@
     <Compile Include="TSqlBigIntValue.cs" />
     <Compile Include="TSqlBitValue.cs" />
     <Compile Include="TSqlIntValue.cs" />
+    <Compile Include="TSqlNonQueryStatement.cs" />
     <Compile Include="TSqlNullValue.cs" />
     <Compile Include="TSqlNVarCharSize.cs" />
     <Compile Include="TSqlNVarCharValue.cs" />

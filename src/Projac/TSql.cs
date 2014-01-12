@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Reflection;
 
 namespace Projac
 {
@@ -24,8 +27,8 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
         public static ITSqlParameterValue VarChar(string value, TSqlVarCharSize size)
         {
-            return value == null ? 
-                Null() : 
+            return value == null ?
+                Null() :
                 new TSqlVarCharValue(value, size);
         }
 
@@ -36,8 +39,8 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
         public static ITSqlParameterValue VarCharMax(string value)
         {
-            return value == null ? 
-                Null() : 
+            return value == null ?
+                Null() :
                 new TSqlVarCharValue(value, TSqlVarCharSize.Max);
         }
 
@@ -50,7 +53,7 @@ namespace Projac
         public static ITSqlParameterValue NVarChar(string value, TSqlNVarCharSize size)
         {
             return value == null ?
-                Null() : 
+                Null() :
                 new TSqlNVarCharValue(value, size);
         }
 
@@ -62,7 +65,7 @@ namespace Projac
         public static ITSqlParameterValue NVarCharMax(string value)
         {
             return value == null ?
-                Null() : 
+                Null() :
                 new TSqlNVarCharValue(value, TSqlNVarCharSize.Max);
         }
 
@@ -112,6 +115,37 @@ namespace Projac
             return !value.HasValue
                 ? Null()
                 : new TSqlUniqueIdentifierValue(value.Value);
+        }
+
+
+        /// <summary>
+        /// Returns a T-SQL non query statement.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A <see cref="TSqlNonQueryStatement"/>.</returns>
+        public static TSqlNonQueryStatement Statement(string text, object parameters = null)
+        {
+            return new TSqlNonQueryStatement(text, Collect(parameters));
+        }
+
+        private static SqlParameter[] Collect(object parameters)
+        {
+            if (parameters == null)
+                return new SqlParameter[0];
+            return parameters.
+                GetType().
+                GetProperties(BindingFlags.Instance | BindingFlags.Public).
+                Where(property => typeof(ITSqlParameterValue).IsAssignableFrom(property.PropertyType)).
+                Select(property =>
+                    ((ITSqlParameterValue)property.GetGetMethod().Invoke(parameters, null)).
+                        ToSqlParameter(FormatSqlParameterName(property.Name))).
+                ToArray();
+        }
+
+        private static string FormatSqlParameterName(string name)
+        {
+            return "@" + name;
         }
     }
 }
