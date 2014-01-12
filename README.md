@@ -2,7 +2,7 @@
 
 Projac provides a set of simple abstractions that allow one to write projections targeting Microsoft SQL Server databases. It doesn't shove any ```IEventHandler<T>```, ```IHandle<T>```, or ```IMessageHandler<T>``` down your throat. Use your own or the ones provided by the framework you're integrating with.
 
-It stills needs a lot of ironing, but it's a start.
+It stills needs a lot of ironing, but it's a start. It's on [NuGet](https://www.nuget.org/packages/Projac/) already.
 
 ## TSqlNonQueryStatement
 
