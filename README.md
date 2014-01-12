@@ -10,7 +10,7 @@ Abstracts the text and the parameters to be sent to the database. Only non-query
 
 ## TSql
 
-Syntactic sugar for writing SQL statements/procedures in the projection handlers. Parameters can be defined by passing in either an anonymously typed object or a strongly typed one. Properties magically become parameters of the SQL statement.
+Syntactic sugar for writing SQL statements in the projection handlers. Parameters can be defined by passing in either an anonymously typed object or a strongly typed one. Properties magically become parameters of the SQL statement.
 
 ```csharp
 TSql.Statement(
