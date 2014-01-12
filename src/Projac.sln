@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac", "Projac\Projac.csproj", "{359863ED-13EA-4C04-BF6F-C9CF611A7129}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.Tests", "Projac.Tests\Projac.Tests.csproj", "{CDFFD254-1A58-430E-8298-4C873A0F1849}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.SqlServer", "Projac.SqlServer\Projac.SqlServer.csproj", "{0A1567B8-9B58-4AA7-9FDE-3252C336893D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{CDFFD254-1A58-430E-8298-4C873A0F1849}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDFFD254-1A58-430E-8298-4C873A0F1849}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDFFD254-1A58-430E-8298-4C873A0F1849}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A1567B8-9B58-4AA7-9FDE-3252C336893D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A1567B8-9B58-4AA7-9FDE-3252C336893D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A1567B8-9B58-4AA7-9FDE-3252C336893D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A1567B8-9B58-4AA7-9FDE-3252C336893D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,7 +19,6 @@
     <MSBuild 
       Projects="
         $(SourcePath)\Projac\Projac.csproj;
-        $(SourcePath)\Projac.SqlServer\Projac.SqlServer.csproj;
         $(SourcePath)\Projac.Tests\Projac.Tests.csproj;"
       BuildInParallel="true" 
       Properties="Configuration=Release;OutputPath=$(MSBuildProjectDirectory)\output"

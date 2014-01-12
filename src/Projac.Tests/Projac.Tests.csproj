@@ -40,18 +40,6 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Reactive.Core">
-      <HintPath>..\packages\Rx-Core.2.1.30214.0\lib\Net45\System.Reactive.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces">
-      <HintPath>..\packages\Rx-Interfaces.2.1.30214.0\lib\Net45\System.Reactive.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Linq">
-      <HintPath>..\packages\Rx-Linq.2.1.30214.0\lib\Net45\System.Reactive.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.PlatformServices">
-      <HintPath>..\packages\Rx-PlatformServices.2.1.30214.0\lib\Net45\System.Reactive.PlatformServices.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -60,23 +48,22 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Builders\SqlStatementBuilder.cs" />
-    <Compile Include="Builders\SqlStatementCollectorBuilder.cs" />
-    <Compile Include="Builders\TSqlStatementFlusherBuilder.cs" />
-    <Compile Include="SqlStatementCollectorTests.cs" />
-    <Compile Include="SqlServer\TSqlStatementFlusherTests.cs" />
-    <Compile Include="SqlStatementTests.cs" />
+    <Compile Include="Framework\SqlParameterAssertions.cs" />
+    <Compile Include="TSqlBigIntValueTests.cs" />
+    <Compile Include="TSqlBitValueTests.cs" />
+    <Compile Include="TSqlIntValueTests.cs" />
+    <Compile Include="TSqlNullValueTests.cs" />
+    <Compile Include="TSqlNVarCharSizeTest.cs" />
+    <Compile Include="TSqlNVarCharValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlTests.cs" />
+    <Compile Include="TSqlTests.cs" />
+    <Compile Include="TSqlVarCharSizeTest.cs" />
+    <Compile Include="TSqlVarCharValueTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Projac.SqlServer\Projac.SqlServer.csproj">
-      <Project>{0a1567b8-9b58-4aa7-9fde-3252c336893d}</Project>
-      <Name>Projac.SqlServer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Projac\Projac.csproj">
       <Project>{359863ed-13ea-4c04-bf6f-c9cf611a7129}</Project>
       <Name>Projac</Name>

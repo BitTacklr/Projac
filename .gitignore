@@ -11,7 +11,7 @@
 *.sln.docstates
 *.log
 output
-TestRunResult.xml
+nunit_output.xml
 
 # Build results
 [Dd]ebug/

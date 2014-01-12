@@ -20,9 +20,10 @@
 
     <NUnit
         Assemblies="@(AssembliesToTest)"
-        ToolPath="$(PackagesPath)\NUnit.Runners.2.6.2\tools"
+        ToolPath="$(PackagesPath)\NUnit.Runners.2.6.3\tools"
         Force32Bit="true"
         ContinueOnError="false"
-        OutputXmlFile="$(MSBuildProjectDirectory)\TestRunResult.xml"/>
+        Framework="4.0"
+        OutputXmlFile="$(MSBuildProjectDirectory)\nunit_output.xml"/>
   </Target>
 </Project>
