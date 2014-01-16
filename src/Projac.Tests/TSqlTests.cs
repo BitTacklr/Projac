@@ -111,11 +111,47 @@ namespace Projac.Tests
             Assert.That(TSql.UniqueIdentifier(null), Is.EqualTo(TSqlNullValue.Instance));
         }
 
+        [Test]
+        public void BinaryReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Binary(new byte[]{ 1,2,3}, 123), Is.EqualTo(new TSqlBinaryValue(new byte[] { 1, 2 , 3}, new TSqlBinarySize(123))));
+        }
+
+        [Test]
+        public void BinaryNullReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Binary(null, 123), Is.EqualTo(TSqlNullValue.Instance));
+        }
+
         [TestCaseSource("StatementCases")]
         public void StatementReturnsExpectedInstance(TSqlNonQueryStatement actual, TSqlNonQueryStatement expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
+        }
+
+        [Test]
+        public void VarBinaryReturnsExpectedInstance()
+        {
+            Assert.That(TSql.VarBinary(new byte[] { 1, 2, 3 }, 123), Is.EqualTo(new TSqlVarBinaryValue(new byte[] { 1, 2, 3 }, new TSqlVarBinarySize(123))));
+        }
+
+        [Test]
+        public void VarBinaryNullReturnsExpectedInstance()
+        {
+            Assert.That(TSql.VarBinary(null, 123), Is.EqualTo(TSqlNullValue.Instance));
+        }
+
+        [Test]
+        public void VarBinaryMaxReturnsExpectedInstance()
+        {
+            Assert.That(TSql.VarBinaryMax(new byte[] { 1, 2, 3 }), Is.EqualTo(new TSqlVarBinaryValue(new byte[] { 1, 2, 3 }, TSqlVarBinarySize.Max)));
+        }
+
+        [Test]
+        public void VarBinaryMaxNullReturnsExpectedInstance()
+        {
+            Assert.That(TSql.VarBinaryMax(null), Is.EqualTo(TSqlNullValue.Instance));
         }
 
         private IEnumerable<TestCaseData> StatementCases()

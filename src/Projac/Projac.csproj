@@ -48,6 +48,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TSql.cs" />
     <Compile Include="TSqlBigIntValue.cs" />
+    <Compile Include="TSqlBinarySize.cs" />
+    <Compile Include="TSqlBinaryValue.cs" />
     <Compile Include="TSqlBitValue.cs" />
     <Compile Include="TSqlIntValue.cs" />
     <Compile Include="TSqlNonQueryStatement.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="TSqlNVarCharSize.cs" />
     <Compile Include="TSqlNVarCharValue.cs" />
     <Compile Include="TSqlUniqueIdentifierValue.cs" />
+    <Compile Include="TSqlVarBinarySize.cs" />
     <Compile Include="TSqlVarCharSize.cs" />
     <Compile Include="TSqlVarCharValue.cs" />
   </ItemGroup>

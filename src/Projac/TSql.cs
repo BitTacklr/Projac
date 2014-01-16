@@ -117,6 +117,43 @@ namespace Projac
                 : new TSqlUniqueIdentifierValue(value.Value);
         }
 
+        /// <summary>
+        /// Returns a BINARY parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <param name="size">The parameter size.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue Binary(byte[] value, TSqlBinarySize size)
+        {
+            return value == null
+                ? Null()
+                : new TSqlBinaryValue(value, size);
+        }
+
+        /// <summary>
+        /// Returns a VARBINARY parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <param name="size">The parameter size.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue VarBinary(byte[] value, TSqlVarBinarySize size)
+        {
+            return value == null
+                ? Null()
+                : new TSqlVarBinaryValue(value, size);
+        }
+
+        /// <summary>
+        /// Returns a VARBINARY parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue VarBinaryMax(byte[] value)
+        {
+            return value == null
+                ? Null()
+                : new TSqlVarBinaryValue(value, TSqlVarBinarySize.Max);
+        }
 
         /// <summary>
         /// Returns a T-SQL non query statement.
