@@ -54,6 +54,7 @@
     <Compile Include="TSqlBinarySizeTest.cs" />
     <Compile Include="TSqlBinaryValueTests.cs" />
     <Compile Include="TSqlBitValueTests.cs" />
+    <Compile Include="TSqlDateTimeOffsetValueTests.cs" />
     <Compile Include="TSqlIntValueTests.cs" />
     <Compile Include="TSqlNonQueryStatement.cs" />
     <Compile Include="TSqlNullValueTests.cs" />

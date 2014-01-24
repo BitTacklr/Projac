@@ -51,6 +51,7 @@
     <Compile Include="TSqlBinarySize.cs" />
     <Compile Include="TSqlBinaryValue.cs" />
     <Compile Include="TSqlBitValue.cs" />
+    <Compile Include="TSqlDateTimeOffsetValue.cs" />
     <Compile Include="TSqlIntValue.cs" />
     <Compile Include="TSqlNonQueryStatement.cs" />
     <Compile Include="TSqlNullValue.cs" />

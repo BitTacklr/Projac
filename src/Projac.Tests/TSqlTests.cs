@@ -154,6 +154,19 @@ namespace Projac.Tests
             Assert.That(TSql.VarBinaryMax(null), Is.EqualTo(TSqlNullValue.Instance));
         }
 
+        [Test]
+        public void DateTimeOffsetReturnsExpectedInstance()
+        {
+            var value = DateTimeOffset.UtcNow;
+            Assert.That(TSql.DateTimeOffset(value), Is.EqualTo(new TSqlDateTimeOffsetValue(value)));
+        }
+
+        [Test]
+        public void DateTimeOffsetNullReturnsExpectedInstance()
+        {
+            Assert.That(TSql.DateTimeOffset(null), Is.EqualTo(TSqlNullValue.Instance));
+        }
+
         private IEnumerable<TestCaseData> StatementCases()
         {
             yield return new TestCaseData(

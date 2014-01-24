@@ -118,6 +118,18 @@ namespace Projac
         }
 
         /// <summary>
+        /// Returns a DATETIMEOFFSET parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue DateTimeOffset(DateTimeOffset? value)
+        {
+            return !value.HasValue
+                           ? Null()
+                           : new TSqlDateTimeOffsetValue(value.Value);
+        }
+
+        /// <summary>
         /// Returns a BINARY parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
