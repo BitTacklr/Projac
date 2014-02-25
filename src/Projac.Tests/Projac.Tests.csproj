@@ -61,6 +61,7 @@
     <Compile Include="TSqlNVarCharSizeTest.cs" />
     <Compile Include="TSqlNVarCharValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TSqlQueryStatementTests.cs" />
     <Compile Include="TSqlTests.cs" />
     <Compile Include="TSqlUniqueIdentifierValueTests.cs" />
     <Compile Include="TSqlVarBinarySizeTest.cs" />

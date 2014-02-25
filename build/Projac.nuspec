@@ -10,7 +10,7 @@
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
     <description>Projac provides lightweight infrastructure for producing T-SQL DML statements.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
-    <releaseNotes>A first release. Warning! The API is still in flux.</releaseNotes>
+    <releaseNotes>Breaking Changes: TSql.Statement replaced by TSql.NonQuery. TSql.Query added.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
   </metadata>

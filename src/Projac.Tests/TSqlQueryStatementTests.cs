@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Projac.Tests
 {
     [TestFixture]
-    public class TSqlNonQueryStatementTests
+    public class TSqlQueryStatementTests
     {
         [Test]
         public void TextCanNotBeNull()
@@ -46,19 +46,19 @@ namespace Projac.Tests
             Assert.That(sut.Parameters, Is.EqualTo(new SqlParameter[0]));
         }
 
-        private static TSqlNonQueryStatement SutFactory(string text)
+        private static TSqlQueryStatement SutFactory(string text)
         {
             return SutFactory(text, new SqlParameter[0]);
         }
 
-        private static TSqlNonQueryStatement SutFactory(SqlParameter[] parameters)
+        private static TSqlQueryStatement SutFactory(SqlParameter[] parameters)
         {
             return SutFactory("text", parameters);
         }
 
-        private static TSqlNonQueryStatement SutFactory(string text, SqlParameter[] parameters)
+        private static TSqlQueryStatement SutFactory(string text, SqlParameter[] parameters)
         {
-            return new TSqlNonQueryStatement(text, parameters);
+            return new TSqlQueryStatement(text, parameters);
         }
     }
 }

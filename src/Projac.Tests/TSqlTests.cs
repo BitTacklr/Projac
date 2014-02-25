@@ -123,13 +123,6 @@ namespace Projac.Tests
             Assert.That(TSql.Binary(null, 123), Is.EqualTo(TSqlNullValue.Instance));
         }
 
-        [TestCaseSource("StatementCases")]
-        public void StatementReturnsExpectedInstance(TSqlNonQueryStatement actual, TSqlNonQueryStatement expected)
-        {
-            Assert.That(actual.Text, Is.EqualTo(expected.Text));
-            Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
-        }
-
         [Test]
         public void VarBinaryReturnsExpectedInstance()
         {
@@ -167,26 +160,66 @@ namespace Projac.Tests
             Assert.That(TSql.DateTimeOffset(null), Is.EqualTo(TSqlNullValue.Instance));
         }
 
-        private IEnumerable<TestCaseData> StatementCases()
+        [TestCaseSource("NonQueryCases")]
+        public void NonQueryReturnsExpectedInstance(TSqlNonQueryStatement actual, TSqlNonQueryStatement expected)
+        {
+            Assert.That(actual.Text, Is.EqualTo(expected.Text));
+            Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
+        }
+
+        private static IEnumerable<TestCaseData> NonQueryCases()
         {
             yield return new TestCaseData(
-                TSql.Statement("text"),
+                TSql.NonQuery("text"),
                 new TSqlNonQueryStatement("text", new SqlParameter[0]));
             yield return new TestCaseData(
-                TSql.Statement("text", parameters: null),
+                TSql.NonQuery("text", parameters: null),
                 new TSqlNonQueryStatement("text", new SqlParameter[0]));
             yield return new TestCaseData(
-                TSql.Statement("text", new { }),
+                TSql.NonQuery("text", new { }),
                 new TSqlNonQueryStatement("text", new SqlParameter[0]));
             yield return new TestCaseData(
-                TSql.Statement("text", new { Parameter = TSql.Bit(true) }),
+                TSql.NonQuery("text", new { Parameter = TSql.Bit(true) }),
                 new TSqlNonQueryStatement("text", new []
                 {
                     new TSqlBitValue(true).ToSqlParameter("@Parameter")
                 }));
             yield return new TestCaseData(
-                TSql.Statement("text", new { Parameter1 = TSql.Bit(true), Parameter2 = TSql.Bit(null) }),
+                TSql.NonQuery("text", new { Parameter1 = TSql.Bit(true), Parameter2 = TSql.Bit(null) }),
                 new TSqlNonQueryStatement("text", new[]
+                {
+                    new TSqlBitValue(true).ToSqlParameter("@Parameter1"),
+                    TSqlNullValue.Instance.ToSqlParameter("@Parameter2")
+                }));
+        }
+
+        [TestCaseSource("QueryCases")]
+        public void QueryReturnsExpectedInstance(TSqlQueryStatement actual, TSqlQueryStatement expected)
+        {
+            Assert.That(actual.Text, Is.EqualTo(expected.Text));
+            Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
+        }
+
+        private static IEnumerable<TestCaseData> QueryCases()
+        {
+            yield return new TestCaseData(
+                TSql.Query("text"),
+                new TSqlQueryStatement("text", new SqlParameter[0]));
+            yield return new TestCaseData(
+                TSql.Query("text", parameters: null),
+                new TSqlQueryStatement("text", new SqlParameter[0]));
+            yield return new TestCaseData(
+                TSql.Query("text", new { }),
+                new TSqlQueryStatement("text", new SqlParameter[0]));
+            yield return new TestCaseData(
+                TSql.Query("text", new { Parameter = TSql.Bit(true) }),
+                new TSqlQueryStatement("text", new[]
+                {
+                    new TSqlBitValue(true).ToSqlParameter("@Parameter")
+                }));
+            yield return new TestCaseData(
+                TSql.Query("text", new { Parameter1 = TSql.Bit(true), Parameter2 = TSql.Bit(null) }),
+                new TSqlQueryStatement("text", new[]
                 {
                     new TSqlBitValue(true).ToSqlParameter("@Parameter1"),
                     TSqlNullValue.Instance.ToSqlParameter("@Parameter2")

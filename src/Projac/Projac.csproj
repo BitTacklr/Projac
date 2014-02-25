@@ -57,6 +57,7 @@
     <Compile Include="TSqlNullValue.cs" />
     <Compile Include="TSqlNVarCharSize.cs" />
     <Compile Include="TSqlNVarCharValue.cs" />
+    <Compile Include="TSqlQueryStatement.cs" />
     <Compile Include="TSqlUniqueIdentifierValue.cs" />
     <Compile Include="TSqlVarBinarySize.cs" />
     <Compile Include="TSqlVarCharSize.cs" />

@@ -173,7 +173,18 @@ namespace Projac
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A <see cref="TSqlNonQueryStatement"/>.</returns>
-        public static TSqlNonQueryStatement Statement(string text, object parameters = null)
+        public static TSqlQueryStatement Query(string text, object parameters = null)
+        {
+            return new TSqlQueryStatement(text, Collect(parameters));
+        }
+
+        /// <summary>
+        /// Returns a T-SQL non query statement.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A <see cref="TSqlNonQueryStatement"/>.</returns>
+        public static TSqlNonQueryStatement NonQuery(string text, object parameters = null)
         {
             return new TSqlNonQueryStatement(text, Collect(parameters));
         }
