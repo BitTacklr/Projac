@@ -1,25 +1,24 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 
 namespace Projac
 {
     /// <summary>
-    /// Represents a T-SQL BINARY parameter value.
+    /// Represents a T-SQL NCHAR parameter value.
     /// </summary>
-    public class TSqlBinaryValue : ITSqlParameterValue
+    public class TSqlNCharValue : ITSqlParameterValue
     {
-        private readonly byte[] _value;
+        private readonly string _value;
         private readonly int _size;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TSqlBinaryValue"/> class.
+        /// Initializes a new instance of the <see cref="TSqlNCharValue"/> class.
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <param name="size">The parameter size.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="value"/> is <c>null</c>.</exception>
-        public TSqlBinaryValue(byte[] value, TSqlBinarySize size)
+        public TSqlNCharValue(string value, TSqlNCharSize size)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
@@ -38,7 +37,7 @@ namespace Projac
         {
             return new SqlParameter(
                 parameterName,
-                SqlDbType.Binary,
+                SqlDbType.Char,
                 _size,
                 ParameterDirection.Input,
                 false,
@@ -49,9 +48,9 @@ namespace Projac
                 _value);
         }
 
-        bool Equals(TSqlBinaryValue other)
+        bool Equals(TSqlNCharValue other)
         {
-            return _value.SequenceEqual(other._value) && _size == other._size;
+            return string.Equals(_value, other._value) && _size == other._size;
         }
 
         /// <summary>
@@ -66,7 +65,7 @@ namespace Projac
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((TSqlBinaryValue)obj);
+            return Equals((TSqlNCharValue)obj);
         }
 
         /// <summary>
@@ -77,7 +76,7 @@ namespace Projac
         /// </returns>
         public override int GetHashCode()
         {
-            return _value.Aggregate(_size, (aggregation, current) => aggregation ^ current);
+            return _value.GetHashCode() ^ _size;
         }
     }
 }

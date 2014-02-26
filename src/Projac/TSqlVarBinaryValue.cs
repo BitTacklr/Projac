@@ -6,20 +6,20 @@ using System.Linq;
 namespace Projac
 {
     /// <summary>
-    /// Represents a T-SQL BINARY parameter value.
+    /// Represents a T-SQL VARBINARY parameter value.
     /// </summary>
-    public class TSqlBinaryValue : ITSqlParameterValue
+    public class TSqlVarBinaryValue : ITSqlParameterValue
     {
         private readonly byte[] _value;
         private readonly int _size;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TSqlBinaryValue"/> class.
+        /// Initializes a new instance of the <see cref="TSqlVarBinaryValue"/> class.
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <param name="size">The parameter size.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="value"/> is <c>null</c>.</exception>
-        public TSqlBinaryValue(byte[] value, TSqlBinarySize size)
+        public TSqlVarBinaryValue(byte[] value, TSqlVarBinarySize size)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
@@ -38,7 +38,7 @@ namespace Projac
         {
             return new SqlParameter(
                 parameterName,
-                SqlDbType.Binary,
+                SqlDbType.VarBinary,
                 _size,
                 ParameterDirection.Input,
                 false,
@@ -49,7 +49,7 @@ namespace Projac
                 _value);
         }
 
-        bool Equals(TSqlBinaryValue other)
+        bool Equals(TSqlVarBinaryValue other)
         {
             return _value.SequenceEqual(other._value) && _size == other._size;
         }
@@ -66,7 +66,7 @@ namespace Projac
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((TSqlBinaryValue)obj);
+            return Equals((TSqlVarBinaryValue)obj);
         }
 
         /// <summary>

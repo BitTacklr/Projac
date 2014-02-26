@@ -54,8 +54,12 @@
     <Compile Include="TSqlBinarySizeTest.cs" />
     <Compile Include="TSqlBinaryValueTests.cs" />
     <Compile Include="TSqlBitValueTests.cs" />
+    <Compile Include="TSqlCharSizeTest.cs" />
+    <Compile Include="TSqlCharValueTests.cs" />
     <Compile Include="TSqlDateTimeOffsetValueTests.cs" />
     <Compile Include="TSqlIntValueTests.cs" />
+    <Compile Include="TSqlNCharSizeTest.cs" />
+    <Compile Include="TSqlNCharValueTests.cs" />
     <Compile Include="TSqlNonQueryStatement.cs" />
     <Compile Include="TSqlNullValueTests.cs" />
     <Compile Include="TSqlNVarCharSizeTest.cs" />

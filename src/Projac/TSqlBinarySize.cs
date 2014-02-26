@@ -16,8 +16,8 @@ namespace Projac
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="value"/> is not between 0 and 8000.</exception>
         public TSqlBinarySize(int value)
         {
-            if (value < 0 || value > 8000)
-                throw new ArgumentOutOfRangeException("value", value, "The value must be between 0 and 8000.");
+            if (value < 0 || value > Limits.MaxByteSize)
+                throw new ArgumentOutOfRangeException("value", value, string.Format("The value must be between 0 and {0}.", Limits.MaxByteSize));
             _value = value;
         }
 

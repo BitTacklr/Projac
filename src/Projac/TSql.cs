@@ -33,6 +33,19 @@ namespace Projac
         }
 
         /// <summary>
+        /// Returns a CHAR parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <param name="size">The parameter size.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue Char(string value, TSqlCharSize size)
+        {
+            return value == null ?
+                Null() :
+                new TSqlCharValue(value, size);
+        }
+
+        /// <summary>
         /// Returns a VARCHAR(MAX) parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
@@ -55,6 +68,19 @@ namespace Projac
             return value == null ?
                 Null() :
                 new TSqlNVarCharValue(value, size);
+        }
+
+        /// <summary>
+        /// Returns a NCHAR parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <param name="size">The parameter size.</param>
+        /// <returns>A <see cref="ITSqlParameterValue"/>.</returns>
+        public static ITSqlParameterValue NChar(string value, TSqlNCharSize size)
+        {
+            return value == null ?
+                Null() :
+                new TSqlNCharValue(value, size);
         }
 
         /// <summary>

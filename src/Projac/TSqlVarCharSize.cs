@@ -21,8 +21,8 @@ namespace Projac
         /// <exception cref="System.ArgumentOutOfRangeException">value;The value must be between -1 and 8000.</exception>
         public TSqlVarCharSize(int value)
         {
-            if(value < -1 || value > 8000)
-                throw new ArgumentOutOfRangeException("value", value, "The value must be between -1 and 8000.");
+            if(value < -1 || value > Limits.MaxAnsiSize)
+                throw new ArgumentOutOfRangeException("value", value, string.Format("The value must be between -1 and {0}.", Limits.MaxAnsiSize));
             _value = value;
         }
 
