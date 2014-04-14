@@ -249,5 +249,39 @@ namespace Projac.Tests
                     TSqlNullValue.Instance.ToSqlParameter("@Parameter2")
                 }));
         }
+
+        [Test]
+        public void ComposeStatementsCanNotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => TSql.Compose(null));
+        }
+
+        [Test]
+        public void ComposeReturnsComposition()
+        {
+            Assert.IsInstanceOf<TSqlStatementComposer>(
+                TSql.Compose(
+                    StatementFactory(),
+                    StatementFactory()));
+        }
+
+        [Test]
+        public void ComposedStatementsArePreservedAndReturnedByComposition()
+        {
+            var statement1 = StatementFactory();
+            var statement2 = StatementFactory();
+            
+            ITSqlStatement[] result = TSql.Compose(statement1, statement2);
+
+            Assert.That(result, Is.EquivalentTo(new []
+            {
+                statement1, statement2
+            }));
+        }
+        
+        private static ITSqlStatement StatementFactory()
+        {
+            return new TSqlStatementStub();
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Projac
@@ -6,7 +7,7 @@ namespace Projac
     /// <summary>
     /// Represent a T-SQL query statement.
     /// </summary>
-    public class TSqlQueryStatement
+    public class TSqlQueryStatement : ITSqlStatement
     {
         private readonly string _text;
         private readonly SqlParameter[] _parameters;
@@ -57,6 +58,14 @@ namespace Projac
             {
                 return _parameters;
             }
+        }
+
+        public void WriteTo(SqlCommand command)
+        {
+            command.Parameters.Clear();
+            command.Parameters.AddRange(Parameters);
+            command.CommandText = Text;
+            command.CommandType = CommandType.Text;
         }
     }
 }

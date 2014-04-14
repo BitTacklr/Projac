@@ -45,6 +45,7 @@
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
     <Compile Include="ITSqlParameterValue.cs" />
+    <Compile Include="ITSqlStatement.cs" />
     <Compile Include="Limits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TSql.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="TSqlNVarCharSize.cs" />
     <Compile Include="TSqlNVarCharValue.cs" />
     <Compile Include="TSqlQueryStatement.cs" />
+    <Compile Include="TSqlStatementComposer.cs" />
     <Compile Include="TSqlUniqueIdentifierValue.cs" />
     <Compile Include="TSqlVarBinarySize.cs" />
     <Compile Include="TSqlVarBinaryValue.cs" />

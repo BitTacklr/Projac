@@ -8,6 +8,12 @@ namespace Projac.Tests
     public class TSqlQueryStatementTests
     {
         [Test]
+        public void IsTSqlStatement()
+        {
+            Assert.IsInstanceOf<ITSqlStatement>(SutFactory("", new SqlParameter[0]));
+        }
+
+        [Test]
         public void TextCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => SutFactory((string)null));
