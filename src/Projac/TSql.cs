@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
@@ -213,6 +214,27 @@ namespace Projac
         public static TSqlNonQueryStatement NonQuery(string text, object parameters = null)
         {
             return new TSqlNonQueryStatement(text, Collect(parameters));
+        }
+
+        /// <summary>
+        /// Returns a T-SQL projection builder.
+        /// </summary>
+        /// <returns>A <see cref="TSqlProjectionBuilder"/>.</returns>
+        public static TSqlProjectionBuilder Projection()
+        {
+            return new TSqlProjectionBuilder();
+        }
+
+        /// <summary>
+        /// Starts a composition of statements with the specified <paramref name="statements"/>.
+        /// </summary>
+        /// <param name="statements">The <see cref="ITSqlStatement">statements</see> to start the composition with.</param>
+        /// <returns>A new composition of <see cref="ITSqlStatement">statements</see>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements"/> are <c>null</c>.</exception>
+        public static TSqlStatementComposer Compose(IEnumerable<ITSqlStatement> statements)
+        {
+            if (statements == null) throw new ArgumentNullException("statements");
+            return new TSqlStatementComposer(statements.ToArray());
         }
 
         /// <summary>

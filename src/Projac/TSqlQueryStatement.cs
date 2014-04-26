@@ -60,8 +60,14 @@ namespace Projac
             }
         }
 
+        /// <summary>
+        /// Writes the text and parameters to the specified <paramref name="command" />.
+        /// </summary>
+        /// <param name="command">The command to write to.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="command"/> is <c>null</c>.</exception>
         public void WriteTo(SqlCommand command)
         {
+            if (command == null) throw new ArgumentNullException("command");
             command.Parameters.Clear();
             command.Parameters.AddRange(Parameters);
             command.CommandText = Text;

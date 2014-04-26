@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Projac.Tests.Framework;
 
@@ -18,14 +15,21 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void ComposeStatementsCanNotBeNull()
+        public void ComposeParamsArrayStatementsCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(() => sut.Compose(null));
+            Assert.Throws<ArgumentNullException>(() => sut.Compose((ITSqlStatement[])null));
         }
 
         [Test]
-        public void ComposeReturnsComposition()
+        public void ComposeEnumerationStatementsCanNotBeNull()
+        {
+            var sut = SutFactory();
+            Assert.Throws<ArgumentNullException>(() => sut.Compose((IEnumerable<ITSqlStatement>)null));
+        }
+
+        [Test]
+        public void ComposeParamsArrayReturnsComposition()
         {
             var sut = SutFactory();
             Assert.IsInstanceOf<TSqlStatementComposer>(
@@ -35,7 +39,19 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void ComposedStatementsArePreservedAndReturnedByComposition()
+        public void ComposeEnumerationReturnsComposition()
+        {
+            var sut = SutFactory();
+            Assert.IsInstanceOf<TSqlStatementComposer>(
+                sut.Compose(
+                    (IEnumerable<ITSqlStatement>) new[] {
+                        StatementFactory(),
+                        StatementFactory()
+                    }));
+        }
+
+        [Test]
+        public void ComposedParamsArrayStatementsArePreservedAndReturnedByComposition()
         {
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
@@ -46,6 +62,26 @@ namespace Projac.Tests
             var statement4 = StatementFactory();
 
             ITSqlStatement[] result = sut.Compose(statement3, statement4);
+
+            Assert.That(result, Is.EquivalentTo(new[]
+            {
+                statement1, statement2, statement3, statement4
+            }));
+        }
+
+        [Test]
+        public void ComposedEnumerationStatementsArePreservedAndReturnedByComposition()
+        {
+            var statement1 = StatementFactory();
+            var statement2 = StatementFactory();
+
+            var sut = SutFactory(statement1, statement2);
+
+            var statement3 = StatementFactory();
+            var statement4 = StatementFactory();
+
+            ITSqlStatement[] result = sut.Compose(
+                (IEnumerable<ITSqlStatement>) new[] { statement3, statement4 });
 
             Assert.That(result, Is.EquivalentTo(new[]
             {

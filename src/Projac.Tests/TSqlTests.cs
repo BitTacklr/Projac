@@ -251,22 +251,38 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void ComposeStatementsCanNotBeNull()
+        public void ComposeStatementArrayCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => TSql.Compose(null));
+            Assert.Throws<ArgumentNullException>(() => TSql.Compose((ITSqlStatement[])null));
         }
 
         [Test]
-        public void ComposeReturnsComposition()
+        public void ComposeStatementEnumerationCanNotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => TSql.Compose((IEnumerable<ITSqlStatement>)null));
+        }
+
+        [Test]
+        public void ComposeStatementArrayReturnsComposer()
         {
             Assert.IsInstanceOf<TSqlStatementComposer>(
                 TSql.Compose(
                     StatementFactory(),
                     StatementFactory()));
         }
+        [Test]
+        public void ComposeStatementEnumerationReturnsComposer()
+        {
+            Assert.IsInstanceOf<TSqlStatementComposer>(
+                TSql.Compose((IEnumerable<ITSqlStatement>) new[]
+                {
+                    StatementFactory(),
+                    StatementFactory()
+                }));
+        }
 
         [Test]
-        public void ComposedStatementsArePreservedAndReturnedByComposition()
+        public void ComposedStatementArrayIsPreservedAndReturnedByComposer()
         {
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
@@ -278,10 +294,45 @@ namespace Projac.Tests
                 statement1, statement2
             }));
         }
+
+        [Test]
+        public void ComposedStatementEnumerationIsPreservedAndReturnedByComposer()
+        {
+            var statement1 = StatementFactory();
+            var statement2 = StatementFactory();
+
+            ITSqlStatement[] result = TSql.Compose((IEnumerable<ITSqlStatement>)new []
+            {
+                statement1, statement2
+            });
+
+            Assert.That(result, Is.EquivalentTo(new[]
+            {
+                statement1, statement2
+            }));
+        }
         
         private static ITSqlStatement StatementFactory()
         {
             return new TSqlStatementStub();
+        }
+
+        [Test]
+        public void ProjectionReturnsBuilder()
+        {
+            var result = TSql.Projection();
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.InstanceOf<TSqlProjectionBuilder>());
+        }
+
+        [Test]
+        public void ProjectionReturnsNewBuilderUponEachCall()
+        {
+            var result1 = TSql.Projection();
+            var result2 = TSql.Projection();
+
+            Assert.That(result1, Is.Not.SameAs(result2));
         }
     }
 }

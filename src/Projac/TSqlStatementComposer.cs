@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Projac
@@ -34,6 +35,18 @@ namespace Projac
         }
 
         /// <summary>
+        /// Composes this instance with the specified <paramref name="statements"/>.
+        /// </summary>
+        /// <param name="statements">The <see cref="ITSqlStatement">statements</see> to compose with.</param>
+        /// <returns>A new composition of <see cref="ITSqlStatement">statements</see>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements"/> are <c>null</c>.</exception>
+        public TSqlStatementComposer Compose(IEnumerable<ITSqlStatement> statements)
+        {
+            if (statements == null) throw new ArgumentNullException("statements");
+            return new TSqlStatementComposer(_statements.Concat(statements).ToArray());
+        }
+
+        /// <summary>
         /// Implicitly converts a composition of <see cref="ITSqlStatement">statements</see> to an array of <see cref="ITSqlStatement">statements</see>.
         /// </summary>
         /// <param name="instance">The instance to convert.</param>
@@ -41,6 +54,6 @@ namespace Projac
         public static implicit operator ITSqlStatement[](TSqlStatementComposer instance)
         {
             return instance._statements;
-        } 
+        }
     }
 }
