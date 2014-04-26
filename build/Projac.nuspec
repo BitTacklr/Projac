@@ -10,7 +10,7 @@
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
     <description>Projac provides lightweight infrastructure for producing T-SQL DML statements.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
-    <releaseNotes>Breaking Changes: TSql.Statement replaced by TSql.NonQuery. TSql.Query added.</releaseNotes>
+    <releaseNotes>Changes: Added TSql.Compose() allowing for a fluent syntax to compose multiple non query statements that is both friendly to the eye and LINQ-to-objects. TSql.Projection() allows specifying Projac based projections in a declarative fashion (say goodbye to classes for specifying projections).</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
   </metadata>
