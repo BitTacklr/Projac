@@ -7,7 +7,7 @@ namespace Projac
     /// <summary>
     /// Represent a T-SQL query statement.
     /// </summary>
-    public class TSqlQueryStatement : ITSqlStatement
+    public class TSqlQueryStatement
     {
         private readonly string _text;
         private readonly SqlParameter[] _parameters;
@@ -58,20 +58,6 @@ namespace Projac
             {
                 return _parameters;
             }
-        }
-
-        /// <summary>
-        /// Writes the text and parameters to the specified <paramref name="command" />.
-        /// </summary>
-        /// <param name="command">The command to write to.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="command"/> is <c>null</c>.</exception>
-        public void WriteTo(SqlCommand command)
-        {
-            if (command == null) throw new ArgumentNullException("command");
-            command.Parameters.Clear();
-            command.Parameters.AddRange(Parameters);
-            command.CommandText = Text;
-            command.CommandType = CommandType.Text;
         }
     }
 }

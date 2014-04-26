@@ -228,25 +228,25 @@ namespace Projac
         /// <summary>
         /// Starts a composition of statements with the specified <paramref name="statements"/>.
         /// </summary>
-        /// <param name="statements">The <see cref="ITSqlStatement">statements</see> to start the composition with.</param>
-        /// <returns>A new composition of <see cref="ITSqlStatement">statements</see>.</returns>
+        /// <param name="statements">The <see cref="TSqlNonQueryStatement">statements</see> to start the composition with.</param>
+        /// <returns>A new composition of <see cref="TSqlNonQueryStatement">statements</see>.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements"/> are <c>null</c>.</exception>
-        public static TSqlStatementComposer Compose(IEnumerable<ITSqlStatement> statements)
+        public static TSqlNonQueryStatementComposer Compose(IEnumerable<TSqlNonQueryStatement> statements)
         {
             if (statements == null) throw new ArgumentNullException("statements");
-            return new TSqlStatementComposer(statements.ToArray());
+            return new TSqlNonQueryStatementComposer(statements.ToArray());
         }
 
         /// <summary>
         /// Starts a composition of statements with the specified <paramref name="statements"/>.
         /// </summary>
-        /// <param name="statements">The <see cref="ITSqlStatement">statements</see> to start the composition with.</param>
-        /// <returns>A new composition of <see cref="ITSqlStatement">statements</see>.</returns>
+        /// <param name="statements">The <see cref="TSqlNonQueryStatement">statements</see> to start the composition with.</param>
+        /// <returns>A new composition of <see cref="TSqlNonQueryStatement">statements</see>.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements"/> are <c>null</c>.</exception>
-        public static TSqlStatementComposer Compose(params ITSqlStatement[] statements)
+        public static TSqlNonQueryStatementComposer Compose(params TSqlNonQueryStatement[] statements)
         {
             if (statements == null) throw new ArgumentNullException("statements");
-            return new TSqlStatementComposer(statements);
+            return new TSqlNonQueryStatementComposer(statements);
         }
 
         private static SqlParameter[] Collect(object parameters)

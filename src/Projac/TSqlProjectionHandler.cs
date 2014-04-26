@@ -9,7 +9,7 @@ namespace Projac
     public class TSqlProjectionHandler
     {
         private readonly Type _event;
-        private readonly Func<object, IEnumerable<ITSqlStatement>> _handler;
+        private readonly Func<object, IEnumerable<TSqlNonQueryStatement>> _handler;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TSqlProjectionHandler"/> class.
@@ -17,7 +17,7 @@ namespace Projac
         /// <param name="event">The event.</param>
         /// <param name="handler">The handler.</param>
         /// <exception cref="System.ArgumentNullException">Throw when <paramref name="event"/> or <paramref name="handler"/> is <c>null</c>.</exception>
-        public TSqlProjectionHandler(Type @event, Func<object, IEnumerable<ITSqlStatement>> handler)
+        public TSqlProjectionHandler(Type @event, Func<object, IEnumerable<TSqlNonQueryStatement>> handler)
         {
             if (@event == null) throw new ArgumentNullException("event");
             if (handler == null) throw new ArgumentNullException("handler");
@@ -36,7 +36,7 @@ namespace Projac
         /// <summary>
         /// The function that handles the event.
         /// </summary>
-        public Func<object, IEnumerable<ITSqlStatement>> Handler
+        public Func<object, IEnumerable<TSqlNonQueryStatement>> Handler
         {
             get { return _handler; }
         }

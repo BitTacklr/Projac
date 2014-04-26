@@ -253,19 +253,19 @@ namespace Projac.Tests
         [Test]
         public void ComposeStatementArrayCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => TSql.Compose((ITSqlStatement[])null));
+            Assert.Throws<ArgumentNullException>(() => TSql.Compose((TSqlNonQueryStatement[])null));
         }
 
         [Test]
         public void ComposeStatementEnumerationCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => TSql.Compose((IEnumerable<ITSqlStatement>)null));
+            Assert.Throws<ArgumentNullException>(() => TSql.Compose((IEnumerable<TSqlNonQueryStatement>)null));
         }
 
         [Test]
         public void ComposeStatementArrayReturnsComposer()
         {
-            Assert.IsInstanceOf<TSqlStatementComposer>(
+            Assert.IsInstanceOf<TSqlNonQueryStatementComposer>(
                 TSql.Compose(
                     StatementFactory(),
                     StatementFactory()));
@@ -273,8 +273,8 @@ namespace Projac.Tests
         [Test]
         public void ComposeStatementEnumerationReturnsComposer()
         {
-            Assert.IsInstanceOf<TSqlStatementComposer>(
-                TSql.Compose((IEnumerable<ITSqlStatement>) new[]
+            Assert.IsInstanceOf<TSqlNonQueryStatementComposer>(
+                TSql.Compose((IEnumerable<TSqlNonQueryStatement>)new[]
                 {
                     StatementFactory(),
                     StatementFactory()
@@ -286,8 +286,8 @@ namespace Projac.Tests
         {
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
-            
-            ITSqlStatement[] result = TSql.Compose(statement1, statement2);
+
+            TSqlNonQueryStatement[] result = TSql.Compose(statement1, statement2);
 
             Assert.That(result, Is.EquivalentTo(new []
             {
@@ -301,7 +301,7 @@ namespace Projac.Tests
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
 
-            ITSqlStatement[] result = TSql.Compose((IEnumerable<ITSqlStatement>)new []
+            TSqlNonQueryStatement[] result = TSql.Compose((IEnumerable<TSqlNonQueryStatement>)new[]
             {
                 statement1, statement2
             });
@@ -311,10 +311,10 @@ namespace Projac.Tests
                 statement1, statement2
             }));
         }
-        
-        private static ITSqlStatement StatementFactory()
+
+        private static TSqlNonQueryStatement StatementFactory()
         {
-            return new TSqlStatementStub();
+            return new TSqlNonQueryStatement("text", new SqlParameter[0]);
         }
 
         [Test]

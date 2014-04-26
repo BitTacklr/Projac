@@ -18,8 +18,8 @@ namespace Projac.Tests
         [Test]
         public void HandlersArePreservedAsProperty()
         {
-            var handler1 = new TSqlProjectionHandler(typeof(object), _ => new ITSqlStatement[0]);
-            var handler2 = new TSqlProjectionHandler(typeof(object), _ => new ITSqlStatement[0]);
+            var handler1 = new TSqlProjectionHandler(typeof(object), _ => new TSqlNonQueryStatement[0]);
+            var handler2 = new TSqlProjectionHandler(typeof(object), _ => new TSqlNonQueryStatement[0]);
 
             var handlers = new[]
             {

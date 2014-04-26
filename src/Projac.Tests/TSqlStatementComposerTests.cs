@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using NUnit.Framework;
-using Projac.Tests.Framework;
 
 namespace Projac.Tests
 {
@@ -18,21 +18,21 @@ namespace Projac.Tests
         public void ComposeParamsArrayStatementsCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(() => sut.Compose((ITSqlStatement[])null));
+            Assert.Throws<ArgumentNullException>(() => sut.Compose((TSqlNonQueryStatement[])null));
         }
 
         [Test]
         public void ComposeEnumerationStatementsCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(() => sut.Compose((IEnumerable<ITSqlStatement>)null));
+            Assert.Throws<ArgumentNullException>(() => sut.Compose((IEnumerable<TSqlNonQueryStatement>)null));
         }
 
         [Test]
         public void ComposeParamsArrayReturnsComposition()
         {
             var sut = SutFactory();
-            Assert.IsInstanceOf<TSqlStatementComposer>(
+            Assert.IsInstanceOf<TSqlNonQueryStatementComposer>(
                 sut.Compose(
                     StatementFactory(),
                     StatementFactory()));
@@ -42,9 +42,9 @@ namespace Projac.Tests
         public void ComposeEnumerationReturnsComposition()
         {
             var sut = SutFactory();
-            Assert.IsInstanceOf<TSqlStatementComposer>(
+            Assert.IsInstanceOf<TSqlNonQueryStatementComposer>(
                 sut.Compose(
-                    (IEnumerable<ITSqlStatement>) new[] {
+                    (IEnumerable<TSqlNonQueryStatement>)new[] {
                         StatementFactory(),
                         StatementFactory()
                     }));
@@ -61,7 +61,7 @@ namespace Projac.Tests
             var statement3 = StatementFactory();
             var statement4 = StatementFactory();
 
-            ITSqlStatement[] result = sut.Compose(statement3, statement4);
+            TSqlNonQueryStatement[] result = sut.Compose(statement3, statement4);
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
@@ -80,8 +80,8 @@ namespace Projac.Tests
             var statement3 = StatementFactory();
             var statement4 = StatementFactory();
 
-            ITSqlStatement[] result = sut.Compose(
-                (IEnumerable<ITSqlStatement>) new[] { statement3, statement4 });
+            TSqlNonQueryStatement[] result = sut.Compose(
+                (IEnumerable<TSqlNonQueryStatement>)new[] { statement3, statement4 });
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
@@ -95,7 +95,7 @@ namespace Projac.Tests
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
 
-            ITSqlStatement[] result = new TSqlStatementComposer(new[] { statement1, statement2 });
+            TSqlNonQueryStatement[] result = new TSqlNonQueryStatementComposer(new[] { statement1, statement2 });
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
@@ -109,7 +109,7 @@ namespace Projac.Tests
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
 
-            var result = (ITSqlStatement[])TSql.Compose(statement1, statement2);
+            var result = (TSqlNonQueryStatement[])TSql.Compose(statement1, statement2);
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
@@ -117,14 +117,14 @@ namespace Projac.Tests
             }));
         }
 
-        private static TSqlStatementComposer SutFactory(params ITSqlStatement[] statements)
+        private static TSqlNonQueryStatementComposer SutFactory(params TSqlNonQueryStatement[] statements)
         {
-            return new TSqlStatementComposer(statements);
+            return new TSqlNonQueryStatementComposer(statements);
         }
 
-        private static ITSqlStatement StatementFactory()
+        private static TSqlNonQueryStatement StatementFactory()
         {
-            return new TSqlStatementStub();
+            return new TSqlNonQueryStatement("text", new SqlParameter[0]);
         }
     }
 }

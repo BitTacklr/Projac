@@ -70,7 +70,6 @@
     <Compile Include="TSqlProjectionSpecificationTests.cs" />
     <Compile Include="TSqlQueryStatementTests.cs" />
     <Compile Include="TSqlStatementComposerTests.cs" />
-    <Compile Include="Framework\TSqlStatementStub.cs" />
     <Compile Include="TSqlTests.cs" />
     <Compile Include="TSqlUniqueIdentifierValueTests.cs" />
     <Compile Include="TSqlVarBinarySizeTest.cs" />

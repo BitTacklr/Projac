@@ -11,7 +11,7 @@ namespace Projac.Tests
         public void EventCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new TSqlProjectionHandler(null, _ => new ITSqlStatement[0])
+                () => new TSqlProjectionHandler(null, _ => new TSqlNonQueryStatement[0])
             );
         }
 
@@ -27,7 +27,7 @@ namespace Projac.Tests
         public void ParametersArePreservedAsProperties()
         {
             var @event = typeof(object);
-            Func<object, IEnumerable<ITSqlStatement>> handler = _ => new ITSqlStatement[0];
+            Func<object, IEnumerable<TSqlNonQueryStatement>> handler = _ => new TSqlNonQueryStatement[0];
 
             var sut = new TSqlProjectionHandler(@event, handler);
 
