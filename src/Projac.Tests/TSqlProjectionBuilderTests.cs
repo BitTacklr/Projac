@@ -41,7 +41,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithSingleStatementIsPreservedUponBuild()
+        public void WhenHandlerWithSingleStatementItIsPreservedUponBuild()
         {
             var statement = StatementFactory();
             Func<object, TSqlNonQueryStatement> handler = _ => statement;
@@ -49,6 +49,23 @@ namespace Projac.Tests
 
             Assert.That(
                 result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { statement })), 
+                Is.EqualTo(1));
+        }
+
+        [Test]
+        public void WhenHandlerWithSingleStatementMustPreservePreviouslyCollectedStatementsUponBuild()
+        {
+            var statements = new[]
+            {
+                StatementFactory(),
+                StatementFactory()
+            };
+            var statement = StatementFactory();
+            Func<object, TSqlNonQueryStatement> handler = _ => statement;
+            var result = _sut.When((object _) => statements).When(handler).Build();
+
+            Assert.That(
+                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(statements)),
                 Is.EqualTo(1));
         }
 
@@ -67,7 +84,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithStatementArrayIsPreservedUponBuild()
+        public void WhenHandlerWithStatementArrayItIsPreservedUponBuild()
         {
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
@@ -76,6 +93,24 @@ namespace Projac.Tests
 
             Assert.That(
                 result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { statement1, statement2 })),
+                Is.EqualTo(1));
+        }
+
+        [Test]
+        public void WhenHandlerWithStatementArrayPreservesPreviouslyCollectedStatementsUponBuild()
+        {
+            var statements = new[]
+            {
+                StatementFactory(),
+                StatementFactory()
+            };
+            var statement1 = StatementFactory();
+            var statement2 = StatementFactory();
+            Func<object, TSqlNonQueryStatement[]> handler = _ => new[] { statement1, statement2 };
+            var result = _sut.When((object _) => statements).When(handler).Build();
+
+            Assert.That(
+                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(statements)),
                 Is.EqualTo(1));
         }
 
@@ -97,7 +132,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithStatementEnumerationIsPreservedUponBuild()
+        public void WhenHandlerWithStatementEnumerationItIsPreservedUponBuild()
         {
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
@@ -109,6 +144,27 @@ namespace Projac.Tests
 
             Assert.That(
                 result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { statement1, statement2 })),
+                Is.EqualTo(1));
+        }
+
+        [Test]
+        public void WhenHandlerWithStatementEnumerationPreservesPreviouslyCollectedStatementsUponBuild()
+        {
+            var statements = new[]
+            {
+                StatementFactory(),
+                StatementFactory()
+            };
+            var statement1 = StatementFactory();
+            var statement2 = StatementFactory();
+            Func<object, IEnumerable<TSqlNonQueryStatement>> handler = _ => (IEnumerable<TSqlNonQueryStatement>)new[]
+            {
+                statement1, statement2
+            };
+            var result = _sut.When((object _) => statements).When(handler).Build();
+
+            Assert.That(
+                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(statements)),
                 Is.EqualTo(1));
         }
 

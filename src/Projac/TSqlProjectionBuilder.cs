@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Projac
 {
@@ -34,14 +35,16 @@ namespace Projac
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new TSqlProjectionBuilder(
-                new[]
-                {
-                    new TSqlProjectionHandler
-                        (
-                        typeof (TEvent),
-                        @event => new[] {handler((TEvent) @event)}
-                        )
-                });
+                _handlers.Concat(
+                    new[]
+                    {
+                        new TSqlProjectionHandler
+                            (
+                            typeof (TEvent),
+                            @event => new[] {handler((TEvent) @event)}
+                            )
+                    }).
+                    ToArray());
         }
 
         /// <summary>
@@ -55,14 +58,16 @@ namespace Projac
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new TSqlProjectionBuilder(
-                new[]
-                {
-                    new TSqlProjectionHandler
-                        (
-                        typeof (TEvent),
-                        @event => handler((TEvent) @event)
-                        )
-                });
+                _handlers.Concat(
+                    new[]
+                    {
+                        new TSqlProjectionHandler
+                            (
+                            typeof (TEvent),
+                            @event => handler((TEvent) @event)
+                            )
+                    }).
+                    ToArray());
         }
 
         /// <summary>
@@ -76,14 +81,16 @@ namespace Projac
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new TSqlProjectionBuilder(
-                new[]
-                {
-                    new TSqlProjectionHandler
-                        (
-                        typeof (TEvent),
-                        @event => handler((TEvent) @event)
-                        )
-                });
+                _handlers.Concat(
+                    new[]
+                    {
+                        new TSqlProjectionHandler
+                            (
+                            typeof (TEvent),
+                            @event => handler((TEvent) @event)
+                            )
+                    }).
+                    ToArray());
         }
 
 
