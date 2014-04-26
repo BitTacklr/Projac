@@ -41,7 +41,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithSingleStatementItIsPreservedUponBuild()
+        public void WhenHandlerWithSingleStatementIsPreservedUponBuild()
         {
             var statement = StatementFactory();
             Func<object, TSqlNonQueryStatement> handler = _ => statement;
@@ -53,7 +53,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithSingleStatementMustPreservePreviouslyCollectedStatementsUponBuild()
+        public void WhenHandlerWithSingleStatementPreservesPreviouslyCollectedStatementsUponBuild()
         {
             var statements = new[]
             {
@@ -84,7 +84,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithStatementArrayItIsPreservedUponBuild()
+        public void WhenHandlerWithStatementArrayIsPreservedUponBuild()
         {
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
@@ -132,7 +132,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithStatementEnumerationItIsPreservedUponBuild()
+        public void WhenHandlerWithStatementEnumerationIsPreservedUponBuild()
         {
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
