@@ -27,36 +27,23 @@ Syntactic sugar to allow you to specify projections without the need for a dedic
 
 ```csharp
 var specification =
-    TSql.Projection().
-        When<StartedShopping>(@event =>
-            TSql.NonQuery(
-                "INSERT INTO [Cart] ([CartId], [Started], [Ended]) VALUES (@CartId, @Started, NULL)",
-                new
-                {
-                    CartId = TSql.Int(@event.CartId),
-                    Started = TSql.DateTimeOffset(@event.When)
-                })
-        ).
-        When<CheckedoutCart>(@event =>
-            TSql.Compose(
-                @event.Items.Select(item => TSql.NonQuery(
-                    "INSERT INTO [CartContent] ([CartId], [ItemId], [Count]) VALUES (@CartId, @ItemId, @Count)",
-                    new
-                    {
-                        CartId = TSql.Int(@event.CartId),
-                        ItemId = TSql.Int(item.Id),
-                        Count = TSql.Int(item.Count)
-                    }))).
-                Compose(
-                    TSql.NonQuery(
-                        "UPDATE [Cart] SET [Ended] = @Ended WHERE [CartId] = @CartId",
-                        new
-                        {
-                            CartId = TSql.Int(@event.CartId),
-                            Ended = TSql.DateTimeOffset(@event.When)
-                        }))
-        ).
-        Build();
+  TSql.Projection().
+    When<PortfolioAdded>(@event =>
+      TSql.NonQuery(
+        "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
+        new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
+    ).
+    When<PortfolioRemoved>(@event =>
+      TSql.NonQuery(
+        "DELETE FROM [Portfolio] WHERE Id = @P1",
+        new { P1 = TSql.Int(@event.Id) }
+    ).
+    When<PortfolioRenamed>(@event =>
+      TSql.NonQuery(
+        "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
+        new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
+    ).
+    Build();
 ```
 
 How and when you decide to execute the projection specification is still left as an exercise to you. Typically, you'll turn the handlers into a map where you can lookup the handler based on the type of event to be handled. Familiarity with plain old ADO.NET is assumed. You can take a look at the ```TSqlNonQueryStatementFlusher``` (in the tests under Usage) to get an idea of how to flush the resulting statements.
@@ -71,7 +58,7 @@ Your projection handlers should either accept an ```IObserver<TSqlNonQueryStatem
 public class PortfolioListProjectionHandler : 
   IHandle<PortfolioAdded>,
   IHandle<PortfolioRemoved>,
-  IHandle<PortfolioModified> {
+  IHandle<PortfolioRenamed> {
   
   readonly IObserver<TSqlNonQueryStatement> statements;
 
@@ -93,7 +80,7 @@ public class PortfolioListProjectionHandler :
         new { P1 = TSql.Int(@event.Id) }));
   }
 
-  public void Handle(PortfolioModified @event) {
+  public void Handle(PortfolioRenamed @event) {
     statements.OnNext(
       TSql.NonQuery(
         "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
@@ -106,7 +93,7 @@ public class PortfolioListProjectionHandler :
 public class PortfolioListProjectionHandler : 
   IHandle<PortfolioAdded>,
   IHandle<PortfolioRemoved>,
-  IHandle<PortfolioModified> {
+  IHandle<PortfolioRenamed> {
 
   public IEnumerable<TSqlNonQueryStatement> Handle(PortfolioAdded @event) {
     yield return
@@ -122,7 +109,7 @@ public class PortfolioListProjectionHandler :
         new { P1 = TSql.Int(@event.Id) });
   }
 
-  public IEnumerable<TSqlNonQueryStatement> Handle(PortfolioModified @event) {
+  public IEnumerable<TSqlNonQueryStatement> Handle(PortfolioRenamed @event) {
     yield return
       TSql.NonQuery(
         "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
