@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Projac
 {
     /// <summary>
-    /// Represents a handler of a particular type of event.
+    ///     Represents a handler of a particular type of event.
     /// </summary>
     public class TSqlProjectionHandler
     {
@@ -12,11 +12,14 @@ namespace Projac
         private readonly Func<object, IEnumerable<TSqlNonQueryStatement>> _handler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TSqlProjectionHandler"/> class.
+        ///     Initializes a new instance of the <see cref="TSqlProjectionHandler" /> class.
         /// </summary>
         /// <param name="event">The event.</param>
         /// <param name="handler">The handler.</param>
-        /// <exception cref="System.ArgumentNullException">Throw when <paramref name="event"/> or <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">
+        ///     Throw when <paramref name="event" /> or <paramref name="handler" /> is
+        ///     <c>null</c>.
+        /// </exception>
         public TSqlProjectionHandler(Type @event, Func<object, IEnumerable<TSqlNonQueryStatement>> handler)
         {
             if (@event == null) throw new ArgumentNullException("event");
@@ -26,7 +29,7 @@ namespace Projac
         }
 
         /// <summary>
-        /// The type of event to handle.
+        ///     The type of event to handle.
         /// </summary>
         public Type Event
         {
@@ -34,7 +37,7 @@ namespace Projac
         }
 
         /// <summary>
-        /// The function that handles the event.
+        ///     The function that handles the event.
         /// </summary>
         public Func<object, IEnumerable<TSqlNonQueryStatement>> Handler
         {

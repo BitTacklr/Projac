@@ -6,19 +6,19 @@ using System.Linq;
 namespace Projac
 {
     /// <summary>
-    /// Represents a T-SQL BINARY parameter value.
+    ///     Represents a T-SQL BINARY parameter value.
     /// </summary>
     public class TSqlBinaryValue : ITSqlParameterValue
     {
-        private readonly byte[] _value;
         private readonly int _size;
+        private readonly byte[] _value;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TSqlBinaryValue"/> class.
+        ///     Initializes a new instance of the <see cref="TSqlBinaryValue" /> class.
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <param name="size">The parameter size.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="value" /> is <c>null</c>.</exception>
         public TSqlBinaryValue(byte[] value, TSqlBinarySize size)
         {
             if (value == null)
@@ -28,11 +28,11 @@ namespace Projac
         }
 
         /// <summary>
-        /// Creates a <see cref="SqlParameter" /> instance based on this instance.
+        ///     Creates a <see cref="SqlParameter" /> instance based on this instance.
         /// </summary>
         /// <param name="parameterName">The name of the parameter.</param>
         /// <returns>
-        /// A <see cref="SqlParameter" />.
+        ///     A <see cref="SqlParameter" />.
         /// </returns>
         public SqlParameter ToSqlParameter(string parameterName)
         {
@@ -49,31 +49,31 @@ namespace Projac
                 _value);
         }
 
-        bool Equals(TSqlBinaryValue other)
+        private bool Equals(TSqlBinaryValue other)
         {
             return _value.SequenceEqual(other._value) && _size == other._size;
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/>, is equal to this instance.
+        ///     Determines whether the specified <see cref="System.Object" />, is equal to this instance.
         /// </summary>
         /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((TSqlBinaryValue)obj);
+            return Equals((TSqlBinaryValue) obj);
         }
 
         /// <summary>
-        /// Returns a hash code for this instance.
+        ///     Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {
