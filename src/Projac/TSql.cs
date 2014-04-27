@@ -206,14 +206,48 @@ namespace Projac
         }
 
         /// <summary>
+        ///     Returns a T-SQL query statement.
+        /// </summary>
+        /// <param name="format">The text with positional parameters to be formatted.</param>
+        /// <param name="parameters">The positional parameter values.</param>
+        /// <returns>A <see cref="TSqlQueryStatement" />.</returns>
+        public static TSqlQueryStatement QueryFormat(string format, params ITSqlParameterValue[] parameters)
+        {
+            if (parameters == null || parameters.Length == 0)
+            {
+                return new TSqlQueryStatement(format, new SqlParameter[0]);
+            }
+            return new TSqlQueryStatement(
+                string.Format(format, parameters.Select((_, index) => (object)FormatSqlParameterName("P" + index)).ToArray()),
+                parameters.Select((value, index) => value.ToSqlParameter(FormatSqlParameterName("P" + index))).ToArray());
+        }
+
+        /// <summary>
         ///     Returns a T-SQL non query statement.
         /// </summary>
-        /// <param name="text">The text.</param>
-        /// <param name="parameters">The parameters.</param>
+        /// <param name="text">The text with named parameters.</param>
+        /// <param name="parameters">The named parameters.</param>
         /// <returns>A <see cref="TSqlNonQueryStatement" />.</returns>
         public static TSqlNonQueryStatement NonQuery(string text, object parameters = null)
         {
             return new TSqlNonQueryStatement(text, Collect(parameters));
+        }
+
+        /// <summary>
+        ///     Returns a T-SQL non query statement.
+        /// </summary>
+        /// <param name="format">The text with positional parameters to be formatted.</param>
+        /// <param name="parameters">The positional parameter values.</param>
+        /// <returns>A <see cref="TSqlNonQueryStatement" />.</returns>
+        public static TSqlNonQueryStatement NonQueryFormat(string format, params ITSqlParameterValue[] parameters)
+        {
+            if (parameters == null || parameters.Length == 0)
+            {
+                return new TSqlNonQueryStatement(format, new SqlParameter[0]);
+            }
+            return new TSqlNonQueryStatement(
+                string.Format(format, parameters.Select((_, index) => (object) FormatSqlParameterName("P" + index)).ToArray()),
+                parameters.Select((value, index) => value.ToSqlParameter(FormatSqlParameterName("P" + index))).ToArray());
         }
 
         /// <summary>

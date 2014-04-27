@@ -21,6 +21,14 @@ TSql.NonQuery(
 * The parameters prefixed with the ```@``` defined in the text refer - by convention - to the properties defined in the parameter type. Properties are automatically prefixed with ```@``` during conversion.
 * Use the ```TSql.<DataTypeName>(...)``` methods to specify parameters. This allows for passing in just enough meta-data next to the actual value. The data types have a deliberate focus on the TSQL data types and not the .NET type system.
 
+Alternatively you can use a positional syntax, reminiscent of ODBC parameters, where parameter names will be auto assigned and formatted into the text. Don't thank me, thank @tojans for the suggestion.
+
+```csharp
+TSql.NonQueryFormat(
+  "INSERT INTO [Item] (Id, Name) VALUES ({0}, {1})",
+  TSql.Int(message.Id), TSql.VarChar(message.Value, 40));
+```
+
 ## Declarative Projections
 
 Syntactic sugar to allow you to specify projections without the need for a dedicated class. The code should speak for itself, but does require some playing around with. Mind you, only non query T-SQL statements are supported (pit of success).
