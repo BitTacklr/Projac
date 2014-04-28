@@ -67,7 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TSqlProjectionBuilderTests.cs" />
     <Compile Include="TSqlProjectionHandlerTests.cs" />
-    <Compile Include="TSqlProjectionSpecificationTests.cs" />
+    <Compile Include="TSqlProjectionTests.cs" />
     <Compile Include="TSqlQueryStatementTests.cs" />
     <Compile Include="TSqlStatementComposerTests.cs" />
     <Compile Include="TSqlTests.cs" />

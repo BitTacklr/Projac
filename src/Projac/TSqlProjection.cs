@@ -4,18 +4,18 @@ using System.Collections.Generic;
 namespace Projac
 {
     /// <summary>
-    ///     Represent a specification of a projection.
+    ///     Represent a projection.
     /// </summary>
-    public class TSqlProjectionSpecification
+    public class TSqlProjection
     {
         private readonly TSqlProjectionHandler[] _handlers;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="TSqlProjectionSpecification" /> class.
+        ///     Initializes a new instance of the <see cref="TSqlProjection" /> class.
         /// </summary>
         /// <param name="handlers">The handlers.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handlers" /> are <c>null</c>.</exception>
-        public TSqlProjectionSpecification(TSqlProjectionHandler[] handlers)
+        public TSqlProjection(TSqlProjectionHandler[] handlers)
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
             _handlers = handlers;

@@ -64,7 +64,7 @@
     <Compile Include="TSqlNVarCharValue.cs" />
     <Compile Include="TSqlProjectionBuilder.cs" />
     <Compile Include="TSqlProjectionHandler.cs" />
-    <Compile Include="TSqlProjectionSpecification.cs" />
+    <Compile Include="TSqlProjection.cs" />
     <Compile Include="TSqlQueryStatement.cs" />
     <Compile Include="TSqlNonQueryStatementComposer.cs" />
     <Compile Include="TSqlUniqueIdentifierValue.cs" />

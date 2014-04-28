@@ -5,13 +5,13 @@ using NUnit.Framework;
 namespace Projac.Tests
 {
     [TestFixture]
-    public class TSqlProjectionSpecificationTests
+    public class TSqlProjectionTests
     {
         [Test]
         public void HandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new TSqlProjectionSpecification(null)
+                () => new TSqlProjection(null)
                 );
         }
 
@@ -27,7 +27,7 @@ namespace Projac.Tests
                 handler2
             };
 
-            var sut = new TSqlProjectionSpecification(handlers);
+            var sut = new TSqlProjection(handlers);
 
             var result = sut.Handlers;
 

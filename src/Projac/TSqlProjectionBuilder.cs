@@ -5,7 +5,7 @@ using System.Linq;
 namespace Projac
 {
     /// <summary>
-    ///     Represents a fluent syntax to build up a <see cref="TSqlProjectionSpecification" />.
+    ///     Represents a fluent syntax to build up a <see cref="TSqlProjection" />.
     /// </summary>
     public class TSqlProjectionBuilder
     {
@@ -97,10 +97,10 @@ namespace Projac
         /// <summary>
         ///     Builds a projection specification based on the handlers collected by this builder.
         /// </summary>
-        /// <returns>A <see cref="TSqlProjectionSpecification" />.</returns>
-        public TSqlProjectionSpecification Build()
+        /// <returns>A <see cref="TSqlProjection" />.</returns>
+        public TSqlProjection Build()
         {
-            return new TSqlProjectionSpecification(_handlers);
+            return new TSqlProjection(_handlers);
         }
     }
 }
