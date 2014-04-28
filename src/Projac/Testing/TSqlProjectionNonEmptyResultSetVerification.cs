@@ -3,15 +3,13 @@ using System.Data.SqlClient;
 
 namespace Projac.Testing
 {
-    class TSqlProjectionCountVerification : ITSqlProjectionVerification
+    class TSqlProjectionNonEmptyResultSetVerification : ITSqlProjectionVerification
     {
         private readonly TSqlQueryStatement _query;
-        private readonly int _count;
 
-        public TSqlProjectionCountVerification(TSqlQueryStatement query, int count)
+        public TSqlProjectionNonEmptyResultSetVerification(TSqlQueryStatement query)
         {
             _query = query;
-            _count = count;
         }
 
         public bool Verify(SqlTransaction transaction)
@@ -24,8 +22,10 @@ namespace Projac.Testing
                 command.Parameters.AddRange(_query.Parameters);
                 command.CommandText = _query.Text;
 
-                var result = (int)command.ExecuteScalar();
-                return result == _count;
+                using (var reader = command.ExecuteReader())
+                {
+                    return !reader.IsClosed && reader.Read();
+                }
             }
         }
     }

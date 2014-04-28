@@ -54,7 +54,10 @@
     <Compile Include="Testing\ITSqlProjectionScenarioWhenStateBuilder.cs" />
     <Compile Include="Testing\ITSqlProjectionTestSpecificationBuilder.cs" />
     <Compile Include="Testing\ITSqlProjectionVerification.cs" />
-    <Compile Include="Testing\TSqlProjectionCountVerification.cs" />
+    <Compile Include="Testing\TSqlProjectionEmptyResultSetVerification.cs" />
+    <Compile Include="Testing\TSqlProjectionNonEmptyResultSetVerification.cs" />
+    <Compile Include="Testing\TSqlProjectionRowCountVerification.cs" />
+    <Compile Include="Testing\TSqlProjectionScalarVerification.cs" />
     <Compile Include="Testing\TSqlProjectionScenario.cs" />
     <Compile Include="Testing\TSqlProjectionScenarioGivenNoneStateBuilder.cs" />
     <Compile Include="Testing\TSqlProjectionScenarioGivenStateBuilder.cs" />

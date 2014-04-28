@@ -22,7 +22,7 @@ namespace Projac.Testing
                 _projection,
                 _givens,
                 _when,
-                new ITSqlProjectionVerification[] { new TSqlProjectionCountVerification(query, count) });
+                new ITSqlProjectionVerification[] { new TSqlProjectionRowCountVerification(query, count),  });
         }
     }
 }

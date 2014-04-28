@@ -25,7 +25,7 @@ namespace Projac.Testing
                 _projection,
                 _givens,
                 _when,
-                _verifications.Concat(new[] { new TSqlProjectionCountVerification(query, count) }).ToArray());
+                _verifications.Concat(new[] { new TSqlProjectionRowCountVerification(query, count) }).ToArray());
         }
 
         public TSqlProjectionTestSpecification Build()
