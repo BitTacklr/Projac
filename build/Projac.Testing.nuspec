@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Projac.Testing</id>
+    <version>0.0.0</version>
+    <authors>Yves Reynhout</authors>
+    <owners>Yves Reynhout</owners>
+    <title>Projac.Testing</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
+    <description>Projac.Testing allows you to test projections authored with Projac.</description>
+    <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
+    <tags>eventsourcing DDDesign</tags>
+  </metadata>
+  <files>
+    <file src="output\Projac.Testing.dll" target="lib\net45\Projac.Testing.dll" />
+    <file src="output\Projac.Testing.pdb" target="lib\net45\Projac.Testing.pdb" />
+    <file src="output\Projac.Testing.xml" target="lib\net45\Projac.Testing.xml" />
+    <file src="..\src\Projac.Testing\*.cs" target="src\Projac.Testing" />
+    <file src="..\src\Projac.Testing\Properties\*.cs" target="src\Projac.Testing\Properties" />
+  </files>
+</package>

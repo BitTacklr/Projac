@@ -4,19 +4,19 @@ using System.Data.SqlClient;
 
 namespace Projac.Testing
 {
-    class TSqlProjectionScalarVerification<TScalar> : ITSqlProjectionVerification
+    class TSqlProjectionScalarExpectation<TScalar> : ITSqlProjectionExpectation
         where TScalar : IEquatable<TScalar>
     {
         private readonly TSqlQueryStatement _query;
         private readonly TScalar _scalar;
 
-        public TSqlProjectionScalarVerification(TSqlQueryStatement query, TScalar scalar)
+        public TSqlProjectionScalarExpectation(TSqlQueryStatement query, TScalar scalar)
         {
             _query = query;
             _scalar = scalar;
         }
 
-        public bool Verify(SqlTransaction transaction)
+        public bool IsSatisfied(SqlTransaction transaction)
         {
             using (var command = new SqlCommand())
             {

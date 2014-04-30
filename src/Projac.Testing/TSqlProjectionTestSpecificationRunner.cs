@@ -5,16 +5,30 @@ using System.Linq;
 
 namespace Projac.Testing
 {
+    /// <summary>
+    /// Represents a projection test specification runner.
+    /// </summary>
     public class TSqlProjectionTestSpecificationRunner
     {
         private readonly string _connectionString;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TSqlProjectionTestSpecificationRunner"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="connectionString"/> is <c>null</c>.</exception>
         public TSqlProjectionTestSpecificationRunner(string connectionString)
         {
             if (connectionString == null) throw new ArgumentNullException("connectionString");
             _connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Runs the specified projection specification and verifies the expectations.
+        /// </summary>
+        /// <param name="specification">The projection specification to run.</param>
+        /// <returns>The result of the run.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="specification"/> is <c>null</c>.</exception>
         public TSqlProjectionTestResult Run(TSqlProjectionTestSpecification specification)
         {
             if (specification == null) throw new ArgumentNullException("specification");
@@ -58,9 +72,9 @@ namespace Projac.Testing
                                     command.ExecuteNonQuery();
                                 }
                                 //Then
-                                foreach (var verification in specification.Verifications)
+                                foreach (var verification in specification.Expectations)
                                 {
-                                    if (!verification.Verify(transaction))
+                                    if (!verification.IsSatisfied(transaction))
                                     {
                                         return new TSqlProjectionTestResult(); //Fail
                                     }
