@@ -8,10 +8,10 @@ namespace Projac.Testing
     public interface ITSqlProjectionExpectation
     {
         /// <summary>
-        /// Determines whether this expectation is satisfied.
+        /// Verifies this expectation is met.
         /// </summary>
         /// <param name="transaction">The transaction used to perform the expectation verification.</param>
         /// <returns><c>true</c> if the expectation is met, otherwise <c>false</c>.</returns>
-        bool IsSatisfied(SqlTransaction transaction);
+        bool Verify(SqlTransaction transaction);
     }
 }

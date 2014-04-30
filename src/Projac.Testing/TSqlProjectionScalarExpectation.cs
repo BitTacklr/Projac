@@ -16,7 +16,7 @@ namespace Projac.Testing
             _scalar = scalar;
         }
 
-        public bool IsSatisfied(SqlTransaction transaction)
+        public bool Verify(SqlTransaction transaction)
         {
             using (var command = new SqlCommand())
             {

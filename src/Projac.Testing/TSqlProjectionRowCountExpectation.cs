@@ -14,7 +14,7 @@ namespace Projac.Testing
             _rowCount = rowCount;
         }
 
-        public bool IsSatisfied(SqlTransaction transaction)
+        public bool Verify(SqlTransaction transaction)
         {
             using (var command = new SqlCommand())
             {

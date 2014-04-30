@@ -74,7 +74,7 @@ namespace Projac.Testing
                                 //Then
                                 foreach (var verification in specification.Expectations)
                                 {
-                                    if (!verification.IsSatisfied(transaction))
+                                    if (!verification.Verify(transaction))
                                     {
                                         return new TSqlProjectionTestResult(); //Fail
                                     }
