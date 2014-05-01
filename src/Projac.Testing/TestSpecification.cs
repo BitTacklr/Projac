@@ -1,26 +1,27 @@
 using System;
+using System.Collections.Generic;
 
 namespace Projac.Testing
 {
     /// <summary>
     /// Represent a projection test specification.
     /// </summary>
-    public class TSqlProjectionTestSpecification
+    public class TestSpecification
     {
         private readonly TSqlProjection _projection;
         private readonly object[] _givens;
         private readonly object _when;
-        private readonly ITSqlProjectionExpectation[] _expectations;
+        private readonly IExpectation[] _expectations;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TSqlProjectionTestSpecification"/> class.
+        /// Initializes a new instance of the <see cref="TestSpecification"/> class.
         /// </summary>
         /// <param name="projection">The projection under test.</param>
         /// <param name="givens">The givens.</param>
         /// <param name="when">The when.</param>
         /// <param name="expectations">The expectations.</param>
         /// <exception cref="System.ArgumentNullException">Throw when <paramref name="projection"/> or <paramref name="givens"/> or <paramref name="when"/> or <paramref name="expectations"/> is <c>null</c>.</exception>
-        public TSqlProjectionTestSpecification(TSqlProjection projection, object[] givens, object when, ITSqlProjectionExpectation[] expectations)
+        public TestSpecification(TSqlProjection projection, object[] givens, object when, IExpectation[] expectations)
         {
             if (projection == null) throw new ArgumentNullException("projection");
             if (givens == null) throw new ArgumentNullException("givens");
@@ -49,7 +50,7 @@ namespace Projac.Testing
         /// <value>
         /// The givens.
         /// </value>
-        public object[] Givens
+        public IReadOnlyCollection<object> Givens
         {
             get { return _givens; }
         }
@@ -71,19 +72,9 @@ namespace Projac.Testing
         /// <value>
         /// The expectations.
         /// </value>
-        public ITSqlProjectionExpectation[] Expectations
+        public IReadOnlyCollection<IExpectation> Expectations
         {
             get { return _expectations; }
         }
-
-        //public TSqlProjectionTestResult Fail(ITSqlProjectionExpectation failures)
-        //{
-            
-        //}
-
-        //public TSqlProjectionTestResult Pass()
-        //{
-            
-        //}
     }
 }

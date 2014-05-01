@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,16 +9,16 @@ namespace Projac.Testing
     /// <summary>
     /// Represents a projection test specification runner.
     /// </summary>
-    public class TSqlProjectionTestSpecificationRunner
+    public class TestSpecificationRunner
     {
         private readonly string _connectionString;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TSqlProjectionTestSpecificationRunner"/> class.
+        /// Initializes a new instance of the <see cref="TestSpecificationRunner"/> class.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="connectionString"/> is <c>null</c>.</exception>
-        public TSqlProjectionTestSpecificationRunner(string connectionString)
+        public TestSpecificationRunner(string connectionString)
         {
             if (connectionString == null) throw new ArgumentNullException("connectionString");
             _connectionString = connectionString;
@@ -29,7 +30,7 @@ namespace Projac.Testing
         /// <param name="specification">The projection specification to run.</param>
         /// <returns>The result of the run.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="specification"/> is <c>null</c>.</exception>
-        public TSqlProjectionTestResult Run(TSqlProjectionTestSpecification specification)
+        public TestRunResult Run(TestSpecification specification)
         {
             if (specification == null) throw new ArgumentNullException("specification");
             using (var connection = new SqlConnection(_connectionString))
@@ -72,14 +73,11 @@ namespace Projac.Testing
                                     command.ExecuteNonQuery();
                                 }
                                 //Then
-                                foreach (var verification in specification.Expectations)
-                                {
-                                    if (!verification.Verify(transaction))
-                                    {
-                                        return new TSqlProjectionTestResult(); //Fail
-                                    }
-                                }
-                                return new TSqlProjectionTestResult(); //Pass
+                                return new TestRunResult(
+                                    specification,
+                                    specification.Expectations.
+                                        Select(verification => verification.Verify(transaction)).
+                                        ToArray());
                             }
                         }
                         finally

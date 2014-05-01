@@ -3,18 +3,18 @@ using System.Data.SqlClient;
 
 namespace Projac.Testing
 {
-    class TSqlProjectionRowCountExpectation : ITSqlProjectionExpectation
+    class RowCountExpectation : IExpectation
     {
         private readonly TSqlQueryStatement _query;
         private readonly int _rowCount;
 
-        public TSqlProjectionRowCountExpectation(TSqlQueryStatement query, int rowCount)
+        public RowCountExpectation(TSqlQueryStatement query, int rowCount)
         {
             _query = query;
             _rowCount = rowCount;
         }
 
-        public bool Verify(SqlTransaction transaction)
+        public ExpectationVerificationResult Verify(SqlTransaction transaction)
         {
             using (var command = new SqlCommand())
             {
@@ -25,7 +25,11 @@ namespace Projac.Testing
                 command.CommandText = _query.Text;
 
                 var result = (int)command.ExecuteScalar();
-                return result.Equals(_rowCount);
+                if (result.Equals(_rowCount))
+                {
+                    return new RowCountExpectationVerificationPassResult(this);
+                }
+                return new RowCountExpectationVerificationFailResult(this, result);
             }
         }
     }

@@ -1,9 +1,9 @@
 namespace Projac.Testing
 {
     /// <summary>
-    /// Enumeration of possible states a test specification result can be in.
+    /// Enumeration of possible states an expectation result can be in.
     /// </summary>
-    public enum TSqlProjectionTestResultState
+    public enum ExpectationVerificationResultState
     {
         /// <summary>
         /// The test specification passed

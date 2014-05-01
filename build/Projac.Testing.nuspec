@@ -8,7 +8,7 @@
     <title>Projac.Testing</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
-    <description>Projac.Testing allows you to test projections authored with Projac.</description>
+    <description>Projac.Testing allows to write test specifications that verify Projac projections.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
     <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>

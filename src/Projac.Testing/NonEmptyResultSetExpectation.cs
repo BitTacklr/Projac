@@ -3,16 +3,16 @@ using System.Data.SqlClient;
 
 namespace Projac.Testing
 {
-    class TSqlProjectionEmptyResultSetExpectation : ITSqlProjectionExpectation
+    class NonEmptyResultSetExpectation : IExpectation
     {
         private readonly TSqlQueryStatement _query;
 
-        public TSqlProjectionEmptyResultSetExpectation(TSqlQueryStatement query)
+        public NonEmptyResultSetExpectation(TSqlQueryStatement query)
         {
             _query = query;
         }
 
-        public bool Verify(SqlTransaction transaction)
+        public ExpectationVerificationResult Verify(SqlTransaction transaction)
         {
             using (var command = new SqlCommand())
             {
@@ -24,7 +24,11 @@ namespace Projac.Testing
 
                 using (var reader = command.ExecuteReader())
                 {
-                    return reader.IsClosed || !reader.Read();
+                    if (!reader.IsClosed && reader.Read())
+                    {
+                        return new NonEmptyResultSetExpectationVerificationResult(this, ExpectationVerificationResultState.Passed);
+                    }
+                    return new NonEmptyResultSetExpectationVerificationResult(this, ExpectationVerificationResultState.Failed);
                 }
             }
         }
