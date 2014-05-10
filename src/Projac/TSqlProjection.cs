@@ -8,6 +8,11 @@ namespace Projac
     /// </summary>
     public class TSqlProjection
     {
+        /// <summary>
+        ///     Represents an empty projection instance.
+        /// </summary>
+        public static readonly TSqlProjection Empty = new TSqlProjection(new TSqlProjectionHandler[0]);
+
         private readonly TSqlProjectionHandler[] _handlers;
 
         /// <summary>

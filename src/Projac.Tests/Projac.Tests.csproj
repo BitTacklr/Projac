@@ -40,6 +40,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -48,8 +49,18 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Framework\TestDatabase.cs" />
+    <Compile Include="Framework\RequiresSqlServerAttribute.cs" />
+    <Compile Include="Framework\DatabaseOperations.cs" />
     <Compile Include="Framework\SqlParameterAssertions.cs" />
     <Compile Include="Framework\SqlParameterEqualityComparer.cs" />
+    <Compile Include="Framework\SqlServerInstanceDiscoveryResult.cs" />
+    <Compile Include="Testing\ExpectStateTests.cs" />
+    <Compile Include="Testing\GivenNoneStateTests.cs" />
+    <Compile Include="Testing\GivenStateTests.cs" />
+    <Compile Include="Testing\IntegrationTests.cs" />
+    <Compile Include="Testing\ScenarioTests.cs" />
+    <Compile Include="Testing\WhenStateTests.cs" />
     <Compile Include="TSqlBigIntValueTests.cs" />
     <Compile Include="TSqlBinarySizeTest.cs" />
     <Compile Include="TSqlBinaryValueTests.cs" />
@@ -82,10 +93,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Projac.Testing.NUnit\Projac.Testing.NUnit.csproj">
+      <Project>{468928bc-303b-4299-a7cf-170b4b68d872}</Project>
+      <Name>Projac.Testing.NUnit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Projac.Testing\Projac.Testing.csproj">
+      <Project>{394af825-d219-4861-88ef-8b5506a93551}</Project>
+      <Name>Projac.Testing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Projac\Projac.csproj">
       <Project>{359863ed-13ea-4c04-bf6f-c9cf611a7129}</Project>
       <Name>Projac</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Testing\NUnit\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

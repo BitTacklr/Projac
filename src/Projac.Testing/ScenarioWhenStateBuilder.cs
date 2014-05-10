@@ -15,16 +15,6 @@ namespace Projac.Testing
             _when = when;
         }
 
-        public IScenarioExpectStateBuilder ThenCount(TSqlQueryStatement query, int count)
-        {
-            if (query == null) throw new ArgumentNullException("query");
-            return new ScenarioExpectStateBuilder(
-                _projection,
-                _givens,
-                _when,
-                new IExpectation[] { new RowCountExpectation(query, count),  });
-        }
-
         public IScenarioExpectStateBuilder ExpectRowCount(TSqlQueryStatement query, int rowCount)
         {
             if (query == null) throw new ArgumentNullException("query");
