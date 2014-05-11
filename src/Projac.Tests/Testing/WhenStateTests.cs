@@ -68,7 +68,7 @@ namespace Projac.Tests.Testing
 
         [Test]
         [RequiresSqlServer]
-        public void ExpectRowCountIsPreservedWithExpectedBehavior()
+        public void ExpectRowCountIsPreservedUponBuildWithExpectedPassBehavior()
         {
             using (var connection = TestDatabase.OpenConnection())
             {
@@ -94,7 +94,7 @@ namespace Projac.Tests.Testing
                                 TSql.VarChar(value, 10)), 1).
                             Build().
                             Expectations.
-                            Last();
+                            Single();
                     using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
                     {
                         try
@@ -122,48 +122,7 @@ namespace Projac.Tests.Testing
 
         [Test]
         [RequiresSqlServer]
-        public void ExpectEmptyResultSetIsPreservedWithExpectedBehavior()
-        {
-            using (var connection = TestDatabase.OpenConnection())
-            {
-                try
-                {
-                    //Arrange
-                    SetUpTestSchema(connection);
-                    var expectation =
-                        _sut.ExpectEmptyResultSet(
-                            TSql.Query("SELECT * FROM [Test]")).
-                            Build().
-                            Expectations.
-                            Last();
-                    using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
-                    {
-                        try
-                        {
-                            //Act
-                            var result = expectation.Verify(transaction);
-
-                            //Assert
-                            Assert.That(result.Passed, Is.True);
-                            Assert.That(result.Expectation, Is.EqualTo(expectation));
-                            Assert.That(result.Failed, Is.False);
-                        }
-                        finally
-                        {
-                            transaction.Rollback();
-                        }
-                    }
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-
-        [Test]
-        [RequiresSqlServer]
-        public void ExpectNonEmptyResultSetIsPreservedWithExpectedBehavior()
+        public void ExpectRowCountIsPreservedUponBuildWithExpectedFailBehavior()
         {
             using (var connection = TestDatabase.OpenConnection())
             {
@@ -183,11 +142,54 @@ namespace Projac.Tests.Testing
                         command.ExecuteNonQuery();
                     }
                     var expectation =
-                        _sut.ExpectNonEmptyResultSet(
-                            TSql.QueryFormat("SELECT * FROM [Test]")).
+                        _sut.ExpectRowCount(
+                            TSql.QueryFormat("SELECT COUNT(*) FROM [Test] WHERE [Id] = {0} AND [Value] = {1}",
+                                TSql.Int(id),
+                                TSql.VarChar(value, 10)), 0).
                             Build().
                             Expectations.
-                            Last();
+                            Single();
+                    using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+                    {
+                        try
+                        {
+                            //Act
+                            var result = expectation.Verify(transaction);
+
+                            //Assert
+                            Assert.That(result.Passed, Is.False);
+                            Assert.That(result.Expectation, Is.EqualTo(expectation));
+                            Assert.That(result.Failed, Is.True);
+                        }
+                        finally
+                        {
+                            transaction.Rollback();
+                        }
+                    }
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        [Test]
+        [RequiresSqlServer]
+        public void ExpectEmptyResultSetIsPreservedUponBuildWithExpectedPassBehavior()
+        {
+            using (var connection = TestDatabase.OpenConnection())
+            {
+                try
+                {
+                    //Arrange
+                    SetUpTestSchema(connection);
+                    var expectation =
+                        _sut.ExpectEmptyResultSet(
+                            TSql.Query("SELECT * FROM [Test]")).
+                            Build().
+                            Expectations.
+                            Single();
                     using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
                     {
                         try
@@ -199,6 +201,147 @@ namespace Projac.Tests.Testing
                             Assert.That(result.Passed, Is.True);
                             Assert.That(result.Expectation, Is.EqualTo(expectation));
                             Assert.That(result.Failed, Is.False);
+                        }
+                        finally
+                        {
+                            transaction.Rollback();
+                        }
+                    }
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        [Test]
+        [RequiresSqlServer]
+        public void ExpectEmptyResultSetIsPreservedUponBuildWithExpectedFailBehavior()
+        {
+            using (var connection = TestDatabase.OpenConnection())
+            {
+                try
+                {
+                    //Arrange
+                    SetUpTestSchema(connection);
+                    var random = new Random();
+                    using (var command = new SqlCommand())
+                    {
+                        command.Connection = connection;
+                        command.CommandText = "INSERT INTO [Test] ([Id],[Value]) VALUES (@Id, @Value)";
+                        command.Parameters.Add(TSql.Int(random.Next()).ToSqlParameter("@Id"));
+                        command.Parameters.Add(TSql.VarChar(new string('a', random.Next(10)), 10).ToSqlParameter("@Value"));
+                        command.ExecuteNonQuery();
+                    }
+                    var expectation =
+                        _sut.ExpectEmptyResultSet(
+                            TSql.Query("SELECT * FROM [Test]")).
+                            Build().
+                            Expectations.
+                            Single();
+                    using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+                    {
+                        try
+                        {
+                            //Act
+                            var result = expectation.Verify(transaction);
+
+                            //Assert
+                            Assert.That(result.Passed, Is.False);
+                            Assert.That(result.Expectation, Is.EqualTo(expectation));
+                            Assert.That(result.Failed, Is.True);
+                        }
+                        finally
+                        {
+                            transaction.Rollback();
+                        }
+                    }
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        [Test]
+        [RequiresSqlServer]
+        public void ExpectNonEmptyResultSetIsPreservedUponBuildWithExpectedPassBehavior()
+        {
+            using (var connection = TestDatabase.OpenConnection())
+            {
+                try
+                {
+                    //Arrange
+                    SetUpTestSchema(connection);
+                    var random = new Random();
+                    using (var command = new SqlCommand())
+                    {
+                        command.Connection = connection;
+                        command.CommandText = "INSERT INTO [Test] ([Id],[Value]) VALUES (@Id, @Value)";
+                        command.Parameters.Add(TSql.Int(random.Next()).ToSqlParameter("@Id"));
+                        command.Parameters.Add(TSql.VarChar(new string('a', random.Next(10)), 10).ToSqlParameter("@Value"));
+                        command.ExecuteNonQuery();
+                    }
+                    var expectation =
+                        _sut.ExpectNonEmptyResultSet(
+                            TSql.QueryFormat("SELECT * FROM [Test]")).
+                            Build().
+                            Expectations.
+                            Single();
+                    using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+                    {
+                        try
+                        {
+                            //Act
+                            var result = expectation.Verify(transaction);
+
+                            //Assert
+                            Assert.That(result.Passed, Is.True);
+                            Assert.That(result.Expectation, Is.EqualTo(expectation));
+                            Assert.That(result.Failed, Is.False);
+                        }
+                        finally
+                        {
+                            transaction.Rollback();
+                        }
+                    }
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        [Test]
+        [RequiresSqlServer]
+        public void ExpectNonEmptyResultSetIsPreservedUponBuildWithExpectedFailBehavior()
+        {
+            using (var connection = TestDatabase.OpenConnection())
+            {
+                try
+                {
+                    //Arrange
+                    SetUpTestSchema(connection);
+                    var expectation =
+                        _sut.ExpectNonEmptyResultSet(
+                            TSql.QueryFormat("SELECT * FROM [Test]")).
+                            Build().
+                            Expectations.
+                            Single();
+                    using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+                    {
+                        try
+                        {
+                            //Act
+                            var result = expectation.Verify(transaction);
+
+                            //Assert
+                            Assert.That(result.Passed, Is.False);
+                            Assert.That(result.Expectation, Is.EqualTo(expectation));
+                            Assert.That(result.Failed, Is.True);
                         }
                         finally
                         {

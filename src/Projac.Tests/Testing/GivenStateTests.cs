@@ -54,7 +54,7 @@ namespace Projac.Tests.Testing
         }
 
         [Test]
-        public void GivenEnumerableGivensArePreserved()
+        public void GivenEnumerableGivensArePreservedUponBuild()
         {
             IEnumerable<object> givens = new[]
             {
@@ -66,7 +66,7 @@ namespace Projac.Tests.Testing
         }
 
         [Test]
-        public void GivenArrayGivensArePreserved()
+        public void GivenArrayGivensArePreservedUponBuild()
         {
             var givens = new[]
             {
@@ -78,7 +78,7 @@ namespace Projac.Tests.Testing
         }
 
         [Test]
-        public void WhenEventIsPreserved()
+        public void WhenEventIsPreservedUponBuild()
         {
             var @event = new object();
             var result = _sut.When(@event).ExpectRowCount(TSql.Query(""), 0).Build().When;

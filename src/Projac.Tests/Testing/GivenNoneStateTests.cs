@@ -22,7 +22,14 @@ namespace Projac.Tests.Testing
         }
 
         [Test]
-        public void WhenEventIsPreserved()
+        public void GivensAreEmptyUponBuild()
+        {
+            var result = _sut.When(new object()).ExpectRowCount(TSql.Query(""), 0).Build().Givens;
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void WhenEventIsPreservedUponBuild()
         {
             var @event = new object();
             var result = _sut.When(@event).ExpectRowCount(TSql.Query(""), 0).Build().When;
