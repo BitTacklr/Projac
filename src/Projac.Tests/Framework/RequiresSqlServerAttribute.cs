@@ -39,7 +39,7 @@ namespace Projac.Tests.Framework
 
         public ActionTargets Targets
         {
-            get { return ActionTargets.Suite; }
+            get { return ActionTargets.Test; }
         }
     }
 }

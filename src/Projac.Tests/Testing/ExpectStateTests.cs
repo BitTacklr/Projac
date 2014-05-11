@@ -35,7 +35,6 @@ namespace Projac.Tests.Testing
         }
     }
 
-    [RequiresSqlServer]
     public abstract class ExpectStateFixture
     {
         private IScenarioExpectStateBuilder _sut;
@@ -45,18 +44,6 @@ namespace Projac.Tests.Testing
         [SetUp]
         public void SetUp()
         {
-            using (var connection = TestDatabase.OpenConnection())
-            {
-                using (var command = new SqlCommand())
-                {
-                    command.Connection = connection;
-                    command.CommandText = "IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Test')) BEGIN CREATE TABLE [Test] ([Id] INT PRIMARY KEY, [Value] VARCHAR(10)) END";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Test')) BEGIN DELETE FROM [Test] END";
-                    command.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
             _sut = SutFactory();
         }
 
@@ -79,12 +66,15 @@ namespace Projac.Tests.Testing
         }
 
         [Test]
+        [RequiresSqlServer]
         public void ExpectRowCountIsPreservedWithExpectedBehavior()
         {
             using (var connection = TestDatabase.OpenConnection())
             {
                 try
                 {
+                    //Arrange
+                    SetUpTestSchema(connection);
                     var random = new Random();
                     var id = random.Next();
                     var value = new string('a', random.Next(10));
@@ -108,7 +98,10 @@ namespace Projac.Tests.Testing
                     {
                         try
                         {
+                            //Act
                             var result = expectation.Verify(transaction);
+
+                            //Assert
                             Assert.That(result.Passed, Is.True);
                             Assert.That(result.Expectation, Is.EqualTo(expectation));
                             Assert.That(result.Failed, Is.False);
@@ -127,12 +120,15 @@ namespace Projac.Tests.Testing
         }
 
         [Test]
+        [RequiresSqlServer]
         public void ExpectEmptyResultSetIsPreservedWithExpectedBehavior()
         {
             using (var connection = TestDatabase.OpenConnection())
             {
                 try
                 {
+                    //Arrange
+                    SetUpTestSchema(connection);
                     var expectation =
                         _sut.ExpectEmptyResultSet(
                             TSql.Query("SELECT * FROM [Test]")).
@@ -143,7 +139,10 @@ namespace Projac.Tests.Testing
                     {
                         try
                         {
+                            //Act
                             var result = expectation.Verify(transaction);
+
+                            //Assert
                             Assert.That(result.Passed, Is.True);
                             Assert.That(result.Expectation, Is.EqualTo(expectation));
                             Assert.That(result.Failed, Is.False);
@@ -162,12 +161,15 @@ namespace Projac.Tests.Testing
         }
 
         [Test]
+        [RequiresSqlServer]
         public void ExpectNonEmptyResultSetIsPreservedWithExpectedBehavior()
         {
             using (var connection = TestDatabase.OpenConnection())
             {
                 try
                 {
+                    //Arrange
+                    SetUpTestSchema(connection);
                     var random = new Random();
                     var id = random.Next();
                     var value = new string('a', random.Next(10));
@@ -189,7 +191,10 @@ namespace Projac.Tests.Testing
                     {
                         try
                         {
+                            //Act
                             var result = expectation.Verify(transaction);
+
+                            //Assert
                             Assert.That(result.Passed, Is.True);
                             Assert.That(result.Expectation, Is.EqualTo(expectation));
                             Assert.That(result.Failed, Is.False);
@@ -204,6 +209,18 @@ namespace Projac.Tests.Testing
                 {
                     connection.Close();
                 }
+            }
+        }
+
+        private static void SetUpTestSchema(SqlConnection connection)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.Connection = connection;
+                command.CommandText = "IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Test')) BEGIN CREATE TABLE [Test] ([Id] INT PRIMARY KEY, [Value] VARCHAR(10)) END";
+                command.ExecuteNonQuery();
+                command.CommandText = "IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Test')) BEGIN DELETE FROM [Test] END";
+                command.ExecuteNonQuery();
             }
         }
     }

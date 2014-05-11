@@ -58,7 +58,6 @@
     <Compile Include="Testing\ExpectStateTests.cs" />
     <Compile Include="Testing\GivenNoneStateTests.cs" />
     <Compile Include="Testing\GivenStateTests.cs" />
-    <Compile Include="Testing\IntegrationTests.cs" />
     <Compile Include="Testing\ScenarioTests.cs" />
     <Compile Include="Testing\WhenStateTests.cs" />
     <Compile Include="TSqlBigIntValueTests.cs" />

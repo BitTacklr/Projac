@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using NUnit.Framework;
 
 namespace Projac.Tests
@@ -11,25 +10,16 @@ namespace Projac.Tests
         [Test]
         public void EmptyReturnsExpectedInstance()
         {
-            Assert.That(
-                TSqlProjection.Empty,
-                Is.EqualTo(new TSqlProjection(new TSqlProjectionHandler[0])).
-                    Using(new EmptyTSqlProjectionEqualityComparer()));
+            var result = TSqlProjection.Empty;
+            Assert.That(result.Handlers, Is.EquivalentTo(new TSqlProjectionHandler[0]));
         }
 
-        class EmptyTSqlProjectionEqualityComparer : IEqualityComparer<TSqlProjection>
+        [Test]
+        public void EmptyReturnsSameInstance()
         {
-            public bool Equals(TSqlProjection x, TSqlProjection y)
-            {
-                if (ReferenceEquals(x, y)) return true;
-                if (x == null || y == null) return false;
-                return x.Handlers.Count == 0 && y.Handlers.Count == 0;
-            }
-
-            public int GetHashCode(TSqlProjection obj)
-            {
-                throw new NotSupportedException();
-            }
+            var instance1 = TSqlProjection.Empty;
+            var instance2 = TSqlProjection.Empty;
+            Assert.That(instance1, Is.SameAs(instance2));
         }
 
         [Test]
