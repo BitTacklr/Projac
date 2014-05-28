@@ -144,19 +144,17 @@ let PortfolioProjection (message:Object) =
     seq {
         match message with
             | :? PortfolioCreated as m -> 
-                yield TSql.NonQueryFormat(
-                    "INSERT INTO [PortfolioPhotoCount] ([Id], [Name], [PhotoCount]) VALUES ({0}, {1}, {2})", 
-                    TSql.Int(m.PortfolioId), 
-                    TSql.VarCharMax(m.Name), 
-                    TSql.Int(0))
+                yield TSql.NonQuery(
+                    "INSERT INTO [PortfolioPhotoCount] ([Id], [Name], [PhotoCount]) VALUES (@Id, @Name, @PhotoCount)", 
+                    [ ("Id", TSql.Int(m.PortfolioId)); ("Name", TSql.VarCharMax(m.Name)); ("PhotoCount", TSql.Int(0)); ])
             | :? PhotoAddToPortfolio as m ->
-                yield TSql.NonQueryFormat(
-                    "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] + 1 WHERE [Id] = {0}", 
-                    TSql.Int(m.PortfolioId))
+                yield TSql.NonQuery(
+                    "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] + 1 WHERE [Id] = @Id", 
+                    dict [ ("Id", TSql.Int(m.PortfolioId)) ])
             | :? PhotoRemovedFromPortfolio as m ->
-                yield TSql.NonQueryFormat(
+                yield TSql.NonQuery(
                     "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] - 1 WHERE [Id] = {0}", 
-                    TSql.Int(m.PortfolioId))
+                    [ ("Id", TSql.Int(m.PortfolioId)) ] |> Map.ofSeq)
             | :? PortfolioArchived as m ->
                 yield TSql.NonQueryFormat(
                     "DELETE FROM [PortfolioPhotoCount] WHERE [Id] = {0}", 
