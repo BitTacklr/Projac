@@ -3,128 +3,14 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
-#if FSHARP
-using Microsoft.FSharp.Core;
-#endif
 
 namespace Projac
 {
     /// <summary>
     ///     Fluent T-SQL syntax.
     /// </summary>
-    public static class TSql
+    public static partial class TSql
     {
-#if FSHARP
-        /// <summary>
-        ///     Returns a BIGINT parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue BigInt(FSharpOption<long> value)
-        {
-            return FSharpOption<long>.get_IsNone(value)
-                ? Null()
-                : new TSqlBigIntValue(value.Value);
-        }
-
-        /// <summary>
-        ///     Returns a BIGINT parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue BigInt(long value)
-        {
-            return new TSqlBigIntValue(value);
-        }
-
-        /// <summary>
-        ///     Returns a INT parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue Int(FSharpOption<int> value)
-        {
-            return FSharpOption<int>.get_IsNone(value)
-                ? Null()
-                : new TSqlIntValue(value.Value);
-        }
-
-        /// <summary>
-        ///     Returns a INT parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue Int(int value)
-        {
-            return new TSqlIntValue(value);
-        }
-
-        /// <summary>
-        ///     Returns a BIT parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue Bit(FSharpOption<bool> value)
-        {
-            return FSharpOption<bool>.get_IsNone(value)
-                ? Null()
-                : new TSqlBitValue(value.Value);
-        }
-
-        /// <summary>
-        ///     Returns a BIT parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue Bit(bool value)
-        {
-            return new TSqlBitValue(value);
-        }
-
-        /// <summary>
-        ///     Returns a DATETIMEOFFSET parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue DateTimeOffset(FSharpOption<DateTimeOffset> value)
-        {
-            return FSharpOption<DateTimeOffset>.get_IsNone(value) 
-                ? Null()
-                : new TSqlDateTimeOffsetValue(value.Value);
-        }
-
-        /// <summary>
-        ///     Returns a DATETIMEOFFSET parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue DateTimeOffset(DateTimeOffset value)
-        {
-            return new TSqlDateTimeOffsetValue(value);
-        }
-
-        /// <summary>
-        ///     Returns a UNIQUEIDENTIFIER parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue UniqueIdentifier(FSharpOption<Guid> value)
-        {
-            return FSharpOption<Guid>.get_IsNone(value) 
-                ? Null()
-                : new TSqlUniqueIdentifierValue(value.Value);
-        }
-
-        /// <summary>
-        ///     Returns a UNIQUEIDENTIFIER parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue UniqueIdentifier(Guid value)
-        {
-            return new TSqlUniqueIdentifierValue(value);
-        }
-#endif
         /// <summary>
         ///     Returns a NULL parameter value.
         /// </summary>
@@ -210,68 +96,6 @@ namespace Projac
                 : new TSqlNVarCharValue(value, TSqlNVarCharSize.Max);
         }
 
-#if !FSHARP
-        /// <summary>
-        ///     Returns a BIGINT parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue BigInt(long? value)
-        {
-            return !value.HasValue
-                ? Null()
-                : new TSqlBigIntValue(value.Value);
-        }
-
-        /// <summary>
-        ///     Returns a INT parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue Int(int? value)
-        {
-            return !value.HasValue
-                ? Null()
-                : new TSqlIntValue(value.Value);
-        }
-
-        /// <summary>
-        ///     Returns a BIT parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue Bit(bool? value)
-        {
-            return !value.HasValue
-                ? Null()
-                : new TSqlBitValue(value.Value);
-        }
-
-        /// <summary>
-        ///     Returns a UNIQUEIDENTIFIER parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue UniqueIdentifier(Guid? value)
-        {
-            return !value.HasValue
-                ? Null()
-                : new TSqlUniqueIdentifierValue(value.Value);
-        }
-
-        /// <summary>
-        ///     Returns a DATETIMEOFFSET parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue DateTimeOffset(DateTimeOffset? value)
-        {
-            return !value.HasValue
-                ? Null()
-                : new TSqlDateTimeOffsetValue(value.Value);
-        }
-#endif
-
         /// <summary>
         ///     Returns a BINARY parameter value.
         /// </summary>
@@ -311,17 +135,6 @@ namespace Projac
         }
 
         /// <summary>
-        ///     Returns a T-SQL non query statement.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>A <see cref="TSqlNonQueryStatement" />.</returns>
-        public static TSqlQueryStatement Query(string text, object parameters = null)
-        {
-            return new TSqlQueryStatement(text, Collect(parameters));
-        }
-
-        /// <summary>
         ///     Returns a T-SQL query statement.
         /// </summary>
         /// <param name="format">The text with positional parameters to be formatted.</param>
@@ -336,17 +149,6 @@ namespace Projac
             return new TSqlQueryStatement(
                 string.Format(format, parameters.Select((_, index) => (object)FormatSqlParameterName("P" + index)).ToArray()),
                 parameters.Select((value, index) => value.ToSqlParameter(FormatSqlParameterName("P" + index))).ToArray());
-        }
-
-        /// <summary>
-        ///     Returns a T-SQL non query statement.
-        /// </summary>
-        /// <param name="text">The text with named parameters.</param>
-        /// <param name="parameters">The named parameters.</param>
-        /// <returns>A <see cref="TSqlNonQueryStatement" />.</returns>
-        public static TSqlNonQueryStatement NonQuery(string text, object parameters = null)
-        {
-            return new TSqlNonQueryStatement(text, Collect(parameters));
         }
 
         /// <summary>
@@ -397,20 +199,6 @@ namespace Projac
         {
             if (statements == null) throw new ArgumentNullException("statements");
             return new TSqlNonQueryStatementComposer(statements);
-        }
-
-        private static SqlParameter[] Collect(object parameters)
-        {
-            if (parameters == null)
-                return new SqlParameter[0];
-            return parameters.
-                GetType().
-                GetProperties(BindingFlags.Instance | BindingFlags.Public).
-                Where(property => typeof (ITSqlParameterValue).IsAssignableFrom(property.PropertyType)).
-                Select(property =>
-                    ((ITSqlParameterValue) property.GetGetMethod().Invoke(parameters, null)).
-                        ToSqlParameter(FormatSqlParameterName(property.Name))).
-                ToArray();
         }
 
         private static string FormatSqlParameterName(string name)

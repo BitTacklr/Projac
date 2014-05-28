@@ -71,6 +71,8 @@
     <Compile Include="TSqlQueryStatementTests.cs" />
     <Compile Include="TSqlStatementComposerTests.cs" />
     <Compile Include="TSqlTests.cs" />
+    <Compile Include="TSqlTests.CSharpOnly.cs" />
+    <Compile Include="TSqlTests.FSharpOnly.cs" />
     <Compile Include="TSqlUniqueIdentifierValueTests.cs" />
     <Compile Include="TSqlVarBinarySizeTest.cs" />
     <Compile Include="TSqlVarBinaryValueTests.cs" />

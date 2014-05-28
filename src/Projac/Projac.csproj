@@ -48,6 +48,8 @@
     <Compile Include="Limits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TSql.cs" />
+    <Compile Include="TSql.CSharpOnly.cs" />
+    <Compile Include="TSql.FSharpOnly.cs" />
     <Compile Include="TSqlBigIntValue.cs" />
     <Compile Include="TSqlBinarySize.cs" />
     <Compile Include="TSqlBinaryValue.cs" />
