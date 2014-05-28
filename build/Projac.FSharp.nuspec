@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>Projac</id>
+    <id>Projac.FSharp</id>
     <version>0.0.0</version>
     <authors>Yves Reynhout</authors>
     <owners>Yves Reynhout</owners>
-    <title>Projac</title>
+    <title>Projac.FSharp</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
-    <description>Projac provides lightweight infrastructure for producing T-SQL DML statements.</description>
+    <description>Projac.FSharp provides lightweight infrastructure for producing T-SQL DML statements.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
     <releaseNotes>Changes: FSharp support.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
   </metadata>
   <files>
-    <file src="output\csharp\Projac.dll" target="lib\net45\Projac.dll" />
-    <file src="output\csharp\Projac.pdb" target="lib\net45\Projac.pdb" />
-    <file src="output\csharp\Projac.xml" target="lib\net45\Projac.xml" />
+    <file src="output\fsharp\Projac.dll" target="lib\net45\Projac.dll" />
+    <file src="output\fsharp\Projac.pdb" target="lib\net45\Projac.pdb" />
+    <file src="output\fsharp\Projac.xml" target="lib\net45\Projac.xml" />
     <file src="..\src\Projac\*.cs" target="src\Projac" />
     <file src="..\src\Projac\Properties\*.cs" target="src\Projac\Properties" />
   </files>

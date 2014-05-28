@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+#if FSHARP
+using Microsoft.FSharp.Core;
+#endif
 
 namespace Projac
 {
@@ -11,6 +14,117 @@ namespace Projac
     /// </summary>
     public static class TSql
     {
+#if FSHARP
+        /// <summary>
+        ///     Returns a BIGINT parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue BigInt(FSharpOption<long> value)
+        {
+            return FSharpOption<long>.get_IsNone(value)
+                ? Null()
+                : new TSqlBigIntValue(value.Value);
+        }
+
+        /// <summary>
+        ///     Returns a BIGINT parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue BigInt(long value)
+        {
+            return new TSqlBigIntValue(value);
+        }
+
+        /// <summary>
+        ///     Returns a INT parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue Int(FSharpOption<int> value)
+        {
+            return FSharpOption<int>.get_IsNone(value)
+                ? Null()
+                : new TSqlIntValue(value.Value);
+        }
+
+        /// <summary>
+        ///     Returns a INT parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue Int(int value)
+        {
+            return new TSqlIntValue(value);
+        }
+
+        /// <summary>
+        ///     Returns a BIT parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue Bit(FSharpOption<bool> value)
+        {
+            return FSharpOption<bool>.get_IsNone(value)
+                ? Null()
+                : new TSqlBitValue(value.Value);
+        }
+
+        /// <summary>
+        ///     Returns a BIT parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue Bit(bool value)
+        {
+            return new TSqlBitValue(value);
+        }
+
+        /// <summary>
+        ///     Returns a DATETIMEOFFSET parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue DateTimeOffset(FSharpOption<DateTimeOffset> value)
+        {
+            return FSharpOption<DateTimeOffset>.get_IsNone(value) 
+                ? Null()
+                : new TSqlDateTimeOffsetValue(value.Value);
+        }
+
+        /// <summary>
+        ///     Returns a DATETIMEOFFSET parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue DateTimeOffset(DateTimeOffset value)
+        {
+            return new TSqlDateTimeOffsetValue(value);
+        }
+
+        /// <summary>
+        ///     Returns a UNIQUEIDENTIFIER parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue UniqueIdentifier(FSharpOption<Guid> value)
+        {
+            return FSharpOption<Guid>.get_IsNone(value) 
+                ? Null()
+                : new TSqlUniqueIdentifierValue(value.Value);
+        }
+
+        /// <summary>
+        ///     Returns a UNIQUEIDENTIFIER parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
+        public static ITSqlParameterValue UniqueIdentifier(Guid value)
+        {
+            return new TSqlUniqueIdentifierValue(value);
+        }
+#endif
         /// <summary>
         ///     Returns a NULL parameter value.
         /// </summary>
@@ -96,6 +210,7 @@ namespace Projac
                 : new TSqlNVarCharValue(value, TSqlNVarCharSize.Max);
         }
 
+#if !FSHARP
         /// <summary>
         ///     Returns a BIGINT parameter value.
         /// </summary>
@@ -155,6 +270,7 @@ namespace Projac
                 ? Null()
                 : new TSqlDateTimeOffsetValue(value.Value);
         }
+#endif
 
         /// <summary>
         ///     Returns a BINARY parameter value.

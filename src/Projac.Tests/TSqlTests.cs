@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+#if FSHARP
+using Microsoft.FSharp.Core;
+#endif
 using NUnit.Framework;
 using Projac.Tests.Framework;
 
@@ -87,6 +90,7 @@ namespace Projac.Tests
             Assert.That(TSql.NVarCharMax(null), Is.EqualTo(TSqlNullValue.Instance));
         }
 
+#if !FSHARP
         [Test]
         public void BigIntReturnsExpectedInstance()
         {
@@ -136,6 +140,112 @@ namespace Projac.Tests
         }
 
         [Test]
+        public void DateTimeOffsetReturnsExpectedInstance()
+        {
+            var value = DateTimeOffset.UtcNow;
+            Assert.That(TSql.DateTimeOffset(value), Is.EqualTo(new TSqlDateTimeOffsetValue(value)));
+        }
+
+        [Test]
+        public void DateTimeOffsetNullReturnsExpectedInstance()
+        {
+            Assert.That(TSql.DateTimeOffset(null), Is.EqualTo(TSqlNullValue.Instance));
+        }
+#endif
+#if FSHARP
+        [Test]
+        public void OptionalBigIntReturnsExpectedInstance()
+        {
+            Assert.That(TSql.BigInt(FSharpOption<long>.Some(123)), Is.EqualTo(new TSqlBigIntValue(123)));
+        }
+
+        [Test]
+        public void BigIntReturnsExpectedInstance()
+        {
+            Assert.That(TSql.BigInt(123), Is.EqualTo(new TSqlBigIntValue(123)));
+        }
+
+        [Test]
+        public void BigIntNoneReturnsExpectedInstance()
+        {
+            Assert.That(TSql.BigInt(FSharpOption<long>.None), Is.EqualTo(TSqlNullValue.Instance));
+        }
+
+        [Test]
+        public void OptionalIntReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Int(FSharpOption<int>.Some(123)), Is.EqualTo(new TSqlIntValue(123)));
+        }
+
+        [Test]
+        public void IntReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Int(123), Is.EqualTo(new TSqlIntValue(123)));
+        }
+
+        [Test]
+        public void IntNoneReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Int(FSharpOption<int>.None), Is.EqualTo(TSqlNullValue.Instance));
+        }
+
+        [Test]
+        public void OptionalBitReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Bit(FSharpOption<bool>.Some(true)), Is.EqualTo(new TSqlBitValue(true)));
+        }
+
+        [Test]
+        public void BitReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Bit(true), Is.EqualTo(new TSqlBitValue(true)));
+        }
+
+        [Test]
+        public void BitNoneReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Bit(FSharpOption<bool>.None), Is.EqualTo(TSqlNullValue.Instance));
+        }
+
+        [Test]
+        public void OptionalUniqueIdentifierReturnsExpectedInstance()
+        {
+            Assert.That(TSql.UniqueIdentifier(FSharpOption<Guid>.Some(Guid.Empty)), Is.EqualTo(new TSqlUniqueIdentifierValue(Guid.Empty)));
+        }
+
+        [Test]
+        public void UniqueIdentifierReturnsExpectedInstance()
+        {
+            Assert.That(TSql.UniqueIdentifier(Guid.Empty), Is.EqualTo(new TSqlUniqueIdentifierValue(Guid.Empty)));
+        }
+
+        [Test]
+        public void UniqueIdentifierNoneReturnsExpectedInstance()
+        {
+            Assert.That(TSql.UniqueIdentifier(FSharpOption<Guid>.None), Is.EqualTo(TSqlNullValue.Instance));
+        }
+
+        [Test]
+        public void OptionalDateTimeOffsetReturnsExpectedInstance()
+        {
+            var value = DateTimeOffset.UtcNow;
+            Assert.That(TSql.DateTimeOffset(FSharpOption<DateTimeOffset>.Some(value)), Is.EqualTo(new TSqlDateTimeOffsetValue(value)));
+        }
+
+                [Test]
+        public void DateTimeOffsetReturnsExpectedInstance()
+        {
+            var value = DateTimeOffset.UtcNow;
+            Assert.That(TSql.DateTimeOffset(value), Is.EqualTo(new TSqlDateTimeOffsetValue(value)));
+        }
+
+        [Test]
+        public void DateTimeOffsetNoneReturnsExpectedInstance()
+        {
+            Assert.That(TSql.DateTimeOffset(FSharpOption<DateTimeOffset>.None), Is.EqualTo(TSqlNullValue.Instance));
+        }
+#endif
+        [Test]
         public void BinaryReturnsExpectedInstance()
         {
             Assert.That(TSql.Binary(new byte[]{ 1,2,3}, 123), Is.EqualTo(new TSqlBinaryValue(new byte[] { 1, 2 , 3}, new TSqlBinarySize(123))));
@@ -171,19 +281,6 @@ namespace Projac.Tests
             Assert.That(TSql.VarBinaryMax(null), Is.EqualTo(TSqlNullValue.Instance));
         }
 
-        [Test]
-        public void DateTimeOffsetReturnsExpectedInstance()
-        {
-            var value = DateTimeOffset.UtcNow;
-            Assert.That(TSql.DateTimeOffset(value), Is.EqualTo(new TSqlDateTimeOffsetValue(value)));
-        }
-
-        [Test]
-        public void DateTimeOffsetNullReturnsExpectedInstance()
-        {
-            Assert.That(TSql.DateTimeOffset(null), Is.EqualTo(TSqlNullValue.Instance));
-        }
-
         [TestCaseSource("NonQueryCases")]
         public void NonQueryReturnsExpectedInstance(TSqlNonQueryStatement actual, TSqlNonQueryStatement expected)
         {
@@ -203,17 +300,17 @@ namespace Projac.Tests
                 TSql.NonQuery("text", new { }),
                 new TSqlNonQueryStatement("text", new SqlParameter[0]));
             yield return new TestCaseData(
-                TSql.NonQuery("text", new { Parameter = TSql.Bit(true) }),
+                TSql.NonQuery("text", new { Parameter = new TestSqlParameter() }),
                 new TSqlNonQueryStatement("text", new []
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@Parameter")
+                    new TestSqlParameter().ToSqlParameter("@Parameter")
                 }));
             yield return new TestCaseData(
-                TSql.NonQuery("text", new { Parameter1 = TSql.Bit(true), Parameter2 = TSql.Bit(null) }),
+                TSql.NonQuery("text", new { Parameter1 = new TestSqlParameter(), Parameter2 = new TestSqlParameter() }),
                 new TSqlNonQueryStatement("text", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@Parameter1"),
-                    TSqlNullValue.Instance.ToSqlParameter("@Parameter2")
+                    new TestSqlParameter().ToSqlParameter("@Parameter1"),
+                    new TestSqlParameter().ToSqlParameter("@Parameter2")
                 }));
         }
 
@@ -236,30 +333,30 @@ namespace Projac.Tests
                 TSql.NonQueryFormat("text", new ITSqlParameterValue[0]),
                 new TSqlNonQueryStatement("text", new SqlParameter[0]));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text", TSql.Bit(true)),
+                TSql.NonQueryFormat("text", new TestSqlParameter()),
                 new TSqlNonQueryStatement("text", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@P0")
+                    new TestSqlParameter().ToSqlParameter("@P0")
                 }));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text {0}", TSql.Bit(true)),
+                TSql.NonQueryFormat("text {0}", new TestSqlParameter()),
                 new TSqlNonQueryStatement("text @P0", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@P0")
+                    new TestSqlParameter().ToSqlParameter("@P0")
                 }));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text", TSql.Bit(true), TSql.Bit(null)),
+                TSql.NonQueryFormat("text", new TestSqlParameter(), new TestSqlParameter()),
                 new TSqlNonQueryStatement("text", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@P0"),
-                    TSqlNullValue.Instance.ToSqlParameter("@P1")
+                    new TestSqlParameter().ToSqlParameter("@P0"),
+                    new TestSqlParameter().ToSqlParameter("@P1")
                 }));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text {0} {1}", TSql.Bit(true), TSql.Bit(null)),
+                TSql.NonQueryFormat("text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
                 new TSqlNonQueryStatement("text @P0 @P1", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@P0"),
-                    TSqlNullValue.Instance.ToSqlParameter("@P1")
+                    new TestSqlParameter().ToSqlParameter("@P0"),
+                    new TestSqlParameter().ToSqlParameter("@P1")
                 }));
         }
 
@@ -282,17 +379,17 @@ namespace Projac.Tests
                 TSql.Query("text", new { }),
                 new TSqlQueryStatement("text", new SqlParameter[0]));
             yield return new TestCaseData(
-                TSql.Query("text", new { Parameter = TSql.Bit(true) }),
+                TSql.Query("text", new { Parameter = new TestSqlParameter() }),
                 new TSqlQueryStatement("text", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@Parameter")
+                    new TestSqlParameter().ToSqlParameter("@Parameter")
                 }));
             yield return new TestCaseData(
-                TSql.Query("text", new { Parameter1 = TSql.Bit(true), Parameter2 = TSql.Bit(null) }),
+                TSql.Query("text", new { Parameter1 = new TestSqlParameter(), Parameter2 = new TestSqlParameter() }),
                 new TSqlQueryStatement("text", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@Parameter1"),
-                    TSqlNullValue.Instance.ToSqlParameter("@Parameter2")
+                    new TestSqlParameter().ToSqlParameter("@Parameter1"),
+                    new TestSqlParameter().ToSqlParameter("@Parameter2")
                 }));
         }
 
@@ -315,30 +412,30 @@ namespace Projac.Tests
                 TSql.QueryFormat("text", new ITSqlParameterValue[0]),
                 new TSqlQueryStatement("text", new SqlParameter[0]));
             yield return new TestCaseData(
-                TSql.QueryFormat("text", TSql.Bit(true)),
+                TSql.QueryFormat("text", new TestSqlParameter()),
                 new TSqlQueryStatement("text", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@P0")
+                    new TestSqlParameter().ToSqlParameter("@P0")
                 }));
             yield return new TestCaseData(
-                TSql.QueryFormat("text {0}", TSql.Bit(true)),
+                TSql.QueryFormat("text {0}", new TestSqlParameter()),
                 new TSqlQueryStatement("text @P0", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@P0")
+                    new TestSqlParameter().ToSqlParameter("@P0")
                 }));
             yield return new TestCaseData(
-                TSql.QueryFormat("text", TSql.Bit(true), TSql.Bit(null)),
+                TSql.QueryFormat("text", new TestSqlParameter(), new TestSqlParameter()),
                 new TSqlQueryStatement("text", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@P0"),
-                    TSqlNullValue.Instance.ToSqlParameter("@P1")
+                    new TestSqlParameter().ToSqlParameter("@P0"),
+                    new TestSqlParameter().ToSqlParameter("@P1")
                 }));
             yield return new TestCaseData(
-                TSql.QueryFormat("text {0} {1}", TSql.Bit(true), TSql.Bit(null)),
+                TSql.QueryFormat("text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
                 new TSqlQueryStatement("text @P0 @P1", new[]
                 {
-                    new TSqlBitValue(true).ToSqlParameter("@P0"),
-                    TSqlNullValue.Instance.ToSqlParameter("@P1")
+                    new TestSqlParameter().ToSqlParameter("@P0"),
+                    new TestSqlParameter().ToSqlParameter("@P1")
                 }));
         }
 
@@ -425,6 +522,14 @@ namespace Projac.Tests
             var result2 = TSql.Projection();
 
             Assert.That(result1, Is.Not.SameAs(result2));
+        }
+
+        class TestSqlParameter : ITSqlParameterValue
+        {
+            public SqlParameter ToSqlParameter(string parameterName)
+            {
+                return new SqlParameter(parameterName, DBNull.Value);
+            }
         }
     }
 }

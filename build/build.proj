@@ -3,7 +3,11 @@
   <PropertyGroup>
     <RootPath>$(MSBuildProjectDirectory)\..</RootPath>
     <SourcePath>$(RootPath)\src</SourcePath>
+    <PackagesPath>$(MSBuildProjectDirectory)\packages</PackagesPath>
+    <MSBuildCommunityTasksPath>$(PackagesPath)\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
+
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
   <Target Name="NonInteractiveBuild">
     <MSBuild Projects="$(MSBuildProjectDirectory)\run_me_first.proj" />
@@ -16,12 +20,29 @@
       Directories="$(MSBuildProjectDirectory)\output" />
     <MSBuild Projects="$(MSBuildProjectDirectory)\version.proj" />
     <MSBuild Projects="$(MSBuildProjectDirectory)\info.proj" />
+    <!-- CSharp -->
     <MSBuild 
       Projects="
         $(SourcePath)\Projac\Projac.csproj;
         $(SourcePath)\Projac.Tests\Projac.Tests.csproj;"
       BuildInParallel="true" 
-      Properties="Configuration=Release;OutputPath=$(MSBuildProjectDirectory)\output"
+      Properties="Configuration=Release;OutputPath=$(MSBuildProjectDirectory)\output\csharp"
+      UnloadProjectsOnCompletion="true"/>
+    <!-- FSharp -->
+    <Xslt
+      Inputs="$(SourcePath)\Projac\Projac.csproj"
+      Xsl="$(MSBuildProjectDirectory)\TransformToFSharpProject.xslt"
+      Output="$(SourcePath)\Projac\Projac.FSharp.csproj" />
+    <Xslt
+      Inputs="$(SourcePath)\Projac.Tests\Projac.Tests.csproj"
+      Xsl="$(MSBuildProjectDirectory)\TransformToFSharpProject.xslt"
+      Output="$(SourcePath)\Projac.Tests\Projac.Tests.FSharp.csproj" />
+    <MSBuild
+      Projects="
+        $(SourcePath)\Projac\Projac.FSharp.csproj;
+        $(SourcePath)\Projac.Tests\Projac.Tests.FSharp.csproj;"
+      BuildInParallel="true"
+      Properties="Configuration=Release;OutputPath=$(MSBuildProjectDirectory)\output\fsharp"
       UnloadProjectsOnCompletion="true"/>
   </Target>
 </Project>
