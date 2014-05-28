@@ -126,3 +126,41 @@ public class PortfolioListProjectionHandler :
 }
 
 ```
+
+## FSharo support
+
+F# is a wonderful language that makes some of the Projac bits - like declarative projections - obsolete since you can use the language itself as a DSL to get the same result. Projac has been extended with support for F#'s FSharpOption&gt;T&lt; such that it blends more with the native language (room for improvement no doubt). Below an example of a native declarative projection that is leveraging pattern matching.
+
+```fsharp
+open System;
+open Projac;
+
+type PortfolioCreated = { PortfolioId : int; Name : string }
+type PhotoAddToPortfolio = { PortfolioId : int; PhotoId : int }
+type PhotoRemovedFromPortfolio = { PortfolioId : int; PhotoId : int }
+type PortfolioArchived = { PortfolioId : int; Name : string }
+
+let PortfolioProjection (message:Object) =
+    seq {
+        match message with
+            | :? PortfolioCreated as m -> 
+                yield TSql.NonQueryFormat(
+                    "INSERT INTO [PortfolioPhotoCount] ([Id], [Name], [PhotoCount]) VALUES ({0}, {1}, {2})", 
+                    TSql.Int(m.PortfolioId), 
+                    TSql.VarCharMax(m.Name), 
+                    TSql.Int(0))
+            | :? PhotoAddToPortfolio as m ->
+                yield TSql.NonQueryFormat(
+                    "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] + 1 WHERE [Id] = {0}", 
+                    TSql.Int(m.PortfolioId))
+            | :? PhotoRemovedFromPortfolio as m ->
+                yield TSql.NonQueryFormat(
+                    "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] - 1 WHERE [Id] = {0}", 
+                    TSql.Int(m.PortfolioId))
+            | :? PortfolioArchived as m ->
+                yield TSql.NonQueryFormat(
+                    "DELETE FROM [PortfolioPhotoCount] WHERE [Id] = {0}", 
+                    TSql.Int(m.PortfolioId))
+            | _ -> ()
+    }
+```
