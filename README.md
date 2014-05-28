@@ -127,7 +127,7 @@ public class PortfolioListProjectionHandler :
 
 ```
 
-## FSharo support
+## FSharp support
 
 F# is a wonderful language that makes some of the Projac bits - like declarative projections - obsolete since you can use the language itself as a DSL to get the same result. Projac has been extended with support for F#'s FSharpOption&gt;T&lt; such that it blends more with the native language (room for improvement no doubt). Below an example of a native declarative projection that is leveraging pattern matching.
 
