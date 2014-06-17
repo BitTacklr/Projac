@@ -62,6 +62,7 @@
     <Compile Include="TSqlCharValue.cs" />
     <Compile Include="TSqlDateTimeOffsetNullValue.cs" />
     <Compile Include="TSqlDateTimeOffsetValue.cs" />
+    <Compile Include="TSqlDateTimeValue.cs" />
     <Compile Include="TSqlIntNullValue.cs" />
     <Compile Include="TSqlIntValue.cs" />
     <Compile Include="TSqlNCharNullValue.cs" />

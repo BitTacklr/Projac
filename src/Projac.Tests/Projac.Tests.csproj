@@ -62,6 +62,7 @@
     <Compile Include="TSqlCharValueTests.cs" />
     <Compile Include="TSqlDateTimeOffsetNullValueTests.cs" />
     <Compile Include="TSqlDateTimeOffsetValueTests.cs" />
+    <Compile Include="TSqlDateTimeValueTests.cs" />
     <Compile Include="TSqlIntNullValueTests.cs" />
     <Compile Include="TSqlIntValueTests.cs" />
     <Compile Include="TSqlNCharNullValueTests.cs" />
