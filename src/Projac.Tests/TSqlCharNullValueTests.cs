@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using NUnit.Framework;
 using Projac.Tests.Framework;
@@ -6,20 +6,16 @@ using Projac.Tests.Framework;
 namespace Projac.Tests
 {
     [TestFixture]
-    public class TSqlNullValueTests
+    public class TSqlCharNullValueTests
     {
-        private TSqlNullValue _sut;
+        private TSqlCharNullValue _sut;
+        private TSqlCharSize _size;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = TSqlNullValue.Instance;
-        }
-
-        [Test]
-        public void InstanceIsSqlNullValue()
-        {
-            Assert.That(TSqlNullValue.Instance, Is.InstanceOf<TSqlNullValue>());
+            _size = new TSqlCharSize(100);
+            _sut = new TSqlCharNullValue(_size);
         }
 
         [Test]
@@ -35,13 +31,14 @@ namespace Projac.Tests
 
             var result = _sut.ToSqlParameter(parameterName);
 
-            result.Expect(parameterName, SqlDbType.Variant, DBNull.Value, true);
+            result.Expect(parameterName, SqlDbType.Char, DBNull.Value, true, 100);
         }
 
         [Test]
         public void DoesEqualItself()
         {
-            Assert.That(_sut.Equals(TSqlNullValue.Instance), Is.True);
+            var self = _sut;
+            Assert.That(_sut.Equals(self), Is.True);
         }
 
         [Test]
@@ -61,7 +58,7 @@ namespace Projac.Tests
         {
             var result = _sut.GetHashCode();
 
-            Assert.That(result, Is.EqualTo(0));
+            Assert.That(result, Is.EqualTo(100));
         }
     }
 }

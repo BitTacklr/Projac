@@ -18,9 +18,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue BigInt(FSharpOption<long> value)
         {
-            return FSharpOption<long>.get_IsNone(value)
-                ? Null()
-                : new TSqlBigIntValue(value.Value);
+            if (FSharpOption<long>.get_IsNone(value))
+                return TSqlBigIntNullValue.Instance;
+            return new TSqlBigIntValue(value.Value);
         }
 
         /// <summary>
@@ -40,9 +40,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue Int(FSharpOption<int> value)
         {
-            return FSharpOption<int>.get_IsNone(value)
-                ? Null()
-                : new TSqlIntValue(value.Value);
+            if (FSharpOption<int>.get_IsNone(value))
+                return TSqlIntNullValue.Instance;
+            return new TSqlIntValue(value.Value);
         }
 
         /// <summary>
@@ -62,9 +62,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue Bit(FSharpOption<bool> value)
         {
-            return FSharpOption<bool>.get_IsNone(value)
-                ? Null()
-                : new TSqlBitValue(value.Value);
+            if (FSharpOption<bool>.get_IsNone(value))
+                return TSqlBitNullValue.Instance;
+            return new TSqlBitValue(value.Value);
         }
 
         /// <summary>
@@ -84,9 +84,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue DateTimeOffset(FSharpOption<DateTimeOffset> value)
         {
-            return FSharpOption<DateTimeOffset>.get_IsNone(value) 
-                ? Null()
-                : new TSqlDateTimeOffsetValue(value.Value);
+            if (FSharpOption<DateTimeOffset>.get_IsNone(value))
+                return TSqlDateTimeOffsetNullValue.Instance;
+            return new TSqlDateTimeOffsetValue(value.Value);
         }
 
         /// <summary>
@@ -106,9 +106,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue UniqueIdentifier(FSharpOption<Guid> value)
         {
-            return FSharpOption<Guid>.get_IsNone(value) 
-                ? Null()
-                : new TSqlUniqueIdentifierValue(value.Value);
+            if (FSharpOption<Guid>.get_IsNone(value))
+                return TSqlUniqueIdentifierNullValue.Instance;
+            return new TSqlUniqueIdentifierValue(value.Value);
         }
 
         /// <summary>

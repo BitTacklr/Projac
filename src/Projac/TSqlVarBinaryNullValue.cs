@@ -5,14 +5,20 @@ using System.Data.SqlClient;
 namespace Projac
 {
     /// <summary>
-    ///     Represents the T-SQL NULL parameter value.
+    ///     Represents the T-SQL VARBINARY NULL parameter value.
     /// </summary>
-    public class TSqlNullValue : ITSqlParameterValue
+    public class TSqlVarBinaryNullValue : ITSqlParameterValue
     {
+        private readonly TSqlVarBinarySize _size;
+
         /// <summary>
-        ///     The single instance of this value.
+        ///     Initializes a new instance of the <see cref="TSqlVarBinaryNullValue"/> class.
         /// </summary>
-        public static readonly TSqlNullValue Instance = new TSqlNullValue();
+        /// <param name="size">The size.</param>
+        public TSqlVarBinaryNullValue(TSqlVarBinarySize size)
+        {
+            _size = size;
+        }
 
         /// <summary>
         ///     Creates a <see cref="SqlParameter" /> instance based on this instance.
@@ -25,8 +31,8 @@ namespace Projac
         {
             return new SqlParameter(
                 parameterName,
-                SqlDbType.Variant,
-                0,
+                SqlDbType.VarBinary,
+                _size,
                 ParameterDirection.Input,
                 true,
                 0,
@@ -36,9 +42,9 @@ namespace Projac
                 DBNull.Value);
         }
 
-        private static bool Equals(TSqlNullValue value)
+        private bool Equals(TSqlVarBinaryNullValue value)
         {
-            return ReferenceEquals(value, Instance);
+            return value._size == _size;
         }
 
         /// <summary>
@@ -52,7 +58,7 @@ namespace Projac
         {
             if (obj == null || obj.GetType() != GetType())
                 return false;
-            return Equals((TSqlNullValue) obj);
+            return Equals((TSqlVarBinaryNullValue)obj);
         }
 
         /// <summary>
@@ -63,7 +69,7 @@ namespace Projac
         /// </returns>
         public override int GetHashCode()
         {
-            return 0;
+            return _size.GetHashCode();
         }
     }
 }

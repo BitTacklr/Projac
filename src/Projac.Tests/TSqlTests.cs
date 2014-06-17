@@ -10,12 +10,6 @@ namespace Projac.Tests
     public partial class TSqlTests
     {
         [Test]
-        public void NullReturnsSqlNullValueInstance()
-        {
-            Assert.That(TSql.Null(), Is.SameAs(TSqlNullValue.Instance));
-        }
-
-        [Test]
         public void VarCharReturnsExpectedInstance()
         {
             Assert.That(TSql.VarChar("value", 123), Is.EqualTo(new TSqlVarCharValue("value", new TSqlVarCharSize(123))));
@@ -24,7 +18,7 @@ namespace Projac.Tests
         [Test]
         public void VarCharNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.VarChar(null, 123), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.VarChar(null, 123), Is.EqualTo(new TSqlVarCharNullValue(new TSqlVarCharSize(123))));
         }
 
         [Test]
@@ -36,7 +30,7 @@ namespace Projac.Tests
         [Test]
         public void CharNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.Char(null, 123), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.Char(null, 123), Is.EqualTo(new TSqlCharNullValue(new TSqlCharSize(123))));
         }
 
         [Test]
@@ -48,7 +42,7 @@ namespace Projac.Tests
         [Test]
         public void VarCharMaxNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.VarCharMax(null), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.VarCharMax(null), Is.EqualTo(new TSqlVarCharNullValue(TSqlVarCharSize.Max)));
         }
 
         [Test]
@@ -60,7 +54,7 @@ namespace Projac.Tests
         [Test]
         public void NVarCharNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.NVarChar(null, 123), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.NVarChar(null, 123), Is.EqualTo(new TSqlNVarCharNullValue(new TSqlNVarCharSize(123))));
         }
 
         [Test]
@@ -72,7 +66,7 @@ namespace Projac.Tests
         [Test]
         public void NCharNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.NChar(null, 123), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.NChar(null, 123), Is.EqualTo(new TSqlNCharNullValue(new TSqlNCharSize(123))));
         }
 
         [Test]
@@ -84,7 +78,7 @@ namespace Projac.Tests
         [Test]
         public void NVarCharMaxNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.NVarCharMax(null), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.NVarCharMax(null), Is.EqualTo(new TSqlNVarCharNullValue(TSqlNVarCharSize.Max)));
         }
 
         [Test]
@@ -96,7 +90,7 @@ namespace Projac.Tests
         [Test]
         public void BinaryNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.Binary(null, 123), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.Binary(null, 123), Is.EqualTo(new TSqlBinaryNullValue(new TSqlBinarySize(123))));
         }
 
         [Test]
@@ -108,7 +102,7 @@ namespace Projac.Tests
         [Test]
         public void VarBinaryNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.VarBinary(null, 123), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.VarBinary(null, 123), Is.EqualTo(new TSqlVarBinaryNullValue(new TSqlVarBinarySize(123))));
         }
 
         [Test]
@@ -120,7 +114,7 @@ namespace Projac.Tests
         [Test]
         public void VarBinaryMaxNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.VarBinaryMax(null), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.VarBinaryMax(null), Is.EqualTo(new TSqlVarBinaryNullValue(TSqlVarBinarySize.Max)));
         }
 
         [TestCaseSource("NonQueryFormatCases")]

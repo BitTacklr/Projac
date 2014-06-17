@@ -18,7 +18,7 @@ namespace Projac.Tests
         [Test]
         public void BigIntNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.BigInt(null), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.BigInt(null), Is.EqualTo(TSqlBigIntNullValue.Instance));
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace Projac.Tests
         [Test]
         public void IntNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.Int(null), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.Int(null), Is.EqualTo(TSqlIntNullValue.Instance));
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace Projac.Tests
         [Test]
         public void BitNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.Bit(null), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.Bit(null), Is.EqualTo(TSqlBitNullValue.Instance));
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Projac.Tests
         [Test]
         public void UniqueIdentifierNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.UniqueIdentifier(null), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.UniqueIdentifier(null), Is.EqualTo(TSqlUniqueIdentifierNullValue.Instance));
         }
 
         [Test]
@@ -67,10 +67,8 @@ namespace Projac.Tests
         [Test]
         public void DateTimeOffsetNullReturnsExpectedInstance()
         {
-            Assert.That(TSql.DateTimeOffset(null), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.DateTimeOffset(null), Is.EqualTo(TSqlDateTimeOffsetNullValue.Instance));
         }
-
-
 
         [TestCaseSource("QueryCases")]
         public void QueryReturnsExpectedInstance(TSqlQueryStatement actual, TSqlQueryStatement expected)

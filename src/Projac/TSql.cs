@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Reflection;
 
 namespace Projac
 {
@@ -12,15 +11,6 @@ namespace Projac
     public static partial class TSql
     {
         /// <summary>
-        ///     Returns a NULL parameter value.
-        /// </summary>
-        /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
-        public static ITSqlParameterValue Null()
-        {
-            return TSqlNullValue.Instance;
-        }
-
-        /// <summary>
         ///     Returns a VARCHAR parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
@@ -28,9 +18,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue VarChar(string value, TSqlVarCharSize size)
         {
-            return value == null
-                ? Null()
-                : new TSqlVarCharValue(value, size);
+            if (value == null)
+                return new TSqlVarCharNullValue(size);
+            return new TSqlVarCharValue(value, size);
         }
 
         /// <summary>
@@ -41,9 +31,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue Char(string value, TSqlCharSize size)
         {
-            return value == null
-                ? Null()
-                : new TSqlCharValue(value, size);
+            if (value == null)
+                return new TSqlCharNullValue(size);
+            return new TSqlCharValue(value, size);
         }
 
         /// <summary>
@@ -53,9 +43,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue VarCharMax(string value)
         {
-            return value == null
-                ? Null()
-                : new TSqlVarCharValue(value, TSqlVarCharSize.Max);
+            if (value == null)
+                return new TSqlVarCharNullValue(TSqlVarCharSize.Max);
+            return new TSqlVarCharValue(value, TSqlVarCharSize.Max);
         }
 
         /// <summary>
@@ -66,9 +56,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue NVarChar(string value, TSqlNVarCharSize size)
         {
-            return value == null
-                ? Null()
-                : new TSqlNVarCharValue(value, size);
+            if (value == null)
+                return new TSqlNVarCharNullValue(size);
+            return new TSqlNVarCharValue(value, size);
         }
 
         /// <summary>
@@ -79,9 +69,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue NChar(string value, TSqlNCharSize size)
         {
-            return value == null
-                ? Null()
-                : new TSqlNCharValue(value, size);
+            if (value == null)
+                return new TSqlNCharNullValue(size);
+            return new TSqlNCharValue(value, size);
         }
 
         /// <summary>
@@ -91,9 +81,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue NVarCharMax(string value)
         {
-            return value == null
-                ? Null()
-                : new TSqlNVarCharValue(value, TSqlNVarCharSize.Max);
+            if (value == null)
+                return new TSqlNVarCharNullValue(TSqlNVarCharSize.Max);
+            return new TSqlNVarCharValue(value, TSqlNVarCharSize.Max);
         }
 
         /// <summary>
@@ -104,9 +94,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue Binary(byte[] value, TSqlBinarySize size)
         {
-            return value == null
-                ? Null()
-                : new TSqlBinaryValue(value, size);
+            if (value == null)
+                return new TSqlBinaryNullValue(size);
+            return new TSqlBinaryValue(value, size);
         }
 
         /// <summary>
@@ -117,9 +107,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue VarBinary(byte[] value, TSqlVarBinarySize size)
         {
-            return value == null
-                ? Null()
-                : new TSqlVarBinaryValue(value, size);
+            if (value == null)
+                return new TSqlVarBinaryNullValue(size);
+            return new TSqlVarBinaryValue(value, size);
         }
 
         /// <summary>
@@ -129,9 +119,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue VarBinaryMax(byte[] value)
         {
-            return value == null
-                ? Null()
-                : new TSqlVarBinaryValue(value, TSqlVarBinarySize.Max);
+            if (value == null)
+                return new TSqlVarBinaryNullValue(TSqlVarBinarySize.Max);
+            return new TSqlVarBinaryValue(value, TSqlVarBinarySize.Max);
         }
 
         /// <summary>
@@ -164,7 +154,7 @@ namespace Projac
                 return new TSqlNonQueryStatement(format, new SqlParameter[0]);
             }
             return new TSqlNonQueryStatement(
-                string.Format(format, parameters.Select((_, index) => (object) FormatSqlParameterName("P" + index)).ToArray()),
+                string.Format(format, parameters.Select((_, index) => (object)FormatSqlParameterName("P" + index)).ToArray()),
                 parameters.Select((value, index) => value.ToSqlParameter(FormatSqlParameterName("P" + index))).ToArray());
         }
 

@@ -26,7 +26,7 @@ namespace Projac.Tests
         [Test]
         public void BigIntNoneReturnsExpectedInstance()
         {
-            Assert.That(TSql.BigInt(FSharpOption<long>.None), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.BigInt(FSharpOption<long>.None), Is.EqualTo(TSqlBigIntNullValue.Instance));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Projac.Tests
         [Test]
         public void IntNoneReturnsExpectedInstance()
         {
-            Assert.That(TSql.Int(FSharpOption<int>.None), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.Int(FSharpOption<int>.None), Is.EqualTo(TSqlIntNullValue.Instance));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace Projac.Tests
         [Test]
         public void BitNoneReturnsExpectedInstance()
         {
-            Assert.That(TSql.Bit(FSharpOption<bool>.None), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.Bit(FSharpOption<bool>.None), Is.EqualTo(TSqlBitNullValue.Instance));
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace Projac.Tests
         [Test]
         public void UniqueIdentifierNoneReturnsExpectedInstance()
         {
-            Assert.That(TSql.UniqueIdentifier(FSharpOption<Guid>.None), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.UniqueIdentifier(FSharpOption<Guid>.None), Is.EqualTo(TSqlUniqueIdentifierNullValue.Instance));
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace Projac.Tests
         [Test]
         public void DateTimeOffsetNoneReturnsExpectedInstance()
         {
-            Assert.That(TSql.DateTimeOffset(FSharpOption<DateTimeOffset>.None), Is.EqualTo(TSqlNullValue.Instance));
+            Assert.That(TSql.DateTimeOffset(FSharpOption<DateTimeOffset>.None), Is.EqualTo(TSqlDateTimeOffsetNullValue.Instance));
         }
     }
 }

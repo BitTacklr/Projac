@@ -15,9 +15,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue BigInt(long? value)
         {
-            return !value.HasValue
-                ? Null()
-                : new TSqlBigIntValue(value.Value);
+            if(!value.HasValue)
+                return TSqlBigIntNullValue.Instance;
+            return new TSqlBigIntValue(value.Value);
         }
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue Int(int? value)
         {
-            return !value.HasValue
-                ? Null()
-                : new TSqlIntValue(value.Value);
+            if(!value.HasValue)
+                return TSqlIntNullValue.Instance;
+            return new TSqlIntValue(value.Value);
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue Bit(bool? value)
         {
-            return !value.HasValue
-                ? Null()
-                : new TSqlBitValue(value.Value);
+            if(!value.HasValue)
+                return TSqlBitNullValue.Instance;
+            return new TSqlBitValue(value.Value);
         }
 
         /// <summary>
@@ -51,9 +51,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue UniqueIdentifier(Guid? value)
         {
-            return !value.HasValue
-                ? Null()
-                : new TSqlUniqueIdentifierValue(value.Value);
+            if(!value.HasValue)
+                return TSqlUniqueIdentifierNullValue.Instance;
+            return new TSqlUniqueIdentifierValue(value.Value);
         }
 
         /// <summary>
@@ -63,9 +63,9 @@ namespace Projac
         /// <returns>A <see cref="ITSqlParameterValue" />.</returns>
         public static ITSqlParameterValue DateTimeOffset(DateTimeOffset? value)
         {
-            return !value.HasValue
-                ? Null()
-                : new TSqlDateTimeOffsetValue(value.Value);
+            if(!value.HasValue)
+                return TSqlDateTimeOffsetNullValue.Instance;
+            return new TSqlDateTimeOffsetValue(value.Value);
         }
 
         /// <summary>
