@@ -5,7 +5,7 @@
     <NuGetExe Condition="$(NuGetExe) == ''">$(RootPath)\.nuget\nuget.exe</NuGetExe>
     <NuGetApiKey Condition="$(NuGetApiKey) == ''"></NuGetApiKey>
     <PackagesPath>$(MSBuildProjectDirectory)\packages</PackagesPath>
-    <MSBuildCommunityTasksPath>$(PackagesPath)\MSBuildTasks.1.4.0.56\tools</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksPath>$(PackagesPath)\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
@@ -20,7 +20,8 @@
       <Output TaskParameter="Minor" PropertyName="Minor"/>
       <Output TaskParameter="Build" PropertyName="Build"/>
     </Version>
-    <Exec Command='$(NuGetExe) pack Projac.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output"' />
+    <Exec Command='$(NuGetExe) pack Projac.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
+    <Exec Command='$(NuGetExe) pack Projac.FSharp.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\fsharp"' />
   </Target>
 
   <Target Name="Push">
@@ -35,6 +36,7 @@
       <Output TaskParameter="Build" PropertyName="Build"/>
     </Version>
 
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\Projac.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\fsharp\Projac.FSharp.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
   </Target>
 </Project>

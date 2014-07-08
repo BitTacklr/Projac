@@ -12,6 +12,8 @@
 *.log
 output
 nunit_output.xml
+Projac.FSharp.csproj
+Projac.Tests.FSharp.csproj
 
 # Build results
 [Dd]ebug/

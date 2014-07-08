@@ -1,18 +1,24 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace Projac
 {
     /// <summary>
-    ///     Represents the T-SQL NULL parameter value.
+    ///     Represents a T-SQL DATETIME parameter value.
     /// </summary>
-    public class TSqlNullValue : ITSqlParameterValue
+    public class TSqlDateTimeValue : ITSqlParameterValue
     {
+        private readonly DateTime _value;
+
         /// <summary>
-        ///     The single instance of this value.
+        ///     Initializes a new instance of the <see cref="TSqlDateTimeValue" /> class.
         /// </summary>
-        public static readonly TSqlNullValue Instance = new TSqlNullValue();
+        /// <param name="value">The value.</param>
+        public TSqlDateTimeValue(DateTime value)
+        {
+            _value = value;
+        }
 
         /// <summary>
         ///     Creates a <see cref="SqlParameter" /> instance based on this instance.
@@ -25,24 +31,24 @@ namespace Projac
         {
             return new SqlParameter(
                 parameterName,
-                SqlDbType.Variant,
-                0,
+                SqlDbType.DateTime,
+                8,
                 ParameterDirection.Input,
-                true,
+                false,
                 0,
                 0,
                 "",
                 DataRowVersion.Default,
-                DBNull.Value);
+                _value);
         }
 
-        private static bool Equals(TSqlNullValue value)
+        private bool Equals(TSqlDateTimeValue other)
         {
-            return ReferenceEquals(value, Instance);
+            return _value == other._value;
         }
 
         /// <summary>
-        ///     Determines whether the specified <see cref="System.Object" /> is equal to this instance.
+        ///     Determines whether the specified <see cref="System.Object" />, is equal to this instance.
         /// </summary>
         /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
         /// <returns>
@@ -50,9 +56,10 @@ namespace Projac
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || obj.GetType() != GetType())
-                return false;
-            return Equals((TSqlNullValue) obj);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((TSqlDateTimeValue)obj);
         }
 
         /// <summary>
@@ -63,7 +70,7 @@ namespace Projac
         /// </returns>
         public override int GetHashCode()
         {
-            return 0;
+            return _value.GetHashCode();
         }
     }
 }
