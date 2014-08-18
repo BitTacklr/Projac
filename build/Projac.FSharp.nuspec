@@ -13,6 +13,11 @@
     <releaseNotes>Changes: Null support is now datatype aware.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="TSqlClient.FSharp" version="0.0.2" />
+      </group>
+    </dependencies>
   </metadata>
   <files>
     <file src="output\fsharp\Projac.dll" target="lib\net45\Projac.dll" />

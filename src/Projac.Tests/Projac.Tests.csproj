@@ -40,6 +40,9 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="TSqlClient">
+      <HintPath>..\packages\TSqlClient.0.0.2\lib\net45\TSqlClient.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -48,49 +51,10 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Framework\SqlParameterAssertions.cs" />
-    <Compile Include="Framework\SqlParameterEqualityComparer.cs" />
-    <Compile Include="TSqlBigIntNullValueTests.cs" />
-    <Compile Include="TSqlBigIntValueTests.cs" />
-    <Compile Include="TSqlBinaryNullValueTests.cs" />
-    <Compile Include="TSqlBinarySizeTest.cs" />
-    <Compile Include="TSqlBinaryValueTests.cs" />
-    <Compile Include="TSqlBitNullValueTests.cs" />
-    <Compile Include="TSqlBitValueTests.cs" />
-    <Compile Include="TSqlCharNullValueTests.cs" />
-    <Compile Include="TSqlCharSizeTest.cs" />
-    <Compile Include="TSqlCharValueTests.cs" />
-    <Compile Include="TSqlDateTimeOffsetNullValueTests.cs" />
-    <Compile Include="TSqlDateTimeOffsetValueTests.cs" />
-    <Compile Include="TSqlDateTimeValueTests.cs" />
-    <Compile Include="TSqlIntNullValueTests.cs" />
-    <Compile Include="TSqlIntValueTests.cs" />
-    <Compile Include="TSqlNCharNullValueTests.cs" />
-    <Compile Include="TSqlNCharSizeTest.cs" />
-    <Compile Include="TSqlNCharValueTests.cs" />
-    <Compile Include="TSqlNonQueryStatement.cs" />
-    <Compile Include="LegacyTests.cs" />
-    <Compile Include="TSqlNVarCharNullValueTests.cs" />
-    <Compile Include="TSqlNVarCharSizeTest.cs" />
-    <Compile Include="TSqlNVarCharValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TSqlProjectionBuilderTests.cs" />
     <Compile Include="TSqlProjectionHandlerTests.cs" />
     <Compile Include="TSqlProjectionTests.cs" />
-    <Compile Include="TSqlQueryStatementTests.cs" />
-    <Compile Include="TSqlStatementComposerTests.cs" />
-    <Compile Include="TSqlTests.cs" />
-    <Compile Include="TSqlTests.CSharpOnly.cs" />
-    <Compile Include="TSqlTests.FSharpOnly.cs" />
-    <Compile Include="TSqlUniqueIdentifierNullValueTests.cs" />
-    <Compile Include="TSqlUniqueIdentifierValueTests.cs" />
-    <Compile Include="TSqlVarBinaryNullValueTests.cs" />
-    <Compile Include="TSqlVarBinarySizeTest.cs" />
-    <Compile Include="TSqlVarBinaryValueTests.cs" />
-    <Compile Include="TSqlVarCharNullValueTests.cs" />
-    <Compile Include="TSqlVarCharSizeTest.cs" />
-    <Compile Include="TSqlVarCharValueTests.cs" />
-    <Compile Include="Usage\TSqlNonQueryStatementFlusher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

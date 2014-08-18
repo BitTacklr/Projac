@@ -36,6 +36,9 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="TSqlClient">
+      <HintPath>..\packages\TSqlClient.0.0.2\lib\net45\TSqlClient.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -44,48 +47,13 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="ITSqlParameterValue.cs" />
-    <Compile Include="Limits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TSql.cs" />
-    <Compile Include="TSql.CSharpOnly.cs" />
-    <Compile Include="TSql.FSharpOnly.cs" />
-    <Compile Include="TSqlBigIntNullValue.cs" />
-    <Compile Include="TSqlBigIntValue.cs" />
-    <Compile Include="TSqlBinaryNullValue.cs" />
-    <Compile Include="TSqlBinarySize.cs" />
-    <Compile Include="TSqlBinaryValue.cs" />
-    <Compile Include="TSqlBitNullValue.cs" />
-    <Compile Include="TSqlBitValue.cs" />
-    <Compile Include="TSqlCharNullValue.cs" />
-    <Compile Include="TSqlCharSize.cs" />
-    <Compile Include="TSqlCharValue.cs" />
-    <Compile Include="TSqlDateTimeOffsetNullValue.cs" />
-    <Compile Include="TSqlDateTimeOffsetValue.cs" />
-    <Compile Include="TSqlDateTimeValue.cs" />
-    <Compile Include="TSqlIntNullValue.cs" />
-    <Compile Include="TSqlIntValue.cs" />
-    <Compile Include="TSqlNCharNullValue.cs" />
-    <Compile Include="TSqlNCharSize.cs" />
-    <Compile Include="TSqlNCharValue.cs" />
-    <Compile Include="TSqlNonQueryStatement.cs" />
-    <Compile Include="Legacy.cs" />
-    <Compile Include="TSqlNVarCharNullValue.cs" />
-    <Compile Include="TSqlNVarCharSize.cs" />
-    <Compile Include="TSqlNVarCharValue.cs" />
     <Compile Include="TSqlProjectionBuilder.cs" />
     <Compile Include="TSqlProjectionHandler.cs" />
     <Compile Include="TSqlProjection.cs" />
-    <Compile Include="TSqlQueryStatement.cs" />
-    <Compile Include="TSqlNonQueryStatementComposer.cs" />
-    <Compile Include="TSqlUniqueIdentifierNullValue.cs" />
-    <Compile Include="TSqlUniqueIdentifierValue.cs" />
-    <Compile Include="TSqlVarBinaryNullValue.cs" />
-    <Compile Include="TSqlVarBinarySize.cs" />
-    <Compile Include="TSqlVarBinaryValue.cs" />
-    <Compile Include="TSqlVarCharNullValue.cs" />
-    <Compile Include="TSqlVarCharSize.cs" />
-    <Compile Include="TSqlVarCharValue.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
