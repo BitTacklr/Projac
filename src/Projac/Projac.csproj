@@ -36,8 +36,9 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="TSqlClient">
-      <HintPath>..\packages\TSqlClient.0.0.2\lib\net45\TSqlClient.dll</HintPath>
+    <Reference Include="TSqlClient, Version=0.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\TSqlClient.FSharp.0.0.3\lib\net45\TSqlClient.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
