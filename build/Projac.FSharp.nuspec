@@ -15,7 +15,7 @@
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="TSqlClient.FSharp" version="0.0.3" />
+        <dependency id="TSqlClient.FSharp" version="0.0.4" />
       </group>
     </dependencies>
   </metadata>
