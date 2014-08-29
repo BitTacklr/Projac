@@ -22,6 +22,8 @@
     </Version>
     <Exec Command='$(NuGetExe) pack Projac.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
     <Exec Command='$(NuGetExe) pack Projac.FSharp.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\fsharp"' />
+    <Exec Command='$(NuGetExe) pack Paramol.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
+    <Exec Command='$(NuGetExe) pack Paramol.FSharp.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\fsharp"' />
   </Target>
 
   <Target Name="Push">
@@ -36,7 +38,10 @@
       <Output TaskParameter="Build" PropertyName="Build"/>
     </Version>
 
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\fsharp\Paramol.FSharp.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\fsharp\Projac.FSharp.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
+
   </Target>
 </Project>

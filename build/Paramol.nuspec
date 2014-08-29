@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Paramol</id>
+    <version>0.0.0</version>
+    <authors>Yves Reynhout</authors>
+    <owners>Yves Reynhout</owners>
+    <title>Paramol</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.github.com/yreynhout/Paramol/master/LICENSE.txt</licenseUrl>
+    <description>Paramol provides lightweight infrastructure for producing T-SQL DML statements.</description>
+    <projectUrl>https://github.com/yreynhout/Paramol</projectUrl>
+    <releaseNotes>Changes: Paramol is now a separate library.</releaseNotes>
+    <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
+    <tags>eventsourcing DDDesign</tags>
+  </metadata>
+  <files>
+    <file src="output\csharp\Paramol.dll" target="lib\net45\Paramol.dll" />
+    <file src="output\csharp\Paramol.pdb" target="lib\net45\Paramol.pdb" />
+    <file src="output\csharp\Paramol.xml" target="lib\net45\Paramol.xml" />
+    <file src="..\src\Paramol\*.cs" target="src\Paramol" />
+    <file src="..\src\Paramol\Properties\*.cs" target="src\Paramol\Properties" />
+  </files>
+</package>

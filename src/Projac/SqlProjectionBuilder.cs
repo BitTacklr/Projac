@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TSqlClient;
+using Paramol;
 
 namespace Projac
 {
     /// <summary>
-    ///     Represents a fluent syntax to build up a <see cref="TSqlProjection" />.
+    ///     Represents a fluent syntax to build up a <see cref="SqlProjection" />.
     /// </summary>
-    public class TSqlProjectionBuilder
+    public class SqlProjectionBuilder
     {
-        private readonly TSqlProjectionHandler[] _handlers;
+        private readonly SqlProjectionHandler[] _handlers;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="TSqlProjectionBuilder" /> class.
+        ///     Initializes a new instance of the <see cref="SqlProjectionBuilder" /> class.
         /// </summary>
-        public TSqlProjectionBuilder() :
-            this(new TSqlProjectionHandler[0])
+        public SqlProjectionBuilder() :
+            this(new SqlProjectionHandler[0])
         {
         }
 
-        private TSqlProjectionBuilder(TSqlProjectionHandler[] handlers)
+        private SqlProjectionBuilder(SqlProjectionHandler[] handlers)
         {
             _handlers = handlers;
         }
@@ -30,16 +30,16 @@ namespace Projac
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="handler">The single statement returning handler.</param>
-        /// <returns>A <see cref="TSqlProjectionBuilder" />.</returns>
+        /// <returns>A <see cref="SqlProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public TSqlProjectionBuilder When<TEvent>(Func<TEvent, TSqlNonQueryStatement> handler)
+        public SqlProjectionBuilder When<TEvent>(Func<TEvent, SqlNonQueryStatement> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new TSqlProjectionBuilder(
+            return new SqlProjectionBuilder(
                 _handlers.Concat(
                     new[]
                     {
-                        new TSqlProjectionHandler
+                        new SqlProjectionHandler
                             (
                             typeof (TEvent),
                             @event => new[] {handler((TEvent) @event)}
@@ -53,16 +53,16 @@ namespace Projac
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="handler">The statement array returning handler.</param>
-        /// <returns>A <see cref="TSqlProjectionBuilder" />.</returns>
+        /// <returns>A <see cref="SqlProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public TSqlProjectionBuilder When<TEvent>(Func<TEvent, TSqlNonQueryStatement[]> handler)
+        public SqlProjectionBuilder When<TEvent>(Func<TEvent, SqlNonQueryStatement[]> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new TSqlProjectionBuilder(
+            return new SqlProjectionBuilder(
                 _handlers.Concat(
                     new[]
                     {
-                        new TSqlProjectionHandler
+                        new SqlProjectionHandler
                             (
                             typeof (TEvent),
                             @event => handler((TEvent) @event)
@@ -76,16 +76,16 @@ namespace Projac
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="handler">The non query statement enumeration returning handler.</param>
-        /// <returns>A <see cref="TSqlProjectionBuilder" />.</returns>
+        /// <returns>A <see cref="SqlProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public TSqlProjectionBuilder When<TEvent>(Func<TEvent, IEnumerable<TSqlNonQueryStatement>> handler)
+        public SqlProjectionBuilder When<TEvent>(Func<TEvent, IEnumerable<SqlNonQueryStatement>> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new TSqlProjectionBuilder(
+            return new SqlProjectionBuilder(
                 _handlers.Concat(
                     new[]
                     {
-                        new TSqlProjectionHandler
+                        new SqlProjectionHandler
                             (
                             typeof (TEvent),
                             @event => handler((TEvent) @event)
@@ -98,10 +98,10 @@ namespace Projac
         /// <summary>
         ///     Builds a projection specification based on the handlers collected by this builder.
         /// </summary>
-        /// <returns>A <see cref="TSqlProjection" />.</returns>
-        public TSqlProjection Build()
+        /// <returns>A <see cref="SqlProjection" />.</returns>
+        public SqlProjection Build()
         {
-            return new TSqlProjection(_handlers);
+            return new SqlProjection(_handlers);
         }
     }
 }

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
-using TSqlClient;
+using Paramol;
 
 namespace Projac.Tests
 {
     [TestFixture]
-    public class TSqlProjectionBuilderTests
+    public class SqlProjectionBuilderTests
     {
-        private TSqlProjectionBuilder _sut;
+        private SqlProjectionBuilder _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new TSqlProjectionBuilder();
+            _sut = new SqlProjectionBuilder();
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace Projac.Tests
         [Test]
         public void WhenHandlerWithSingleStatementCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, TSqlNonQueryStatement>)null));
+            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, SqlNonQueryStatement>)null));
         }
 
 
@@ -38,14 +38,14 @@ namespace Projac.Tests
         {
             var result = _sut.When((object _) => StatementFactory());
 
-            Assert.That(result, Is.InstanceOf<TSqlProjectionBuilder>());
+            Assert.That(result, Is.InstanceOf<SqlProjectionBuilder>());
         }
 
         [Test]
         public void WhenHandlerWithSingleStatementIsPreservedUponBuild()
         {
             var statement = StatementFactory();
-            Func<object, TSqlNonQueryStatement> handler = _ => statement;
+            Func<object, SqlNonQueryStatement> handler = _ => statement;
             var result = _sut.When(handler).Build();
 
             Assert.That(
@@ -62,7 +62,7 @@ namespace Projac.Tests
                 StatementFactory()
             };
             var statement = StatementFactory();
-            Func<object, TSqlNonQueryStatement> handler = _ => statement;
+            Func<object, SqlNonQueryStatement> handler = _ => statement;
             var result = _sut.When((object _) => statements).When(handler).Build();
 
             Assert.That(
@@ -73,7 +73,7 @@ namespace Projac.Tests
         [Test]
         public void WhenHandlerWithStatementArrayCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, TSqlNonQueryStatement[]>)null));
+            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, SqlNonQueryStatement[]>)null));
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace Projac.Tests
         {
             var result = _sut.When((object _) => new[] { StatementFactory(), StatementFactory() });
 
-            Assert.That(result, Is.InstanceOf<TSqlProjectionBuilder>());
+            Assert.That(result, Is.InstanceOf<SqlProjectionBuilder>());
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace Projac.Tests
         {
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
-            Func<object, TSqlNonQueryStatement[]> handler = _ => new[] { statement1, statement2 };
+            Func<object, SqlNonQueryStatement[]> handler = _ => new[] { statement1, statement2 };
             var result = _sut.When(handler).Build();
 
             Assert.That(
@@ -107,7 +107,7 @@ namespace Projac.Tests
             };
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
-            Func<object, TSqlNonQueryStatement[]> handler = _ => new[] { statement1, statement2 };
+            Func<object, SqlNonQueryStatement[]> handler = _ => new[] { statement1, statement2 };
             var result = _sut.When((object _) => statements).When(handler).Build();
 
             Assert.That(
@@ -118,18 +118,18 @@ namespace Projac.Tests
         [Test]
         public void WhenHandlerWithStatementEnumerationCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, IEnumerable<TSqlNonQueryStatement>>)null));
+            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, IEnumerable<SqlNonQueryStatement>>)null));
         }
 
         [Test]
         public void WhenHandlerWithStatementEnumerationReturnsExpectedResult()
         {
-            var result = _sut.When((object _) => (IEnumerable<TSqlNonQueryStatement>) new []
+            var result = _sut.When((object _) => (IEnumerable<SqlNonQueryStatement>) new []
             {
                 StatementFactory(), StatementFactory()
             });
 
-            Assert.That(result, Is.InstanceOf<TSqlProjectionBuilder>());
+            Assert.That(result, Is.InstanceOf<SqlProjectionBuilder>());
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace Projac.Tests
         {
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
-            Func<object, IEnumerable<TSqlNonQueryStatement>> handler = _ => (IEnumerable<TSqlNonQueryStatement>) new []
+            Func<object, IEnumerable<SqlNonQueryStatement>> handler = _ => (IEnumerable<SqlNonQueryStatement>) new []
             {
                 statement1, statement2
             };
@@ -158,7 +158,7 @@ namespace Projac.Tests
             };
             var statement1 = StatementFactory();
             var statement2 = StatementFactory();
-            Func<object, IEnumerable<TSqlNonQueryStatement>> handler = _ => (IEnumerable<TSqlNonQueryStatement>)new[]
+            Func<object, IEnumerable<SqlNonQueryStatement>> handler = _ => (IEnumerable<SqlNonQueryStatement>)new[]
             {
                 statement1, statement2
             };
@@ -169,9 +169,9 @@ namespace Projac.Tests
                 Is.EqualTo(1));
         }
 
-        private static TSqlNonQueryStatement StatementFactory()
+        private static SqlNonQueryStatement StatementFactory()
         {
-            return new TSqlNonQueryStatement("text", new SqlParameter[0]);
+            return new SqlNonQueryStatement("text", new SqlParameter[0]);
         }
     }
 }

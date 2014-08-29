@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{222D8E5C-EABD-4773-91CD-167C3C66AF3E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Paramol</RootNamespace>
+    <AssemblyName>Paramol</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;FSHARP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Paramol.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;FSHARP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Paramol.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="FSharp.Core, Version=4.3.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\SharedVersionInfo.cs">
+      <Link>Properties\SharedVersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="IDbParameterValue.cs" />
+    <Compile Include="Limits.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlClient\TSql.cs" />
+    <Compile Include="SqlClient\TSql.CSharpOnly.cs" />
+    <Compile Include="SqlClient\TSql.FSharpOnly.cs" />
+    <Compile Include="SqlClient\TSqlBigIntNullValue.cs" />
+    <Compile Include="SqlClient\TSqlBigIntValue.cs" />
+    <Compile Include="SqlClient\TSqlBinaryNullValue.cs" />
+    <Compile Include="SqlClient\TSqlBinarySize.cs" />
+    <Compile Include="SqlClient\TSqlBinaryValue.cs" />
+    <Compile Include="SqlClient\TSqlBitNullValue.cs" />
+    <Compile Include="SqlClient\TSqlBitValue.cs" />
+    <Compile Include="SqlClient\TSqlCharNullValue.cs" />
+    <Compile Include="SqlClient\TSqlCharSize.cs" />
+    <Compile Include="SqlClient\TSqlCharValue.cs" />
+    <Compile Include="SqlClient\TSqlDateTimeOffsetNullValue.cs" />
+    <Compile Include="SqlClient\TSqlDateTimeOffsetValue.cs" />
+    <Compile Include="SqlClient\TSqlDateTimeValue.cs" />
+    <Compile Include="SqlClient\TSqlIntNullValue.cs" />
+    <Compile Include="SqlClient\TSqlIntValue.cs" />
+    <Compile Include="SqlClient\TSqlNCharNullValue.cs" />
+    <Compile Include="SqlClient\TSqlNCharSize.cs" />
+    <Compile Include="SqlClient\TSqlNCharValue.cs" />
+    <Compile Include="SqlNonQueryStatement.cs" />
+    <Compile Include="SqlClient\TSqlNVarCharNullValue.cs" />
+    <Compile Include="SqlClient\TSqlNVarCharSize.cs" />
+    <Compile Include="SqlClient\TSqlNVarCharValue.cs" />
+    <Compile Include="SqlQueryStatement.cs" />
+    <Compile Include="SqlNonQueryStatementComposer.cs" />
+    <Compile Include="SqlClient\TSqlUniqueIdentifierNullValue.cs" />
+    <Compile Include="SqlClient\TSqlUniqueIdentifierValue.cs" />
+    <Compile Include="SqlClient\TSqlVarBinaryNullValue.cs" />
+    <Compile Include="SqlClient\TSqlVarBinarySize.cs" />
+    <Compile Include="SqlClient\TSqlVarBinaryValue.cs" />
+    <Compile Include="SqlClient\TSqlVarCharNullValue.cs" />
+    <Compile Include="SqlClient\TSqlVarCharSize.cs" />
+    <Compile Include="SqlClient\TSqlVarCharValue.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

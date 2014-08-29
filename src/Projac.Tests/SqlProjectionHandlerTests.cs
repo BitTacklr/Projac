@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using TSqlClient;
+using Paramol;
 
 namespace Projac.Tests
 {
     [TestFixture]
-    public class TSqlProjectionHandlerTests
+    public class SqlProjectionHandlerTests
     {
         [Test]
         public void EventCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new TSqlProjectionHandler(null, _ => new TSqlNonQueryStatement[0])
+                () => new SqlProjectionHandler(null, _ => new SqlNonQueryStatement[0])
             );
         }
 
@@ -20,7 +20,7 @@ namespace Projac.Tests
         public void HandlerCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new TSqlProjectionHandler(typeof(object), null)
+                () => new SqlProjectionHandler(typeof(object), null)
             );
         }
 
@@ -28,9 +28,9 @@ namespace Projac.Tests
         public void ParametersArePreservedAsProperties()
         {
             var @event = typeof(object);
-            Func<object, IEnumerable<TSqlNonQueryStatement>> handler = _ => new TSqlNonQueryStatement[0];
+            Func<object, IEnumerable<SqlNonQueryStatement>> handler = _ => new SqlNonQueryStatement[0];
 
-            var sut = new TSqlProjectionHandler(@event, handler);
+            var sut = new SqlProjectionHandler(@event, handler);
 
             Assert.That(sut.Event, Is.EqualTo(@event));
             Assert.That(sut.Handler, Is.EqualTo(handler));

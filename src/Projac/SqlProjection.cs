@@ -6,16 +6,16 @@ namespace Projac
     /// <summary>
     ///     Represent a projection.
     /// </summary>
-    public class TSqlProjection
+    public class SqlProjection
     {
-        private readonly TSqlProjectionHandler[] _handlers;
+        private readonly SqlProjectionHandler[] _handlers;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="TSqlProjection" /> class.
+        ///     Initializes a new instance of the <see cref="SqlProjection" /> class.
         /// </summary>
         /// <param name="handlers">The handlers.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handlers" /> are <c>null</c>.</exception>
-        public TSqlProjection(TSqlProjectionHandler[] handlers)
+        public SqlProjection(SqlProjectionHandler[] handlers)
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
             _handlers = handlers;
@@ -27,7 +27,7 @@ namespace Projac
         /// <value>
         ///     The projection handlers associated with this specification.
         /// </value>
-        public IReadOnlyCollection<TSqlProjectionHandler> Handlers
+        public IReadOnlyCollection<SqlProjectionHandler> Handlers
         {
             get { return _handlers; }
         }

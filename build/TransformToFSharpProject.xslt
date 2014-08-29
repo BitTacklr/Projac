@@ -27,15 +27,15 @@
       <xsl:value-of select="concat(substring-before(.,'.csproj'),'.FSharp.csproj')"/>
     </xsl:attribute>
   </xsl:template>
-  <xsl:template match="ns:Project/ns:ItemGroup/ns:Reference[@Include='TSqlClient']">
+  <xsl:template match="ns:Project/ns:ItemGroup/ns:Reference[@Include='Paramol']">
     <Reference>
       <xsl:attribute name="Include">
-        <xsl:value-of select="'TSqlClient.FSharp'"/>
+        <xsl:value-of select="'Paramol.FSharp'"/>
       </xsl:attribute>
       <HintPath><xsl:call-template name="replace-string">
         <xsl:with-param name="text" select="ns:HintPath/text()"/>
-        <xsl:with-param name="replace" select="'packages\TSqlClient'"/>
-        <xsl:with-param name="with" select="'packages\TSqlClient.FSharp'"/>
+        <xsl:with-param name="replace" select="'packages\Paramol'"/>
+        <xsl:with-param name="with" select="'packages\Paramol.FSharp'"/>
     </xsl:call-template></HintPath>
     </Reference>
   </xsl:template>
