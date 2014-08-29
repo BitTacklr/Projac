@@ -19,6 +19,7 @@
     <file src="output\fsharp\Paramol.pdb" target="lib\net45\Paramol.pdb" />
     <file src="output\fsharp\Paramol.xml" target="lib\net45\Paramol.xml" />
     <file src="..\src\Paramol\*.cs" target="src\Paramol" />
+    <file src="..\src\Paramol\SqlClient\*.cs" target="src\Paramol\SqlClient" />
     <file src="..\src\Paramol\Properties\*.cs" target="src\Paramol\Properties" />
   </files>
 </package>
