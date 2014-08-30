@@ -26,7 +26,7 @@ namespace Projac
         }
 
         /// <summary>
-        ///     Specifies the single statement returning handler to be invoked when a particular event occurs.
+        ///     Specifies the single non query statement returning handler to be invoked when a particular event occurs.
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="handler">The single statement returning handler.</param>
@@ -49,7 +49,7 @@ namespace Projac
         }
 
         /// <summary>
-        ///     Specifies the statement array returning handler to be invoked when a particular event occurs.
+        ///     Specifies the non query statement array returning handler to be invoked when a particular event occurs.
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="handler">The statement array returning handler.</param>
