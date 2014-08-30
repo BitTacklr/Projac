@@ -131,38 +131,38 @@ namespace Paramol.Tests.SqlClient
         {
             yield return new TestCaseData(
                 TSql.NonQueryFormat("text"),
-                new SqlNonQueryStatement("text", new SqlParameter[0]));
+                new SqlNonQueryStatement("text", new DbParameter[0]));
             yield return new TestCaseData(
                 TSql.NonQueryFormat("text", parameters: null),
-                new SqlNonQueryStatement("text", new SqlParameter[0]));
+                new SqlNonQueryStatement("text", new DbParameter[0]));
             yield return new TestCaseData(
                 TSql.NonQueryFormat("text", new IDbParameterValue[0]),
-                new SqlNonQueryStatement("text", new SqlParameter[0]));
+                new SqlNonQueryStatement("text", new DbParameter[0]));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text", new TestSqlParameter()),
+                TSql.NonQueryFormat("text", new TestDbParameter()),
                 new SqlNonQueryStatement("text", new[]
                 {
-                    new TestSqlParameter().ToDbParameter("@P0")
+                    new TestDbParameter().ToDbParameter("@P0")
                 }));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text {0}", new TestSqlParameter()),
+                TSql.NonQueryFormat("text {0}", new TestDbParameter()),
                 new SqlNonQueryStatement("text @P0", new[]
                 {
-                    new TestSqlParameter().ToDbParameter("@P0")
+                    new TestDbParameter().ToDbParameter("@P0")
                 }));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormat("text", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryStatement("text", new[]
                 {
-                    new TestSqlParameter().ToDbParameter("@P0"),
-                    new TestSqlParameter().ToDbParameter("@P1")
+                    new TestDbParameter().ToDbParameter("@P0"),
+                    new TestDbParameter().ToDbParameter("@P1")
                 }));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormat("text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryStatement("text @P0 @P1", new[]
                 {
-                    new TestSqlParameter().ToDbParameter("@P0"),
-                    new TestSqlParameter().ToDbParameter("@P1")
+                    new TestDbParameter().ToDbParameter("@P0"),
+                    new TestDbParameter().ToDbParameter("@P1")
                 }));
         }
 
@@ -182,49 +182,49 @@ namespace Paramol.Tests.SqlClient
         {
             yield return new TestCaseData(
                 TSql.NonQueryFormatIf(true, "text"),
-                new[] {new SqlNonQueryStatement("text", new SqlParameter[0])});
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
                 TSql.NonQueryFormatIf(true, "text", parameters: null),
-                new[] {new SqlNonQueryStatement("text", new SqlParameter[0])});
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
                 TSql.NonQueryFormatIf(true, "text", new IDbParameterValue[0]),
-                new[] {new SqlNonQueryStatement("text", new SqlParameter[0])});
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text", new TestSqlParameter()),
+                TSql.NonQueryFormatIf(true, "text", new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryStatement("text", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0")
+                        new TestDbParameter().ToDbParameter("@P0")
                     })
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text {0}", new TestSqlParameter()),
+                TSql.NonQueryFormatIf(true, "text {0}", new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryStatement("text @P0", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0")
+                        new TestDbParameter().ToDbParameter("@P0")
                     })
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormatIf(true, "text", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryStatement("text", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0"),
-                        new TestSqlParameter().ToDbParameter("@P1")
+                        new TestDbParameter().ToDbParameter("@P0"),
+                        new TestDbParameter().ToDbParameter("@P1")
                     })
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormatIf(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryStatement("text @P0 @P1", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0"),
-                        new TestSqlParameter().ToDbParameter("@P1")
+                        new TestDbParameter().ToDbParameter("@P0"),
+                        new TestDbParameter().ToDbParameter("@P1")
                     })
                 });
 
@@ -238,16 +238,16 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryFormatIf(false, "text", new IDbParameterValue[0]),
                 new SqlNonQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text", new TestSqlParameter()),
+                TSql.NonQueryFormatIf(false, "text", new TestDbParameter()),
                 new SqlNonQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text {0}", new TestSqlParameter()),
+                TSql.NonQueryFormatIf(false, "text {0}", new TestDbParameter()),
                 new SqlNonQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormatIf(false, "text", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormatIf(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryStatement[0]);
         }
 
@@ -267,49 +267,49 @@ namespace Paramol.Tests.SqlClient
         {
             yield return new TestCaseData(
                 TSql.NonQueryFormatUnless(false, "text"),
-                new[] { new SqlNonQueryStatement("text", new SqlParameter[0]) });
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
                 TSql.NonQueryFormatUnless(false, "text", parameters: null),
-                new[] { new SqlNonQueryStatement("text", new SqlParameter[0]) });
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
                 TSql.NonQueryFormatUnless(false, "text", new IDbParameterValue[0]),
-                new[] { new SqlNonQueryStatement("text", new SqlParameter[0]) });
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text", new TestSqlParameter()),
+                TSql.NonQueryFormatUnless(false, "text", new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryStatement("text", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0")
+                        new TestDbParameter().ToDbParameter("@P0")
                     })
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text {0}", new TestSqlParameter()),
+                TSql.NonQueryFormatUnless(false, "text {0}", new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryStatement("text @P0", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0")
+                        new TestDbParameter().ToDbParameter("@P0")
                     })
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormatUnless(false, "text", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryStatement("text", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0"),
-                        new TestSqlParameter().ToDbParameter("@P1")
+                        new TestDbParameter().ToDbParameter("@P0"),
+                        new TestDbParameter().ToDbParameter("@P1")
                     })
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormatUnless(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryStatement("text @P0 @P1", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0"),
-                        new TestSqlParameter().ToDbParameter("@P1")
+                        new TestDbParameter().ToDbParameter("@P0"),
+                        new TestDbParameter().ToDbParameter("@P1")
                     })
                 });
 
@@ -323,16 +323,16 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryFormatUnless(true, "text", new IDbParameterValue[0]),
                 new SqlNonQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text", new TestSqlParameter()),
+                TSql.NonQueryFormatUnless(true, "text", new TestDbParameter()),
                 new SqlNonQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text {0}", new TestSqlParameter()),
+                TSql.NonQueryFormatUnless(true, "text {0}", new TestDbParameter()),
                 new SqlNonQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormatUnless(true, "text", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.NonQueryFormatUnless(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryStatement[0]);
         }
 
@@ -347,38 +347,38 @@ namespace Paramol.Tests.SqlClient
         {
             yield return new TestCaseData(
                TSql.QueryFormat("text"),
-               new SqlQueryStatement("text", new SqlParameter[0]));
+               new SqlQueryStatement("text", new DbParameter[0]));
             yield return new TestCaseData(
                 TSql.QueryFormat("text", parameters: null),
-                new SqlQueryStatement("text", new SqlParameter[0]));
+                new SqlQueryStatement("text", new DbParameter[0]));
             yield return new TestCaseData(
                 TSql.QueryFormat("text", new IDbParameterValue[0]),
-                new SqlQueryStatement("text", new SqlParameter[0]));
+                new SqlQueryStatement("text", new DbParameter[0]));
             yield return new TestCaseData(
-                TSql.QueryFormat("text", new TestSqlParameter()),
+                TSql.QueryFormat("text", new TestDbParameter()),
                 new SqlQueryStatement("text", new[]
                 {
-                    new TestSqlParameter().ToDbParameter("@P0")
+                    new TestDbParameter().ToDbParameter("@P0")
                 }));
             yield return new TestCaseData(
-                TSql.QueryFormat("text {0}", new TestSqlParameter()),
+                TSql.QueryFormat("text {0}", new TestDbParameter()),
                 new SqlQueryStatement("text @P0", new[]
                 {
-                    new TestSqlParameter().ToDbParameter("@P0")
+                    new TestDbParameter().ToDbParameter("@P0")
                 }));
             yield return new TestCaseData(
-                TSql.QueryFormat("text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormat("text", new TestDbParameter(), new TestDbParameter()),
                 new SqlQueryStatement("text", new[]
                 {
-                    new TestSqlParameter().ToDbParameter("@P0"),
-                    new TestSqlParameter().ToDbParameter("@P1")
+                    new TestDbParameter().ToDbParameter("@P0"),
+                    new TestDbParameter().ToDbParameter("@P1")
                 }));
             yield return new TestCaseData(
-                TSql.QueryFormat("text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormat("text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new SqlQueryStatement("text @P0 @P1", new[]
                 {
-                    new TestSqlParameter().ToDbParameter("@P0"),
-                    new TestSqlParameter().ToDbParameter("@P1")
+                    new TestDbParameter().ToDbParameter("@P0"),
+                    new TestDbParameter().ToDbParameter("@P1")
                 }));
         }
 
@@ -398,49 +398,49 @@ namespace Paramol.Tests.SqlClient
         {
             yield return new TestCaseData(
                 TSql.QueryFormatIf(true, "text"),
-                new[] { new SqlQueryStatement("text", new SqlParameter[0]) });
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
                 TSql.QueryFormatIf(true, "text", parameters: null),
-                new[] { new SqlQueryStatement("text", new SqlParameter[0]) });
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
                 TSql.QueryFormatIf(true, "text", new IDbParameterValue[0]),
-                new[] { new SqlQueryStatement("text", new SqlParameter[0]) });
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
-                TSql.QueryFormatIf(true, "text", new TestSqlParameter()),
+                TSql.QueryFormatIf(true, "text", new TestDbParameter()),
                 new[]
                 {
                     new SqlQueryStatement("text", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0")
+                        new TestDbParameter().ToDbParameter("@P0")
                     })
                 });
             yield return new TestCaseData(
-                TSql.QueryFormatIf(true, "text {0}", new TestSqlParameter()),
+                TSql.QueryFormatIf(true, "text {0}", new TestDbParameter()),
                 new[]
                 {
                     new SqlQueryStatement("text @P0", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0")
+                        new TestDbParameter().ToDbParameter("@P0")
                     })
                 });
             yield return new TestCaseData(
-                TSql.QueryFormatIf(true, "text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormatIf(true, "text", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlQueryStatement("text", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0"),
-                        new TestSqlParameter().ToDbParameter("@P1")
+                        new TestDbParameter().ToDbParameter("@P0"),
+                        new TestDbParameter().ToDbParameter("@P1")
                     })
                 });
             yield return new TestCaseData(
-                TSql.QueryFormatIf(true, "text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormatIf(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlQueryStatement("text @P0 @P1", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0"),
-                        new TestSqlParameter().ToDbParameter("@P1")
+                        new TestDbParameter().ToDbParameter("@P0"),
+                        new TestDbParameter().ToDbParameter("@P1")
                     })
                 });
 
@@ -454,16 +454,16 @@ namespace Paramol.Tests.SqlClient
                 TSql.QueryFormatIf(false, "text", new IDbParameterValue[0]),
                 new SqlQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.QueryFormatIf(false, "text", new TestSqlParameter()),
+                TSql.QueryFormatIf(false, "text", new TestDbParameter()),
                 new SqlQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.QueryFormatIf(false, "text {0}", new TestSqlParameter()),
+                TSql.QueryFormatIf(false, "text {0}", new TestDbParameter()),
                 new SqlQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.QueryFormatIf(false, "text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormatIf(false, "text", new TestDbParameter(), new TestDbParameter()),
                 new SqlQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.QueryFormatIf(false, "text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormatIf(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new SqlQueryStatement[0]);
         }
 
@@ -483,49 +483,49 @@ namespace Paramol.Tests.SqlClient
         {
             yield return new TestCaseData(
                 TSql.QueryFormatUnless(false, "text"),
-                new[] { new SqlQueryStatement("text", new SqlParameter[0]) });
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
                 TSql.QueryFormatUnless(false, "text", parameters: null),
-                new[] { new SqlQueryStatement("text", new SqlParameter[0]) });
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
                 TSql.QueryFormatUnless(false, "text", new IDbParameterValue[0]),
-                new[] { new SqlQueryStatement("text", new SqlParameter[0]) });
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
             yield return new TestCaseData(
-                TSql.QueryFormatUnless(false, "text", new TestSqlParameter()),
+                TSql.QueryFormatUnless(false, "text", new TestDbParameter()),
                 new[]
                 {
                     new SqlQueryStatement("text", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0")
+                        new TestDbParameter().ToDbParameter("@P0")
                     })
                 });
             yield return new TestCaseData(
-                TSql.QueryFormatUnless(false, "text {0}", new TestSqlParameter()),
+                TSql.QueryFormatUnless(false, "text {0}", new TestDbParameter()),
                 new[]
                 {
                     new SqlQueryStatement("text @P0", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0")
+                        new TestDbParameter().ToDbParameter("@P0")
                     })
                 });
             yield return new TestCaseData(
-                TSql.QueryFormatUnless(false, "text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormatUnless(false, "text", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlQueryStatement("text", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0"),
-                        new TestSqlParameter().ToDbParameter("@P1")
+                        new TestDbParameter().ToDbParameter("@P0"),
+                        new TestDbParameter().ToDbParameter("@P1")
                     })
                 });
             yield return new TestCaseData(
-                TSql.QueryFormatUnless(false, "text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormatUnless(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlQueryStatement("text @P0 @P1", new[]
                     {
-                        new TestSqlParameter().ToDbParameter("@P0"),
-                        new TestSqlParameter().ToDbParameter("@P1")
+                        new TestDbParameter().ToDbParameter("@P0"),
+                        new TestDbParameter().ToDbParameter("@P1")
                     })
                 });
 
@@ -539,16 +539,16 @@ namespace Paramol.Tests.SqlClient
                 TSql.QueryFormatUnless(true, "text", new IDbParameterValue[0]),
                 new SqlQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.QueryFormatUnless(true, "text", new TestSqlParameter()),
+                TSql.QueryFormatUnless(true, "text", new TestDbParameter()),
                 new SqlQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.QueryFormatUnless(true, "text {0}", new TestSqlParameter()),
+                TSql.QueryFormatUnless(true, "text {0}", new TestDbParameter()),
                 new SqlQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.QueryFormatUnless(true, "text", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormatUnless(true, "text", new TestDbParameter(), new TestDbParameter()),
                 new SqlQueryStatement[0]);
             yield return new TestCaseData(
-                TSql.QueryFormatUnless(true, "text {0} {1}", new TestSqlParameter(), new TestSqlParameter()),
+                TSql.QueryFormatUnless(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new SqlQueryStatement[0]);
         }
 
@@ -830,10 +830,10 @@ namespace Paramol.Tests.SqlClient
 
         private static SqlNonQueryStatement StatementFactory()
         {
-            return new SqlNonQueryStatement("text", new SqlParameter[0]);
+            return new SqlNonQueryStatement("text", new DbParameter[0]);
         }
 
-        class TestSqlParameter : IDbParameterValue
+        class TestDbParameter : IDbParameterValue
         {
             public DbParameter ToDbParameter(string parameterName)
             {

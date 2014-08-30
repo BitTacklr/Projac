@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
@@ -171,7 +172,7 @@ namespace Projac.Tests
 
         private static SqlNonQueryStatement StatementFactory()
         {
-            return new SqlNonQueryStatement("text", new SqlParameter[0]);
+            return new SqlNonQueryStatement("text", new DbParameter[0]);
         }
     }
 }

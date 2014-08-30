@@ -50,6 +50,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlProjectionBuilderTests.cs" />
+    <Compile Include="SqlProjectionDescriptorTests.cs" />
     <Compile Include="SqlProjectionHandlerTests.cs" />
     <Compile Include="SqlProjectionTests.cs" />
   </ItemGroup>
