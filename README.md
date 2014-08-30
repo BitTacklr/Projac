@@ -1,16 +1,16 @@
-# Projac
+# Projac & Paramol
 
-Projac provides a set of simple abstractions that allow one to write projections targeting Microsoft SQL Server databases. It doesn't shove any ```IEventHandler<T>```, ```IHandle<T>```, or ```IMessageHandler<T>``` down your throat. Use your own or the ones provided by the framework you're integrating with.
+Projac provides a set of simple abstractions that allow one to write projections targeting relational databases (only support for Microsoft SQL Server at this point). It doesn't shove any ```IEventHandler<T>```, ```IHandle<T>```, or ```IMessageHandler<T>``` down your throat. Use your own or the ones provided by the framework you're integrating with. Paramol provides abstractions to capture the essence of statements to send to a relational database, along with a fluent syntax to author them (only support for Microsoft SQL Server at this point).
 
 It's on NuGet already: [CSharp version](https://www.nuget.org/packages/Projac/) and [FSharp version](https://www.nuget.org/packages/Projac.FSharp/)
 
-## TSqlNonQueryStatement & TSqlQueryStatement
+## SqlNonQueryStatement & SqlQueryStatement
 
 Abstracts the text and the parameters to be sent to the database. Both non-query (INSERT, UPDATE, DELETE) and query (SELECT) text statements are supported, but as a word of advice, you should generally bias towards non-query statements, since they're the only ones that make sense for writing projections that perform well.
 
 ## TSql
 
-Syntactic sugar for writing SQL statements in the projection handlers. Parameters can be defined by passing in either an anonymously typed object or a strongly typed one. Properties magically become parameters of the SQL statement.
+Syntactic sugar for writing T-SQL statements in the projection handlers. Parameters can be defined by passing in either an anonymously typed object or a strongly typed one. Properties magically become parameters of the T-SQL statement.
 
 ```csharp
 TSql.NonQuery(
@@ -35,7 +35,7 @@ Syntactic sugar to allow you to specify projections without the need for a dedic
 
 ```csharp
 var specification =
-  TSql.Projection().
+  new SqlProjectionBuilder().
     When<PortfolioAdded>(@event =>
       TSql.NonQuery(
         "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
@@ -58,7 +58,7 @@ How and when you decide to execute the projection specification is still left as
 
 ## Projection Handler
 
-Your projection handlers should either accept an ```IObserver<TSqlNonQueryStatement>``` to push their SQL statements on or the projection handling methods should return ```IEnumerable<TSqlNonQueryStatement>```. This is not something that is part of the library. This is your code and optionally the framework you depend upon. The declarative projection syntax above only supports the ```Enumerable``` approach.
+Your projection handlers should either accept an ```IObserver<SqlNonQueryStatement>``` to push their SQL statements on or the projection handling methods should return ```IEnumerable<SqlNonQueryStatement>```. This is not something that is part of the library. This is your code and optionally the framework you depend upon. The declarative projection syntax above only supports the ```Enumerable``` approach.
 
 ```csharp
 // Observable approach - void IHandle.Handle(TMessage message)
@@ -70,7 +70,7 @@ public class PortfolioListProjectionHandler :
   
   readonly IObserver<TSqlNonQueryStatement> statements;
 
-  public PortfolioListProjectionHandler(IObserver<TSqlNonQueryStatement> statements) {
+  public PortfolioListProjectionHandler(IObserver<SqlNonQueryStatement> statements) {
     this.statements = statements;
   }
 
@@ -96,28 +96,28 @@ public class PortfolioListProjectionHandler :
   }
 }
 
-// Enumerable approach - IEnumerable<TSqlNonQueryStatement> IHandle.Handle(TMessage message)
+// Enumerable approach - IEnumerable<SqlNonQueryStatement> IHandle.Handle(TMessage message)
 
 public class PortfolioListProjectionHandler : 
   IHandle<PortfolioAdded>,
   IHandle<PortfolioRemoved>,
   IHandle<PortfolioRenamed> {
 
-  public IEnumerable<TSqlNonQueryStatement> Handle(PortfolioAdded @event) {
+  public IEnumerable<SqlNonQueryStatement> Handle(PortfolioAdded @event) {
     yield return
       TSql.NonQuery(
         "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) });
   }
 
-  public IEnumerable<TSqlNonQueryStatement> Handle(PortfolioRemoved @event) {
+  public IEnumerable<SqlNonQueryStatement> Handle(PortfolioRemoved @event) {
     yield return
       TSql.NonQuery(
         "DELETE FROM [Portfolio] WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id) });
   }
 
-  public IEnumerable<TSqlNonQueryStatement> Handle(PortfolioRenamed @event) {
+  public IEnumerable<SqlNonQueryStatement> Handle(PortfolioRenamed @event) {
     yield return
       TSql.NonQuery(
         "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
