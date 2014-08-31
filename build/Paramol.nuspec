@@ -8,7 +8,7 @@
     <title>Paramol</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://raw.github.com/yreynhout/Paramol/master/LICENSE.txt</licenseUrl>
-    <description>Paramol provides lightweight infrastructure for producing T-SQL DML statements.</description>
+    <description>Paramol provides lightweight infrastructure for producing SQL DML statements.</description>
     <projectUrl>https://github.com/yreynhout/Paramol</projectUrl>
     <releaseNotes>Changes: Paramol is now a separate library.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>

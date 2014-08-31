@@ -4,7 +4,7 @@ using System.Data.Common;
 namespace Paramol
 {
     /// <summary>
-    ///     Represent a T-SQL non query statement.
+    ///     Represent a SQL non query statement.
     /// </summary>
     public class SqlNonQueryStatement
     {

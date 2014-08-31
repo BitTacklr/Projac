@@ -33,12 +33,6 @@ namespace Projac.Tests
             Assert.Throws<ArgumentNullException>(
                 () => SutFactory((SqlProjection)null)
                 );
-
-            new SqlProjectionDescriptorBuilder("identifier")
-            {
-                DataDefinitionStatements = TSql.Compose(TSql.NonQuery("")),
-                Projection = SqlProjection.Empty
-            }.Build();
         }
 
         [Test]

@@ -4,7 +4,7 @@ using System.Data.Common;
 namespace Paramol
 {
     /// <summary>
-    ///     Represent a T-SQL query statement.
+    ///     Represent a SQL query statement.
     /// </summary>
     public class SqlQueryStatement
     {

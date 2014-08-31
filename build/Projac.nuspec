@@ -8,14 +8,14 @@
     <title>Projac</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
-    <description>Projac provides lightweight infrastructure for producing T-SQL DML statements.</description>
+    <description>Projac provides lightweight infrastructure for producing SQL based projections.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
     <releaseNotes>Changes: Null support is now datatype aware.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Paramol" version="0.0.83" />
+        <dependency id="Paramol" version="0.0.86" />
       </group>
     </dependencies>
   </metadata>

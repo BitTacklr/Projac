@@ -5,7 +5,7 @@ using System.Linq;
 namespace Paramol
 {
     /// <summary>
-    ///     Represents a composition of T-SQL non query statements.
+    ///     Represents a composition of SQL non query statements.
     /// </summary>
     public class SqlNonQueryStatementComposer
     {
