@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Paramol;
 
@@ -32,8 +31,22 @@ namespace Projac.Tests
 
             var result = sut.Handlers;
 
-            Assert.That(result, Is.InstanceOf<IReadOnlyCollection<SqlProjectionHandler>>());
             Assert.That(result, Is.EquivalentTo(handlers));
+        }
+
+        [Test]
+        public void EmptyReturnsExpectedInstance()
+        {
+            var result = SqlProjection.Empty;
+
+            Assert.That(result, Is.InstanceOf<SqlProjection>());
+            Assert.That(result.Handlers, Is.Empty);
+        }
+
+        [Test]
+        public void EmptyReturnsSameInstance()
+        {
+            Assert.AreSame(SqlProjection.Empty, SqlProjection.Empty);
         }
     }
 }

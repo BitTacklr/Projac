@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Projac
 {
@@ -8,6 +7,11 @@ namespace Projac
     /// </summary>
     public class SqlProjection
     {
+        /// <summary>
+        /// Returns a <see cref="SqlProjection"/> instance without handlers.
+        /// </summary>
+        public static readonly SqlProjection Empty = new SqlProjection(new SqlProjectionHandler[0]);
+
         private readonly SqlProjectionHandler[] _handlers;
 
         /// <summary>
@@ -27,7 +31,7 @@ namespace Projac
         /// <value>
         ///     The projection handlers associated with this specification.
         /// </value>
-        public IReadOnlyCollection<SqlProjectionHandler> Handlers
+        public SqlProjectionHandler[] Handlers
         {
             get { return _handlers; }
         }

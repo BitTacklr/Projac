@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using Paramol;
 
 namespace Projac
 {
     /// <summary>
-    ///     Represent a projection descriptor.
+    ///     Represent a SQL projection descriptor.
     /// </summary>
     public class SqlProjectionDescriptor
     {
-        private readonly Uri _identifier;
+        private readonly string _identifier;
         private readonly SqlProjection _projection;
         private readonly SqlNonQueryStatement[] _dataDefinitionStatements;
 
@@ -20,7 +19,7 @@ namespace Projac
         /// <param name="dataDefinitionStatements">The data definition statements.</param>
         /// <param name="projection">The projection.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/>, <paramref name="dataDefinitionStatements"/> or <paramref name="projection"/> is <c>null</c>.</exception>
-        public SqlProjectionDescriptor(Uri identifier, SqlNonQueryStatement[] dataDefinitionStatements, SqlProjection projection)
+        public SqlProjectionDescriptor(string identifier, SqlNonQueryStatement[] dataDefinitionStatements, SqlProjection projection)
         {
             if (identifier == null) throw new ArgumentNullException("identifier");
             if (dataDefinitionStatements == null) throw new ArgumentNullException("dataDefinitionStatements");
@@ -36,7 +35,7 @@ namespace Projac
         /// <value>
         /// The projection identifier.
         /// </value>
-        public Uri Identifier
+        public string Identifier
         {
             get { return _identifier; }
         }
@@ -47,7 +46,7 @@ namespace Projac
         /// <value>
         /// The data definition statements.
         /// </value>
-        public IReadOnlyCollection<SqlNonQueryStatement> DataDefinitionStatements
+        public SqlNonQueryStatement[] DataDefinitionStatements
         {
             get { return _dataDefinitionStatements; }
         }

@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlProjectionBuilder.cs" />
     <Compile Include="SqlProjectionDescriptor.cs" />
+    <Compile Include="SqlProjectionDescriptorBuilder.cs" />
     <Compile Include="SqlProjectionHandler.cs" />
     <Compile Include="SqlProjection.cs" />
   </ItemGroup>

@@ -2,17 +2,20 @@ using System;
 using System.Data.Common;
 using NUnit.Framework;
 using Paramol;
+using Paramol.SqlClient;
 
 namespace Projac.Tests
 {
     [TestFixture]
     public class SqlProjectionDescriptorTests
     {
+        private const string Identifier = "identifier:v1";
+
         [Test]
         public void IdentifierCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => SutFactory((Uri)null)
+                () => SutFactory((string)null)
                 );
         }
 
@@ -30,42 +33,47 @@ namespace Projac.Tests
             Assert.Throws<ArgumentNullException>(
                 () => SutFactory((SqlProjection)null)
                 );
+
+            new SqlProjectionDescriptorBuilder("identifier")
+            {
+                DataDefinitionStatements = TSql.Compose(TSql.NonQuery("")),
+                Projection = SqlProjection.Empty
+            }.Build();
         }
 
         [Test]
         public void PropertiesArePreserved()
         {
-            var identifier = new Uri("urn:identifier:v1");
             var dataDefinitionStatements = new[]
             {
                 StatementFactory(),
                 StatementFactory()
             };
             var projection = new SqlProjection(new[] {new SqlProjectionHandler(typeof (object), _ => new SqlNonQueryStatement[0])});
-            var sut = SutFactory(identifier, dataDefinitionStatements, projection);
+            var sut = SutFactory("identifier-v2", dataDefinitionStatements, projection);
 
-            Assert.That(sut.Identifier, Is.EqualTo(identifier));
+            Assert.That(sut.Identifier, Is.EqualTo("identifier-v2"));
             Assert.That(sut.DataDefinitionStatements, Is.EquivalentTo(dataDefinitionStatements));
             Assert.That(sut.Projection, Is.EqualTo(projection));
         }
 
-        private static SqlProjectionDescriptor SutFactory(Uri identifier)
+        private static SqlProjectionDescriptor SutFactory(string identifier)
         {
             return SutFactory(identifier, new SqlNonQueryStatement[0], new SqlProjection(new SqlProjectionHandler[0]));
         }
 
         private static SqlProjectionDescriptor SutFactory(SqlNonQueryStatement[] dataDefinitionStatements)
         {
-            return SutFactory(new Uri("urn:identifier:v1"), dataDefinitionStatements, new SqlProjection(new SqlProjectionHandler[0]));
+            return SutFactory(Identifier, dataDefinitionStatements, new SqlProjection(new SqlProjectionHandler[0]));
         }
 
         private static SqlProjectionDescriptor SutFactory(SqlProjection projection)
         {
-            return SutFactory(new Uri("urn:identifier:v1"), new SqlNonQueryStatement[0], projection);
+            return SutFactory(Identifier, new SqlNonQueryStatement[0], projection);
         }
 
         private static SqlProjectionDescriptor SutFactory(
-            Uri identifier,
+            string identifier,
             SqlNonQueryStatement[] dataDefinitionStatements, 
             SqlProjection projection)
         {
