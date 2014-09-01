@@ -31,31 +31,67 @@ TSql.NonQueryFormat(
 
 ## Declarative Projections
 
-Syntactic sugar to allow you to specify projections without the need for a dedicated class. The code should speak for itself, but does require some playing around with. Mind you, only non query T-SQL statements are supported (pit of success).
+Syntactic sugar to allow you to specify projections without the need for a dedicated class. The code should speak for itself, but does require some playing around with. Mind you, only non query SQL statements are supported (pit of success and all that).
 
 ```csharp
-var specification =
+var projection =
   new SqlProjectionBuilder().
     When<PortfolioAdded>(@event =>
       TSql.NonQuery(
         "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
-    ).
+    )).
     When<PortfolioRemoved>(@event =>
       TSql.NonQuery(
         "DELETE FROM [Portfolio] WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id) }
-    ).
+    )).
     When<PortfolioRenamed>(@event =>
       TSql.NonQuery(
         "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
-    ).
+    )).
     Build();
 ```
 
 How and when you decide to execute the projection specification is still left as an exercise to you. Typically, you'll turn the handlers into a map where you can lookup the handler based on the type of event to be handled. Familiarity with plain old ADO.NET is assumed. You can take a look at the ```TSqlNonQueryStatementFlusher``` (in the tests under Usage) to get an idea of how to flush the resulting statements.
 
+## Projection Descriptor
+
+Next to the actual projection, you'll want to somehow identify the projection. A name and/or version or a date and time. It's just a piece of string. Data definition statements describe the schema of the current projection as a bunch of ``SqlNonQueryStatements``, e.g. drop any database objects pertaining to previous versions of the projection and create any new database objects pertaining to the *current* version. Note that data definition statements are entirely optional, under your control and omit any form of handholding (unlike traditional database schema migration tooling). What's the motivation behind this? Traditionally one would manage the database object schema *on-the-side* using a database project (or an equivalent there of). Yet this is counter to the idea of treating projections as individual units. As such you should see this as an attempt to bring what is usually separated closer together. 
+
+```csharp
+public static class PortfolioProjection
+{
+  public static readonly SqlProjectionDescriptor Descriptor =
+    new SqlProjectionDescriptorBuilder("portfolio-v1")
+    {
+      DataDefinitionStatements = TSql.Compose(
+              TSql.NonQuery(
+                  "CREATE TABLE [Portfolio] ( " +
+                  "[Id] INT NOT NULL PRIMARY KEY, " +
+                  "[Name] NVARCHAR(40) NOT NULL)")),
+      Projection = new SqlProjectionBuilder().
+          When<PortfolioAdded>(@event =>
+              TSql.NonQuery(
+                  "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
+                  new {P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40)}
+                  )).
+          When<PortfolioRemoved>(@event =>
+              TSql.NonQuery(
+                  "DELETE FROM [Portfolio] WHERE Id = @P1",
+                  new {P1 = TSql.Int(@event.Id)}
+                  )).
+          When<PortfolioRenamed>(@event =>
+              TSql.NonQuery(
+                  "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
+                  new {P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40)}
+                  )).
+          Build()
+    }.
+    Build();
+}
+```
 ## Projection Handler
 
 Your projection handlers should either accept an ```IObserver<SqlNonQueryStatement>``` to push their SQL statements on or the projection handling methods should return ```IEnumerable<SqlNonQueryStatement>```. This is not something that is part of the library. This is your code and optionally the framework you depend upon. The declarative projection syntax above only supports the ```Enumerable``` approach.
