@@ -37,6 +37,7 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -49,6 +50,7 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AsyncSqlNonQueryStatementExecutorTests.cs" />
     <Compile Include="Framework\DbParameterAssertions.cs" />
     <Compile Include="Framework\SqlParameterEqualityComparer.cs" />
     <Compile Include="SqlClient\TSqlBigIntNullValueTests.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="SqlClient\TSqlNCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlNCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlNCharValueTests.cs" />
+    <Compile Include="SqlNonQueryStatementExecutorTests.cs" />
     <Compile Include="SqlNonQueryStatementTests.cs" />
     <Compile Include="SqlClient\TSqlNVarCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlNVarCharSizeTest.cs" />

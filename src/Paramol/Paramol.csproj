@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -44,7 +45,10 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AsyncSqlNonQueryStatementExecutor.cs" />
+    <Compile Include="IAsyncSqlNonQueryStatementExecutor.cs" />
     <Compile Include="IDbParameterValue.cs" />
+    <Compile Include="ISqlNonQueryStatementExecutor.cs" />
     <Compile Include="Limits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlClient\TSql.cs" />
@@ -72,6 +76,7 @@
     <Compile Include="SqlClient\TSqlNVarCharNullValue.cs" />
     <Compile Include="SqlClient\TSqlNVarCharSize.cs" />
     <Compile Include="SqlClient\TSqlNVarCharValue.cs" />
+    <Compile Include="SqlNonQueryStatementExecutor.cs" />
     <Compile Include="SqlQueryStatement.cs" />
     <Compile Include="SqlNonQueryStatementComposer.cs" />
     <Compile Include="SqlClient\TSqlUniqueIdentifierNullValue.cs" />

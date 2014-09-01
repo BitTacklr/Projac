@@ -45,12 +45,14 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AsyncSqlProjector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlProjectionBuilder.cs" />
     <Compile Include="SqlProjectionDescriptor.cs" />
     <Compile Include="SqlProjectionDescriptorBuilder.cs" />
     <Compile Include="SqlProjectionHandler.cs" />
     <Compile Include="SqlProjection.cs" />
+    <Compile Include="SqlProjector.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Paramol\Paramol.csproj">
