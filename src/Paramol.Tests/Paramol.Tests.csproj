@@ -90,6 +90,8 @@
     <Compile Include="SqlClient\TSqlVarCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlVarCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlVarCharValueTests.cs" />
+    <Compile Include="TransactionalAsyncSqlNonQueryStatementExecutorTests.cs" />
+    <Compile Include="TransactionalSqlNonQueryStatementExecutorTests.cs" />
     <Compile Include="Usage\TSqlNonQueryStatementFlusher.cs" />
   </ItemGroup>
   <ItemGroup>

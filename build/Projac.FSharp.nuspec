@@ -15,7 +15,7 @@
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Paramol.FSharp" version="0.0.86" />
+        <dependency id="Paramol.FSharp" version="0.0.88" />
       </group>
     </dependencies>
   </metadata>

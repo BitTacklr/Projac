@@ -6,11 +6,20 @@ using Paramol;
 
 namespace Projac
 {
+    /// <summary>
+    /// Projects a single event in an asynchronous manner to the matching handlers.
+    /// </summary>
     public class AsyncSqlProjector
     {
         private readonly SqlProjectionHandler[] _handlers;
         private readonly IAsyncSqlNonQueryStatementExecutor _executor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SqlProjector"/> class.
+        /// </summary>
+        /// <param name="handlers">The handlers.</param>
+        /// <param name="executor">The statement executor.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handlers"/> or <paramref name="executor"/> is <c>null</c>.</exception>
         public AsyncSqlProjector(SqlProjectionHandler[] handlers, IAsyncSqlNonQueryStatementExecutor executor)
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
@@ -19,11 +28,22 @@ namespace Projac
             _executor = executor;
         }
 
+        /// <summary>
+        /// Projects the specified event.
+        /// </summary>
+        /// <param name="event">The event to project.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="event"/> is <c>null</c>.</exception>
         public Task ProjectAsync(object @event)
         {
             return ProjectAsync(@event, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Projects the specified event.
+        /// </summary>
+        /// <param name="event">The event to project.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="event"/> is <c>null</c>.</exception>
         public Task ProjectAsync(object @event, CancellationToken cancellationToken)
         {
             if (@event == null) throw new ArgumentNullException("event");

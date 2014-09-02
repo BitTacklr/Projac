@@ -87,6 +87,8 @@
     <Compile Include="SqlClient\TSqlVarCharNullValue.cs" />
     <Compile Include="SqlClient\TSqlVarCharSize.cs" />
     <Compile Include="SqlClient\TSqlVarCharValue.cs" />
+    <Compile Include="TransactionalAsyncSqlNonQueryStatementExecutor.cs" />
+    <Compile Include="TransactionalSqlNonQueryStatementExecutor.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
