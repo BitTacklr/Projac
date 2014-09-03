@@ -30,8 +30,9 @@ namespace Paramol
         /// Executes the specified statements.
         /// </summary>
         /// <param name="statements">The statements.</param>
+        /// <returns>The number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
         /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements"/> are <c>null</c>.</exception>
-        public void Execute(IEnumerable<SqlNonQueryStatement> statements)
+        public int Execute(IEnumerable<SqlNonQueryStatement> statements)
         {
             if (statements == null) throw new ArgumentNullException("statements");
 
@@ -45,13 +46,16 @@ namespace Paramol
                     {
                         command.Connection = connection;
                         command.CommandType = CommandType.Text;
+                        var count = 0;
                         foreach (var statement in statements)
                         {
                             command.CommandText = statement.Text;
                             command.Parameters.Clear();
                             command.Parameters.AddRange(statement.Parameters);
                             command.ExecuteNonQuery();
+                            count++;
                         }
+                        return count;
                     }
                 }
                 finally

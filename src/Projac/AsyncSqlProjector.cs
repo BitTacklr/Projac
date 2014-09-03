@@ -33,7 +33,7 @@ namespace Projac
         /// </summary>
         /// <param name="event">The event to project.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="event"/> is <c>null</c>.</exception>
-        public Task ProjectAsync(object @event)
+        public Task<int> ProjectAsync(object @event)
         {
             return ProjectAsync(@event, CancellationToken.None);
         }
@@ -44,7 +44,7 @@ namespace Projac
         /// <param name="event">The event to project.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="event"/> is <c>null</c>.</exception>
-        public Task ProjectAsync(object @event, CancellationToken cancellationToken)
+        public Task<int> ProjectAsync(object @event, CancellationToken cancellationToken)
         {
             if (@event == null) throw new ArgumentNullException("event");
 

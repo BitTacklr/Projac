@@ -31,11 +31,11 @@ namespace Projac
         /// </summary>
         /// <param name="event">The event to project.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="event"/> is <c>null</c>.</exception>
-        public void Project(object @event)
+        public int Project(object @event)
         {
             if (@event == null) throw new ArgumentNullException("event");
 
-            _executor.Execute(
+            return _executor.Execute(
                 _handlers.
                     Where(handler => handler.Event == @event.GetType()).
                     SelectMany(handler => handler.Handler(@event)));

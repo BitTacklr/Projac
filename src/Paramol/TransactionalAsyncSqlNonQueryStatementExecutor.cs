@@ -35,9 +35,9 @@ namespace Paramol
         /// Executes the specified statements asynchronously.
         /// </summary>
         /// <param name="statements">The statements.</param>
-        /// <returns>A <see cref="Task"/>.</returns>
+        /// <returns>A <see cref="Task"/> that will return the number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
         /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements"/> are <c>null</c>.</exception>
-        public Task ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements)
+        public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements)
         {
             return ExecuteAsync(statements, CancellationToken.None);
         }
@@ -47,9 +47,9 @@ namespace Paramol
         /// </summary>
         /// <param name="statements">The statements.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A <see cref="Task"/>.</returns>
+        /// <returns>A <see cref="Task"/> that will return the number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
         /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements" /> are <c>null</c>.</exception>
-        public async Task ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken)
+        public async Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken)
         {
             if (statements == null) throw new ArgumentNullException("statements");
             using (var connection = _dbProviderFactory.CreateConnection())
@@ -58,22 +58,26 @@ namespace Paramol
                 await connection.OpenAsync(cancellationToken);
                 try
                 {
+                    var count = 0;
                     using (var transaction = connection.BeginTransaction(_isolationLevel))
                     {
                         using (var command = _dbProviderFactory.CreateCommand())
                         {
                             command.Connection = connection;
                             command.CommandType = CommandType.Text;
+                            
                             foreach (var statement in statements)
                             {
                                 command.CommandText = statement.Text;
                                 command.Parameters.Clear();
                                 command.Parameters.AddRange(statement.Parameters);
                                 await command.ExecuteNonQueryAsync(cancellationToken);
+                                count++;
                             }
                         }
                         transaction.Commit();
                     }
+                    return count;
                 }
                 finally
                 {

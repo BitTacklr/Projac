@@ -13,17 +13,17 @@ namespace Paramol
         /// Executes the specified statements asynchronously.
         /// </summary>
         /// <param name="statements">The statements.</param>
-        /// <returns>A <see cref="Task"/>.</returns>
+        /// <returns>A <see cref="Task"/> that will return the number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
         /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements"/> are <c>null</c>.</exception>
-        Task ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements);
+        Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements);
 
         /// <summary>
         /// Executes the specified statements asynchronously.
         /// </summary>
         /// <param name="statements">The statements.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A <see cref="Task"/>.</returns>
+        /// <returns>A <see cref="Task"/> that will return the number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
         /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements" /> are <c>null</c>.</exception>
-        Task ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken);
+        Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken);
     }
 }

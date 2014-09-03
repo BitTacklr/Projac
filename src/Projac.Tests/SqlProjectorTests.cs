@@ -39,8 +39,9 @@ namespace Projac.Tests
             var handler = new SqlProjectionHandler(typeof(object), _ => statements);
             var sut = SutFactory(new[] {handler}, mock);
 
-            sut.Project(new object());
+            var result = sut.Project(new object());
 
+            Assert.That(result, Is.EqualTo(2));
             Assert.That(mock.Statements, Is.EquivalentTo(statements));
         }
 
@@ -52,8 +53,9 @@ namespace Projac.Tests
             var handler = new SqlProjectionHandler(typeof(string), _ => statements);
             var sut = SutFactory(new[] { handler }, mock);
 
-            sut.Project(new object());
+            var result = sut.Project(new object());
 
+            Assert.That(result, Is.EqualTo(0));
             Assert.That(mock.Statements, Is.Empty);
         }
 
@@ -86,16 +88,19 @@ namespace Projac.Tests
         {
             public readonly List<SqlNonQueryStatement> Statements = new List<SqlNonQueryStatement>();
 
-            public void Execute(IEnumerable<SqlNonQueryStatement> statements)
+            public int Execute(IEnumerable<SqlNonQueryStatement> statements)
             {
+                var count = Statements.Count;
                 Statements.AddRange(statements);
+                return Statements.Count - count;
             }
         }
 
         class ExecutorStub : ISqlNonQueryStatementExecutor
         {
-            public void Execute(IEnumerable<SqlNonQueryStatement> statements)
+            public int Execute(IEnumerable<SqlNonQueryStatement> statements)
             {
+                return 0;
             }
         }
     }

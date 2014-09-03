@@ -74,8 +74,9 @@ namespace Projac.Tests
             var handler = new SqlProjectionHandler(typeof(object), _ => statements);
             var sut = SutFactory(new[] { handler }, mock);
 
-            await sut.ProjectAsync(new object(), CancellationToken.None);
+            var result = await sut.ProjectAsync(new object(), CancellationToken.None);
 
+            Assert.That(result, Is.EqualTo(2));
             Assert.That(mock.Statements, Is.EquivalentTo(statements));
         }
 
@@ -87,8 +88,9 @@ namespace Projac.Tests
             var handler = new SqlProjectionHandler(typeof(string), _ => statements);
             var sut = SutFactory(new[] { handler }, mock);
 
-            await sut.ProjectAsync(new object(), CancellationToken.None);
+            var result = await sut.ProjectAsync(new object(), CancellationToken.None);
 
+            Assert.That(result, Is.EqualTo(0));
             Assert.That(mock.Statements, Is.Empty);
         }
 
@@ -121,28 +123,29 @@ namespace Projac.Tests
         {
             public readonly List<SqlNonQueryStatement> Statements = new List<SqlNonQueryStatement>();
 
-            public Task ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements)
+            public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements)
             {
                 return ExecuteAsync(statements, CancellationToken.None);
             }
 
-            public Task ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken)
+            public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken)
             {
+                var count = Statements.Count;
                 Statements.AddRange(statements);
-                return Task.FromResult<object>(null);
+                return Task.FromResult(Statements.Count - count);
             }
         }
 
         class ExecutorStub : IAsyncSqlNonQueryStatementExecutor
         {
-            public Task ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements)
+            public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements)
             {
-                return Task.FromResult<object>(null);
+                return Task.FromResult(0);
             }
 
-            public Task ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken)
+            public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken)
             {
-                return Task.FromResult<object>(null);
+                return Task.FromResult(0);
             }
         }
     }

@@ -11,7 +11,8 @@ namespace Paramol
         /// Executes the specified statements.
         /// </summary>
         /// <param name="statements">The statements.</param>
+        /// <returns>The number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
         /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements"/> are <c>null</c>.</exception>
-        void Execute(IEnumerable<SqlNonQueryStatement> statements);
+        int Execute(IEnumerable<SqlNonQueryStatement> statements);
     }
 }
