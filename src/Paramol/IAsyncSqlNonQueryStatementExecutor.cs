@@ -14,7 +14,7 @@ namespace Paramol
         /// </summary>
         /// <param name="statements">The statements.</param>
         /// <returns>A <see cref="Task"/> that will return the number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
-        /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements"/> are <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="statements"/> are <c>null</c>.</exception>
         Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements);
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Paramol
         /// <param name="statements">The statements.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> that will return the number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
-        /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements" /> are <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="statements" /> are <c>null</c>.</exception>
         Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken);
     }
 }

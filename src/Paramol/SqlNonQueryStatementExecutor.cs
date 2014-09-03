@@ -9,7 +9,7 @@ namespace Paramol
     /// <summary>
     /// Represents the execution of a set of <see cref="SqlNonQueryStatement">statements</see> against a data source.
     /// </summary>
-    public class SqlNonQueryStatementExecutor : ISqlNonQueryStatementExecutor 
+    public class SqlNonQueryStatementExecutor : ISqlNonQueryStatementExecutor
     {
         private readonly ConnectionStringSettings _settings;
         private readonly DbProviderFactory _dbProviderFactory;
@@ -18,7 +18,7 @@ namespace Paramol
         /// Initializes a new instance of the <see cref="SqlNonQueryStatementExecutor"/> class.
         /// </summary>
         /// <param name="settings">The connection string settings.</param>
-        /// <exception cref="System.ArgumentNullException">Throws when <paramref name="settings"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="settings"/> is <c>null</c>.</exception>
         public SqlNonQueryStatementExecutor(ConnectionStringSettings settings)
         {
             if (settings == null) throw new ArgumentNullException("settings");
@@ -31,7 +31,7 @@ namespace Paramol
         /// </summary>
         /// <param name="statements">The statements.</param>
         /// <returns>The number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
-        /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements"/> are <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="statements"/> are <c>null</c>.</exception>
         public int Execute(IEnumerable<SqlNonQueryStatement> statements)
         {
             if (statements == null) throw new ArgumentNullException("statements");
@@ -42,7 +42,7 @@ namespace Paramol
                 connection.Open();
                 try
                 {
-                    using (var command = _dbProviderFactory.CreateCommand())
+                    using (var command = connection.CreateCommand())
                     {
                         command.Connection = connection;
                         command.CommandType = CommandType.Text;

@@ -22,7 +22,7 @@ namespace Paramol
         /// </summary>
         /// <param name="settings">The connection string settings.</param>
         /// <param name="isolationLevel">The transaction isolation level.</param>
-        /// <exception cref="System.ArgumentNullException">Throws when <paramref name="settings"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="settings"/> is <c>null</c>.</exception>
         public TransactionalAsyncSqlNonQueryStatementExecutor(ConnectionStringSettings settings, IsolationLevel isolationLevel)
         {
             if (settings == null) throw new ArgumentNullException("settings");
@@ -36,7 +36,7 @@ namespace Paramol
         /// </summary>
         /// <param name="statements">The statements.</param>
         /// <returns>A <see cref="Task"/> that will return the number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
-        /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements"/> are <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="statements"/> are <c>null</c>.</exception>
         public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements)
         {
             return ExecuteAsync(statements, CancellationToken.None);
@@ -48,7 +48,7 @@ namespace Paramol
         /// <param name="statements">The statements.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> that will return the number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
-        /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements" /> are <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="statements" /> are <c>null</c>.</exception>
         public async Task<int> ExecuteAsync(IEnumerable<SqlNonQueryStatement> statements, CancellationToken cancellationToken)
         {
             if (statements == null) throw new ArgumentNullException("statements");
@@ -61,9 +61,10 @@ namespace Paramol
                     var count = 0;
                     using (var transaction = connection.BeginTransaction(_isolationLevel))
                     {
-                        using (var command = _dbProviderFactory.CreateCommand())
+                        using (var command = connection.CreateCommand())
                         {
                             command.Connection = connection;
+                            command.Transaction = transaction;
                             command.CommandType = CommandType.Text;
                             
                             foreach (var statement in statements)

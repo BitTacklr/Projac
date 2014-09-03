@@ -20,7 +20,7 @@ namespace Paramol
         /// </summary>
         /// <param name="settings">The connection string settings.</param>
         /// <param name="isolationLevel">The transaction isolation level.</param>
-        /// <exception cref="System.ArgumentNullException">Throws when <paramref name="settings"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="settings"/> is <c>null</c>.</exception>
         public TransactionalSqlNonQueryStatementExecutor(ConnectionStringSettings settings, IsolationLevel isolationLevel)
         {
             if (settings == null) throw new ArgumentNullException("settings");
@@ -34,7 +34,7 @@ namespace Paramol
         /// </summary>
         /// <param name="statements">The statements.</param>
         /// <returns>The number of <see cref="SqlNonQueryStatement">statements</see> executed.</returns>
-        /// <exception cref="System.ArgumentNullException">Throws when <paramref name="statements"/> are <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="statements"/> are <c>null</c>.</exception>
         public int Execute(IEnumerable<SqlNonQueryStatement> statements)
         {
             if (statements == null) throw new ArgumentNullException("statements");
@@ -48,9 +48,10 @@ namespace Paramol
                     var count = 0;
                     using (var transaction = connection.BeginTransaction(_isolationLevel))
                     {
-                        using (var command = _dbProviderFactory.CreateCommand())
+                        using (var command = connection.CreateCommand())
                         {
                             command.Connection = connection;
+                            command.Transaction = transaction;
                             command.CommandType = CommandType.Text;
                             foreach (var statement in statements)
                             {

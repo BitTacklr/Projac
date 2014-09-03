@@ -46,6 +46,8 @@
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
     <Compile Include="AsyncSqlNonQueryStatementExecutor.cs" />
+    <Compile Include="ConnectedSqlNonQueryStatementExecutor.cs" />
+    <Compile Include="ConnectedTransactionalSqlNonQueryStatementExecutor.cs" />
     <Compile Include="IAsyncSqlNonQueryStatementExecutor.cs" />
     <Compile Include="IDbParameterValue.cs" />
     <Compile Include="ISqlNonQueryStatementExecutor.cs" />
