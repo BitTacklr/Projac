@@ -185,22 +185,24 @@ and PortfolioArchived = { PortfolioId : int; Name : string }
 module TSql =
     let Int value = TSql.Int <| Nullable value
 
+let (|TSqlInt|) = TSql.Int
+let (|TSqlVarCharMax|) = TSql.VarCharMax
+
 let projectPortfolioEvent = function
-    | PortfolioCreated m -> 
+    | PortfolioCreated { PortfolioId = TSqlInt portfolioId; Name = TSqlVarCharMax name } -> 
         TSql.NonQuery(
             "INSERT INTO [PortfolioPhotoCount] ([Id], [Name], [PhotoCount]) VALUES (@Id, @Name, @PhotoCount)", 
-            [   "Id", m.PortfolioId |> TSql.Int          
-                "Name", m.Name |> TSql.VarCharMax   
-                "PhotoCount", 0 |> TSql.Int ])
-    | PhotoAdded m ->
+            [ "Id", portfolioId; "Name", name; "PhotoCount", TSql.Int 0 ])
+    | PhotoAdded { PortfolioId = TSqlInt portfolioId } ->
         TSql.NonQuery(
             "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] + 1 WHERE [Id] = @Id", 
-            [ "Id", m.PortfolioId |> TSql.Int ])
-    | PhotoRemoved m ->
+            [ "Id", portfolioId ])
+    | PhotoRemoved { PortfolioId = TSqlInt portfolioId } ->
         TSql.NonQuery(
             "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] - 1 WHERE [Id] = @Id", 
-            [ "Id", m.PortfolioId |> TSql.Int ])
-    | PortfolioArchived m ->
+            [ "Id", portfolioId ])
+    | PortfolioArchived { PortfolioId = TSqlInt portfolioId } ->
         TSql.NonQueryFormat(
             "DELETE FROM [PortfolioPhotoCount] WHERE [Id] = {0}", 
-            m.PortfolioId |> TSql.Int )```
+            portfolioId )
+```
