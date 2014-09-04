@@ -165,36 +165,40 @@ public class PortfolioListProjectionHandler :
 
 ## FSharp support
 
-F# is a wonderful language that makes some of the Projac bits - like declarative projections - obsolete since you can use the language itself as a DSL to get the same result. Projac has been extended with support for F#'s FSharpOption&lt;T&gt;, FSharpList&lt;T&gt;, FSharpMap&lt;TKey,TValue&gt; and IDictionary&lt;TKey,TValue&gt; such that it blends more with the native language (room for improvement no doubt). Below an example of a native declarative projection that is leveraging pattern matching.
+F# is a wonderful language that makes some of the Projac bits - like declarative projections - obsolete since you can use the language itself as a DSL to get the same result. Projac has been extended with support for F#'s FSharpOption&lt;T&gt;, such that it blends more with the native language (there are numerous other variations possible). Below an example of a native declarative projection that is leveraging pattern matching.
 
 ```fsharp
 open System;
 open Projac;
 
-type PortfolioCreated = { PortfolioId : int; Name : string }
-type PhotoAddToPortfolio = { PortfolioId : int; PhotoId : int }
-type PhotoRemovedFromPortfolio = { PortfolioId : int; PhotoId : int }
-type PortfolioArchived = { PortfolioId : int; Name : string }
+type PortfolioEvent =
+    | PortfolioCreated of PortfolioCreated
+    | PortfolioArchived of PortfolioArchived
+    | PhotoAdded of PhotoAddToPortfolio
+    | PhotoRemoved of PhotoRemovedFromPortfolio
+and PortfolioCreated = { PortfolioId : int; Name : string }
+and PhotoAddToPortfolio = { PortfolioId : int; PhotoId : int }
+and PhotoRemovedFromPortfolio = { PortfolioId : int; PhotoId : int }
+and PortfolioArchived = { PortfolioId : int; Name : string }
 
-let PortfolioProjection (message:Object) =
-    seq {
-        match message with
-            | :? PortfolioCreated as m -> 
-                yield TSql.NonQuery(
-                    "INSERT INTO [PortfolioPhotoCount] ([Id], [Name], [PhotoCount]) VALUES (@Id, @Name, @PhotoCount)", 
-                    [ ("Id", TSql.Int(m.PortfolioId)); ("Name", TSql.VarCharMax(m.Name)); ("PhotoCount", TSql.Int(0)); ])
-            | :? PhotoAddToPortfolio as m ->
-                yield TSql.NonQuery(
-                    "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] + 1 WHERE [Id] = @Id", 
-                    dict [ ("Id", TSql.Int(m.PortfolioId)) ])
-            | :? PhotoRemovedFromPortfolio as m ->
-                yield TSql.NonQuery(
-                    "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] - 1 WHERE [Id] = {0}", 
-                    [ ("Id", TSql.Int(m.PortfolioId)) ] |> Map.ofSeq)
-            | :? PortfolioArchived as m ->
-                yield TSql.NonQueryFormat(
-                    "DELETE FROM [PortfolioPhotoCount] WHERE [Id] = {0}", 
-                    TSql.Int(m.PortfolioId))
-            | _ -> ()
+let projectPortfolioEvent = function
+    | PortfolioAdded m -> 
+        TSql.NonQuery(
+            "INSERT INTO [PortfolioPhotoCount] ([Id], [Name], [PhotoCount]) VALUES (@Id, @Name, @PhotoCount)", 
+            [   "Id", m.PortfolioId |> TSql.Int
+                "Name", m.Name |> TSql.VarCharMax 
+                "PhotoCount", 0 |> TSql.Int); ])
+    | PhotoAdded m ->
+        TSql.NonQuery(
+            "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] + 1 WHERE [Id] = @Id", 
+            [ "Id", m.PortfolioId |> TSql.Int ])
+    | PhotoRemoved m ->
+        TSql.NonQuery(
+            "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] - 1 WHERE [Id] = @Id", 
+            [ "Id", m.PortfolioId |> TSql.Int ])
+    | PortfolioArchived as m ->
+        TSql.NonQueryFormat(
+            "DELETE FROM [PortfolioPhotoCount] WHERE [Id] = {0}", 
+            ("Id", m.PortfolioId |> TSql.Int))
     }
 ```
