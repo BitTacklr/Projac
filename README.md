@@ -181,24 +181,28 @@ and PhotoAddToPortfolio = { PortfolioId : int; PhotoId : int }
 and PhotoRemovedFromPortfolio = { PortfolioId : int; PhotoId : int }
 and PortfolioArchived = { PortfolioId : int; Name : string }
 
+[<AutoOpen>] // This could live in a ProjacFSharpBindings.fs in the NuGet
+module ProjacArgumentHelpers =
+    let TSqlArg converter val name = name, val |> converter
+    let TSqlInt = TSqlArg TSql.Int
+    let TSqlVarCharMax = TSqlArg TSql.VarCharMax
+
 let projectPortfolioEvent = function
     | PortfolioAdded m -> 
         TSql.NonQuery(
             "INSERT INTO [PortfolioPhotoCount] ([Id], [Name], [PhotoCount]) VALUES (@Id, @Name, @PhotoCount)", 
-            [   "Id", m.PortfolioId |> TSql.Int
-                "Name", m.Name |> TSql.VarCharMax 
-                "PhotoCount", 0 |> TSql.Int); ])
+            [   m.PortfolioId |> TSqlInt "Id"
+                m.Name        |> TSqlVarChar "Name""
+                0             |> TSqlInt "PhotoCount"); ])
     | PhotoAdded m ->
         TSql.NonQuery(
             "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] + 1 WHERE [Id] = @Id", 
-            [ "Id", m.PortfolioId |> TSql.Int ])
+            [ m.PortfolioId |> TSqlInt "Id" ])
     | PhotoRemoved m ->
         TSql.NonQuery(
             "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] - 1 WHERE [Id] = @Id", 
-            [ "Id", m.PortfolioId |> TSql.Int ])
+            [ m.PortfolioId |> TSqlInt "Id" ])
     | PortfolioArchived as m ->
         TSql.NonQueryFormat(
             "DELETE FROM [PortfolioPhotoCount] WHERE [Id] = {0}", 
-            ("Id", m.PortfolioId |> TSql.Int))
-    }
-```
+            m.PortfolioId |> TSqlInt "Id")```
