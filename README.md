@@ -168,8 +168,8 @@ public class PortfolioListProjectionHandler :
 F# is a wonderful language that makes some of the Projac bits - like declarative projections - obsolete since you can use the language itself as a DSL to get the same result. Projac has been extended with support for F#'s FSharpOption&lt;T&gt;, such that it blends more with the native language (there are numerous other variations possible). Below an example of a native declarative projection that is leveraging pattern matching.
 
 ```fsharp
-open System;
-open Projac;
+open System
+open Paramol.SqlClient
 
 type PortfolioEvent =
     | PortfolioCreated of PortfolioCreated
@@ -182,27 +182,25 @@ and PhotoRemovedFromPortfolio = { PortfolioId : int; PhotoId : int }
 and PortfolioArchived = { PortfolioId : int; Name : string }
 
 [<AutoOpen>] // This could live in a ProjacFSharpBindings.fs in the NuGet
-module ProjacArgumentHelpers =
-    let TSqlArg converter val name = name, val |> converter
-    let TSqlInt = TSqlArg TSql.Int
-    let TSqlVarCharMax = TSqlArg TSql.VarCharMax
+module TSql =
+    let Int value = TSql.Int <| Nullable value
 
 let projectPortfolioEvent = function
-    | PortfolioAdded m -> 
+    | PortfolioCreated m -> 
         TSql.NonQuery(
             "INSERT INTO [PortfolioPhotoCount] ([Id], [Name], [PhotoCount]) VALUES (@Id, @Name, @PhotoCount)", 
-            [   m.PortfolioId |> TSqlInt "Id"
-                m.Name        |> TSqlVarChar "Name""
-                0             |> TSqlInt "PhotoCount"); ])
+            [   "Id", m.PortfolioId |> TSql.Int          
+                "Name", m.Name |> TSql.VarCharMax   
+                "PhotoCount", 0 |> TSql.Int ])
     | PhotoAdded m ->
         TSql.NonQuery(
             "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] + 1 WHERE [Id] = @Id", 
-            [ m.PortfolioId |> TSqlInt "Id" ])
+            [ "Id", m.PortfolioId |> TSql.Int ])
     | PhotoRemoved m ->
         TSql.NonQuery(
             "UPDATE [PortfolioPhotoCount] SET [PhotoCount] = [PhotoCount] - 1 WHERE [Id] = @Id", 
-            [ m.PortfolioId |> TSqlInt "Id" ])
-    | PortfolioArchived as m ->
+            [ "Id", m.PortfolioId |> TSql.Int ])
+    | PortfolioArchived m ->
         TSql.NonQueryFormat(
             "DELETE FROM [PortfolioPhotoCount] WHERE [Id] = {0}", 
-            m.PortfolioId |> TSqlInt "Id")```
+            m.PortfolioId |> TSql.Int )```
