@@ -30,6 +30,7 @@ namespace Projac
         /// Projects the specified event.
         /// </summary>
         /// <param name="event">The event to project.</param>
+        /// <returns>The number of <see cref="SqlNonQueryCommand">commands</see> executed.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="event"/> is <c>null</c>.</exception>
         public int Project(object @event)
         {
