@@ -50,10 +50,11 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AsyncSqlNonQueryStatementExecutorTests.cs" />
-    <Compile Include="ConnectedSqlNonQueryStatementExecutorTests.cs" />
-    <Compile Include="ConnectedTransactionalSqlNonQueryStatementExecutorTests.cs" />
+    <Compile Include="AsyncSqlNonQueryCommandExecutorTests.cs" />
+    <Compile Include="ConnectedSqlNonQueryCommandExecutorTests.cs" />
+    <Compile Include="ConnectedTransactionalSqlNonQueryCommandExecutorTests.cs" />
     <Compile Include="Framework\DbParameterAssertions.cs" />
+    <Compile Include="Framework\SqlNonQueryCommandStub.cs" />
     <Compile Include="Framework\SqlParameterEqualityComparer.cs" />
     <Compile Include="Framework\TestDbConnection.cs">
       <SubType>Component</SubType>
@@ -77,14 +78,15 @@
     <Compile Include="SqlClient\TSqlNCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlNCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlNCharValueTests.cs" />
-    <Compile Include="SqlNonQueryStatementExecutorTests.cs" />
+    <Compile Include="SqlNonQueryCommandTests.cs" />
+    <Compile Include="SqlNonQueryCommandExecutorTests.cs" />
     <Compile Include="SqlNonQueryStatementTests.cs" />
     <Compile Include="SqlClient\TSqlNVarCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlNVarCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlNVarCharValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlQueryStatementTests.cs" />
-    <Compile Include="SqlNonQueryStatementComposerTests.cs" />
+    <Compile Include="SqlNonQueryCommandComposerTests.cs" />
     <Compile Include="SqlClient\TSqlTests.cs" />
     <Compile Include="SqlClient\TSqlTests.CSharpOnly.cs" />
     <Compile Include="SqlClient\TSqlTests.FSharpOnly.cs" />
@@ -96,8 +98,8 @@
     <Compile Include="SqlClient\TSqlVarCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlVarCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlVarCharValueTests.cs" />
-    <Compile Include="TransactionalAsyncSqlNonQueryStatementExecutorTests.cs" />
-    <Compile Include="TransactionalSqlNonQueryStatementExecutorTests.cs" />
+    <Compile Include="TransactionalAsyncSqlNonQueryCommandExecutorTests.cs" />
+    <Compile Include="TransactionalSqlNonQueryCommandExecutorTests.cs" />
     <Compile Include="Usage\TSqlNonQueryStatementFlusher.cs" />
   </ItemGroup>
   <ItemGroup>

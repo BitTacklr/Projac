@@ -10,23 +10,23 @@ namespace Projac
     {
         private readonly string _identifier;
         private readonly SqlProjection _projection;
-        private readonly SqlNonQueryStatement[] _dataDefinitionStatements;
+        private readonly SqlNonQueryCommand[] _dataDefinitionCommands;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlProjectionDescriptor"/> class.
         /// </summary>
         /// <param name="identifier">The projection identifier.</param>
-        /// <param name="dataDefinitionStatements">The data definition statements.</param>
+        /// <param name="dataDefinitionCommands">The data definition commands.</param>
         /// <param name="projection">The projection.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/>, <paramref name="dataDefinitionStatements"/> or <paramref name="projection"/> is <c>null</c>.</exception>
-        public SqlProjectionDescriptor(string identifier, SqlNonQueryStatement[] dataDefinitionStatements, SqlProjection projection)
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/>, <paramref name="dataDefinitionCommands"/> or <paramref name="projection"/> is <c>null</c>.</exception>
+        public SqlProjectionDescriptor(string identifier, SqlNonQueryCommand[] dataDefinitionCommands, SqlProjection projection)
         {
             if (identifier == null) throw new ArgumentNullException("identifier");
-            if (dataDefinitionStatements == null) throw new ArgumentNullException("dataDefinitionStatements");
+            if (dataDefinitionCommands == null) throw new ArgumentNullException("dataDefinitionStatements");
             if (projection == null) throw new ArgumentNullException("projection");
             _identifier = identifier;
             _projection = projection;
-            _dataDefinitionStatements = dataDefinitionStatements;
+            _dataDefinitionCommands = dataDefinitionCommands;
         }
 
         /// <summary>
@@ -41,14 +41,14 @@ namespace Projac
         }
 
         /// <summary>
-        /// Gets the data definition statements.
+        /// Gets the data definition commands.
         /// </summary>
         /// <value>
-        /// The data definition statements.
+        /// The data definition commands.
         /// </value>
-        public SqlNonQueryStatement[] DataDefinitionStatements
+        public SqlNonQueryCommand[] DataDefinitionCommands
         {
-            get { return _dataDefinitionStatements; }
+            get { return _dataDefinitionCommands; }
         }
 
         /// <summary>

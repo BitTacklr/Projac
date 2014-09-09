@@ -137,7 +137,8 @@ namespace Paramol.SqlClient
                 return new SqlQueryStatement(format, new DbParameter[0]);
             }
             return new SqlQueryStatement(
-                string.Format(format, parameters.Select((_, index) => (object)FormatDbParameterName("P" + index)).ToArray()),
+                string.Format(format,
+                    parameters.Select((_, index) => (object) FormatDbParameterName("P" + index)).ToArray()),
                 parameters.Select((value, index) => value.ToDbParameter(FormatDbParameterName("P" + index))).ToArray());
         }
 
@@ -148,7 +149,8 @@ namespace Paramol.SqlClient
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlQueryStatement" />.</returns>
-        public static IEnumerable<SqlQueryStatement> QueryFormatIf(bool condition, string format, params IDbParameterValue[] parameters)
+        public static IEnumerable<SqlQueryStatement> QueryFormatIf(bool condition, string format,
+            params IDbParameterValue[] parameters)
         {
             if (condition)
                 yield return QueryFormat(format, parameters);
@@ -161,7 +163,8 @@ namespace Paramol.SqlClient
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlQueryStatement" />.</returns>
-        public static IEnumerable<SqlQueryStatement> QueryFormatUnless(bool condition, string format, params IDbParameterValue[] parameters)
+        public static IEnumerable<SqlQueryStatement> QueryFormatUnless(bool condition, string format,
+            params IDbParameterValue[] parameters)
         {
             if (!condition)
                 yield return QueryFormat(format, parameters);
@@ -172,15 +175,16 @@ namespace Paramol.SqlClient
         /// </summary>
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
-        public static SqlNonQueryStatement NonQueryFormat(string format, params IDbParameterValue[] parameters)
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static SqlNonQueryCommand NonQueryFormat(string format, params IDbParameterValue[] parameters)
         {
             if (parameters == null || parameters.Length == 0)
             {
                 return new SqlNonQueryStatement(format, new DbParameter[0]);
             }
             return new SqlNonQueryStatement(
-                string.Format(format, parameters.Select((_, index) => (object)FormatDbParameterName("P" + index)).ToArray()),
+                string.Format(format,
+                    parameters.Select((_, index) => (object) FormatDbParameterName("P" + index)).ToArray()),
                 parameters.Select((value, index) => value.ToDbParameter(FormatDbParameterName("P" + index))).ToArray());
         }
 
@@ -190,8 +194,9 @@ namespace Paramol.SqlClient
         /// <param name="condition">The condition to satisfy.</param>
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
-        public static IEnumerable<SqlNonQueryStatement> NonQueryFormatIf(bool condition, string format, params IDbParameterValue[] parameters)
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static IEnumerable<SqlNonQueryCommand> NonQueryFormatIf(bool condition, string format,
+            params IDbParameterValue[] parameters)
         {
             if (condition)
                 yield return NonQueryFormat(format, parameters);
@@ -203,83 +208,89 @@ namespace Paramol.SqlClient
         /// <param name="condition">The condition to satisfy.</param>
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
-        public static IEnumerable<SqlNonQueryStatement> NonQueryFormatUnless(bool condition, string format, params IDbParameterValue[] parameters)
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static IEnumerable<SqlNonQueryCommand> NonQueryFormatUnless(bool condition, string format,
+            params IDbParameterValue[] parameters)
         {
             if (!condition)
                 yield return NonQueryFormat(format, parameters);
         }
 
         /// <summary>
-        ///     Starts a composition of statements with the specified <paramref name="statements" />.
+        ///     Starts a composition of commands with the specified <paramref name="commands" />.
         /// </summary>
-        /// <param name="statements">The <see cref="SqlNonQueryStatement">statements</see> to start the composition with.</param>
-        /// <returns>A new composition of <see cref="SqlNonQueryStatement">statements</see>.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements" /> are <c>null</c>.</exception>
-        public static SqlNonQueryStatementComposer Compose(IEnumerable<SqlNonQueryStatement> statements)
+        /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
+        /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
+        public static SqlNonQueryCommandComposer Compose(IEnumerable<SqlNonQueryCommand> commands)
         {
-            if (statements == null) throw new ArgumentNullException("statements");
-            return new SqlNonQueryStatementComposer(statements.ToArray());
+            if (commands == null) throw new ArgumentNullException("commands");
+            return new SqlNonQueryCommandComposer(commands.ToArray());
         }
 
         /// <summary>
-        ///     Starts a composition of statements with the specified <paramref name="statements" /> if the condition is satisfied.
+        ///     Starts a composition of commands with the specified <paramref name="commands" /> if the condition is satisfied.
         /// </summary>
         /// <param name="condition">The condition to satisfy.</param>
-        /// <param name="statements">The <see cref="SqlNonQueryStatement">statements</see> to start the composition with.</param>
-        /// <returns>A new composition of <see cref="SqlNonQueryStatement">statements</see>.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements" /> are <c>null</c>.</exception>
-        public static SqlNonQueryStatementComposer ComposeIf(bool condition, IEnumerable<SqlNonQueryStatement> statements)
+        /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
+        /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
+        public static SqlNonQueryCommandComposer ComposeIf(bool condition,
+            IEnumerable<SqlNonQueryCommand> commands)
         {
-            return Compose(condition ? statements : new SqlNonQueryStatement[0]);
+            return Compose(condition ? commands : new SqlNonQueryCommand[0]);
         }
 
         /// <summary>
-        ///     Starts a composition of statements with the specified <paramref name="statements" /> unless the condition is satisfied.
+        ///     Starts a composition of commands with the specified <paramref name="commands" /> unless the condition is
+        ///     satisfied.
         /// </summary>
         /// <param name="condition">The condition to satisfy.</param>
-        /// <param name="statements">The <see cref="SqlNonQueryStatement">statements</see> to start the composition with.</param>
-        /// <returns>A new composition of <see cref="SqlNonQueryStatement">statements</see>.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements" /> are <c>null</c>.</exception>
-        public static SqlNonQueryStatementComposer ComposeUnless(bool condition, IEnumerable<SqlNonQueryStatement> statements)
+        /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
+        /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
+        public static SqlNonQueryCommandComposer ComposeUnless(bool condition,
+            IEnumerable<SqlNonQueryCommand> commands)
         {
-            return Compose(!condition ? statements : new SqlNonQueryStatement[0]);
+            return Compose(!condition ? commands : new SqlNonQueryCommand[0]);
         }
 
         /// <summary>
-        ///     Starts a composition of statements with the specified <paramref name="statements" />.
+        ///     Starts a composition of commands with the specified <paramref name="commands" />.
         /// </summary>
-        /// <param name="statements">The <see cref="SqlNonQueryStatement">statements</see> to start the composition with.</param>
-        /// <returns>A new composition of <see cref="SqlNonQueryStatement">statements</see>.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements" /> are <c>null</c>.</exception>
-        public static SqlNonQueryStatementComposer Compose(params SqlNonQueryStatement[] statements)
+        /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
+        /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
+        public static SqlNonQueryCommandComposer Compose(params SqlNonQueryCommand[] commands)
         {
-            if (statements == null) throw new ArgumentNullException("statements");
-            return new SqlNonQueryStatementComposer(statements);
+            if (commands == null) throw new ArgumentNullException("commands");
+            return new SqlNonQueryCommandComposer(commands);
         }
 
         /// <summary>
-        ///     Starts a composition of statements with the specified <paramref name="statements" /> if the condition is satisfied.
-        /// </summary>
-        /// <param name="condition">The condition to satisfy.</param>
-        /// <param name="statements">The <see cref="SqlNonQueryStatement">statements</see> to start the composition with.</param>
-        /// <returns>A new composition of <see cref="SqlNonQueryStatement">statements</see>.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements" /> are <c>null</c>.</exception>
-        public static SqlNonQueryStatementComposer ComposeIf(bool condition, params SqlNonQueryStatement[] statements)
-        {
-            return Compose(condition ? statements : new SqlNonQueryStatement[0]);
-        }
-
-        /// <summary>
-        ///     Starts a composition of statements with the specified <paramref name="statements" /> unless the condition is satisfied.
+        ///     Starts a composition of commands with the specified <paramref name="commands" /> if the condition is satisfied.
         /// </summary>
         /// <param name="condition">The condition to satisfy.</param>
-        /// <param name="statements">The <see cref="SqlNonQueryStatement">statements</see> to start the composition with.</param>
-        /// <returns>A new composition of <see cref="SqlNonQueryStatement">statements</see>.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="statements" /> are <c>null</c>.</exception>
-        public static SqlNonQueryStatementComposer ComposeUnless(bool condition, params SqlNonQueryStatement[] statements)
+        /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
+        /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
+        public static SqlNonQueryCommandComposer ComposeIf(bool condition, params SqlNonQueryCommand[] commands)
         {
-            return Compose(!condition ? statements : new SqlNonQueryStatement[0]);
+            return Compose(condition ? commands : new SqlNonQueryCommand[0]);
+        }
+
+        /// <summary>
+        ///     Starts a composition of commands with the specified <paramref name="commands" /> unless the condition is
+        ///     satisfied.
+        /// </summary>
+        /// <param name="condition">The condition to satisfy.</param>
+        /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
+        /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
+        public static SqlNonQueryCommandComposer ComposeUnless(bool condition,
+            params SqlNonQueryCommand[] commands)
+        {
+            return Compose(!condition ? commands : new SqlNonQueryCommand[0]);
         }
 
         private static string FormatDbParameterName(string name)

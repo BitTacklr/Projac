@@ -17,7 +17,7 @@ namespace Paramol.SqlClient
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
         public static IDbParameterValue BigInt(long? value)
         {
-            if(!value.HasValue)
+            if (!value.HasValue)
                 return TSqlBigIntNullValue.Instance;
             return new TSqlBigIntValue(value.Value);
         }
@@ -29,7 +29,7 @@ namespace Paramol.SqlClient
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
         public static IDbParameterValue Int(int? value)
         {
-            if(!value.HasValue)
+            if (!value.HasValue)
                 return TSqlIntNullValue.Instance;
             return new TSqlIntValue(value.Value);
         }
@@ -41,7 +41,7 @@ namespace Paramol.SqlClient
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
         public static IDbParameterValue Bit(bool? value)
         {
-            if(!value.HasValue)
+            if (!value.HasValue)
                 return TSqlBitNullValue.Instance;
             return new TSqlBitValue(value.Value);
         }
@@ -53,7 +53,7 @@ namespace Paramol.SqlClient
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
         public static IDbParameterValue UniqueIdentifier(Guid? value)
         {
-            if(!value.HasValue)
+            if (!value.HasValue)
                 return TSqlUniqueIdentifierNullValue.Instance;
             return new TSqlUniqueIdentifierValue(value.Value);
         }
@@ -65,7 +65,7 @@ namespace Paramol.SqlClient
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
         public static IDbParameterValue DateTimeOffset(DateTimeOffset? value)
         {
-            if(!value.HasValue)
+            if (!value.HasValue)
                 return TSqlDateTimeOffsetNullValue.Instance;
             return new TSqlDateTimeOffsetValue(value.Value);
         }
@@ -75,7 +75,7 @@ namespace Paramol.SqlClient
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
         public static SqlQueryStatement Query(string text, object parameters = null)
         {
             return new SqlQueryStatement(text, CollectFromAnonymousType(parameters));
@@ -87,7 +87,7 @@ namespace Paramol.SqlClient
         /// <param name="condition">The condition to satisfy</param>
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
         public static IEnumerable<SqlQueryStatement> QueryIf(bool condition, string text, object parameters = null)
         {
             if (condition)
@@ -100,7 +100,7 @@ namespace Paramol.SqlClient
         /// <param name="condition">The condition to satisfy</param>
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
         public static IEnumerable<SqlQueryStatement> QueryUnless(bool condition, string text, object parameters = null)
         {
             if (!condition)
@@ -112,8 +112,8 @@ namespace Paramol.SqlClient
         /// </summary>
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
-        public static SqlNonQueryStatement NonQuery(string text, object parameters = null)
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static SqlNonQueryCommand NonQuery(string text, object parameters = null)
         {
             return new SqlNonQueryStatement(text, CollectFromAnonymousType(parameters));
         }
@@ -124,8 +124,8 @@ namespace Paramol.SqlClient
         /// <param name="condition">The condition to satisfy</param>
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
-        public static IEnumerable<SqlNonQueryStatement> NonQueryIf(bool condition, string text, object parameters = null)
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static IEnumerable<SqlNonQueryCommand> NonQueryIf(bool condition, string text, object parameters = null)
         {
             if (condition)
                 yield return NonQuery(text, parameters);
@@ -137,8 +137,9 @@ namespace Paramol.SqlClient
         /// <param name="condition">The condition to satisfy</param>
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
-        public static IEnumerable<SqlNonQueryStatement> NonQueryUnless(bool condition, string text, object parameters = null)
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static IEnumerable<SqlNonQueryCommand> NonQueryUnless(bool condition, string text,
+            object parameters = null)
         {
             if (!condition)
                 yield return NonQuery(text, parameters);
@@ -151,12 +152,13 @@ namespace Paramol.SqlClient
             return parameters.
                 GetType().
                 GetProperties(BindingFlags.Instance | BindingFlags.Public).
-                Where(property => typeof(IDbParameterValue).IsAssignableFrom(property.PropertyType)).
+                Where(property => typeof (IDbParameterValue).IsAssignableFrom(property.PropertyType)).
                 Select(property =>
-                    ((IDbParameterValue)property.GetGetMethod().Invoke(parameters, null)).
+                    ((IDbParameterValue) property.GetGetMethod().Invoke(parameters, null)).
                         ToDbParameter(FormatDbParameterName(property.Name))).
                 ToArray();
         }
     }
 }
+
 #endif

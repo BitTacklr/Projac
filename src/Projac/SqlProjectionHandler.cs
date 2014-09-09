@@ -10,7 +10,7 @@ namespace Projac
     public class SqlProjectionHandler
     {
         private readonly Type _event;
-        private readonly Func<object, IEnumerable<SqlNonQueryStatement>> _handler;
+        private readonly Func<object, IEnumerable<SqlNonQueryCommand>> _handler;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SqlProjectionHandler" /> class.
@@ -21,7 +21,7 @@ namespace Projac
         ///     Throw when <paramref name="event" /> or <paramref name="handler" /> is
         ///     <c>null</c>.
         /// </exception>
-        public SqlProjectionHandler(Type @event, Func<object, IEnumerable<SqlNonQueryStatement>> handler)
+        public SqlProjectionHandler(Type @event, Func<object, IEnumerable<SqlNonQueryCommand>> handler)
         {
             if (@event == null) throw new ArgumentNullException("event");
             if (handler == null) throw new ArgumentNullException("handler");
@@ -40,7 +40,7 @@ namespace Projac
         /// <summary>
         ///     The function that handles the event.
         /// </summary>
-        public Func<object, IEnumerable<SqlNonQueryStatement>> Handler
+        public Func<object, IEnumerable<SqlNonQueryCommand>> Handler
         {
             get { return _handler; }
         }

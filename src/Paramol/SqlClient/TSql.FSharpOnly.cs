@@ -137,8 +137,8 @@ namespace Paramol.SqlClient
         /// </summary>
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
-        public static SqlNonQueryStatement NonQuery(string text, FSharpList<Tuple<string, IDbParameterValue>> parameters = null)
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static SqlNonQueryCommand NonQuery(string text, FSharpList<Tuple<string, IDbParameterValue>> parameters = null)
         {
             return new SqlNonQueryStatement(text, CollectFromFSharpList(parameters));
         }
@@ -153,11 +153,11 @@ namespace Paramol.SqlClient
         }
 
         /// <summary>
-        ///     Returns a T-SQL non query statement.
+        ///     Returns a T-SQL query statement.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
+        /// <returns>A <see cref="SqlQueryStatement" />.</returns>
         public static SqlQueryStatement Query(string text, FSharpMap<string, IDbParameterValue> parameters = null)
         {
             return new SqlQueryStatement(text, CollectFromFSharpMap(parameters));
@@ -169,7 +169,7 @@ namespace Paramol.SqlClient
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
         /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
-        public static SqlNonQueryStatement NonQuery(string text, FSharpMap<string, IDbParameterValue> parameters = null)
+        public static SqlNonQueryCommand NonQuery(string text, FSharpMap<string, IDbParameterValue> parameters = null)
         {
             return new SqlNonQueryStatement(text, CollectFromFSharpMap(parameters));
         }
@@ -184,11 +184,11 @@ namespace Paramol.SqlClient
         }
 
         /// <summary>
-        ///     Returns a T-SQL non query statement.
+        ///     Returns a T-SQL query statement.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
+        /// <returns>A <see cref="SqlQueryStatement" />.</returns>
         public static SqlQueryStatement Query(string text, IDictionary<string, IDbParameterValue> parameters = null)
         {
             return new SqlQueryStatement(text, CollectFromDictionary(parameters));
@@ -200,7 +200,7 @@ namespace Paramol.SqlClient
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
         /// <returns>A <see cref="SqlNonQueryStatement" />.</returns>
-        public static SqlNonQueryStatement NonQuery(string text, IDictionary<string, IDbParameterValue> parameters = null)
+        public static SqlNonQueryCommand NonQuery(string text, IDictionary<string, IDbParameterValue> parameters = null)
         {
             return new SqlNonQueryStatement(text, CollectFromDictionary(parameters));
         }

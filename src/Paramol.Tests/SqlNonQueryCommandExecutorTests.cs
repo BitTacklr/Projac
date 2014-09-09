@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Configuration;
-using System.Data;
-using System.Threading;
 using NUnit.Framework;
 
 namespace Paramol.Tests
 {
     [TestFixture]
-    public class TransactionalAsyncSqlNonQueryStatementExecutorTests
+    public class SqlNonQueryCommandExecutorTests
     {
         [Test]
-        public void IsAsynchronousSqlNonQueryStatementExecutor()
+        public void IsSynchronousSqlNonQueryCommandExecutor()
         {
-            Assert.IsInstanceOf<IAsyncSqlNonQueryStatementExecutor>(SutFactory());
+            Assert.IsInstanceOf<ISqlNonQueryCommandExecutor>(SutFactory());
         }
 
         [Test]
@@ -37,33 +35,26 @@ namespace Paramol.Tests
         }
 
         [Test]
-        public void ExecuteAsyncStatementsCanNotBeNull()
+        public void ExecuteCommandsCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(async () => await sut.ExecuteAsync(null));
+            Assert.Throws<ArgumentNullException>(
+                () => sut.Execute(null));
         }
 
-        [Test]
-        public void ExecuteAsyncTokenStatementsCanNotBeNull()
-        {
-            var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(async () => await sut.ExecuteAsync(null, CancellationToken.None));
-        }
-
-        private static TransactionalAsyncSqlNonQueryStatementExecutor SutFactory()
+        private static SqlNonQueryCommandExecutor SutFactory()
         {
             return SutFactory(ConnectionStringSettingsFactory("System.Data.SqlClient"));
         }
 
-        private static TransactionalAsyncSqlNonQueryStatementExecutor SutFactory(ConnectionStringSettings settings)
+        private static SqlNonQueryCommandExecutor SutFactory(ConnectionStringSettings settings)
         {
-            return new TransactionalAsyncSqlNonQueryStatementExecutor(settings, IsolationLevel.Unspecified);
+            return new SqlNonQueryCommandExecutor(settings);
         }
 
         private static ConnectionStringSettings ConnectionStringSettingsFactory(string providerName)
         {
             return new ConnectionStringSettings("name", "", providerName);
         }
-
     }
 }

@@ -13,7 +13,7 @@ namespace Paramol.SqlClient
         private readonly TSqlVarBinarySize _size;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="TSqlVarBinaryNullValue"/> class.
+        ///     Initializes a new instance of the <see cref="TSqlVarBinaryNullValue" /> class.
         /// </summary>
         /// <param name="size">The size.</param>
         public TSqlVarBinaryNullValue(TSqlVarBinarySize size)
@@ -71,7 +71,7 @@ namespace Paramol.SqlClient
         {
             if (obj == null || obj.GetType() != GetType())
                 return false;
-            return Equals((TSqlVarBinaryNullValue)obj);
+            return Equals((TSqlVarBinaryNullValue) obj);
         }
 
         /// <summary>

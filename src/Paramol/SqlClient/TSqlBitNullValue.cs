@@ -15,7 +15,9 @@ namespace Paramol.SqlClient
         /// </summary>
         public static readonly TSqlBitNullValue Instance = new TSqlBitNullValue();
 
-        TSqlBitNullValue() { }
+        private TSqlBitNullValue()
+        {
+        }
 
         /// <summary>
         ///     Creates a <see cref="DbParameter" /> instance based on this instance.
@@ -77,7 +79,7 @@ namespace Paramol.SqlClient
         {
             if (obj == null || obj.GetType() != GetType())
                 return false;
-            return Equals((TSqlBitNullValue)obj);
+            return Equals((TSqlBitNullValue) obj);
         }
 
         /// <summary>

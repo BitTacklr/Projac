@@ -50,10 +50,10 @@
       <Output TaskParameter="Build" PropertyName="Build"/>
     </Version>
 
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\fsharp\Paramol.FSharp.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\fsharp\Projac.FSharp.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\fsharp\Paramol.FSharp.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\fsharp\Projac.FSharp.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
 
   </Target>
 </Project>

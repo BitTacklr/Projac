@@ -52,8 +52,14 @@
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
     <Compile Include="AsyncSqlNonQueryStatementExecutorTests.cs" />
+    <Compile Include="ConnectedSqlNonQueryStatementExecutorTests.cs" />
+    <Compile Include="ConnectedTransactionalSqlNonQueryStatementExecutorTests.cs" />
     <Compile Include="Framework\DbParameterAssertions.cs" />
     <Compile Include="Framework\SqlParameterEqualityComparer.cs" />
+    <Compile Include="Framework\TestDbConnection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Framework\TestDbTransaction.cs" />
     <Compile Include="SqlClient\TSqlBigIntNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlBigIntValueTests.cs" />
     <Compile Include="SqlClient\TSqlBinaryNullValueTests.cs" />

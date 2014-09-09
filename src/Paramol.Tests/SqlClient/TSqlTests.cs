@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -121,7 +122,7 @@ namespace Paramol.Tests.SqlClient
         }
 
         [TestCaseSource("NonQueryFormatCases")]
-        public void NonQueryFormatReturnsExpectedInstance(SqlNonQueryStatement actual, SqlNonQueryStatement expected)
+        public void NonQueryFormatReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
@@ -167,7 +168,7 @@ namespace Paramol.Tests.SqlClient
         }
 
         [TestCaseSource("NonQueryFormatIfCases")]
-        public void NonQueryFormatIfReturnsExpectedInstance(IEnumerable<SqlNonQueryStatement> actual, SqlNonQueryStatement[] expected)
+        public void NonQueryFormatIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
             Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
@@ -252,7 +253,7 @@ namespace Paramol.Tests.SqlClient
         }
 
         [TestCaseSource("NonQueryFormatUnlessCases")]
-        public void NonQueryFormatUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryStatement> actual, SqlNonQueryStatement[] expected)
+        public void NonQueryFormatUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
             Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
@@ -553,284 +554,284 @@ namespace Paramol.Tests.SqlClient
         }
 
         [Test]
-        public void ComposeStatementArrayCanNotBeNull()
+        public void ComposeCommandArrayCanNotBeNull()
         {
             // ReSharper disable RedundantCast
-            Assert.Throws<ArgumentNullException>(() => TSql.Compose((SqlNonQueryStatement[])null));
+            Assert.Throws<ArgumentNullException>(() => TSql.Compose((SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
         [Test]
-        public void ComposeIfStatementArrayCanNotBeNullWhenConditionIsTrue()
+        public void ComposeIfCommandArrayCanNotBeNullWhenConditionIsTrue()
         {
             // ReSharper disable RedundantCast
-            Assert.Throws<ArgumentNullException>(() => TSql.ComposeIf(true, (SqlNonQueryStatement[])null));
+            Assert.Throws<ArgumentNullException>(() => TSql.ComposeIf(true, (SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
         [Test]
-        public void ComposeIfStatementArrayCanBeNullWhenConditionIsFalse()
+        public void ComposeIfCommandArrayCanBeNullWhenConditionIsFalse()
         {
             // ReSharper disable RedundantCast
-            Assert.DoesNotThrow(() => TSql.ComposeIf(false, (SqlNonQueryStatement[])null));
+            Assert.DoesNotThrow(() => TSql.ComposeIf(false, (SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
         [Test]
-        public void ComposeUnlessStatementArrayCanNotBeNullWhenConditionIsFalse()
+        public void ComposeUnlessCommandArrayCanNotBeNullWhenConditionIsFalse()
         {
             // ReSharper disable RedundantCast
-            Assert.Throws<ArgumentNullException>(() => TSql.ComposeUnless(false, (SqlNonQueryStatement[])null));
+            Assert.Throws<ArgumentNullException>(() => TSql.ComposeUnless(false, (SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
         [Test]
-        public void ComposeUnlessStatementArrayCanBeNullWhenConditionIsTrue()
+        public void ComposeUnlessCommandArrayCanBeNullWhenConditionIsTrue()
         {
             // ReSharper disable RedundantCast
-            Assert.DoesNotThrow(() => TSql.ComposeUnless(true, (SqlNonQueryStatement[])null));
+            Assert.DoesNotThrow(() => TSql.ComposeUnless(true, (SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
         [Test]
-        public void ComposeStatementEnumerationCanNotBeNull()
+        public void ComposeCommandEnumerationCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => TSql.Compose((IEnumerable<SqlNonQueryStatement>)null));
+            Assert.Throws<ArgumentNullException>(() => TSql.Compose((IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
-        public void ComposeIfStatementEnumerationCanNotBeNullWhenConditionIsTrue()
+        public void ComposeIfCommandEnumerationCanNotBeNullWhenConditionIsTrue()
         {
-            Assert.Throws<ArgumentNullException>(() => TSql.ComposeIf(true, (IEnumerable<SqlNonQueryStatement>)null));
+            Assert.Throws<ArgumentNullException>(() => TSql.ComposeIf(true, (IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
-        public void ComposeIfStatementEnumerationCanBeNullWhenConditionIsFalse()
+        public void ComposeIfCommandEnumerationCanBeNullWhenConditionIsFalse()
         {
-            Assert.DoesNotThrow(() => TSql.ComposeIf(false, (IEnumerable<SqlNonQueryStatement>)null));
+            Assert.DoesNotThrow(() => TSql.ComposeIf(false, (IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
-        public void ComposeUnlessStatementEnumerationCanNotBeNullWhenConditionIsFalse()
+        public void ComposeUnlessCommandEnumerationCanNotBeNullWhenConditionIsFalse()
         {
-            Assert.Throws<ArgumentNullException>(() => TSql.ComposeUnless(false, (IEnumerable<SqlNonQueryStatement>)null));
+            Assert.Throws<ArgumentNullException>(() => TSql.ComposeUnless(false, (IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
-        public void ComposeUnlessStatementEnumerationCanBeNullWhenConditionIsTrue()
+        public void ComposeUnlessCommandEnumerationCanBeNullWhenConditionIsTrue()
         {
-            Assert.DoesNotThrow(() => TSql.ComposeUnless(true, (IEnumerable<SqlNonQueryStatement>)null));
+            Assert.DoesNotThrow(() => TSql.ComposeUnless(true, (IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
-        public void ComposeStatementArrayReturnsComposer()
+        public void ComposeCommandArrayReturnsComposer()
         {
-            Assert.IsInstanceOf<SqlNonQueryStatementComposer>(
+            Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
                 TSql.Compose(
-                    StatementFactory(),
-                    StatementFactory()));
+                    CommandFactory(),
+                    CommandFactory()));
         }
 
         [Test]
-        public void ComposeIfStatementArrayReturnsComposer([Values(true, false)]bool condition)
+        public void ComposeIfCommandArrayReturnsComposer([Values(true, false)]bool condition)
         {
-            Assert.IsInstanceOf<SqlNonQueryStatementComposer>(
+            Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
                 TSql.ComposeIf(
                     condition,
-                    StatementFactory(),
-                    StatementFactory()));
+                    CommandFactory(),
+                    CommandFactory()));
         }
 
         [Test]
-        public void ComposeUnlessStatementArrayReturnsComposer([Values(true, false)]bool condition)
+        public void ComposeUnlessCommandArrayReturnsComposer([Values(true, false)]bool condition)
         {
-            Assert.IsInstanceOf<SqlNonQueryStatementComposer>(
+            Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
                 TSql.ComposeUnless(
                     condition,
-                    StatementFactory(),
-                    StatementFactory()));
+                    CommandFactory(),
+                    CommandFactory()));
         }
 
         [Test]
-        public void ComposeStatementEnumerationReturnsComposer()
+        public void ComposeCommandEnumerationReturnsComposer()
         {
-            Assert.IsInstanceOf<SqlNonQueryStatementComposer>(
-                TSql.Compose((IEnumerable<SqlNonQueryStatement>)new[]
+            Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
+                TSql.Compose((IEnumerable<SqlNonQueryCommand>)new[]
                 {
-                    StatementFactory(),
-                    StatementFactory()
+                    CommandFactory(),
+                    CommandFactory()
                 }));
         }
 
         [Test]
-        public void ComposeIfStatementEnumerationReturnsComposer([Values(true, false)]bool condition)
+        public void ComposeIfCommandEnumerationReturnsComposer([Values(true, false)]bool condition)
         {
-            Assert.IsInstanceOf<SqlNonQueryStatementComposer>(
-                TSql.ComposeIf(condition, (IEnumerable<SqlNonQueryStatement>)new[]
+            Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
+                TSql.ComposeIf(condition, (IEnumerable<SqlNonQueryCommand>)new[]
                 {
-                    StatementFactory(),
-                    StatementFactory()
+                    CommandFactory(),
+                    CommandFactory()
                 }));
         }
 
         [Test]
-        public void ComposeUnlessStatementEnumerationReturnsComposer([Values(true, false)]bool condition)
+        public void ComposeUnlessCommandEnumerationReturnsComposer([Values(true, false)]bool condition)
         {
-            Assert.IsInstanceOf<SqlNonQueryStatementComposer>(
-                TSql.ComposeUnless(condition, (IEnumerable<SqlNonQueryStatement>)new[]
+            Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
+                TSql.ComposeUnless(condition, (IEnumerable<SqlNonQueryCommand>)new[]
                 {
-                    StatementFactory(),
-                    StatementFactory()
+                    CommandFactory(),
+                    CommandFactory()
                 }));
         }
 
         [Test]
-        public void ComposedStatementArrayIsPreservedAndReturnedByComposer()
+        public void ComposedCommandArrayIsPreservedAndReturnedByComposer()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
 
-            SqlNonQueryStatement[] result = TSql.Compose(statement1, statement2);
+            SqlNonQueryCommand[] result = TSql.Compose(command1, command2);
 
             Assert.That(result, Is.EquivalentTo(new []
             {
-                statement1, statement2
+                command1, command2
             }));
         }
 
         [Test]
-        public void ComposedIfStatementArrayIsPreservedAndReturnedByComposerWhenConditionIsTrue()
+        public void ComposedIfCommandArrayIsPreservedAndReturnedByComposerWhenConditionIsTrue()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
 
-            SqlNonQueryStatement[] result = TSql.ComposeIf(true, statement1, statement2);
+            SqlNonQueryCommand[] result = TSql.ComposeIf(true, command1, command2);
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
-                statement1, statement2
+                command1, command2
             }));
         }
 
         [Test]
-        public void ComposedIfStatementArrayIsNotPreservedAndReturnedByComposerWhenConditionIsFalse()
+        public void ComposedIfCommandArrayIsNotPreservedAndReturnedByComposerWhenConditionIsFalse()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
 
-            SqlNonQueryStatement[] result = TSql.ComposeIf(false, statement1, statement2);
+            SqlNonQueryCommand[] result = TSql.ComposeIf(false, command1, command2);
 
-            Assert.That(result, Is.EquivalentTo(new SqlNonQueryStatement[0]));
+            Assert.That(result, Is.EquivalentTo(new SqlNonQueryCommand[0]));
         }
 
         [Test]
-        public void ComposedUnlessStatementArrayIsPreservedAndReturnedByComposerWhenConditionIsFalse()
+        public void ComposedUnlessCommandArrayIsPreservedAndReturnedByComposerWhenConditionIsFalse()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
 
-            SqlNonQueryStatement[] result = TSql.ComposeUnless(false, statement1, statement2);
+            SqlNonQueryCommand[] result = TSql.ComposeUnless(false, command1, command2);
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
-                statement1, statement2
+                command1, command2
             }));
         }
 
         [Test]
-        public void ComposedUnlessStatementArrayIsNotPreservedAndReturnedByComposerWhenConditionIsTrue()
+        public void ComposedUnlessCommandArrayIsNotPreservedAndReturnedByComposerWhenConditionIsTrue()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
 
-            SqlNonQueryStatement[] result = TSql.ComposeUnless(true, statement1, statement2);
+            SqlNonQueryCommand[] result = TSql.ComposeUnless(true, command1, command2);
 
-            Assert.That(result, Is.EquivalentTo(new SqlNonQueryStatement[0]));
+            Assert.That(result, Is.EquivalentTo(new SqlNonQueryCommand[0]));
         }
 
         [Test]
-        public void ComposedStatementEnumerationIsPreservedAndReturnedByComposer()
+        public void ComposedCommandEnumerationIsPreservedAndReturnedByComposer()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
 
-            SqlNonQueryStatement[] result = TSql.Compose((IEnumerable<SqlNonQueryStatement>)new[]
+            SqlNonQueryCommand[] result = TSql.Compose((IEnumerable<SqlNonQueryCommand>)new[]
             {
-                statement1, statement2
+                command1, command2
             });
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
-                statement1, statement2
+                command1, command2
             }));
         }
 
         [Test]
-        public void ComposedIfStatementEnumerationIsPreservedAndReturnedByComposerWhenConditionIsTrue()
+        public void ComposedIfCommandEnumerationIsPreservedAndReturnedByComposerWhenConditionIsTrue()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
 
-            SqlNonQueryStatement[] result = TSql.ComposeIf(true, (IEnumerable<SqlNonQueryStatement>)new[]
+            SqlNonQueryCommand[] result = TSql.ComposeIf(true, (IEnumerable<SqlNonQueryCommand>)new[]
             {
-                statement1, statement2
+                command1, command2
             });
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
-                statement1, statement2
+                command1, command2
             }));
         }
 
         [Test]
-        public void ComposedIfStatementEnumerationIsNotPreservedAndReturnedByComposerWhenConditionIsFalse()
+        public void ComposedIfCommandEnumerationIsNotPreservedAndReturnedByComposerWhenConditionIsFalse()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
 
-            SqlNonQueryStatement[] result = TSql.ComposeIf(false, (IEnumerable<SqlNonQueryStatement>)new[]
+            SqlNonQueryCommand[] result = TSql.ComposeIf(false, (IEnumerable<SqlNonQueryCommand>)new[]
             {
-                statement1, statement2
-            });
-
-            Assert.That(result, Is.EquivalentTo(new SqlNonQueryStatement[0]));
-        }
-
-        [Test]
-        public void ComposedUnlessStatementEnumerationIsPreservedAndReturnedByComposerWhenConditionIsFalse()
-        {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
-
-            SqlNonQueryStatement[] result = TSql.ComposeUnless(false, (IEnumerable<SqlNonQueryStatement>)new[]
-            {
-                statement1, statement2
-            });
-
-            Assert.That(result, Is.EquivalentTo(new[]
-            {
-                statement1, statement2
-            }));
-        }
-
-
-        [Test]
-        public void ComposedUnlessStatementEnumerationIsNotPreservedAndReturnedByComposerWhenConditionIsTrue()
-        {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
-
-            SqlNonQueryStatement[] result = TSql.ComposeUnless(true, (IEnumerable<SqlNonQueryStatement>)new[]
-            {
-                statement1, statement2
+                command1, command2
             });
 
             Assert.That(result, Is.EquivalentTo(new SqlNonQueryStatement[0]));
         }
 
-        private static SqlNonQueryStatement StatementFactory()
+        [Test]
+        public void ComposedUnlessCommandEnumerationIsPreservedAndReturnedByComposerWhenConditionIsFalse()
         {
-            return new SqlNonQueryStatement("text", new DbParameter[0]);
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
+
+            SqlNonQueryCommand[] result = TSql.ComposeUnless(false, (IEnumerable<SqlNonQueryCommand>)new[]
+            {
+                command1, command2
+            });
+
+            Assert.That(result, Is.EquivalentTo(new[]
+            {
+                command1, command2
+            }));
+        }
+
+
+        [Test]
+        public void ComposedUnlessCommandEnumerationIsNotPreservedAndReturnedByComposerWhenConditionIsTrue()
+        {
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
+
+            SqlNonQueryCommand[] result = TSql.ComposeUnless(true, (IEnumerable<SqlNonQueryCommand>)new[]
+            {
+                command1, command2
+            });
+
+            Assert.That(result, Is.EquivalentTo(new SqlNonQueryStatement[0]));
+        }
+
+        private static SqlNonQueryCommand CommandFactory()
+        {
+            return new SqlNonQueryCommandStub("text", new DbParameter[0], CommandType.Text);
         }
 
         class TestDbParameter : IDbParameterValue

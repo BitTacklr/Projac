@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
 using NUnit.Framework;
 
@@ -7,6 +8,12 @@ namespace Paramol.Tests
     [TestFixture]
     public class SqlNonQueryStatementTests
     {
+        [Test]
+        public void IsSqlNonQueryCommand()
+        {
+            Assert.That(SutFactory(), Is.InstanceOf<SqlNonQueryCommand>());
+        }
+
         [Test]
         public void TextCanNotBeNull()
         {
@@ -38,12 +45,15 @@ namespace Paramol.Tests
         }
 
         [Test]
-        public void PropertiesReturnExpectedValues()
+        public void TypeReturnsExpectedResult()
         {
-            var sut = SutFactory("text", new DbParameter[0]);
+            var result = SutFactory().Type;
+            Assert.That(result, Is.EqualTo(CommandType.Text));
+        }
 
-            Assert.That(sut.Text, Is.EqualTo("text"));
-            Assert.That(sut.Parameters, Is.EqualTo(new DbParameter[0]));
+        private static SqlNonQueryStatement SutFactory()
+        {
+            return SutFactory("text", new DbParameter[0]);
         }
 
         private static SqlNonQueryStatement SutFactory(string text)

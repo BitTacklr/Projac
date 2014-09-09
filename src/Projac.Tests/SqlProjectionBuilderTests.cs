@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using NUnit.Framework;
 using Paramol;
+using Projac.Tests.Framework;
 
 namespace Projac.Tests
 {
@@ -27,59 +29,59 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithSingleStatementCanNotBeNull()
+        public void WhenHandlerWithSingleCommandCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, SqlNonQueryStatement>)null));
+            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, SqlNonQueryCommand>)null));
         }
 
 
         [Test]
-        public void WhenHandlerWithSingleStatementReturnsExpectedResult()
+        public void WhenHandlerWithSingleCommandReturnsExpectedResult()
         {
-            var result = _sut.When((object _) => StatementFactory());
+            var result = _sut.When((object _) => CommandFactory());
 
             Assert.That(result, Is.InstanceOf<SqlProjectionBuilder>());
         }
 
         [Test]
-        public void WhenHandlerWithSingleStatementIsPreservedUponBuild()
+        public void WhenHandlerWithSingleCommandIsPreservedUponBuild()
         {
-            var statement = StatementFactory();
-            Func<object, SqlNonQueryStatement> handler = _ => statement;
+            var command = CommandFactory();
+            Func<object, SqlNonQueryCommand> handler = _ => command;
             var result = _sut.When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { statement })), 
+                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { command })), 
                 Is.EqualTo(1));
         }
 
         [Test]
         public void WhenHandlerWithSingleStatementPreservesPreviouslyCollectedStatementsUponBuild()
         {
-            var statements = new[]
+            var commands = new[]
             {
-                StatementFactory(),
-                StatementFactory()
+                CommandFactory(),
+                CommandFactory()
             };
-            var statement = StatementFactory();
-            Func<object, SqlNonQueryStatement> handler = _ => statement;
-            var result = _sut.When((object _) => statements).When(handler).Build();
+            var command = CommandFactory();
+            Func<object, SqlNonQueryCommand> handler = _ => command;
+            var result = _sut.When((object _) => commands).When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(statements)),
+                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(commands)),
                 Is.EqualTo(1));
         }
 
         [Test]
-        public void WhenHandlerWithStatementArrayCanNotBeNull()
+        public void WhenHandlerWithCommandArrayCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, SqlNonQueryStatement[]>)null));
+            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, SqlNonQueryCommand[]>)null));
         }
 
         [Test]
-        public void WhenHandlerWithStatementArrayReturnsExpectedResult()
+        public void WhenHandlerWithCommandArrayReturnsExpectedResult()
         {
-            var result = _sut.When((object _) => new[] { StatementFactory(), StatementFactory() });
+            var result = _sut.When((object _) => new[] { CommandFactory(), CommandFactory() });
 
             Assert.That(result, Is.InstanceOf<SqlProjectionBuilder>());
         }
@@ -87,46 +89,46 @@ namespace Projac.Tests
         [Test]
         public void WhenHandlerWithStatementArrayIsPreservedUponBuild()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
-            Func<object, SqlNonQueryStatement[]> handler = _ => new[] { statement1, statement2 };
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
+            Func<object, SqlNonQueryCommand[]> handler = _ => new[] { command1, command2 };
             var result = _sut.When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { statement1, statement2 })),
+                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
                 Is.EqualTo(1));
         }
 
         [Test]
         public void WhenHandlerWithStatementArrayPreservesPreviouslyCollectedStatementsUponBuild()
         {
-            var statements = new[]
+            var commands = new[]
             {
-                StatementFactory(),
-                StatementFactory()
+                CommandFactory(),
+                CommandFactory()
             };
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
-            Func<object, SqlNonQueryStatement[]> handler = _ => new[] { statement1, statement2 };
-            var result = _sut.When((object _) => statements).When(handler).Build();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
+            Func<object, SqlNonQueryCommand[]> handler = _ => new[] { command1, command2 };
+            var result = _sut.When((object _) => commands).When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(statements)),
+                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(commands)),
                 Is.EqualTo(1));
         }
 
         [Test]
-        public void WhenHandlerWithStatementEnumerationCanNotBeNull()
+        public void WhenHandlerWithCommandEnumerationCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, IEnumerable<SqlNonQueryStatement>>)null));
+            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, IEnumerable<SqlNonQueryCommand>>)null));
         }
 
         [Test]
-        public void WhenHandlerWithStatementEnumerationReturnsExpectedResult()
+        public void WhenHandlerWithCommandEnumerationReturnsExpectedResult()
         {
-            var result = _sut.When((object _) => (IEnumerable<SqlNonQueryStatement>) new []
+            var result = _sut.When((object _) => (IEnumerable<SqlNonQueryCommand>) new []
             {
-                StatementFactory(), StatementFactory()
+                CommandFactory(), CommandFactory()
             });
 
             Assert.That(result, Is.InstanceOf<SqlProjectionBuilder>());
@@ -135,43 +137,43 @@ namespace Projac.Tests
         [Test]
         public void WhenHandlerWithStatementEnumerationIsPreservedUponBuild()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
-            Func<object, IEnumerable<SqlNonQueryStatement>> handler = _ => (IEnumerable<SqlNonQueryStatement>) new []
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
+            Func<object, IEnumerable<SqlNonQueryCommand>> handler = _ => (IEnumerable<SqlNonQueryCommand>) new []
             {
-                statement1, statement2
+                command1, command2
             };
             var result = _sut.When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { statement1, statement2 })),
+                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
                 Is.EqualTo(1));
         }
 
         [Test]
-        public void WhenHandlerWithStatementEnumerationPreservesPreviouslyCollectedStatementsUponBuild()
+        public void WhenHandlerWithCommandEnumerationPreservesPreviouslyCollectedStatementsUponBuild()
         {
-            var statements = new[]
+            var commands = new[]
             {
-                StatementFactory(),
-                StatementFactory()
+                CommandFactory(),
+                CommandFactory()
             };
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
-            Func<object, IEnumerable<SqlNonQueryStatement>> handler = _ => (IEnumerable<SqlNonQueryStatement>)new[]
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
+            Func<object, IEnumerable<SqlNonQueryCommand>> handler = _ => (IEnumerable<SqlNonQueryCommand>)new[]
             {
-                statement1, statement2
+                command1, command2
             };
-            var result = _sut.When((object _) => statements).When(handler).Build();
+            var result = _sut.When((object _) => commands).When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(statements)),
+                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(commands)),
                 Is.EqualTo(1));
         }
 
-        private static SqlNonQueryStatement StatementFactory()
+        private static SqlNonQueryCommand CommandFactory()
         {
-            return new SqlNonQueryStatement("text", new DbParameter[0]);
+            return new SqlNonQueryCommandStub("text", new DbParameter[0], CommandType.Text);
         }
     }
 }

@@ -229,7 +229,7 @@ namespace Paramol.Tests.SqlClient
         }
 
         [TestCaseSource("NonQueryCases")]
-        public void NonQueryReturnsExpectedInstance(SqlNonQueryStatement actual, SqlNonQueryStatement expected)
+        public void NonQueryReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
@@ -262,7 +262,7 @@ namespace Paramol.Tests.SqlClient
         }
 
         [TestCaseSource("NonQueryIfCases")]
-        public void NonQueryIfReturnsExpectedInstance(IEnumerable<SqlNonQueryStatement> actual, SqlNonQueryStatement[] expected)
+        public void NonQueryIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
             Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
@@ -323,7 +323,7 @@ namespace Paramol.Tests.SqlClient
         }
 
         [TestCaseSource("NonQueryUnlessCases")]
-        public void NonQueryUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryStatement> actual, SqlNonQueryStatement[] expected)
+        public void NonQueryUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
             Assert.That(actualArray.Length, Is.EqualTo(expected.Length));

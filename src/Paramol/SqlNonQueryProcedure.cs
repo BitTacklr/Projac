@@ -4,12 +4,12 @@ using System.Data.Common;
 namespace Paramol
 {
     /// <summary>
-    ///     Represent a SQL non query statement.
+    ///     Represent a SQL non query stored procedure.
     /// </summary>
-    public class SqlNonQueryStatement : SqlNonQueryCommand
+    public class SqlNonQueryProcedure : SqlNonQueryCommand
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SqlNonQueryStatement" /> class.
+        ///     Initializes a new instance of the <see cref="SqlNonQueryProcedure" /> class.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
@@ -17,7 +17,8 @@ namespace Paramol
         ///     Thrown when <paramref name="text" /> or <paramref name="parameters" />
         ///     is <c>null</c>.
         /// </exception>
-        public SqlNonQueryStatement(string text, DbParameter[] parameters) : base(text, parameters, CommandType.Text)
+        public SqlNonQueryProcedure(string text, DbParameter[] parameters)
+            : base(text, parameters, CommandType.StoredProcedure)
         {
         }
     }

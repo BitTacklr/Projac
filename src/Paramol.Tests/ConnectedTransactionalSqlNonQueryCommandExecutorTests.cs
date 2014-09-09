@@ -6,12 +6,12 @@ using Paramol.Tests.Framework;
 namespace Paramol.Tests
 {
     [TestFixture]
-    public class ConnectedTransactionalSqlNonQueryStatementExecutorTests
+    public class ConnectedTransactionalSqlNonQueryCommandExecutorTests
     {
         [Test]
-        public void IsSynchronousTransactionalSqlNonQueryStatementExecutor()
+        public void IsSynchronousTransactionalSqlNonQueryCommandExecutor()
         {
-            Assert.IsInstanceOf<ISqlNonQueryStatementExecutor>(SutFactory());
+            Assert.IsInstanceOf<ISqlNonQueryCommandExecutor>(SutFactory());
         }
 
         [Test]
@@ -22,21 +22,21 @@ namespace Paramol.Tests
         }
 
         [Test]
-        public void ExecuteStatementsCanNotBeNull()
+        public void ExecuteCommandsCanNotBeNull()
         {
             var sut = SutFactory();
             Assert.Throws<ArgumentNullException>(
                 () => sut.Execute(null));
         }
 
-        private static ConnectedTransactionalSqlNonQueryStatementExecutor SutFactory()
+        private static ConnectedTransactionalSqlNonQueryCommandExecutor SutFactory()
         {
             return SutFactory(new TestDbTransaction(new TestDbConnection()));
         }
 
-        private static ConnectedTransactionalSqlNonQueryStatementExecutor SutFactory(DbTransaction transaction)
+        private static ConnectedTransactionalSqlNonQueryCommandExecutor SutFactory(DbTransaction transaction)
         {
-            return new ConnectedTransactionalSqlNonQueryStatementExecutor(transaction);
+            return new ConnectedTransactionalSqlNonQueryCommandExecutor(transaction);
         }
     }
 }

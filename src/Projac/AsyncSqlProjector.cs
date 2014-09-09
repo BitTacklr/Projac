@@ -12,15 +12,15 @@ namespace Projac
     public class AsyncSqlProjector
     {
         private readonly SqlProjectionHandler[] _handlers;
-        private readonly IAsyncSqlNonQueryStatementExecutor _executor;
+        private readonly IAsyncSqlNonQueryCommandExecutor _executor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlProjector"/> class.
         /// </summary>
         /// <param name="handlers">The handlers.</param>
-        /// <param name="executor">The statement executor.</param>
+        /// <param name="executor">The command executor.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handlers"/> or <paramref name="executor"/> is <c>null</c>.</exception>
-        public AsyncSqlProjector(SqlProjectionHandler[] handlers, IAsyncSqlNonQueryStatementExecutor executor)
+        public AsyncSqlProjector(SqlProjectionHandler[] handlers, IAsyncSqlNonQueryCommandExecutor executor)
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
             if (executor == null) throw new ArgumentNullException("executor");

@@ -13,7 +13,7 @@ namespace Paramol.SqlClient
         private readonly TSqlNVarCharSize _size;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="TSqlNVarCharNullValue"/> class.
+        ///     Initializes a new instance of the <see cref="TSqlNVarCharNullValue" /> class.
         /// </summary>
         /// <param name="size">The size.</param>
         public TSqlNVarCharNullValue(TSqlNVarCharSize size)
@@ -71,7 +71,7 @@ namespace Paramol.SqlClient
         {
             if (obj == null || obj.GetType() != GetType())
                 return false;
-            return Equals((TSqlNVarCharNullValue)obj);
+            return Equals((TSqlNVarCharNullValue) obj);
         }
 
         /// <summary>

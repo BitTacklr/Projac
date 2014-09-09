@@ -15,7 +15,9 @@ namespace Paramol.SqlClient
         /// </summary>
         public static readonly TSqlDateTimeOffsetNullValue Instance = new TSqlDateTimeOffsetNullValue();
 
-        TSqlDateTimeOffsetNullValue() { }
+        private TSqlDateTimeOffsetNullValue()
+        {
+        }
 
         /// <summary>
         ///     Creates a <see cref="DbParameter" /> instance based on this instance.
@@ -67,7 +69,7 @@ namespace Paramol.SqlClient
         {
             if (obj == null || obj.GetType() != GetType())
                 return false;
-            return Equals((TSqlDateTimeOffsetNullValue)obj);
+            return Equals((TSqlDateTimeOffsetNullValue) obj);
         }
 
         /// <summary>

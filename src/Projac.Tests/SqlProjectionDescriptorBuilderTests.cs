@@ -1,7 +1,9 @@
 using System;
+using System.Data;
 using System.Data.Common;
 using NUnit.Framework;
 using Paramol;
+using Projac.Tests.Framework;
 
 namespace Projac.Tests
 {
@@ -19,46 +21,46 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void DataDefinitionStatementsAreEmptyByDefault()
+        public void DataDefinitionCommandsAreEmptyByDefault()
         {
             var sut = SutFactory();
-            var result = sut.DataDefinitionStatements;
+            var result = sut.DataDefinitionCommands;
             Assert.That(result, Is.Empty);
         }
 
         [Test]
-        public void DataDefinitionStatementsCanNotBeNull()
+        public void DataDefinitionCommandsCanNotBeNull()
         {
             var sut = SutFactory();
             Assert.Throws<ArgumentNullException>(
-                () => sut.DataDefinitionStatements = null);
+                () => sut.DataDefinitionCommands = null);
         }
 
         [Test]
-        public void DataDefinitionStatementsCanBeEmpty()
+        public void DataDefinitionCommandsCanBeEmpty()
         {
             var sut = SutFactory();
             Assert.DoesNotThrow(
-                () => sut.DataDefinitionStatements = new SqlNonQueryStatement[0]);
+                () => sut.DataDefinitionCommands = new SqlNonQueryCommand[0]);
         }
 
         [Test]
-        public void DataDefinitionStatementsCanBeNonEmpty()
+        public void DataDefinitionCommandsCanBeNonEmpty()
         {
             var sut = SutFactory();
             Assert.DoesNotThrow(
-                () => sut.DataDefinitionStatements = new[] { StatementFactory(), StatementFactory() });
+                () => sut.DataDefinitionCommands = new[] { CommandFactory(), CommandFactory() });
         }
 
         [Test]
-        public void DataDefinitionStatementsArePreserved()
+        public void DataDefinitionCommandsArePreserved()
         {
             var sut = SutFactory();
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
-            sut.DataDefinitionStatements = new[] { statement1, statement2 };
-            var result = sut.DataDefinitionStatements;
-            Assert.That(result, Is.EquivalentTo(new[] { statement1, statement2 }));
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
+            sut.DataDefinitionCommands = new[] { command1, command2 };
+            var result = sut.DataDefinitionCommands;
+            Assert.That(result, Is.EquivalentTo(new[] { command1, command2 }));
         }
 
         [Test]
@@ -95,7 +97,7 @@ namespace Projac.Tests
                     {
                         new SqlProjectionHandler(
                             typeof (object),
-                            _ => new SqlNonQueryStatement[0])
+                            _ => new SqlNonQueryCommand[0])
                     }));
         }
 
@@ -117,7 +119,7 @@ namespace Projac.Tests
                 {
                     new SqlProjectionHandler(
                         typeof (object),
-                        _ => new SqlNonQueryStatement[0])
+                        _ => new SqlNonQueryCommand[0])
                 });
             sut.Projection = projection;
             var result = sut.Projection;
@@ -127,24 +129,24 @@ namespace Projac.Tests
         [Test]
         public void BuildReturnsExpectedResult()
         {
-            var statement1 = StatementFactory();
-            var statement2 = StatementFactory();
+            var command1 = CommandFactory();
+            var command2 = CommandFactory();
             var projection = new SqlProjection(
                 new[]
                 {
                     new SqlProjectionHandler(
                         typeof (object),
-                        _ => new SqlNonQueryStatement[0])
+                        _ => new SqlNonQueryCommand[0])
                 });
             var sut = new SqlProjectionDescriptorBuilder("identifier")
             {
-                DataDefinitionStatements = new[] {statement1, statement2},
+                DataDefinitionCommands = new[] {command1, command2},
                 Projection = projection
             };
             var result = sut.Build();
             Assert.That(result, Is.InstanceOf<SqlProjectionDescriptor>());
             Assert.That(result.Identifier, Is.EqualTo("identifier"));
-            Assert.That(result.DataDefinitionStatements, Is.EquivalentTo(new[] { statement1, statement2 }));
+            Assert.That(result.DataDefinitionCommands, Is.EquivalentTo(new[] { command1, command2 }));
             Assert.That(result.Projection, Is.SameAs(projection));
         }
 
@@ -153,9 +155,9 @@ namespace Projac.Tests
             return new SqlProjectionDescriptorBuilder(identifier);
         }
 
-        private static SqlNonQueryStatement StatementFactory()
+        private static SqlNonQueryCommand CommandFactory()
         {
-            return new SqlNonQueryStatement("text", new DbParameter[0]);
+            return new SqlNonQueryCommandStub("", new DbParameter[0], CommandType.Text);
         }
     }
 }
