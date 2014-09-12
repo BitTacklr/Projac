@@ -87,20 +87,6 @@ namespace Paramol.SqlClient
                 yield return NonQuery(text, parameters);
         }
 
-        private static DbParameter[] CollectFromAnonymousType(object parameters)
-        {
-            if (parameters == null)
-                return new DbParameter[0];
-            return parameters.
-                GetType().
-                GetProperties(BindingFlags.Instance | BindingFlags.Public).
-                Where(property => typeof(IDbParameterValue).IsAssignableFrom(property.PropertyType)).
-                Select(property =>
-                    ((IDbParameterValue)property.GetGetMethod().Invoke(parameters, null)).
-                        ToDbParameter(FormatDbParameterName(property.Name))).
-                ToArray();
-        }
-
         /// <summary>
         ///     Returns a T-SQL query statement.
         /// </summary>
@@ -113,6 +99,7 @@ namespace Paramol.SqlClient
             {
                 return new SqlQueryStatement(format, new DbParameter[0]);
             }
+            ThrowIfMaxParameterCountExceeded(parameters);
             return new SqlQueryStatement(
                 string.Format(format,
                     parameters.Select((_, index) => (object) FormatDbParameterName("P" + index)).ToArray()),
@@ -120,7 +107,7 @@ namespace Paramol.SqlClient
         }
 
         /// <summary>
-        ///     Returns a T-SQL query statement if the condition is satisified.
+        ///     Returns a T-SQL query statement if the condition is satisfied.
         /// </summary>
         /// <param name="condition">The condition to satisfy.</param>
         /// <param name="format">The text with positional parameters to be formatted.</param>
@@ -159,6 +146,7 @@ namespace Paramol.SqlClient
             {
                 return new SqlNonQueryCommand(format, new DbParameter[0], CommandType.Text);
             }
+            ThrowIfMaxParameterCountExceeded(parameters);
             return new SqlNonQueryCommand(
                 string.Format(format,
                     parameters.Select((_, index) => (object) FormatDbParameterName("P" + index)).ToArray()),
@@ -269,6 +257,38 @@ namespace Paramol.SqlClient
             params SqlNonQueryCommand[] commands)
         {
             return Compose(!condition ? commands : new SqlNonQueryCommand[0]);
+        }
+
+        private static DbParameter[] CollectFromAnonymousType(object parameters)
+        {
+            if (parameters == null)
+                return new DbParameter[0];
+            return ThrowIfMaxParameterCountExceeded(
+                parameters.
+                    GetType().
+                    GetProperties(BindingFlags.Instance | BindingFlags.Public).
+                    Where(property => typeof(IDbParameterValue).IsAssignableFrom(property.PropertyType)).
+                    Select(property =>
+                        ((IDbParameterValue)property.GetGetMethod().Invoke(parameters, null)).
+                            ToDbParameter(FormatDbParameterName(property.Name))).
+                    ToArray());
+        }
+
+        private static DbParameter[] ThrowIfMaxParameterCountExceeded(DbParameter[] parameters)
+        {
+            if (parameters.Length > Limits.MaxParameterCount)
+                throw new ArgumentException(
+                    string.Format("The parameter count is limited to {0}.", Limits.MaxParameterCount),
+                    "parameters");
+            return parameters;
+        }
+
+        private static void ThrowIfMaxParameterCountExceeded(IDbParameterValue[] parameters)
+        {
+            if (parameters.Length > Limits.MaxParameterCount)
+                throw new ArgumentException(
+                    string.Format("The parameter count is limited to {0}.", Limits.MaxParameterCount),
+                    "parameters");
         }
 
         private static string FormatDbParameterName(string name)

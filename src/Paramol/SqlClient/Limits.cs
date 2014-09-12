@@ -1,4 +1,4 @@
-﻿namespace Paramol
+﻿namespace Paramol.SqlClient
 {
     internal static class Limits
     {

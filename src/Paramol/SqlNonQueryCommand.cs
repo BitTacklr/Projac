@@ -31,11 +31,6 @@ namespace Paramol
                 throw new ArgumentNullException("parameters");
             if (!Enum.IsDefined(typeof (CommandType), type))
                 throw new ArgumentException(string.Format("The command type value {0} is not supported.", type), "type");
-            //TODO: Remove this because it doesn't make sense when we're dealing with DbParameters
-            if (parameters.Length > Limits.MaxParameterCount)
-                throw new ArgumentException(
-                    string.Format("The parameter count is limited to {0}.", Limits.MaxParameterCount),
-                    "parameters");
             _text = text;
             _parameters = parameters;
             _type = type;

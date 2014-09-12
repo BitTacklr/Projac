@@ -48,12 +48,6 @@ namespace Paramol.Tests
         }
 
         [Test]
-        public void ParameterCountLimitedTo2098()
-        {
-            Assert.Throws<ArgumentException>(() => SutFactory(new DbParameter[2099]));
-        }
-
-        [Test]
         public void PropertiesReturnExpectedValues()
         {
             var sut = SutFactory("text", new DbParameter[0], CommandType.TableDirect);

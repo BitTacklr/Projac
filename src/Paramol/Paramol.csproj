@@ -51,7 +51,7 @@
     <Compile Include="IAsyncSqlNonQueryCommandExecutor.cs" />
     <Compile Include="IDbParameterValue.cs" />
     <Compile Include="ISqlNonQueryCommandExecutor.cs" />
-    <Compile Include="Limits.cs" />
+    <Compile Include="SqlClient\Limits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlClient\TSql.cs" />
     <Compile Include="SqlClient\TSql.DataTypes.cs" />

@@ -55,10 +55,11 @@
     <Compile Include="ConnectedTransactionalSqlNonQueryCommandExecutorTests.cs" />
     <Compile Include="Framework\DbParameterAssertions.cs" />
     <Compile Include="Framework\SqlParameterEqualityComparer.cs" />
+    <Compile Include="Framework\TestDbTransaction.cs" />
     <Compile Include="Framework\TestDbConnection.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Framework\TestDbTransaction.cs" />
+    <Compile Include="SqlClient\ParameterCountLimitedExceeded.cs" />
     <Compile Include="SqlClient\TSqlBigIntNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlBigIntValueTests.cs" />
     <Compile Include="SqlClient\TSqlBinaryNullValueTests.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="SqlClient\TSqlNCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlNCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlNCharValueTests.cs" />
+    <Compile Include="SqlClient\TSqlParameterCountLimitExceededTests.cs" />
     <Compile Include="SqlNonQueryCommandTests.cs" />
     <Compile Include="SqlNonQueryCommandExecutorTests.cs" />
     <Compile Include="SqlClient\TSqlNVarCharNullValueTests.cs" />

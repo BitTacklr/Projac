@@ -1016,7 +1016,6 @@ namespace Paramol.Tests.SqlClient
             }));
         }
 
-
         [Test]
         public void ComposedUnlessCommandEnumerationIsNotPreservedAndReturnedByComposerWhenConditionIsTrue()
         {
