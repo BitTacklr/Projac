@@ -13,112 +13,314 @@ namespace Paramol.Tests.SqlClient
     [TestFixture]
     public partial class TSqlTests
     {
-        [Test]
-        public void VarCharReturnsExpectedInstance()
+        [TestCaseSource("QueryCases")]
+        public void QueryReturnsExpectedInstance(SqlQueryStatement actual, SqlQueryStatement expected)
         {
-            Assert.That(TSql.VarChar("value", 123), Is.EqualTo(new TSqlVarCharValue("value", new TSqlVarCharSize(123))));
+            Assert.That(actual.Text, Is.EqualTo(expected.Text));
+            Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
         }
 
-        [Test]
-        public void VarCharNullReturnsExpectedInstance()
+        private static IEnumerable<TestCaseData> QueryCases()
         {
-            Assert.That(TSql.VarChar(null, 123), Is.EqualTo(new TSqlVarCharNullValue(new TSqlVarCharSize(123))));
+            yield return new TestCaseData(
+                TSql.Query("text"),
+                new SqlQueryStatement("text", new DbParameter[0]));
+            yield return new TestCaseData(
+                TSql.Query("text", parameters: null),
+                new SqlQueryStatement("text", new DbParameter[0]));
+            yield return new TestCaseData(
+                TSql.Query("text", new { }),
+                new SqlQueryStatement("text", new DbParameter[0]));
+            yield return new TestCaseData(
+                TSql.Query("text", new { Parameter = new TestDbParameter() }),
+                new SqlQueryStatement("text", new[]
+                {
+                    new TestDbParameter().ToDbParameter("@Parameter")
+                }));
+            yield return new TestCaseData(
+                TSql.Query("text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new SqlQueryStatement("text", new[]
+                {
+                    new TestDbParameter().ToDbParameter("@Parameter1"),
+                    new TestDbParameter().ToDbParameter("@Parameter2")
+                }));
         }
 
-        [Test]
-        public void CharReturnsExpectedInstance()
+        [TestCaseSource("QueryIfCases")]
+        public void QueryIfReturnsExpectedInstance(IEnumerable<SqlQueryStatement> actual, SqlQueryStatement[] expected)
         {
-            Assert.That(TSql.Char("value", 123), Is.EqualTo(new TSqlCharValue("value", new TSqlCharSize(123))));
+            var actualArray = actual.ToArray();
+            Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
+            for (var index = 0; index < actualArray.Length; index++)
+            {
+                Assert.That(actualArray[index].Text, Is.EqualTo(expected[index].Text));
+                Assert.That(actualArray[index].Parameters, Is.EquivalentTo(expected[index].Parameters).Using(new SqlParameterEqualityComparer()));
+            }
         }
 
-        [Test]
-        public void CharNullReturnsExpectedInstance()
+        private static IEnumerable<TestCaseData> QueryIfCases()
         {
-            Assert.That(TSql.Char(null, 123), Is.EqualTo(new TSqlCharNullValue(new TSqlCharSize(123))));
+            yield return new TestCaseData(
+                TSql.QueryIf(true, "text"),
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.QueryIf(true, "text", parameters: null),
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.QueryIf(true, "text", new { }),
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.QueryIf(true, "text", new { Parameter = new TestDbParameter() }),
+                new[]
+                {
+                    new SqlQueryStatement("text", new[]
+                    {
+                        new TestDbParameter().ToDbParameter("@Parameter")
+                    })
+                });
+            yield return new TestCaseData(
+                TSql.QueryIf(true, "text",
+                    new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new[]
+                {
+                    new SqlQueryStatement("text", new[]
+                    {
+                        new TestDbParameter().ToDbParameter("@Parameter1"),
+                        new TestDbParameter().ToDbParameter("@Parameter2")
+                    })
+                });
+
+            yield return new TestCaseData(
+                TSql.QueryIf(false, "text"),
+                new SqlQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.QueryIf(false, "text", parameters: null),
+                new SqlQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.QueryIf(false, "text", new { }),
+                new SqlQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.QueryIf(false, "text", new { Parameter = new TestDbParameter() }),
+                new SqlQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.QueryIf(false, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new SqlQueryStatement[0]);
         }
 
-        [Test]
-        public void VarCharMaxReturnsExpectedInstance()
+        [TestCaseSource("QueryUnlessCases")]
+        public void QueryUnlessReturnsExpectedInstance(IEnumerable<SqlQueryStatement> actual, SqlQueryStatement[] expected)
         {
-            Assert.That(TSql.VarCharMax("value"), Is.EqualTo(new TSqlVarCharValue("value", TSqlVarCharSize.Max)));
+            var actualArray = actual.ToArray();
+            Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
+            for (var index = 0; index < actualArray.Length; index++)
+            {
+                Assert.That(actualArray[index].Text, Is.EqualTo(expected[index].Text));
+                Assert.That(actualArray[index].Parameters, Is.EquivalentTo(expected[index].Parameters).Using(new SqlParameterEqualityComparer()));
+            }
         }
 
-        [Test]
-        public void VarCharMaxNullReturnsExpectedInstance()
+        private static IEnumerable<TestCaseData> QueryUnlessCases()
         {
-            Assert.That(TSql.VarCharMax(null), Is.EqualTo(new TSqlVarCharNullValue(TSqlVarCharSize.Max)));
+            yield return new TestCaseData(
+                TSql.QueryUnless(false, "text"),
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.QueryUnless(false, "text", parameters: null),
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.QueryUnless(false, "text", new { }),
+                new[] { new SqlQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.QueryUnless(false, "text", new { Parameter = new TestDbParameter() }),
+                new[]
+                {
+                    new SqlQueryStatement("text", new[]
+                    {
+                        new TestDbParameter().ToDbParameter("@Parameter")
+                    })
+                });
+            yield return new TestCaseData(
+                TSql.QueryUnless(false, "text",
+                    new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new[]
+                {
+                    new SqlQueryStatement("text", new[]
+                    {
+                        new TestDbParameter().ToDbParameter("@Parameter1"),
+                        new TestDbParameter().ToDbParameter("@Parameter2")
+                    })
+                });
+
+            yield return new TestCaseData(
+                TSql.QueryUnless(true, "text"),
+                new SqlQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.QueryUnless(true, "text", parameters: null),
+                new SqlQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.QueryUnless(true, "text", new { }),
+                new SqlQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.QueryUnless(true, "text", new { Parameter = new TestDbParameter() }),
+                new SqlQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.QueryUnless(true, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new SqlQueryStatement[0]);
         }
 
-        [Test]
-        public void NVarCharReturnsExpectedInstance()
+        [TestCaseSource("NonQueryCases")]
+        public void NonQueryReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
-            Assert.That(TSql.NVarChar("value", 123), Is.EqualTo(new TSqlNVarCharValue("value", new TSqlNVarCharSize(123))));
+            Assert.That(actual.Text, Is.EqualTo(expected.Text));
+            Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
         }
 
-        [Test]
-        public void NVarCharNullReturnsExpectedInstance()
+        private static IEnumerable<TestCaseData> NonQueryCases()
         {
-            Assert.That(TSql.NVarChar(null, 123), Is.EqualTo(new TSqlNVarCharNullValue(new TSqlNVarCharSize(123))));
+            yield return new TestCaseData(
+                TSql.NonQuery("text"),
+                new SqlNonQueryStatement("text", new DbParameter[0]));
+            yield return new TestCaseData(
+                TSql.NonQuery("text", parameters: null),
+                new SqlNonQueryStatement("text", new DbParameter[0]));
+            yield return new TestCaseData(
+                TSql.NonQuery("text", new { }),
+                new SqlNonQueryStatement("text", new DbParameter[0]));
+            yield return new TestCaseData(
+                TSql.NonQuery("text", new { Parameter = new TestDbParameter() }),
+                new SqlNonQueryStatement("text", new[]
+                {
+                    new TestDbParameter().ToDbParameter("@Parameter")
+                }));
+            yield return new TestCaseData(
+                TSql.NonQuery("text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new SqlNonQueryStatement("text", new[]
+                {
+                    new TestDbParameter().ToDbParameter("@Parameter1"),
+                    new TestDbParameter().ToDbParameter("@Parameter2")
+                }));
         }
 
-        [Test]
-        public void NCharReturnsExpectedInstance()
+        [TestCaseSource("NonQueryIfCases")]
+        public void NonQueryIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
-            Assert.That(TSql.NChar("value", 123), Is.EqualTo(new TSqlNCharValue("value", new TSqlNCharSize(123))));
+            var actualArray = actual.ToArray();
+            Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
+            for (var index = 0; index < actualArray.Length; index++)
+            {
+                Assert.That(actualArray[index].Text, Is.EqualTo(expected[index].Text));
+                Assert.That(actualArray[index].Parameters, Is.EquivalentTo(expected[index].Parameters).Using(new SqlParameterEqualityComparer()));
+            }
         }
 
-        [Test]
-        public void NCharNullReturnsExpectedInstance()
+        private static IEnumerable<TestCaseData> NonQueryIfCases()
         {
-            Assert.That(TSql.NChar(null, 123), Is.EqualTo(new TSqlNCharNullValue(new TSqlNCharSize(123))));
+            yield return new TestCaseData(
+                TSql.NonQueryIf(true, "text"),
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.NonQueryIf(true, "text", parameters: null),
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.NonQueryIf(true, "text", new { }),
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.NonQueryIf(true, "text", new { Parameter = new TestDbParameter() }),
+                new[]
+                {
+                    new SqlNonQueryStatement("text", new[]
+                    {
+                        new TestDbParameter().ToDbParameter("@Parameter")
+                    })
+                });
+            yield return new TestCaseData(
+                TSql.NonQueryIf(true, "text",
+                    new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new[]
+                {
+                    new SqlNonQueryStatement("text", new[]
+                    {
+                        new TestDbParameter().ToDbParameter("@Parameter1"),
+                        new TestDbParameter().ToDbParameter("@Parameter2")
+                    })
+                });
+
+            yield return new TestCaseData(
+                TSql.NonQueryIf(false, "text"),
+                new SqlNonQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.NonQueryIf(false, "text", parameters: null),
+                new SqlNonQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.NonQueryIf(false, "text", new { }),
+                new SqlNonQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.NonQueryIf(false, "text", new { Parameter = new TestDbParameter() }),
+                new SqlNonQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.NonQueryIf(false, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new SqlNonQueryStatement[0]);
         }
 
-        [Test]
-        public void NVarCharMaxReturnsExpectedInstance()
+        [TestCaseSource("NonQueryUnlessCases")]
+        public void NonQueryUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
-            Assert.That(TSql.NVarCharMax("value"), Is.EqualTo(new TSqlNVarCharValue("value", TSqlNVarCharSize.Max)));
+            var actualArray = actual.ToArray();
+            Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
+            for (var index = 0; index < actualArray.Length; index++)
+            {
+                Assert.That(actualArray[index].Text, Is.EqualTo(expected[index].Text));
+                Assert.That(actualArray[index].Parameters, Is.EquivalentTo(expected[index].Parameters).Using(new SqlParameterEqualityComparer()));
+            }
         }
 
-        [Test]
-        public void NVarCharMaxNullReturnsExpectedInstance()
+        private static IEnumerable<TestCaseData> NonQueryUnlessCases()
         {
-            Assert.That(TSql.NVarCharMax(null), Is.EqualTo(new TSqlNVarCharNullValue(TSqlNVarCharSize.Max)));
-        }
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(false, "text"),
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(false, "text", parameters: null),
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(false, "text", new { }),
+                new[] { new SqlNonQueryStatement("text", new DbParameter[0]) });
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(false, "text", new { Parameter = new TestDbParameter() }),
+                new[]
+                {
+                    new SqlNonQueryStatement("text", new[]
+                    {
+                        new TestDbParameter().ToDbParameter("@Parameter")
+                    })
+                });
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(false, "text",
+                    new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new[]
+                {
+                    new SqlNonQueryStatement("text", new[]
+                    {
+                        new TestDbParameter().ToDbParameter("@Parameter1"),
+                        new TestDbParameter().ToDbParameter("@Parameter2")
+                    })
+                });
 
-        [Test]
-        public void BinaryReturnsExpectedInstance()
-        {
-            Assert.That(TSql.Binary(new byte[]{ 1,2,3}, 123), Is.EqualTo(new TSqlBinaryValue(new byte[] { 1, 2 , 3}, new TSqlBinarySize(123))));
-        }
-
-        [Test]
-        public void BinaryNullReturnsExpectedInstance()
-        {
-            Assert.That(TSql.Binary(null, 123), Is.EqualTo(new TSqlBinaryNullValue(new TSqlBinarySize(123))));
-        }
-
-        [Test]
-        public void VarBinaryReturnsExpectedInstance()
-        {
-            Assert.That(TSql.VarBinary(new byte[] { 1, 2, 3 }, 123), Is.EqualTo(new TSqlVarBinaryValue(new byte[] { 1, 2, 3 }, new TSqlVarBinarySize(123))));
-        }
-
-        [Test]
-        public void VarBinaryNullReturnsExpectedInstance()
-        {
-            Assert.That(TSql.VarBinary(null, 123), Is.EqualTo(new TSqlVarBinaryNullValue(new TSqlVarBinarySize(123))));
-        }
-
-        [Test]
-        public void VarBinaryMaxReturnsExpectedInstance()
-        {
-            Assert.That(TSql.VarBinaryMax(new byte[] { 1, 2, 3 }), Is.EqualTo(new TSqlVarBinaryValue(new byte[] { 1, 2, 3 }, TSqlVarBinarySize.Max)));
-        }
-
-        [Test]
-        public void VarBinaryMaxNullReturnsExpectedInstance()
-        {
-            Assert.That(TSql.VarBinaryMax(null), Is.EqualTo(new TSqlVarBinaryNullValue(TSqlVarBinarySize.Max)));
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(true, "text"),
+                new SqlNonQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(true, "text", parameters: null),
+                new SqlNonQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(true, "text", new { }),
+                new SqlNonQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(true, "text", new { Parameter = new TestDbParameter() }),
+                new SqlNonQueryStatement[0]);
+            yield return new TestCaseData(
+                TSql.NonQueryUnless(true, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                new SqlNonQueryStatement[0]);
         }
 
         [TestCaseSource("NonQueryFormatCases")]

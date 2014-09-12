@@ -88,8 +88,7 @@
     <Compile Include="SqlQueryStatementTests.cs" />
     <Compile Include="SqlNonQueryCommandComposerTests.cs" />
     <Compile Include="SqlClient\TSqlTests.cs" />
-    <Compile Include="SqlClient\TSqlTests.CSharpOnly.cs" />
-    <Compile Include="SqlClient\TSqlTests.FSharpOnly.cs" />
+    <Compile Include="SqlClient\TSqlTests.DataTypes.cs" />
     <Compile Include="SqlClient\TSqlUniqueIdentifierNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlUniqueIdentifierValueTests.cs" />
     <Compile Include="SqlClient\TSqlVarBinaryNullValueTests.cs" />

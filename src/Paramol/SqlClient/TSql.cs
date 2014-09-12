@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Reflection;
 
 namespace Paramol.SqlClient
 {
@@ -11,117 +12,92 @@ namespace Paramol.SqlClient
     public static partial class TSql
     {
         /// <summary>
-        ///     Returns a VARCHAR parameter value.
+        ///     Returns a T-SQL non query statement.
         /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <param name="size">The parameter size.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue VarChar(string value, TSqlVarCharSize size)
+        /// <param name="text">The text.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static SqlQueryStatement Query(string text, object parameters = null)
         {
-            if (value == null)
-                return new TSqlVarCharNullValue(size);
-            return new TSqlVarCharValue(value, size);
+            return new SqlQueryStatement(text, CollectFromAnonymousType(parameters));
         }
 
         /// <summary>
-        ///     Returns a CHAR parameter value.
+        ///     Returns a T-SQL non query statement if the condition is satisfied.
         /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <param name="size">The parameter size.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Char(string value, TSqlCharSize size)
+        /// <param name="condition">The condition to satisfy</param>
+        /// <param name="text">The text.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static IEnumerable<SqlQueryStatement> QueryIf(bool condition, string text, object parameters = null)
         {
-            if (value == null)
-                return new TSqlCharNullValue(size);
-            return new TSqlCharValue(value, size);
+            if (condition)
+                yield return Query(text, parameters);
         }
 
         /// <summary>
-        ///     Returns a VARCHAR(MAX) parameter value.
+        ///     Returns a T-SQL non query statement unless the condition is satisfied.
         /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue VarCharMax(string value)
+        /// <param name="condition">The condition to satisfy</param>
+        /// <param name="text">The text.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static IEnumerable<SqlQueryStatement> QueryUnless(bool condition, string text, object parameters = null)
         {
-            if (value == null)
-                return new TSqlVarCharNullValue(TSqlVarCharSize.Max);
-            return new TSqlVarCharValue(value, TSqlVarCharSize.Max);
+            if (!condition)
+                yield return Query(text, parameters);
         }
 
         /// <summary>
-        ///     Returns a NVARCHAR parameter value.
+        ///     Returns a T-SQL non query statement.
         /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <param name="size">The parameter size.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue NVarChar(string value, TSqlNVarCharSize size)
+        /// <param name="text">The text with named parameters.</param>
+        /// <param name="parameters">The named parameters.</param>
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static SqlNonQueryCommand NonQuery(string text, object parameters = null)
         {
-            if (value == null)
-                return new TSqlNVarCharNullValue(size);
-            return new TSqlNVarCharValue(value, size);
+            return new SqlNonQueryStatement(text, CollectFromAnonymousType(parameters));
         }
 
         /// <summary>
-        ///     Returns a NCHAR parameter value.
+        ///     Returns a T-SQL non query statement if the condition is satisfied.
         /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <param name="size">The parameter size.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue NChar(string value, TSqlNCharSize size)
+        /// <param name="condition">The condition to satisfy</param>
+        /// <param name="text">The text with named parameters.</param>
+        /// <param name="parameters">The named parameters.</param>
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static IEnumerable<SqlNonQueryCommand> NonQueryIf(bool condition, string text, object parameters = null)
         {
-            if (value == null)
-                return new TSqlNCharNullValue(size);
-            return new TSqlNCharValue(value, size);
+            if (condition)
+                yield return NonQuery(text, parameters);
         }
 
         /// <summary>
-        ///     Returns a NVARCHAR(MAX) parameter value.
+        ///     Returns a T-SQL non query statement unless the condition is satisfied.
         /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue NVarCharMax(string value)
+        /// <param name="condition">The condition to satisfy</param>
+        /// <param name="text">The text with named parameters.</param>
+        /// <param name="parameters">The named parameters.</param>
+        /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
+        public static IEnumerable<SqlNonQueryCommand> NonQueryUnless(bool condition, string text,
+            object parameters = null)
         {
-            if (value == null)
-                return new TSqlNVarCharNullValue(TSqlNVarCharSize.Max);
-            return new TSqlNVarCharValue(value, TSqlNVarCharSize.Max);
+            if (!condition)
+                yield return NonQuery(text, parameters);
         }
 
-        /// <summary>
-        ///     Returns a BINARY parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <param name="size">The parameter size.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Binary(byte[] value, TSqlBinarySize size)
+        private static DbParameter[] CollectFromAnonymousType(object parameters)
         {
-            if (value == null)
-                return new TSqlBinaryNullValue(size);
-            return new TSqlBinaryValue(value, size);
-        }
-
-        /// <summary>
-        ///     Returns a VARBINARY parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <param name="size">The parameter size.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue VarBinary(byte[] value, TSqlVarBinarySize size)
-        {
-            if (value == null)
-                return new TSqlVarBinaryNullValue(size);
-            return new TSqlVarBinaryValue(value, size);
-        }
-
-        /// <summary>
-        ///     Returns a VARBINARY parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue VarBinaryMax(byte[] value)
-        {
-            if (value == null)
-                return new TSqlVarBinaryNullValue(TSqlVarBinarySize.Max);
-            return new TSqlVarBinaryValue(value, TSqlVarBinarySize.Max);
+            if (parameters == null)
+                return new DbParameter[0];
+            return parameters.
+                GetType().
+                GetProperties(BindingFlags.Instance | BindingFlags.Public).
+                Where(property => typeof(IDbParameterValue).IsAssignableFrom(property.PropertyType)).
+                Select(property =>
+                    ((IDbParameterValue)property.GetGetMethod().Invoke(parameters, null)).
+                        ToDbParameter(FormatDbParameterName(property.Name))).
+                ToArray();
         }
 
         /// <summary>

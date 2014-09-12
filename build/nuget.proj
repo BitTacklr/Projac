@@ -26,16 +26,9 @@
       XmlFileName="Projac.nuspec"
       XPath="/ns:package/ns:metadata/ns:dependencies/ns:group/ns:dependency[@id='Paramol']/@version"
       Value="$(Major).$(Minor).$(Build)" />
-    <XmlUpdate
-      Prefix="ns"
-      Namespace="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
-      XmlFileName="Projac.FSharp.nuspec"
-      XPath="/ns:package/ns:metadata/ns:dependencies/ns:group/ns:dependency[@id='Paramol.FSharp']/@version"
-      Value="$(Major).$(Minor).$(Build)" />
-    <Exec Command='$(NuGetExe) pack Projac.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
-    <Exec Command='$(NuGetExe) pack Projac.FSharp.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\fsharp"' />
     <Exec Command='$(NuGetExe) pack Paramol.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
-    <Exec Command='$(NuGetExe) pack Paramol.FSharp.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\fsharp"' />
+    <Exec Command='$(NuGetExe) pack Projac.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
+    
   </Target>
 
   <Target Name="Push">
@@ -51,9 +44,7 @@
     </Version>
 
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\fsharp\Paramol.FSharp.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\fsharp\Projac.FSharp.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-
+    
   </Target>
 </Project>

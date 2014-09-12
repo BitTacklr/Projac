@@ -14,9 +14,7 @@
     <CreateItem 
       Include="
       $(MSBuildProjectDirectory)\output\csharp\Projac.Tests.dll;
-      $(MSBuildProjectDirectory)\output\fsharp\Projac.Tests.dll;
       $(MSBuildProjectDirectory)\output\csharp\Paramol.Tests.dll;
-      $(MSBuildProjectDirectory)\output\fsharp\Paramol.Tests.dll;
       ">
       <Output TaskParameter="Include" ItemName="AssembliesToTest" />
     </CreateItem>

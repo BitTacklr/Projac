@@ -54,8 +54,7 @@
     <Compile Include="Limits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlClient\TSql.cs" />
-    <Compile Include="SqlClient\TSql.CSharpOnly.cs" />
-    <Compile Include="SqlClient\TSql.FSharpOnly.cs" />
+    <Compile Include="SqlClient\TSql.DataTypes.cs" />
     <Compile Include="SqlClient\TSqlBigIntNullValue.cs" />
     <Compile Include="SqlClient\TSqlBigIntValue.cs" />
     <Compile Include="SqlClient\TSqlBinaryNullValue.cs" />

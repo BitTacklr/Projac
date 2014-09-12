@@ -30,31 +30,5 @@
       BuildInParallel="true" 
       Properties="Configuration=Release;OutputPath=$(MSBuildProjectDirectory)\output\csharp"
       UnloadProjectsOnCompletion="true"/>
-    <!-- FSharp -->
-    <Xslt
-      Inputs="$(SourcePath)\Paramol\Paramol.csproj"
-      Xsl="$(MSBuildProjectDirectory)\TransformToFSharpProject.xslt"
-      Output="$(SourcePath)\Paramol\Paramol.FSharp.csproj" />
-    <Xslt
-      Inputs="$(SourcePath)\Paramol.Tests\Paramol.Tests.csproj"
-      Xsl="$(MSBuildProjectDirectory)\TransformToFSharpProject.xslt"
-      Output="$(SourcePath)\Paramol.Tests\Paramol.Tests.FSharp.csproj" />
-    <Xslt
-      Inputs="$(SourcePath)\Projac\Projac.csproj"
-      Xsl="$(MSBuildProjectDirectory)\TransformToFSharpProject.xslt"
-      Output="$(SourcePath)\Projac\Projac.FSharp.csproj" />
-    <Xslt
-      Inputs="$(SourcePath)\Projac.Tests\Projac.Tests.csproj"
-      Xsl="$(MSBuildProjectDirectory)\TransformToFSharpProject.xslt"
-      Output="$(SourcePath)\Projac.Tests\Projac.Tests.FSharp.csproj" />
-    <MSBuild
-      Projects="
-        $(SourcePath)\Paramol\Paramol.FSharp.csproj;
-        $(SourcePath)\Paramol.Tests\Paramol.Tests.FSharp.csproj;
-        $(SourcePath)\Projac\Projac.FSharp.csproj;
-        $(SourcePath)\Projac.Tests\Projac.Tests.FSharp.csproj;"
-      BuildInParallel="true"
-      Properties="Configuration=Release;OutputPath=$(MSBuildProjectDirectory)\output\fsharp"
-      UnloadProjectsOnCompletion="true"/>
   </Target>
 </Project>
