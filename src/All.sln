@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paramol", "Paramol\Paramol.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paramol.Tests", "Paramol.Tests\Paramol.Tests.csproj", "{1DB95A98-6A5F-44E7-BB6A-AB9D3C92B38F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Usage", "Usage\Usage.csproj", "{5298E548-D353-47CA-BD23-9C174ED24ED9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{1DB95A98-6A5F-44E7-BB6A-AB9D3C92B38F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DB95A98-6A5F-44E7-BB6A-AB9D3C92B38F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DB95A98-6A5F-44E7-BB6A-AB9D3C92B38F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5298E548-D353-47CA-BD23-9C174ED24ED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5298E548-D353-47CA-BD23-9C174ED24ED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5298E548-D353-47CA-BD23-9C174ED24ED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5298E548-D353-47CA-BD23-9C174ED24ED9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
