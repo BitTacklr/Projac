@@ -1,9 +1,6 @@
 using System;
-using System.Data;
-using System.Data.Common;
 using NUnit.Framework;
 using Paramol;
-using Projac.Tests.Framework;
 
 namespace Projac.Tests
 {
@@ -21,10 +18,10 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void DataDefinitionCommandsCanNotBeNull()
+        public void SchemaProjectionCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => SutFactory((SqlNonQueryCommand[])null)
+                () => SutSchemaProjectionFactory(null)
                 );
         }
 
@@ -32,52 +29,43 @@ namespace Projac.Tests
         public void ProjectionCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => SutFactory((SqlProjection)null)
+                () => SutProjectionFactory(null)
                 );
         }
 
         [Test]
         public void PropertiesArePreserved()
         {
-            var dataDefinitionCommands = new[]
-            {
-                CommandFactory(),
-                CommandFactory()
-            };
             var projection = new SqlProjection(new[] { new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]) });
-            var sut = SutFactory("identifier-v2", dataDefinitionCommands, projection);
+            var schemaProjection = new SqlProjection(new[] { new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]) });
+            var sut = SutFactory("identifier-v2", schemaProjection, projection);
 
             Assert.That(sut.Identifier, Is.EqualTo("identifier-v2"));
-            Assert.That(sut.DataDefinitionCommands, Is.EquivalentTo(dataDefinitionCommands));
-            Assert.That(sut.Projection, Is.EqualTo(projection));
+            Assert.That(sut.SchemaProjection, Is.SameAs(schemaProjection));
+            Assert.That(sut.Projection, Is.SameAs(projection));
         }
 
         private static SqlProjectionDescriptor SutFactory(string identifier)
         {
-            return SutFactory(identifier, new SqlNonQueryCommand[0], new SqlProjection(new SqlProjectionHandler[0]));
+            return SutFactory(identifier, SqlProjection.Empty, SqlProjection.Empty);
         }
 
-        private static SqlProjectionDescriptor SutFactory(SqlNonQueryCommand[] dataDefinitionCommands)
+        private static SqlProjectionDescriptor SutSchemaProjectionFactory(SqlProjection projection)
         {
-            return SutFactory(Identifier, dataDefinitionCommands, new SqlProjection(new SqlProjectionHandler[0]));
+            return SutFactory(Identifier, projection, SqlProjection.Empty);
         }
 
-        private static SqlProjectionDescriptor SutFactory(SqlProjection projection)
+        private static SqlProjectionDescriptor SutProjectionFactory(SqlProjection projection)
         {
-            return SutFactory(Identifier, new SqlNonQueryCommand[0], projection);
+            return SutFactory(Identifier, SqlProjection.Empty, projection);
         }
 
         private static SqlProjectionDescriptor SutFactory(
             string identifier,
-            SqlNonQueryCommand[] dataDefinitionCommands, 
+            SqlProjection schemaProjection,
             SqlProjection projection)
         {
-            return new SqlProjectionDescriptor(identifier, dataDefinitionCommands, projection);
-        }
-
-        private static SqlNonQueryCommand CommandFactory()
-        {
-            return new SqlNonQueryCommandStub("text", new DbParameter[0], CommandType.Text);
+            return new SqlProjectionDescriptor(identifier, schemaProjection, projection);
         }
     }
 }

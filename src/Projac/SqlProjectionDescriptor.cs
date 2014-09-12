@@ -1,5 +1,4 @@
 ﻿using System;
-using Paramol;
 
 namespace Projac
 {
@@ -9,24 +8,24 @@ namespace Projac
     public class SqlProjectionDescriptor
     {
         private readonly string _identifier;
+        private readonly SqlProjection _schemaProjection;
         private readonly SqlProjection _projection;
-        private readonly SqlNonQueryCommand[] _dataDefinitionCommands;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlProjectionDescriptor"/> class.
         /// </summary>
         /// <param name="identifier">The projection identifier.</param>
-        /// <param name="dataDefinitionCommands">The data definition commands.</param>
+        /// <param name="schemaProjection">The schema projection.</param>
         /// <param name="projection">The projection.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/>, <paramref name="dataDefinitionCommands"/> or <paramref name="projection"/> is <c>null</c>.</exception>
-        public SqlProjectionDescriptor(string identifier, SqlNonQueryCommand[] dataDefinitionCommands, SqlProjection projection)
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/>, <paramref name="schemaProjection"/> or <paramref name="projection"/> is <c>null</c>.</exception>
+        public SqlProjectionDescriptor(string identifier, SqlProjection schemaProjection, SqlProjection projection)
         {
             if (identifier == null) throw new ArgumentNullException("identifier");
-            if (dataDefinitionCommands == null) throw new ArgumentNullException("dataDefinitionStatements");
+            if (schemaProjection == null) throw new ArgumentNullException("schemaProjection");
             if (projection == null) throw new ArgumentNullException("projection");
             _identifier = identifier;
+            _schemaProjection = schemaProjection;
             _projection = projection;
-            _dataDefinitionCommands = dataDefinitionCommands;
         }
 
         /// <summary>
@@ -41,14 +40,14 @@ namespace Projac
         }
 
         /// <summary>
-        /// Gets the data definition commands.
+        /// Gets the schema projection.
         /// </summary>
         /// <value>
-        /// The data definition commands.
+        /// The schema projection.
         /// </value>
-        public SqlNonQueryCommand[] DataDefinitionCommands
+        public SqlProjection SchemaProjection
         {
-            get { return _dataDefinitionCommands; }
+            get { return _schemaProjection; }
         }
 
         /// <summary>

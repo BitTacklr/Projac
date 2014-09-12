@@ -1,5 +1,4 @@
 ﻿using System;
-using Paramol;
 
 namespace Projac
 {
@@ -9,8 +8,8 @@ namespace Projac
     public class SqlProjectionDescriptorBuilder
     {
         private readonly string _identifier;
+        private SqlProjection _schemaProjection;
         private SqlProjection _projection;
-        private SqlNonQueryCommand[] _dataDefinitionCommands;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlProjectionDescriptorBuilder"/> class.
@@ -21,8 +20,8 @@ namespace Projac
         {
             if (identifier == null) throw new ArgumentNullException("identifier");
             _identifier = identifier;
+            _schemaProjection = SqlProjection.Empty;
             _projection = SqlProjection.Empty;
-            _dataDefinitionCommands = new SqlNonQueryCommand[0];
         }
 
         /// <summary>
@@ -37,19 +36,19 @@ namespace Projac
         }
 
         /// <summary>
-        /// Gets or sets the data definition commands.
+        /// Gets or sets the schema projection.
         /// </summary>
         /// <value>
-        /// The data definition commands.
+        /// The schema projection.
         /// </value>
-        public SqlNonQueryCommand[] DataDefinitionCommands
+        public SqlProjection SchemaProjection
         {
-            get { return _dataDefinitionCommands; }
+            get { return _schemaProjection; }
             set
             {
                 if (value == null)
                     throw new ArgumentNullException("value");
-                _dataDefinitionCommands = value;
+                _schemaProjection = value;
             }
         }
 
@@ -76,7 +75,7 @@ namespace Projac
         /// <returns>A <see cref="SqlProjectionDescriptor"/>.</returns>
         public SqlProjectionDescriptor Build()
         {
-            return new SqlProjectionDescriptor(Identifier, DataDefinitionCommands, Projection);
+            return new SqlProjectionDescriptor(Identifier, SchemaProjection, Projection);
         }
     }
 }
