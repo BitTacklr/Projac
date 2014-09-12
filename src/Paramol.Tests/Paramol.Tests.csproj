@@ -78,7 +78,10 @@
     <Compile Include="SqlClient\TSqlNCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlNCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlNCharValueTests.cs" />
-    <Compile Include="SqlClient\TSqlParameterCountLimitExceededTests.cs" />
+    <Compile Include="SqlClient\TSqlTests.NonQueryStatement.cs" />
+    <Compile Include="SqlClient\TSqlTests.NonQueryProcedure.cs" />
+    <Compile Include="SqlClient\TSqlTests.ParameterCountLimitExceeded.cs" />
+    <Compile Include="SqlClient\TSqlTests.Query.cs" />
     <Compile Include="SqlNonQueryCommandTests.cs" />
     <Compile Include="SqlNonQueryCommandExecutorTests.cs" />
     <Compile Include="SqlClient\TSqlNVarCharNullValueTests.cs" />
@@ -87,7 +90,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlQueryStatementTests.cs" />
     <Compile Include="SqlNonQueryCommandComposerTests.cs" />
-    <Compile Include="SqlClient\TSqlTests.cs" />
+    <Compile Include="SqlClient\TSqlTests.Compose.cs" />
     <Compile Include="SqlClient\TSqlTests.DataTypes.cs" />
     <Compile Include="SqlClient\TSqlUniqueIdentifierNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlUniqueIdentifierValueTests.cs" />
