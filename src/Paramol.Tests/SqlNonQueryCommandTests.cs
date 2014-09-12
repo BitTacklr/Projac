@@ -80,7 +80,7 @@ namespace Paramol.Tests
 
         private static SqlNonQueryCommand SutFactory(string text, DbParameter[] parameters, CommandType type)
         {
-            return new SqlNonQueryCommandStub(text, parameters, type);
+            return new SqlNonQueryCommand(text, parameters, type);
         }
     }
 }

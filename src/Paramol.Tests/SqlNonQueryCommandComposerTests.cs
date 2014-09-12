@@ -390,7 +390,7 @@ namespace Paramol.Tests
 
         private static SqlNonQueryCommand CommandFactory()
         {
-            return new SqlNonQueryCommandStub("text", new DbParameter[0], CommandType.Text);
+            return new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text);
         }
     }
 }

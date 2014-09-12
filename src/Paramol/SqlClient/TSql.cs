@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection;
@@ -56,7 +57,7 @@ namespace Paramol.SqlClient
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
         public static SqlNonQueryCommand NonQuery(string text, object parameters = null)
         {
-            return new SqlNonQueryStatement(text, CollectFromAnonymousType(parameters));
+            return new SqlNonQueryCommand(text, CollectFromAnonymousType(parameters), CommandType.Text);
         }
 
         /// <summary>
@@ -156,12 +157,13 @@ namespace Paramol.SqlClient
         {
             if (parameters == null || parameters.Length == 0)
             {
-                return new SqlNonQueryStatement(format, new DbParameter[0]);
+                return new SqlNonQueryCommand(format, new DbParameter[0], CommandType.Text);
             }
-            return new SqlNonQueryStatement(
+            return new SqlNonQueryCommand(
                 string.Format(format,
                     parameters.Select((_, index) => (object) FormatDbParameterName("P" + index)).ToArray()),
-                parameters.Select((value, index) => value.ToDbParameter(FormatDbParameterName("P" + index))).ToArray());
+                parameters.Select((value, index) => value.ToDbParameter(FormatDbParameterName("P" + index))).ToArray(),
+                CommandType.Text);
         }
 
         /// <summary>

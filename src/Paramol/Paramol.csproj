@@ -75,7 +75,6 @@
     <Compile Include="SqlClient\TSqlNCharValue.cs" />
     <Compile Include="SqlNonQueryCommand.cs" />
     <Compile Include="SqlNonQueryProcedure.cs" />
-    <Compile Include="SqlNonQueryStatement.cs" />
     <Compile Include="SqlClient\TSqlNVarCharNullValue.cs" />
     <Compile Include="SqlClient\TSqlNVarCharSize.cs" />
     <Compile Include="SqlClient\TSqlNVarCharValue.cs" />

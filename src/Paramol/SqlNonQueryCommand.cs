@@ -7,7 +7,7 @@ namespace Paramol
     /// <summary>
     ///     Represent a SQL non query command.
     /// </summary>
-    public abstract class SqlNonQueryCommand
+    public class SqlNonQueryCommand
     {
         private readonly DbParameter[] _parameters;
         private readonly string _text;
@@ -23,7 +23,7 @@ namespace Paramol
         ///     Thrown when <paramref name="text" /> or <paramref name="parameters" />
         ///     is <c>null</c>.
         /// </exception>
-        protected SqlNonQueryCommand(string text, DbParameter[] parameters, CommandType type)
+        public SqlNonQueryCommand(string text, DbParameter[] parameters, CommandType type)
         {
             if (text == null)
                 throw new ArgumentNullException("text");
