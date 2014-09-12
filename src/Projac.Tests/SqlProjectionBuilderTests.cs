@@ -51,7 +51,7 @@ namespace Projac.Tests
             var result = _sut.When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { command })), 
+                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command })), 
                 Is.EqualTo(1));
         }
 
@@ -68,7 +68,7 @@ namespace Projac.Tests
             var result = _sut.When((object _) => commands).When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(commands)),
+                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
                 Is.EqualTo(1));
         }
 
@@ -95,7 +95,7 @@ namespace Projac.Tests
             var result = _sut.When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
+                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
                 Is.EqualTo(1));
         }
 
@@ -113,7 +113,7 @@ namespace Projac.Tests
             var result = _sut.When((object _) => commands).When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(commands)),
+                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
                 Is.EqualTo(1));
         }
 
@@ -146,7 +146,7 @@ namespace Projac.Tests
             var result = _sut.When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
+                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
                 Is.EqualTo(1));
         }
 
@@ -167,7 +167,7 @@ namespace Projac.Tests
             var result = _sut.When((object _) => commands).When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Event == typeof(object) && _.Handler(null).SequenceEqual(commands)),
+                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
                 Is.EqualTo(1));
         }
 

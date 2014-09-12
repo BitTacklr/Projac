@@ -5,7 +5,7 @@ using Paramol;
 namespace Projac
 {
     /// <summary>
-    /// Projects a single event in a synchronous manner to the matching handlers.
+    /// Projects a single message in a synchronous manner to the matching handlers.
     /// </summary>
     public class SqlProjector
     {
@@ -27,19 +27,19 @@ namespace Projac
         }
 
         /// <summary>
-        /// Projects the specified event.
+        /// Projects the specified message.
         /// </summary>
-        /// <param name="event">The event to project.</param>
+        /// <param name="message">The message to project.</param>
         /// <returns>The number of <see cref="SqlNonQueryCommand">commands</see> executed.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="event"/> is <c>null</c>.</exception>
-        public int Project(object @event)
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="message"/> is <c>null</c>.</exception>
+        public int Project(object message)
         {
-            if (@event == null) throw new ArgumentNullException("event");
+            if (message == null) throw new ArgumentNullException("message");
 
             return _executor.Execute(
                 _handlers.
-                    Where(handler => handler.Event == @event.GetType()).
-                    SelectMany(handler => handler.Handler(@event)));
+                    Where(handler => handler.Message == message.GetType()).
+                    SelectMany(handler => handler.Handler(message)));
         }
     }
 }

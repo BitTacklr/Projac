@@ -26,13 +26,13 @@ namespace Projac
         }
 
         /// <summary>
-        ///     Specifies the single non query command returning handler to be invoked when a particular event occurs.
+        ///     Specifies the single non query command returning handler to be invoked when a particular message occurs.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event.</typeparam>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The single command returning handler.</param>
         /// <returns>A <see cref="SqlProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public SqlProjectionBuilder When<TEvent>(Func<TEvent, SqlNonQueryCommand> handler)
+        public SqlProjectionBuilder When<TMessage>(Func<TMessage, SqlNonQueryCommand> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new SqlProjectionBuilder(
@@ -41,21 +41,21 @@ namespace Projac
                     {
                         new SqlProjectionHandler
                             (
-                            typeof (TEvent),
-                            @event => new[] {handler((TEvent) @event)}
+                            typeof (TMessage),
+                            message => new[] {handler((TMessage) message)}
                             )
                     }).
                     ToArray());
         }
 
         /// <summary>
-        ///     Specifies the non query command array returning handler to be invoked when a particular event occurs.
+        ///     Specifies the non query command array returning handler to be invoked when a particular message occurs.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event.</typeparam>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The command array returning handler.</param>
         /// <returns>A <see cref="SqlProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public SqlProjectionBuilder When<TEvent>(Func<TEvent, SqlNonQueryCommand[]> handler)
+        public SqlProjectionBuilder When<TMessage>(Func<TMessage, SqlNonQueryCommand[]> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new SqlProjectionBuilder(
@@ -64,21 +64,21 @@ namespace Projac
                     {
                         new SqlProjectionHandler
                             (
-                            typeof (TEvent),
-                            @event => handler((TEvent) @event)
+                            typeof (TMessage),
+                            message => handler((TMessage) message)
                             )
                     }).
                     ToArray());
         }
 
         /// <summary>
-        ///     Specifies the non query statement enumeration returning handler to be invoked when a particular event occurs.
+        ///     Specifies the non query statement enumeration returning handler to be invoked when a particular message occurs.
         /// </summary>
-        /// <typeparam name="TEvent">The type of the event.</typeparam>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The non query command enumeration returning handler.</param>
         /// <returns>A <see cref="SqlProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public SqlProjectionBuilder When<TEvent>(Func<TEvent, IEnumerable<SqlNonQueryCommand>> handler)
+        public SqlProjectionBuilder When<TMessage>(Func<TMessage, IEnumerable<SqlNonQueryCommand>> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new SqlProjectionBuilder(
@@ -87,8 +87,8 @@ namespace Projac
                     {
                         new SqlProjectionHandler
                             (
-                            typeof (TEvent),
-                            @event => handler((TEvent) @event)
+                            typeof (TMessage),
+                            message => handler((TMessage) message)
                             )
                     }).
                     ToArray());

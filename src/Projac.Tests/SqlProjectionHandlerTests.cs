@@ -9,7 +9,7 @@ namespace Projac.Tests
     public class SqlProjectionHandlerTests
     {
         [Test]
-        public void EventCanNotBeNull()
+        public void MessageCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
                 () => new SqlProjectionHandler(null, _ => new SqlNonQueryCommand[0])
@@ -27,12 +27,12 @@ namespace Projac.Tests
         [Test]
         public void ParametersArePreservedAsProperties()
         {
-            var @event = typeof(object);
+            var message = typeof(object);
             Func<object, IEnumerable<SqlNonQueryCommand>> handler = _ => new SqlNonQueryCommand[0];
 
-            var sut = new SqlProjectionHandler(@event, handler);
+            var sut = new SqlProjectionHandler(message, handler);
 
-            Assert.That(sut.Event, Is.EqualTo(@event));
+            Assert.That(sut.Message, Is.EqualTo(message));
             Assert.That(sut.Handler, Is.EqualTo(handler));
         }
     }

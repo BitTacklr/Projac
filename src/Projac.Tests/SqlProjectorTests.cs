@@ -27,14 +27,14 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void ProjectEventCanNotBeNull()
+        public void ProjectMessageCanNotBeNull()
         {
             var sut = SutFactory();
             Assert.Throws<ArgumentNullException>(() => sut.Project(null));
         }
 
         [Test]
-        public void ProjectCausesExecutorToBeCalledWithExpectedCommandsWhenEventTypeMatches()
+        public void ProjectCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
         {
             var commands = new[] {CommandFactory(), CommandFactory()};
             var mock = new ExecutorMock();
@@ -48,7 +48,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void ProjectCausesExecutorToBeCalledWithExpectedCommandsWhenEventTypeMismatches()
+        public void ProjectCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
         {
             var commands = new[] { CommandFactory(), CommandFactory() };
             var mock = new ExecutorMock();

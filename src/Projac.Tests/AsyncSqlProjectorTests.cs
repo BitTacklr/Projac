@@ -29,21 +29,21 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void ProjectAsyncEventCanNotBeNull()
+        public void ProjectAsyncMessageCanNotBeNull()
         {
             var sut = SutFactory();
             Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync(null));
         }
 
         [Test]
-        public void ProjectAsyncTokenEventCanNotBeNull()
+        public void ProjectAsyncTokenMessageCanNotBeNull()
         {
             var sut = SutFactory();
             Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync(null, CancellationToken.None));
         }
 
         [Test]
-        public async void ProjectAsyncCausesExecutorToBeCalledWithExpectedCommandsWhenEventTypeMatches()
+        public async void ProjectAsyncCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
         {
             var commands = new[] { CommandFactory(), CommandFactory() };
             var mock = new ExecutorMock();
@@ -56,7 +56,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public async void ProjectAsyncCausesExecutorToBeCalledWithExpectedCommandsWhenEventTypeMismatches()
+        public async void ProjectAsyncCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
         {
             var commands = new[] { CommandFactory(), CommandFactory() };
             var mock = new ExecutorMock();
@@ -69,7 +69,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public async void ProjectAsyncTokenCausesExecutorToBeCalledWithExpectedCommandsWhenEventTypeMatches()
+        public async void ProjectAsyncTokenCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
         {
             var commands = new[] { CommandFactory(), CommandFactory() };
             var mock = new ExecutorMock();
@@ -83,7 +83,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public async void ProjectAsyncTokenCausesExecutorToBeCalledWithExpectedCommandsWhenEventTypeMismatches()
+        public async void ProjectAsyncTokenCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
         {
             var commands = new[] { CommandFactory(), CommandFactory() };
             var mock = new ExecutorMock();
