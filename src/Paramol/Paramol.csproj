@@ -56,6 +56,7 @@
     <Compile Include="SqlClient\TSql.Compose.cs" />
     <Compile Include="SqlClient\TSql.NonQueryProcedure.cs" />
     <Compile Include="SqlClient\TSql.NonQueryStatement.cs" />
+    <Compile Include="SqlClient\TSql.QueryProcedure.cs" />
     <Compile Include="SqlClient\TSql.QueryStatement.cs" />
     <Compile Include="SqlClient\TSql.cs" />
     <Compile Include="SqlClient\TSql.DataTypes.cs" />

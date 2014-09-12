@@ -81,6 +81,7 @@
     <Compile Include="SqlClient\TSqlTests.NonQueryStatement.cs" />
     <Compile Include="SqlClient\TSqlTests.NonQueryProcedure.cs" />
     <Compile Include="SqlClient\TSqlTests.ParameterCountLimitExceeded.cs" />
+    <Compile Include="SqlClient\TSqlTests.QueryProcedure.cs" />
     <Compile Include="SqlClient\TSqlTests.QueryStatement.cs" />
     <Compile Include="SqlNonQueryCommandTests.cs" />
     <Compile Include="SqlNonQueryCommandExecutorTests.cs" />

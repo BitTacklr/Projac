@@ -11,88 +11,88 @@ namespace Paramol.SqlClient
     public static partial class TSql
     {
         /// <summary>
-        ///     Returns a T-SQL non query statement.
+        ///     Returns a T-SQL non query stored procedure.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static SqlQueryCommand QueryStatement(string text, object parameters = null)
+        public static SqlQueryCommand QueryProcedure(string text, object parameters = null)
         {
-            return new SqlQueryCommand(text, CollectFromAnonymousType(parameters), CommandType.Text);
+            return new SqlQueryCommand(text, CollectFromAnonymousType(parameters), CommandType.StoredProcedure);
         }
 
         /// <summary>
-        ///     Returns a T-SQL non query statement if the condition is satisfied.
+        ///     Returns a T-SQL non query stored procedure if the condition is satisfied.
         /// </summary>
         /// <param name="condition">The condition to satisfy</param>
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlQueryCommand> QueryStatementIf(bool condition, string text, object parameters = null)
+        public static IEnumerable<SqlQueryCommand> QueryProcedureIf(bool condition, string text, object parameters = null)
         {
             if (condition)
-                yield return QueryStatement(text, parameters);
+                yield return QueryProcedure(text, parameters);
         }
 
         /// <summary>
-        ///     Returns a T-SQL non query statement unless the condition is satisfied.
+        ///     Returns a T-SQL non query stored procedure unless the condition is satisfied.
         /// </summary>
         /// <param name="condition">The condition to satisfy</param>
         /// <param name="text">The text.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlQueryCommand> QueryStatementUnless(bool condition, string text, object parameters = null)
+        public static IEnumerable<SqlQueryCommand> QueryProcedureUnless(bool condition, string text, object parameters = null)
         {
             if (!condition)
-                yield return QueryStatement(text, parameters);
+                yield return QueryProcedure(text, parameters);
         }
 
         /// <summary>
-        ///     Returns a T-SQL query statement.
+        ///     Returns a T-SQL query stored procedure.
         /// </summary>
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlQueryCommand" />.</returns>
-        public static SqlQueryCommand QueryStatementFormat(string format, params IDbParameterValue[] parameters)
+        public static SqlQueryCommand QueryProcedureFormat(string format, params IDbParameterValue[] parameters)
         {
             if (parameters == null || parameters.Length == 0)
             {
-                return new SqlQueryCommand(format, new DbParameter[0], CommandType.Text);
+                return new SqlQueryCommand(format, new DbParameter[0], CommandType.StoredProcedure);
             }
             ThrowIfMaxParameterCountExceeded(parameters);
             return new SqlQueryCommand(
                 string.Format(format,
                     parameters.Select((_, index) => (object) FormatDbParameterName("P" + index)).ToArray()),
                 parameters.Select((value, index) => value.ToDbParameter(FormatDbParameterName("P" + index))).ToArray(),
-                CommandType.Text);
+                CommandType.StoredProcedure);
         }
 
         /// <summary>
-        ///     Returns a T-SQL query statement if the condition is satisfied.
+        ///     Returns a T-SQL query stored procedure if the condition is satisfied.
         /// </summary>
         /// <param name="condition">The condition to satisfy.</param>
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlQueryCommand" />.</returns>
-        public static IEnumerable<SqlQueryCommand> QueryStatementFormatIf(bool condition, string format,
+        public static IEnumerable<SqlQueryCommand> QueryProcedureFormatIf(bool condition, string format,
             params IDbParameterValue[] parameters)
         {
             if (condition)
-                yield return QueryStatementFormat(format, parameters);
+                yield return QueryProcedureFormat(format, parameters);
         }
 
         /// <summary>
-        ///     Returns a T-SQL query statement unless the condition is satisfied.
+        ///     Returns a T-SQL query stored procedure unless the condition is satisfied.
         /// </summary>
         /// <param name="condition">The condition to satisfy.</param>
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlQueryCommand" />.</returns>
-        public static IEnumerable<SqlQueryCommand> QueryStatementFormatUnless(bool condition, string format,
+        public static IEnumerable<SqlQueryCommand> QueryProcedureFormatUnless(bool condition, string format,
             params IDbParameterValue[] parameters)
         {
             if (!condition)
-                yield return QueryStatementFormat(format, parameters);
+                yield return QueryProcedureFormat(format, parameters);
         }
     }
 }
