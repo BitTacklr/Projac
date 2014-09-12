@@ -10,12 +10,23 @@
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
     <description>Projac provides lightweight infrastructure for producing SQL based projections.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
-    <releaseNotes>Changes: Null support is now datatype aware.</releaseNotes>
+    <releaseNotes>Changes: 
+- SqlProjectionDescriptor/-Builder now use SchemaProjection instead of DataDefinitionStatements
+- SqlProjectionBuilder can now decorate an existing projection, just pass it into the ctor
+- Added support for invoking stored procedures using QueryProcedure* and NonQueryProcedure*
+- Renamed Query* to QueryStatement*
+- Renamed NonQuery* to NonQueryStatement*
+- Moved from SqlQueryStatement to SqlQueryCommand (supporting stored procedures)
+- Moved from SqlNonQueryStatement to SqlNonQueryCommand (supporting stored procedures)
+- Executors now use the command type from SqlNon/-QueryCommand
+- ParameterCount limit now moved to TSql syntax
+- Dropped F# support
+- Moved nomenclature from "event" to "message" (relaxes how projections can be used)</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Paramol" version="0.0.92" />
+        <dependency id="Paramol" version="0.0.93" />
       </group>
     </dependencies>
   </metadata>

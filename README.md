@@ -2,18 +2,18 @@
 
 Projac provides a set of simple abstractions that allow one to write projections targeting relational databases (only support for Microsoft SQL Server at this point). It doesn't shove any ```IEventHandler<T>```, ```IHandle<T>```, or ```IMessageHandler<T>``` down your throat. Use your own or the ones provided by the framework you're integrating with. Paramol provides abstractions to capture the essence of statements to send to a relational database, along with a fluent syntax to author them (only support for Microsoft SQL Server at this point).
 
-It's on NuGet already: [CSharp version](https://www.nuget.org/packages/Projac/) and [FSharp version](https://www.nuget.org/packages/Projac.FSharp/)
+It's on NuGet already: [CSharp version](https://www.nuget.org/packages/Projac/))
 
-## SqlNonQueryStatement & SqlQueryStatement
+## SqlNonQueryCommand & SqlQueryCommand
 
-Abstracts the text and the parameters to be sent to the database. Both non-query (INSERT, UPDATE, DELETE) and query (SELECT) text statements are supported, but as a word of advice, you should generally bias towards non-query statements, since they're the only ones that make sense for writing projections that perform well.
+Abstracts the text and the parameters to be sent to the database. Both non-query (INSERT, UPDATE, DELETE) and query (SELECT) text statements/procedures are supported, but as a word of advice, you should generally bias towards non-query statements, since they're the only ones that make sense for writing projections that perform well.
 
 ## TSql
 
 Syntactic sugar for writing T-SQL statements in the projection handlers. Parameters can be defined by passing in either an anonymously typed object or a strongly typed one. Properties magically become parameters of the T-SQL statement.
 
 ```csharp
-TSql.NonQuery(
+TSql.NonQueryStatement(
   "INSERT INTO [Item] (Id, Name) VALUES (@P1, @P2)",
   new { P1 = TSql.Int(message.Id), P2 = TSql.VarChar(message.Value, 40) });
 ```
@@ -24,7 +24,7 @@ TSql.NonQuery(
 Alternatively you can use a positional syntax, reminiscent of ODBC parameters, where parameter names will be auto assigned and formatted into the text. Don't thank me, thank @tojans for the suggestion.
 
 ```csharp
-TSql.NonQueryFormat(
+TSql.NonQueryStatementFormat(
   "INSERT INTO [Item] (Id, Name) VALUES ({0}, {1})",
   TSql.Int(message.Id), TSql.VarChar(message.Value, 40));
 ```
@@ -37,17 +37,17 @@ Syntactic sugar to allow you to specify projections without the need for a dedic
 var projection =
   new SqlProjectionBuilder().
     When<PortfolioAdded>(@event =>
-      TSql.NonQuery(
+      TSql.NonQueryStatement(
         "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
     )).
     When<PortfolioRemoved>(@event =>
-      TSql.NonQuery(
+      TSql.NonQueryStatement(
         "DELETE FROM [Portfolio] WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id) }
     )).
     When<PortfolioRenamed>(@event =>
-      TSql.NonQuery(
+      TSql.NonQueryStatement(
         "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
     )).
@@ -58,7 +58,7 @@ How and when you decide to execute the projection specification is still left as
 
 ## Projection Descriptor
 
-Next to the actual projection, you'll want to somehow identify the projection. A name and/or version or a date and time. It's just a piece of string. Data definition statements describe the schema of the current projection as a bunch of ``SqlNonQueryStatements``, e.g. drop any database objects pertaining to previous versions of the projection and create any new database objects pertaining to the *current* version. Note that data definition statements are entirely optional, under your control and omit any form of handholding (unlike traditional database schema migration tooling). What's the motivation behind this? Traditionally one would manage the database object schema *on-the-side* using a database project (or an equivalent there of). Yet this is counter to the idea of treating projections as individual units. As such you should see this as an attempt to bring what is usually separated closer together. 
+Next to the actual projection, you'll want to somehow identify the projection. A name and/or version or a date and time. It's just a piece of string. SchemaProjection describes the schema of the current projection as a bunch of ``SqlNonQueryStatements``, e.g. drop any database objects pertaining to previous versions of the projection and create any new database objects pertaining to the *current* version. Note that schema projection is entirely optional, under your control and omit any form of handholding (unlike traditional database schema migration tooling). What's the motivation behind this? Traditionally one would manage the database object schema *on-the-side* using a database project (or an equivalent there of). Yet this is counter to the idea of treating projections as individual units. As such you should see this as an attempt to bring what is usually separated closer together. 
 
 ```csharp
 public static class PortfolioProjection
@@ -66,11 +66,8 @@ public static class PortfolioProjection
   public static readonly SqlProjectionDescriptor Descriptor =
     new SqlProjectionDescriptorBuilder("portfolio-v1")
     {
-      DataDefinitionStatements = TSql.Compose(
-              TSql.NonQuery(
-                  "CREATE TABLE [Portfolio] ( " +
-                  "[Id] INT NOT NULL PRIMARY KEY, " +
-                  "[Name] NVARCHAR(40) NOT NULL)")),
+      SchemaProjection = new SqlProjectionBuilder().
+          ...,
       Projection = new SqlProjectionBuilder().
           When<PortfolioAdded>(@event =>
               TSql.NonQuery(
