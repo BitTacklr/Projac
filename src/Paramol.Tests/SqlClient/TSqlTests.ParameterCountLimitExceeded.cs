@@ -10,61 +10,61 @@ namespace Paramol.Tests.SqlClient
         [Test]
         public void QueryParameterCountLimitedTo2098()
         {
-            Assert.Throws<ArgumentException>(() => TSql.Query("", ParameterCountLimitedExceeded.Instance));
+            Assert.Throws<ArgumentException>(() => TSql.QueryStatement("", ParameterCountLimitedExceeded.Instance));
         }
 
         [Test]
         public void QueryIfParameterCountLimitedTo2098WhenConditionIsMet()
         {
-            Assert.Throws<ArgumentException>(() => TSql.QueryIf(true, "", ParameterCountLimitedExceeded.Instance).ToArray());
+            Assert.Throws<ArgumentException>(() => TSql.QueryStatementIf(true, "", ParameterCountLimitedExceeded.Instance).ToArray());
         }
 
         [Test]
         public void QueryIfParameterCountNotLimitedTo2098WhenConditionIsNotMet()
         {
-            Assert.DoesNotThrow(() => TSql.QueryIf(false, "", ParameterCountLimitedExceeded.Instance).ToArray());
+            Assert.DoesNotThrow(() => TSql.QueryStatementIf(false, "", ParameterCountLimitedExceeded.Instance).ToArray());
         }
 
         [Test]
         public void QueryUnlessParameterCountLimitedTo2098WhenConditionIsMet()
         {
-            Assert.DoesNotThrow(() => TSql.QueryUnless(true, "", ParameterCountLimitedExceeded.Instance).ToArray());
+            Assert.DoesNotThrow(() => TSql.QueryStatementUnless(true, "", ParameterCountLimitedExceeded.Instance).ToArray());
         }
 
         [Test]
         public void QueryUnlessParameterCountNotLimitedTo2098WhenConditionIsMet()
         {
-            Assert.Throws<ArgumentException>(() => TSql.QueryUnless(false, "", ParameterCountLimitedExceeded.Instance).ToArray());
+            Assert.Throws<ArgumentException>(() => TSql.QueryStatementUnless(false, "", ParameterCountLimitedExceeded.Instance).ToArray());
         }
 
         [Test]
         public void QueryFormatParameterCountLimitedTo2098()
         {
-            Assert.Throws<ArgumentException>(() => TSql.QueryFormat("", ParameterCountLimitedExceeded.Instance.All));
+            Assert.Throws<ArgumentException>(() => TSql.QueryStatementFormat("", ParameterCountLimitedExceeded.Instance.All));
         }
 
         [Test]
         public void QueryFormatIfParameterCountLimitedTo2098WhenConditionIsMet()
         {
-            Assert.Throws<ArgumentException>(() => TSql.QueryFormatIf(true, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
+            Assert.Throws<ArgumentException>(() => TSql.QueryStatementFormatIf(true, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
         }
 
         [Test]
         public void QueryFormatIfParameterCountNotLimitedTo2098WhenConditionIsNotMet()
         {
-            Assert.DoesNotThrow(() => TSql.QueryFormatIf(false, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
+            Assert.DoesNotThrow(() => TSql.QueryStatementFormatIf(false, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
         }
 
         [Test]
         public void QueryFormatUnlessParameterCountLimitedTo2098WhenConditionIsMet()
         {
-            Assert.DoesNotThrow(() => TSql.QueryFormatUnless(true, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
+            Assert.DoesNotThrow(() => TSql.QueryStatementFormatUnless(true, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
         }
 
         [Test]
         public void QueryFormatUnlessParameterCountNotLimitedTo2098WhenConditionIsMet()
         {
-            Assert.Throws<ArgumentException>(() => TSql.QueryFormatUnless(false, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
+            Assert.Throws<ArgumentException>(() => TSql.QueryStatementFormatUnless(false, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
         }
 
         [Test]

@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
 using NUnit.Framework;
 
 namespace Paramol.Tests
 {
     [TestFixture]
-    public class SqlQueryStatementTests
+    public class SqlQueryCommandTests
     {
-
         [Test]
         public void TextCanNotBeNull()
         {
@@ -27,6 +27,20 @@ namespace Paramol.Tests
         }
 
         [Test]
+        public void TypeCanNotBeUnsupportedEnumValue()
+        {
+            Assert.Throws<ArgumentException>(() => SutFactory((CommandType)Int32.MinValue));
+        }
+
+        [TestCase(CommandType.StoredProcedure)]
+        [TestCase(CommandType.TableDirect)]
+        [TestCase(CommandType.Text)]
+        public void TypeCanBeUnsupportedEnumValue(CommandType type)
+        {
+            Assert.DoesNotThrow(() => SutFactory(type));
+        }
+
+        [Test]
         public void ParametersCanBeEmpty()
         {
             Assert.DoesNotThrow(() => SutFactory(new DbParameter[0]));
@@ -35,25 +49,31 @@ namespace Paramol.Tests
         [Test]
         public void PropertiesReturnExpectedValues()
         {
-            var sut = SutFactory("text", new DbParameter[0]);
+            var sut = SutFactory("text", new DbParameter[0], CommandType.TableDirect);
 
             Assert.That(sut.Text, Is.EqualTo("text"));
             Assert.That(sut.Parameters, Is.EqualTo(new DbParameter[0]));
+            Assert.That(sut.Type, Is.EqualTo(CommandType.TableDirect));
         }
 
-        private static SqlQueryStatement SutFactory(string text)
+        private static SqlQueryCommand SutFactory(string text)
         {
-            return SutFactory(text, new DbParameter[0]);
+            return SutFactory(text, new DbParameter[0], CommandType.Text);
         }
 
-        private static SqlQueryStatement SutFactory(DbParameter[] parameters)
+        private static SqlQueryCommand SutFactory(DbParameter[] parameters)
         {
-            return SutFactory("text", parameters);
+            return SutFactory("text", parameters, CommandType.Text);
         }
 
-        private static SqlQueryStatement SutFactory(string text, DbParameter[] parameters)
+        private static SqlQueryCommand SutFactory(CommandType type)
         {
-            return new SqlQueryStatement(text, parameters);
+            return SutFactory("text", new DbParameter[0], type);
+        }
+
+        private static SqlQueryCommand SutFactory(string text, DbParameter[] parameters, CommandType type)
+        {
+            return new SqlQueryCommand(text, parameters, type);
         }
     }
 }

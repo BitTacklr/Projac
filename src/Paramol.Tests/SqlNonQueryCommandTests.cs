@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Common;
 using NUnit.Framework;
-using Paramol.Tests.Framework;
 
 namespace Paramol.Tests
 {
