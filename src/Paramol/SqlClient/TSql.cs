@@ -55,7 +55,7 @@ namespace Paramol.SqlClient
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static SqlNonQueryCommand NonQuery(string text, object parameters = null)
+        public static SqlNonQueryCommand NonQueryStatement(string text, object parameters = null)
         {
             return new SqlNonQueryCommand(text, CollectFromAnonymousType(parameters), CommandType.Text);
         }
@@ -67,10 +67,10 @@ namespace Paramol.SqlClient
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlNonQueryCommand> NonQueryIf(bool condition, string text, object parameters = null)
+        public static IEnumerable<SqlNonQueryCommand> NonQueryStatementIf(bool condition, string text, object parameters = null)
         {
             if (condition)
-                yield return NonQuery(text, parameters);
+                yield return NonQueryStatement(text, parameters);
         }
 
         /// <summary>
@@ -80,11 +80,11 @@ namespace Paramol.SqlClient
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlNonQueryCommand> NonQueryUnless(bool condition, string text,
+        public static IEnumerable<SqlNonQueryCommand> NonQueryStatementUnless(bool condition, string text,
             object parameters = null)
         {
             if (!condition)
-                yield return NonQuery(text, parameters);
+                yield return NonQueryStatement(text, parameters);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Paramol.SqlClient
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static SqlNonQueryCommand NonQueryFormat(string format, params IDbParameterValue[] parameters)
+        public static SqlNonQueryCommand NonQueryStatementFormat(string format, params IDbParameterValue[] parameters)
         {
             if (parameters == null || parameters.Length == 0)
             {
@@ -161,11 +161,11 @@ namespace Paramol.SqlClient
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlNonQueryCommand> NonQueryFormatIf(bool condition, string format,
+        public static IEnumerable<SqlNonQueryCommand> NonQueryStatementFormatIf(bool condition, string format,
             params IDbParameterValue[] parameters)
         {
             if (condition)
-                yield return NonQueryFormat(format, parameters);
+                yield return NonQueryStatementFormat(format, parameters);
         }
 
         /// <summary>
@@ -175,11 +175,11 @@ namespace Paramol.SqlClient
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlNonQueryCommand> NonQueryFormatUnless(bool condition, string format,
+        public static IEnumerable<SqlNonQueryCommand> NonQueryStatementFormatUnless(bool condition, string format,
             params IDbParameterValue[] parameters)
         {
             if (!condition)
-                yield return NonQueryFormat(format, parameters);
+                yield return NonQueryStatementFormat(format, parameters);
         }
 
         /// <summary>

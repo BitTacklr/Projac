@@ -168,32 +168,32 @@ namespace Paramol.Tests.SqlClient
                 new SqlQueryStatement[0]);
         }
 
-        [TestCaseSource("NonQueryCases")]
-        public void NonQueryReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
+        [TestCaseSource("NonQueryStatementCases")]
+        public void NonQueryStatementReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
         }
 
-        private static IEnumerable<TestCaseData> NonQueryCases()
+        private static IEnumerable<TestCaseData> NonQueryStatementCases()
         {
             yield return new TestCaseData(
-                TSql.NonQuery("text"),
+                TSql.NonQueryStatement("text"),
                 new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQuery("text", parameters: null),
+                TSql.NonQueryStatement("text", parameters: null),
                 new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQuery("text", new { }),
+                TSql.NonQueryStatement("text", new { }),
                 new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQuery("text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryStatement("text", new { Parameter = new TestDbParameter() }),
                 new SqlNonQueryCommand("text", new[]
                 {
                     new TestDbParameter().ToDbParameter("@Parameter")
                 }, CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQuery("text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                TSql.NonQueryStatement("text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
                 new SqlNonQueryCommand("text", new[]
                 {
                     new TestDbParameter().ToDbParameter("@Parameter1"),
@@ -201,8 +201,8 @@ namespace Paramol.Tests.SqlClient
                 }, CommandType.Text));
         }
 
-        [TestCaseSource("NonQueryIfCases")]
-        public void NonQueryIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
+        [TestCaseSource("NonQueryStatementIfCases")]
+        public void NonQueryStatementIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
             Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
@@ -213,19 +213,19 @@ namespace Paramol.Tests.SqlClient
             }
         }
 
-        private static IEnumerable<TestCaseData> NonQueryIfCases()
+        private static IEnumerable<TestCaseData> NonQueryStatementIfCases()
         {
             yield return new TestCaseData(
-                TSql.NonQueryIf(true, "text"),
+                TSql.NonQueryStatementIf(true, "text"),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryIf(true, "text", parameters: null),
+                TSql.NonQueryStatementIf(true, "text", parameters: null),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryIf(true, "text", new { }),
+                TSql.NonQueryStatementIf(true, "text", new { }),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryIf(true, "text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryStatementIf(true, "text", new { Parameter = new TestDbParameter() }),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
@@ -234,7 +234,7 @@ namespace Paramol.Tests.SqlClient
                     }, CommandType.Text)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryIf(true, "text",
+                TSql.NonQueryStatementIf(true, "text",
                     new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
                 new[]
                 {
@@ -246,24 +246,24 @@ namespace Paramol.Tests.SqlClient
                 });
 
             yield return new TestCaseData(
-                TSql.NonQueryIf(false, "text"),
+                TSql.NonQueryStatementIf(false, "text"),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryIf(false, "text", parameters: null),
+                TSql.NonQueryStatementIf(false, "text", parameters: null),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryIf(false, "text", new { }),
+                TSql.NonQueryStatementIf(false, "text", new { }),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryIf(false, "text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryStatementIf(false, "text", new { Parameter = new TestDbParameter() }),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryIf(false, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                TSql.NonQueryStatementIf(false, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
                 new SqlNonQueryCommand[0]);
         }
 
-        [TestCaseSource("NonQueryUnlessCases")]
-        public void NonQueryUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
+        [TestCaseSource("NonQueryStatementUnlessCases")]
+        public void NonQueryStatementUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
             Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
@@ -274,19 +274,19 @@ namespace Paramol.Tests.SqlClient
             }
         }
 
-        private static IEnumerable<TestCaseData> NonQueryUnlessCases()
+        private static IEnumerable<TestCaseData> NonQueryStatementUnlessCases()
         {
             yield return new TestCaseData(
-                TSql.NonQueryUnless(false, "text"),
+                TSql.NonQueryStatementUnless(false, "text"),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryUnless(false, "text", parameters: null),
+                TSql.NonQueryStatementUnless(false, "text", parameters: null),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryUnless(false, "text", new { }),
+                TSql.NonQueryStatementUnless(false, "text", new { }),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryUnless(false, "text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryStatementUnless(false, "text", new { Parameter = new TestDbParameter() }),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
@@ -295,7 +295,7 @@ namespace Paramol.Tests.SqlClient
                     }, CommandType.Text)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryUnless(false, "text",
+                TSql.NonQueryStatementUnless(false, "text",
                     new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
                 new[]
                 {
@@ -307,61 +307,61 @@ namespace Paramol.Tests.SqlClient
                 });
 
             yield return new TestCaseData(
-                TSql.NonQueryUnless(true, "text"),
+                TSql.NonQueryStatementUnless(true, "text"),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryUnless(true, "text", parameters: null),
+                TSql.NonQueryStatementUnless(true, "text", parameters: null),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryUnless(true, "text", new { }),
+                TSql.NonQueryStatementUnless(true, "text", new { }),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryUnless(true, "text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryStatementUnless(true, "text", new { Parameter = new TestDbParameter() }),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryUnless(true, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                TSql.NonQueryStatementUnless(true, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
                 new SqlNonQueryCommand[0]);
         }
 
-        [TestCaseSource("NonQueryFormatCases")]
-        public void NonQueryFormatReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
+        [TestCaseSource("NonQueryStatementFormatCases")]
+        public void NonQueryStatementFormatReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
         }
 
-        private static IEnumerable<TestCaseData> NonQueryFormatCases()
+        private static IEnumerable<TestCaseData> NonQueryStatementFormatCases()
         {
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text"),
+                TSql.NonQueryStatementFormat("text"),
                 new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text", parameters: null),
+                TSql.NonQueryStatementFormat("text", parameters: null),
                 new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text", new IDbParameterValue[0]),
+                TSql.NonQueryStatementFormat("text", new IDbParameterValue[0]),
                 new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text", new TestDbParameter()),
+                TSql.NonQueryStatementFormat("text", new TestDbParameter()),
                 new SqlNonQueryCommand("text", new[]
                 {
                     new TestDbParameter().ToDbParameter("@P0")
                 }, CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text {0}", new TestDbParameter()),
+                TSql.NonQueryStatementFormat("text {0}", new TestDbParameter()),
                 new SqlNonQueryCommand("text @P0", new[]
                 {
                     new TestDbParameter().ToDbParameter("@P0")
                 }, CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormat("text", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryCommand("text", new[]
                 {
                     new TestDbParameter().ToDbParameter("@P0"),
                     new TestDbParameter().ToDbParameter("@P1")
                 }, CommandType.Text));
             yield return new TestCaseData(
-                TSql.NonQueryFormat("text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormat("text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryCommand("text @P0 @P1", new[]
                 {
                     new TestDbParameter().ToDbParameter("@P0"),
@@ -369,8 +369,8 @@ namespace Paramol.Tests.SqlClient
                 }, CommandType.Text));
         }
 
-        [TestCaseSource("NonQueryFormatIfCases")]
-        public void NonQueryFormatIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
+        [TestCaseSource("NonQueryStatementFormatIfCases")]
+        public void NonQueryStatementFormatIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
             Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
@@ -381,19 +381,19 @@ namespace Paramol.Tests.SqlClient
             }
         }
 
-        private static IEnumerable<TestCaseData> NonQueryFormatIfCases()
+        private static IEnumerable<TestCaseData> NonQueryStatementFormatIfCases()
         {
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text"),
+                TSql.NonQueryStatementFormatIf(true, "text"),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text", parameters: null),
+                TSql.NonQueryStatementFormatIf(true, "text", parameters: null),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text", new IDbParameterValue[0]),
+                TSql.NonQueryStatementFormatIf(true, "text", new IDbParameterValue[0]),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text", new TestDbParameter()),
+                TSql.NonQueryStatementFormatIf(true, "text", new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
@@ -402,7 +402,7 @@ namespace Paramol.Tests.SqlClient
                     }, CommandType.Text)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text {0}", new TestDbParameter()),
+                TSql.NonQueryStatementFormatIf(true, "text {0}", new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryCommand("text @P0", new[]
@@ -411,7 +411,7 @@ namespace Paramol.Tests.SqlClient
                     }, CommandType.Text)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormatIf(true, "text", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
@@ -421,7 +421,7 @@ namespace Paramol.Tests.SqlClient
                     }, CommandType.Text)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormatIf(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryCommand("text @P0 @P1", new[]
@@ -432,30 +432,30 @@ namespace Paramol.Tests.SqlClient
                 });
 
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text"),
+                TSql.NonQueryStatementFormatIf(false, "text"),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text", parameters: null),
+                TSql.NonQueryStatementFormatIf(false, "text", parameters: null),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text", new IDbParameterValue[0]),
+                TSql.NonQueryStatementFormatIf(false, "text", new IDbParameterValue[0]),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text", new TestDbParameter()),
+                TSql.NonQueryStatementFormatIf(false, "text", new TestDbParameter()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text {0}", new TestDbParameter()),
+                TSql.NonQueryStatementFormatIf(false, "text {0}", new TestDbParameter()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormatIf(false, "text", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatIf(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormatIf(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryCommand[0]);
         }
 
-        [TestCaseSource("NonQueryFormatUnlessCases")]
-        public void NonQueryFormatUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
+        [TestCaseSource("NonQueryStatementFormatUnlessCases")]
+        public void NonQueryStatementFormatUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
             Assert.That(actualArray.Length, Is.EqualTo(expected.Length));
@@ -466,19 +466,19 @@ namespace Paramol.Tests.SqlClient
             }
         }
 
-        private static IEnumerable<TestCaseData> NonQueryFormatUnlessCases()
+        private static IEnumerable<TestCaseData> NonQueryStatementFormatUnlessCases()
         {
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text"),
+                TSql.NonQueryStatementFormatUnless(false, "text"),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text", parameters: null),
+                TSql.NonQueryStatementFormatUnless(false, "text", parameters: null),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text", new IDbParameterValue[0]),
+                TSql.NonQueryStatementFormatUnless(false, "text", new IDbParameterValue[0]),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text) });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text", new TestDbParameter()),
+                TSql.NonQueryStatementFormatUnless(false, "text", new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
@@ -487,7 +487,7 @@ namespace Paramol.Tests.SqlClient
                     }, CommandType.Text)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text {0}", new TestDbParameter()),
+                TSql.NonQueryStatementFormatUnless(false, "text {0}", new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryCommand("text @P0", new[]
@@ -496,7 +496,7 @@ namespace Paramol.Tests.SqlClient
                     }, CommandType.Text)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormatUnless(false, "text", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
@@ -506,7 +506,7 @@ namespace Paramol.Tests.SqlClient
                     }, CommandType.Text)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormatUnless(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new[]
                 {
                     new SqlNonQueryCommand("text @P0 @P1", new[]
@@ -517,25 +517,25 @@ namespace Paramol.Tests.SqlClient
                 });
 
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text"),
+                TSql.NonQueryStatementFormatUnless(true, "text"),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text", parameters: null),
+                TSql.NonQueryStatementFormatUnless(true, "text", parameters: null),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text", new IDbParameterValue[0]),
+                TSql.NonQueryStatementFormatUnless(true, "text", new IDbParameterValue[0]),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text", new TestDbParameter()),
+                TSql.NonQueryStatementFormatUnless(true, "text", new TestDbParameter()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text {0}", new TestDbParameter()),
+                TSql.NonQueryStatementFormatUnless(true, "text {0}", new TestDbParameter()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormatUnless(true, "text", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryFormatUnless(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryStatementFormatUnless(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
                 new SqlNonQueryCommand[0]);
         }
 

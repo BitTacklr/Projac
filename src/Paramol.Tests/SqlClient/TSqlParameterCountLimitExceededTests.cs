@@ -68,63 +68,63 @@ namespace Paramol.Tests.SqlClient
         }
 
         [Test]
-        public void NonQueryParameterCountLimitedTo2098()
+        public void NonQueryStatementParameterCountLimitedTo2098()
         {
-            Assert.Throws<ArgumentException>(() => TSql.NonQuery("", ParameterCountLimitedExceeded.Instance));
+            Assert.Throws<ArgumentException>(() => TSql.NonQueryStatement("", ParameterCountLimitedExceeded.Instance));
         }
 
         [Test]
-        public void NonQueryIfParameterCountLimitedTo2098WhenConditionIsMet()
+        public void NonQueryStatementIfParameterCountLimitedTo2098WhenConditionIsMet()
         {
-            Assert.Throws<ArgumentException>(() => TSql.NonQueryIf(true, "", ParameterCountLimitedExceeded.Instance).ToArray());
+            Assert.Throws<ArgumentException>(() => TSql.NonQueryStatementIf(true, "", ParameterCountLimitedExceeded.Instance).ToArray());
         }
 
         [Test]
-        public void NonQueryIfParameterCountNotLimitedTo2098WhenConditionIsNotMet()
+        public void NonQueryStatementIfParameterCountNotLimitedTo2098WhenConditionIsNotMet()
         {
-            Assert.DoesNotThrow(() => TSql.NonQueryIf(false, "", ParameterCountLimitedExceeded.Instance).ToArray());
+            Assert.DoesNotThrow(() => TSql.NonQueryStatementIf(false, "", ParameterCountLimitedExceeded.Instance).ToArray());
         }
 
         [Test]
-        public void NonQueryUnlessParameterCountLimitedTo2098WhenConditionIsMet()
+        public void NonQueryStatementUnlessParameterCountLimitedTo2098WhenConditionIsMet()
         {
-            Assert.DoesNotThrow(() => TSql.NonQueryUnless(true, "", ParameterCountLimitedExceeded.Instance).ToArray());
+            Assert.DoesNotThrow(() => TSql.NonQueryStatementUnless(true, "", ParameterCountLimitedExceeded.Instance).ToArray());
         }
 
         [Test]
-        public void NonQueryUnlessParameterCountNotLimitedTo2098WhenConditionIsMet()
+        public void NonQueryStatementUnlessParameterCountNotLimitedTo2098WhenConditionIsMet()
         {
-            Assert.Throws<ArgumentException>(() => TSql.NonQueryUnless(false, "", ParameterCountLimitedExceeded.Instance).ToArray());
+            Assert.Throws<ArgumentException>(() => TSql.NonQueryStatementUnless(false, "", ParameterCountLimitedExceeded.Instance).ToArray());
         }
 
         [Test]
-        public void NonQueryFormatParameterCountLimitedTo2098()
+        public void NonQueryStatementFormatParameterCountLimitedTo2098()
         {
-            Assert.Throws<ArgumentException>(() => TSql.NonQueryFormat("", ParameterCountLimitedExceeded.Instance.All));
+            Assert.Throws<ArgumentException>(() => TSql.NonQueryStatementFormat("", ParameterCountLimitedExceeded.Instance.All));
         }
 
         [Test]
-        public void NonQueryFormatIfParameterCountLimitedTo2098WhenConditionIsMet()
+        public void NonQueryStatementFormatIfParameterCountLimitedTo2098WhenConditionIsMet()
         {
-            Assert.Throws<ArgumentException>(() => TSql.NonQueryFormatIf(true, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
+            Assert.Throws<ArgumentException>(() => TSql.NonQueryStatementFormatIf(true, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
         }
 
         [Test]
-        public void NonQueryFormatIfParameterCountNotLimitedTo2098WhenConditionIsNotMet()
+        public void NonQueryStatementFormatIfParameterCountNotLimitedTo2098WhenConditionIsNotMet()
         {
-            Assert.DoesNotThrow(() => TSql.NonQueryFormatIf(false, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
+            Assert.DoesNotThrow(() => TSql.NonQueryStatementFormatIf(false, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
         }
 
         [Test]
-        public void NonQueryFormatUnlessParameterCountLimitedTo2098WhenConditionIsMet()
+        public void NonQueryStatementFormatUnlessParameterCountLimitedTo2098WhenConditionIsMet()
         {
-            Assert.DoesNotThrow(() => TSql.NonQueryFormatUnless(true, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
+            Assert.DoesNotThrow(() => TSql.NonQueryStatementFormatUnless(true, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
         }
 
         [Test]
-        public void NonQueryFormatUnlessParameterCountNotLimitedTo2098WhenConditionIsMet()
+        public void NonQueryStatementFormatUnlessParameterCountNotLimitedTo2098WhenConditionIsMet()
         {
-            Assert.Throws<ArgumentException>(() => TSql.NonQueryFormatUnless(false, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
+            Assert.Throws<ArgumentException>(() => TSql.NonQueryStatementFormatUnless(false, "", ParameterCountLimitedExceeded.Instance.All).ToArray());
         }
     }
 }
