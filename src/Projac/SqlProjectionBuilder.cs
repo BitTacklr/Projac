@@ -20,6 +20,15 @@ namespace Projac
         {
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="SqlProjectionBuilder" /> class.
+        /// </summary>
+        public SqlProjectionBuilder(SqlProjection projection)
+        {
+            if (projection == null) throw new ArgumentNullException("projection");
+            _handlers = projection.Handlers;
+        }
+
         private SqlProjectionBuilder(SqlProjectionHandler[] handlers)
         {
             _handlers = handlers;

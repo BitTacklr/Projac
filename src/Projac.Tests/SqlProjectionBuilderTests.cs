@@ -21,6 +21,33 @@ namespace Projac.Tests
         }
 
         [Test]
+        public void DecoratedProjectionCanNotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new SqlProjectionBuilder(null));
+        }
+
+        [Test]
+        public void DecoratedProjectionHandlersAreCopiedOnConstruction()
+        {
+            var handler1 = new SqlProjectionHandler(typeof(object), o => new SqlNonQueryCommand[0]);
+            var handler2 = new SqlProjectionHandler(typeof(object), o => new SqlNonQueryCommand[0]);
+            var projection = new SqlProjection(new[]
+            {
+                handler1, 
+                handler2
+            });
+            var sut = new SqlProjectionBuilder(projection);
+
+            var result = sut.Build();
+
+            Assert.That(result.Handlers, Is.EquivalentTo(new []
+            {
+                handler1, handler2
+            }));
+
+        }
+
+        [Test]
         public void InitialInstanceBuildReturnsExpectedResult()
         {
             var result = _sut.Build();
