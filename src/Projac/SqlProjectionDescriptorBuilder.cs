@@ -8,6 +8,7 @@ namespace Projac
     public class SqlProjectionDescriptorBuilder
     {
         private readonly string _identifier;
+        private readonly string _version;
         private SqlProjection _schemaProjection;
         private SqlProjection _projection;
 
@@ -15,11 +16,14 @@ namespace Projac
         /// Initializes a new instance of the <see cref="SqlProjectionDescriptorBuilder"/> class.
         /// </summary>
         /// <param name="identifier">The projection identifier.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/> is <c>null</c>.</exception>
-        public SqlProjectionDescriptorBuilder(string identifier)
+        /// <param name="version">The projection version.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/> or <paramref name="version"/> is <c>null</c>.</exception>
+        public SqlProjectionDescriptorBuilder(string identifier, string version)
         {
             if (identifier == null) throw new ArgumentNullException("identifier");
+            if (version == null) throw new ArgumentNullException("version");
             _identifier = identifier;
+            _version = version;
             _schemaProjection = SqlProjection.Empty;
             _projection = SqlProjection.Empty;
         }
@@ -33,6 +37,17 @@ namespace Projac
         public string Identifier
         {
             get { return _identifier; }
+        }
+
+        /// <summary>
+        /// Gets the projection version.
+        /// </summary>
+        /// <value>
+        /// The projection version.
+        /// </value>
+        public string Version
+        {
+            get { return _version; }
         }
 
         /// <summary>
@@ -75,7 +90,7 @@ namespace Projac
         /// <returns>A <see cref="SqlProjectionDescriptor"/>.</returns>
         public SqlProjectionDescriptor Build()
         {
-            return new SqlProjectionDescriptor(Identifier, SchemaProjection, Projection);
+            return new SqlProjectionDescriptor(Identifier, Version, SchemaProjection, Projection);
         }
     }
 }

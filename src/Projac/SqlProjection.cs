@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Projac
 {
@@ -34,6 +35,65 @@ namespace Projac
         public SqlProjectionHandler[] Handlers
         {
             get { return _handlers; }
+        }
+
+        /// <summary>
+        ///     Concatenates the handlers of this projection with the handlers of the specified projection.
+        /// </summary>
+        /// <param name="projection">The projection to concatenate.</param>
+        /// <returns>A <see cref="SqlProjection"/> containing the concatenated handlers.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="projection"/> is <c>null</c>.</exception>
+        public SqlProjection Concat(SqlProjection projection)
+        {
+            if (projection == null) 
+                throw new ArgumentNullException("projection");
+            return Concat(projection.Handlers);
+        }
+
+        /// <summary>
+        ///     Concatenates the handlers of this projection with the specified projection handler.
+        /// </summary>
+        /// <param name="handler">The projection handler to concatenate.</param>
+        /// <returns>A <see cref="SqlProjection"/> containing the concatenated handlers.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler"/> is <c>null</c>.</exception>
+        public SqlProjection Concat(SqlProjectionHandler handler)
+        {
+            if (handler == null)
+                throw new ArgumentNullException("handler");
+
+            var concatenated = new SqlProjectionHandler[Handlers.Length + 1];
+            Handlers.CopyTo(concatenated, 0);
+            concatenated[Handlers.Length] = handler;
+            return new SqlProjection(concatenated);
+        }
+
+        /// <summary>
+        ///     Concatenates the handlers of this projection with the specified projection handlers.
+        /// </summary>
+        /// <param name="handlers">The projection handlers to concatenate.</param>
+        /// <returns>A <see cref="SqlProjection"/> containing the concatenated handlers.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handlers"/> are <c>null</c>.</exception>
+        public SqlProjection Concat(SqlProjectionHandler[] handlers)
+        {
+            if (handlers == null)
+                throw new ArgumentNullException("handlers");
+
+            var concatenated = new SqlProjectionHandler[Handlers.Length + handlers.Length];
+            Handlers.CopyTo(concatenated, 0);
+            handlers.CopyTo(concatenated, Handlers.Length);
+            return new SqlProjection(concatenated);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SqlProjection"/> to <see><cref>SqlProjectionHandler[]</cref></see>.
+        /// </summary>
+        /// <param name="instance">The instance.</param>
+        /// <returns>
+        /// The result of the conversion.
+        /// </returns>
+        public static implicit operator SqlProjectionHandler[](SqlProjection instance)
+        {
+            return instance.Handlers;
         }
     }
 }

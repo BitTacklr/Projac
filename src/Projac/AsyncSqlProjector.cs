@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Paramol;
+using Paramol.Executors;
 
 namespace Projac
 {
@@ -56,7 +57,7 @@ namespace Projac
         {
             if (message == null) throw new ArgumentNullException("message");
 
-            return _executor.ExecuteAsync(
+            return _executor.ExecuteNonQueryAsync(
                 _handlers.
                     Where(handler => handler.Message == message.GetType()).
                     SelectMany(handler => handler.Handler(message)),

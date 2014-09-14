@@ -46,12 +46,14 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AsyncSqlNonQueryCommandExecutor.cs" />
-    <Compile Include="ConnectedSqlNonQueryCommandExecutor.cs" />
-    <Compile Include="ConnectedTransactionalSqlNonQueryCommandExecutor.cs" />
-    <Compile Include="IAsyncSqlNonQueryCommandExecutor.cs" />
+    <Compile Include="Executors\SqlCommandExecutor.cs" />
+    <Compile Include="Executors\ConnectedSqlCommandExecutor.cs" />
+    <Compile Include="Executors\ConnectedTransactionalSqlCommandExecutor.cs" />
+    <Compile Include="Executors\IAsyncSqlNonQueryCommandExecutor.cs" />
+    <Compile Include="Executors\IAsyncSqlQueryCommandExecutor.cs" />
     <Compile Include="IDbParameterValue.cs" />
-    <Compile Include="ISqlNonQueryCommandExecutor.cs" />
+    <Compile Include="Executors\ISqlNonQueryCommandExecutor.cs" />
+    <Compile Include="Executors\ISqlQueryCommandExecutor.cs" />
     <Compile Include="SqlClient\Limits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlClient\TSql.Compose.cs" />
@@ -83,7 +85,6 @@
     <Compile Include="SqlClient\TSqlNVarCharNullValue.cs" />
     <Compile Include="SqlClient\TSqlNVarCharSize.cs" />
     <Compile Include="SqlClient\TSqlNVarCharValue.cs" />
-    <Compile Include="SqlNonQueryCommandExecutor.cs" />
     <Compile Include="SqlQueryCommand.cs" />
     <Compile Include="SqlNonQueryCommandComposer.cs" />
     <Compile Include="SqlClient\TSqlUniqueIdentifierNullValue.cs" />
@@ -94,8 +95,7 @@
     <Compile Include="SqlClient\TSqlVarCharNullValue.cs" />
     <Compile Include="SqlClient\TSqlVarCharSize.cs" />
     <Compile Include="SqlClient\TSqlVarCharValue.cs" />
-    <Compile Include="TransactionalAsyncSqlNonQueryCommandExecutor.cs" />
-    <Compile Include="TransactionalSqlNonQueryCommandExecutor.cs" />
+    <Compile Include="Executors\TransactionalSqlCommandExecutor.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

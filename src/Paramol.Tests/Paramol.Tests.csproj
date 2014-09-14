@@ -51,9 +51,8 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AsyncSqlNonQueryCommandExecutorTests.cs" />
-    <Compile Include="ConnectedSqlNonQueryCommandExecutorTests.cs" />
-    <Compile Include="ConnectedTransactionalSqlNonQueryCommandExecutorTests.cs" />
+    <Compile Include="Executors\ConnectedSqlCommandExecutorTests.cs" />
+    <Compile Include="Executors\ConnectedTransactionalSqlCommandExecutorTests.cs" />
     <Compile Include="Framework\DbParameterAssertions.cs" />
     <Compile Include="Framework\SqlParameterEqualityComparer.cs" />
     <Compile Include="Framework\TestDbTransaction.cs" />
@@ -85,7 +84,7 @@
     <Compile Include="SqlClient\TSqlTests.QueryProcedure.cs" />
     <Compile Include="SqlClient\TSqlTests.QueryStatement.cs" />
     <Compile Include="SqlNonQueryCommandTests.cs" />
-    <Compile Include="SqlNonQueryCommandExecutorTests.cs" />
+    <Compile Include="Executors\SqlCommandExecutorTests.cs" />
     <Compile Include="SqlClient\TSqlNVarCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlNVarCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlNVarCharValueTests.cs" />
@@ -102,8 +101,7 @@
     <Compile Include="SqlClient\TSqlVarCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlVarCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlVarCharValueTests.cs" />
-    <Compile Include="TransactionalAsyncSqlNonQueryCommandExecutorTests.cs" />
-    <Compile Include="TransactionalSqlNonQueryCommandExecutorTests.cs" />
+    <Compile Include="Executors\TransactionalSqlCommandExecutorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

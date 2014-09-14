@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Paramol;
+using Paramol.Executors;
 using Projac.Tests.Framework;
 
 namespace Projac.Tests
@@ -125,12 +126,12 @@ namespace Projac.Tests
         {
             public readonly List<SqlNonQueryCommand> Commands = new List<SqlNonQueryCommand>();
 
-            public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryCommand> commands)
+            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands)
             {
-                return ExecuteAsync(commands, CancellationToken.None);
+                return ExecuteNonQueryAsync(commands, CancellationToken.None);
             }
 
-            public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
+            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
             {
                 var count = Commands.Count;
                 Commands.AddRange(commands);
@@ -140,12 +141,12 @@ namespace Projac.Tests
 
         class ExecutorStub : IAsyncSqlNonQueryCommandExecutor
         {
-            public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryCommand> commands)
+            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands)
             {
                 return Task.FromResult(0);
             }
 
-            public Task<int> ExecuteAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
+            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
             {
                 return Task.FromResult(0);
             }

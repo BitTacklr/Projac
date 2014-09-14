@@ -33,10 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NEventStore">
+      <HintPath>..\packages\NEventStore.5.1.0\lib\net40\NEventStore.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -45,11 +50,27 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="CommitObserver.cs" />
+    <Compile Include="Framework\Checkpoint.cs" />
+    <Compile Include="Framework\DbDataReaderExtensions.cs" />
+    <Compile Include="Framework\StringExtensions.cs" />
+    <Compile Include="MemoryConnectionFactory.cs" />
+    <Compile Include="Messages\PortfolioAdded.cs" />
+    <Compile Include="Messages\PortfolioRemoved.cs" />
+    <Compile Include="Messages\PortfolioRenamed.cs" />
+    <Compile Include="PortfolioProjection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlProjectionHost.cs" />
+    <Compile Include="SystemMessages\BuildProjection.cs" />
+    <Compile Include="SystemMessages\InitializeProjectionSystem.cs" />
+    <Compile Include="SystemMessages\RebuildProjection.cs" />
+    <Compile Include="SystemMessages\ResetProjectionCheckpoint.cs" />
+    <Compile Include="SystemMessages\SetProjectionCheckpoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Paramol\Paramol.csproj">

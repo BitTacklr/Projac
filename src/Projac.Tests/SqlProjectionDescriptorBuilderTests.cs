@@ -7,13 +7,22 @@ namespace Projac.Tests
     [TestFixture]
     public class SqlProjectionDescriptorBuilderTests
     {
-        private const string Identifier = "identifier:v1";
+        private const string Identifier = "id";
+        private const string Version = "v1";
 
         [Test]
         public void IdentifierCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => SutFactory((string)null)
+                () => SutIdentifierFactory(null)
+                );
+        }
+
+        [Test]
+        public void VersionCanNotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => SutVersionFactory(null)
                 );
         }
 
@@ -160,7 +169,7 @@ namespace Projac.Tests
                         typeof (object),
                         _ => new SqlNonQueryCommand[0])
                 });
-            var sut = new SqlProjectionDescriptorBuilder("identifier")
+            var sut = new SqlProjectionDescriptorBuilder("identifier", "v2")
             {
                 SchemaProjection = schemaProjection,
                 Projection = projection
@@ -168,13 +177,29 @@ namespace Projac.Tests
             var result = sut.Build();
             Assert.That(result, Is.InstanceOf<SqlProjectionDescriptor>());
             Assert.That(result.Identifier, Is.EqualTo("identifier"));
+            Assert.That(result.Version, Is.EqualTo("v2"));
             Assert.That(result.SchemaProjection, Is.SameAs(schemaProjection));
             Assert.That(result.Projection, Is.SameAs(projection));
         }
 
-        private static SqlProjectionDescriptorBuilder SutFactory(string identifier = Identifier)
+        private static SqlProjectionDescriptorBuilder SutIdentifierFactory(string identifier)
         {
-            return new SqlProjectionDescriptorBuilder(identifier);
+            return SutFactory(identifier, Version);
+        }
+
+        private static SqlProjectionDescriptorBuilder SutVersionFactory(string version)
+        {
+            return SutFactory(Identifier, version);
+        }
+
+        private static SqlProjectionDescriptorBuilder SutFactory()
+        {
+            return new SqlProjectionDescriptorBuilder(Identifier, Version);
+        }
+
+        private static SqlProjectionDescriptorBuilder SutFactory(string identifier, string version)
+        {
+            return new SqlProjectionDescriptorBuilder(identifier, version);
         }
     }
 }

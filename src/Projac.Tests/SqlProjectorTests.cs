@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using NUnit.Framework;
 using Paramol;
+using Paramol.Executors;
 using Projac.Tests.Framework;
 
 namespace Projac.Tests
@@ -90,7 +91,12 @@ namespace Projac.Tests
         {
             public readonly List<SqlNonQueryCommand> Commands = new List<SqlNonQueryCommand>();
 
-            public int Execute(IEnumerable<SqlNonQueryCommand> commands)
+            public void ExecuteNonQuery(SqlNonQueryCommand command)
+            {
+                Commands.Add(command);
+            }
+
+            public int ExecuteNonQuery(IEnumerable<SqlNonQueryCommand> commands)
             {
                 var count = Commands.Count;
                 Commands.AddRange(commands);
@@ -100,7 +106,11 @@ namespace Projac.Tests
 
         class ExecutorStub : ISqlNonQueryCommandExecutor
         {
-            public int Execute(IEnumerable<SqlNonQueryCommand> commands)
+            public void ExecuteNonQuery(SqlNonQueryCommand command)
+            {
+            }
+
+            public int ExecuteNonQuery(IEnumerable<SqlNonQueryCommand> commands)
             {
                 return 0;
             }
