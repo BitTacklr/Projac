@@ -9,7 +9,7 @@ namespace Usage
     public static class PortfolioProjection
     {
         public static readonly SqlProjectionDescriptor Descriptor =
-            new SqlProjectionDescriptorBuilder("photo:Portfolio", "v2")
+            new SqlProjectionDescriptorBuilder("photo:Portfolio", "v1")
             {
                 SchemaProjection = new SqlProjectionBuilder().
                     When<BuildProjection>(_ => CreateTable()).

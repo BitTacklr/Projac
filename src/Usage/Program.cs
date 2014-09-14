@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Globalization;
 using NEventStore;
 using NEventStore.Persistence.Sql.SqlDialects;
 using Usage.Messages;
@@ -44,10 +43,11 @@ namespace Usage
 
         private static void SimulateEventProduction(IStoreEvents eStore)
         {
+            var random = new Random();
             var ticks = DateTime.Now.Ticks;
             for (var i = 0; i < 1000; i++)
             {
-                var streamId = (ticks + i).ToString(CultureInfo.InvariantCulture);
+                var streamId = string.Format("{0}-{1}", ticks, i);
                 using (var stream = eStore.CreateStream(streamId))
                 {
                     stream.Add(new EventMessage
@@ -58,13 +58,23 @@ namespace Usage
                             Name = streamId
                         }
                     });
-                    stream.Add(new EventMessage
-                    {
-                        Body = new PortfolioRemoved
+                    if(random.Next() % 2 == 0)
+                        stream.Add(new EventMessage
                         {
-                            Id = i
-                        }
-                    });
+                            Body = new PortfolioRenamed
+                            {
+                                Id = i,
+                                Name = "renamed-" + streamId
+                            }
+                        });
+                    if (random.Next() % 99 == 0)
+                        stream.Add(new EventMessage
+                        {
+                            Body = new PortfolioRemoved
+                            {
+                                Id = i
+                            }
+                        });
                     stream.CommitChanges(Guid.NewGuid());
                 }
             }
