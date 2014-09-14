@@ -47,6 +47,7 @@ namespace Usage
             var ticks = DateTime.Now.Ticks;
             for (var i = 0; i < 1000; i++)
             {
+                var id = Guid.NewGuid();
                 var streamId = string.Format("{0}-{1}", ticks, i);
                 using (var stream = eStore.CreateStream(streamId))
                 {
@@ -54,16 +55,16 @@ namespace Usage
                     {
                         Body = new PortfolioAdded
                         {
-                            Id = i,
+                            Id = id,
                             Name = streamId
                         }
                     });
-                    if(random.Next() % 2 == 0)
+                    if(random.Next() % random.Next(1, 10) == 0)
                         stream.Add(new EventMessage
                         {
                             Body = new PortfolioRenamed
                             {
-                                Id = i,
+                                Id = id,
                                 Name = "renamed-" + streamId
                             }
                         });
@@ -72,7 +73,7 @@ namespace Usage
                         {
                             Body = new PortfolioRemoved
                             {
-                                Id = i
+                                Id = id
                             }
                         });
                     stream.CommitChanges(Guid.NewGuid());

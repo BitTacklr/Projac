@@ -1,43 +1,49 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Reactive;
 using NEventStore;
 using Projac;
 using Usage.SystemMessages;
 
 namespace Usage
 {
-    public class CommitObserver : IObserver<ICommit>
+    public class CommitObserver : ObserverBase<ICommit>
     {
         private readonly string _identifier;
+        private readonly long _checkpoint;
         private readonly SqlProjector _projector;
 
-        public CommitObserver(string identifier, SqlProjector projector)
+        public CommitObserver(string identifier, long checkpoint, SqlProjector projector)
         {
             if (identifier == null) throw new ArgumentNullException("identifier");
             if (projector == null) throw new ArgumentNullException("projector");
             _identifier = identifier;
+            _checkpoint = checkpoint;
             _projector = projector;
         }
 
-        public void OnNext(ICommit value)
+        protected override void OnNextCore(ICommit value)
         {
+            var commitCheckpoint = Int64.Parse(value.CheckpointToken, CultureInfo.InvariantCulture);
+            Console.WriteLine("Projection {0} is handling commit at checkpoint {1}.", _identifier, commitCheckpoint);
+            if (commitCheckpoint <= _checkpoint) return;
             _projector.Project(
                 value.
                     Events.
                     Select(_ => _.Body).
                     Concat(new object[]
                     {
-                        new SetProjectionCheckpoint(_identifier, Int64.Parse(value.CheckpointToken, CultureInfo.InvariantCulture))
+                        new SetProjectionCheckpoint(_identifier, commitCheckpoint)
                     })
                 );
         }
 
-        public void OnError(Exception error)
+        protected override void OnErrorCore(Exception error)
         {
         }
 
-        public void OnCompleted()
+        protected override void OnCompletedCore()
         {
         }
     }

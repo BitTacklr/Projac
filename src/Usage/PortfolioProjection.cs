@@ -20,17 +20,17 @@ namespace Usage
                     When<PortfolioAdded>(@event =>
                         TSql.NonQueryStatement(
                             "INSERT INTO [Portfolio] ([Id], [Name], [PhotoCount]) VALUES (@P1, @P2, 0)",
-                            new {P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40)}
+                            new {P1 = TSql.UniqueIdentifier(@event.Id), P2 = TSql.NVarChar(@event.Name, 40)}
                             )).
                     When<PortfolioRemoved>(@event =>
                         TSql.NonQueryStatement(
                             "DELETE FROM [Portfolio] WHERE [Id] = @P1",
-                            new {P1 = TSql.Int(@event.Id)}
+                            new { P1 = TSql.UniqueIdentifier(@event.Id) }
                             )).
                     When<PortfolioRenamed>(@event =>
                         TSql.NonQueryStatement(
                             "UPDATE [Portfolio] SET [Name] = @P2 WHERE [Id] = @P1",
-                            new {P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40)}
+                            new { P1 = TSql.UniqueIdentifier(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
                             )).
                     Build()
             }.Build();
@@ -49,7 +49,7 @@ namespace Usage
         {
             return TSql.NonQueryStatement(
 @"CREATE TABLE [Portfolio] ( 
-    [Id] INT NOT NULL CONSTRAINT [PK_Portfolio] PRIMARY KEY,
+    [Id] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [PK_Portfolio] PRIMARY KEY,
     [Name] NVARCHAR(MAX) NOT NULL,
     [PhotoCount] INT NOT NULL
 )");

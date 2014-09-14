@@ -41,6 +41,18 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Reactive.Core">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -63,9 +75,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlProjectionHost.cs" />
     <Compile Include="SystemMessages\BuildProjection.cs" />
-    <Compile Include="SystemMessages\InitializeProjectionSystem.cs" />
     <Compile Include="SystemMessages\RebuildProjection.cs" />
-    <Compile Include="SystemMessages\ResetProjectionCheckpoint.cs" />
     <Compile Include="SystemMessages\SetProjectionCheckpoint.cs" />
   </ItemGroup>
   <ItemGroup>

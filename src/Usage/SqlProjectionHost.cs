@@ -4,7 +4,9 @@ using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using NEventStore;
 using NEventStore.Client;
 using NEventStore.Persistence;
 using Paramol.Executors;
@@ -69,11 +71,11 @@ namespace Usage
 
         public void Initialize()
         {
-            InitializeHostSchemaAsync();
-            InitializeProjectionSchemaAsync();
+            InitializeHostSchema();
+            InitializeProjectionSchema();
         }
 
-        private void InitializeHostSchemaAsync()
+        private void InitializeHostSchema()
         {
             new SqlCommandExecutor(_settings).
                 ExecuteNonQuery(
@@ -89,7 +91,7 @@ BEGIN
 END"));
         }
 
-        private void InitializeProjectionSchemaAsync()
+        private void InitializeProjectionSchema()
         {
             var queryExecutor = new SqlCommandExecutor(_settings);
             var nonQueryExecutor = new TransactionalSqlCommandExecutor(_settings, IsolationLevel.Serializable);
@@ -135,6 +137,9 @@ END"));
                 throw new ArgumentNullException("connection");
 
             var queryExecutor = new SqlCommandExecutor(_settings);
+            var subject = new Subject<ICommit>();
+            _disposables.Add(subject);
+            var checkpoint = Int64.MaxValue;
             foreach (var descriptor in _descriptors)
             {
                 var storedDescriptor = queryExecutor.
@@ -144,22 +149,25 @@ END"));
                             TSql.Binary(descriptor.Identifier.ToMD5Hash(), 16))).
                     Read<StoredDescriptor>().
                     Single();
-
-                var client = new PollingClient(connection);
-                _clients.Add(client);
-                var observer = client.ObserveFrom(storedDescriptor.Checkpoint.ToString(CultureInfo.InvariantCulture));
+                var observer = new CommitObserver(
+                        descriptor.Identifier,
+                        storedDescriptor.Checkpoint,
+                        new SqlProjector(
+                            descriptor.Projection.Concat(HostProjection),
+                            new TransactionalSqlCommandExecutor(_settings, IsolationLevel.ReadCommitted)));
+                _disposables.Add(subject.Subscribe(observer));
                 _disposables.Add(observer);
-                var subscription = observer.
-                    Subscribe(
-                        new CommitObserver(
-                            descriptor.Identifier,
-                            new SqlProjector(
-                                descriptor.Projection.Concat(HostProjection),
-                                new TransactionalSqlCommandExecutor(_settings, IsolationLevel.ReadCommitted)))
-                    );
-                _disposables.Add(subscription);
-                _runningObservers.Add(observer.Start());
+                if (checkpoint > storedDescriptor.Checkpoint)
+                    checkpoint = storedDescriptor.Checkpoint;
             }
+
+            var client = new PollingClient(connection);
+            _clients.Add(client);
+            var clientObserver = client.ObserveFrom(checkpoint.ToString(CultureInfo.InvariantCulture));
+            _disposables.Add(clientObserver);
+            var subscription = clientObserver.Subscribe(subject);
+            _disposables.Add(subscription);
+            _runningObservers.Add(clientObserver.Start());
         }
 
         class StoredDescriptor
