@@ -38,10 +38,12 @@ namespace Projac
         {
             if (message == null) throw new ArgumentNullException("message");
 
-            return _executor.ExecuteNonQuery(
-                _handlers.
-                    Where(handler => handler.Message == message.GetType()).
-                    SelectMany(handler => handler.Handler(message)));
+            return _executor.
+                ExecuteNonQuery(
+                    from handler in _handlers
+                    where handler.Message == message.GetType()
+                    from statement in handler.Handler(message)
+                    select statement);
         }
 
         /// <summary>

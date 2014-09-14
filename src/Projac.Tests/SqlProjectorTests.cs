@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using NUnit.Framework;
 using Paramol;
 using Paramol.Executors;
@@ -31,11 +32,18 @@ namespace Projac.Tests
         public void ProjectMessageCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(() => sut.Project(null));
+            Assert.Throws<ArgumentNullException>(() => sut.Project((object)null));
         }
 
         [Test]
-        public void ProjectCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
+        public void ProjectMessagesCanNotBeNull()
+        {
+            var sut = SutFactory();
+            Assert.Throws<ArgumentNullException>(() => sut.Project((IEnumerable<object>)null));
+        }
+
+        [Test]
+        public void ProjectMessageCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
         {
             var commands = new[] {CommandFactory(), CommandFactory()};
             var mock = new ExecutorMock();
@@ -49,7 +57,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void ProjectCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
+        public void ProjectMessageCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
         {
             var commands = new[] { CommandFactory(), CommandFactory() };
             var mock = new ExecutorMock();
@@ -60,6 +68,38 @@ namespace Projac.Tests
 
             Assert.That(result, Is.EqualTo(0));
             Assert.That(mock.Commands, Is.Empty);
+        }
+
+        [Test]
+        public void ProjectMessagesCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
+        {
+            var commands1 = new[] { CommandFactory(), CommandFactory() };
+            var commands2 = new[] { CommandFactory(), CommandFactory() };
+            var mock = new ExecutorMock();
+            var handler1 = new SqlProjectionHandler(typeof(int), _ => commands1);
+            var handler2 = new SqlProjectionHandler(typeof(bool), _ => commands2);
+            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+
+            var result = sut.Project(new object[] { 123, true });
+
+            Assert.That(result, Is.EqualTo(4));
+            Assert.That(mock.Commands, Is.EquivalentTo(commands1.Concat(commands2)));
+        }
+
+        [Test]
+        public void ProjectMessagesCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
+        {
+            var commands1 = new[] { CommandFactory(), CommandFactory() };
+            var commands2 = new[] { CommandFactory(), CommandFactory() };
+            var mock = new ExecutorMock();
+            var handler1 = new SqlProjectionHandler(typeof(int), _ => commands1);
+            var handler2 = new SqlProjectionHandler(typeof(bool), _ => commands2);
+            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+
+            var result = sut.Project(new object[] { 123 });
+
+            Assert.That(result, Is.EqualTo(2));
+            Assert.That(mock.Commands, Is.EquivalentTo(commands1));
         }
 
         private static SqlProjector SutFactory()

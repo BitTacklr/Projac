@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace Projac
         }
 
         /// <summary>
-        /// Projects the specified message.
+        /// Projects the specified message asynchronously.
         /// </summary>
         /// <param name="message">The message to project.</param>
         /// <returns>
@@ -44,7 +45,7 @@ namespace Projac
         }
 
         /// <summary>
-        /// Projects the specified message.
+        /// Projects the specified message asynchronously.
         /// </summary>
         /// <param name="message">The message to project.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -57,11 +58,51 @@ namespace Projac
         {
             if (message == null) throw new ArgumentNullException("message");
 
-            return _executor.ExecuteNonQueryAsync(
-                _handlers.
-                    Where(handler => handler.Message == message.GetType()).
-                    SelectMany(handler => handler.Handler(message)),
-                cancellationToken);
+            return _executor.
+                ExecuteNonQueryAsync(
+                    from handler in _handlers
+                    where handler.Message == message.GetType()
+                    from statement in handler.Handler(message)
+                    select statement,
+                    cancellationToken);
+        }
+
+        /// <summary>
+        /// Projects the specified messages to project.
+        /// </summary>
+        /// <param name="messages">The messages to project.</param>
+        /// <returns>
+        ///     A <see cref="Task" /> that will return the number of <see cref="SqlNonQueryCommand">commands</see>
+        ///     executed.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="messages"/> are <c>null</c>.</exception>
+        public Task<int> ProjectAsync(IEnumerable<object> messages)
+        {
+            return ProjectAsync(messages, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Projects the specified messages asynchronously.
+        /// </summary>
+        /// <param name="messages">The messages to project.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        ///     A <see cref="Task" /> that will return the number of <see cref="SqlNonQueryCommand">commands</see>
+        ///     executed.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="messages"/> are <c>null</c>.</exception>
+        public Task<int> ProjectAsync(IEnumerable<object> messages, CancellationToken cancellationToken)
+        {
+            if (messages == null) throw new ArgumentNullException("messages");
+
+            return _executor.
+                ExecuteNonQueryAsync(
+                    from message in messages
+                    from handler in _handlers
+                    where handler.Message == message.GetType()
+                    from statement in handler.Handler(message)
+                    select statement,
+                    cancellationToken);
         }
     }
 }
