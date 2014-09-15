@@ -27,69 +27,6 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void SchemaProjectionIsEmptyByDefault()
-        {
-            var sut = SutFactory();
-            var result = sut.SchemaProjection;
-            Assert.That(result, Is.SameAs(SqlProjection.Empty));
-        }
-
-        [Test]
-        public void SchemaProjectionCanNotBeNull()
-        {
-            var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(
-                () => sut.SchemaProjection = null);
-        }
-
-        [Test]
-        public void SchemaProjectionCanBeEmpty()
-        {
-            var sut = SutFactory();
-            Assert.DoesNotThrow(
-                () => sut.SchemaProjection = SqlProjection.Empty);
-        }
-
-        [Test]
-        public void SchemaProjectionCanBeNonEmpty()
-        {
-            var sut = SutFactory();
-            Assert.DoesNotThrow(
-                () => sut.SchemaProjection = new SqlProjection(
-                    new[]
-                    {
-                        new SqlProjectionHandler(
-                            typeof (object),
-                            _ => new SqlNonQueryCommand[0])
-                    }));
-        }
-
-        [Test]
-        public void SchemaProjectionEmptyIsPreserved()
-        {
-            var sut = SutFactory();
-            sut.SchemaProjection = SqlProjection.Empty;
-            var result = sut.SchemaProjection;
-            Assert.That(result, Is.SameAs(SqlProjection.Empty));
-        }
-
-        [Test]
-        public void SchemaProjectionIsPreserved()
-        {
-            var sut = SutFactory();
-            var projection = new SqlProjection(
-                new[]
-                {
-                    new SqlProjectionHandler(
-                        typeof (object),
-                        _ => new SqlNonQueryCommand[0])
-                });
-            sut.SchemaProjection = projection;
-            var result = sut.SchemaProjection;
-            Assert.That(result, Is.SameAs(projection));
-        }
-
-        [Test]
         public void ProjectionIsEmptyByDefault()
         {
             var sut = SutFactory();
@@ -162,23 +99,14 @@ namespace Projac.Tests
                         typeof (object),
                         _ => new SqlNonQueryCommand[0])
                 });
-            var schemaProjection = new SqlProjection(
-                new[]
-                {
-                    new SqlProjectionHandler(
-                        typeof (object),
-                        _ => new SqlNonQueryCommand[0])
-                });
             var sut = new SqlProjectionDescriptorBuilder("identifier", "v2")
             {
-                SchemaProjection = schemaProjection,
                 Projection = projection
             };
             var result = sut.Build();
             Assert.That(result, Is.InstanceOf<SqlProjectionDescriptor>());
             Assert.That(result.Identifier, Is.EqualTo("identifier"));
             Assert.That(result.Version, Is.EqualTo("v2"));
-            Assert.That(result.SchemaProjection, Is.SameAs(schemaProjection));
             Assert.That(result.Projection, Is.SameAs(projection));
         }
 

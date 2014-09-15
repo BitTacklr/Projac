@@ -12,6 +12,7 @@ using NEventStore.Persistence;
 using Paramol.Executors;
 using Paramol.SqlClient;
 using Projac;
+using Projac.Messages;
 using Usage.Framework;
 using Usage.SystemMessages;
 
@@ -34,7 +35,7 @@ namespace Usage
                     {
                         Id = TSql.Binary(_.Identifier.ToMD5Hash(), 16),
                         Identifier = TSql.NVarCharMax(_.Identifier),
-                        Version = TSql.NVarCharMax(_.Version),
+                        Version = TSql.NVarCharMax(_.CreateVersion),
                         Checkpoint = TSql.BigInt(Checkpoint.None)
                     })).
             When<RebuildProjection>(_ =>
@@ -44,7 +45,7 @@ namespace Usage
                     new
                     {
                         Id = TSql.Binary(_.Identifier.ToMD5Hash(), 16),
-                        Version = TSql.NVarCharMax(_.NewVersion),
+                        Version = TSql.NVarCharMax(_.CreateVersion),
                         Checkpoint = TSql.BigInt(Checkpoint.None)
                     })).
             When<SetProjectionCheckpoint>(_ =>
@@ -77,6 +78,8 @@ namespace Usage
 
         private void InitializeHostSchema()
         {
+
+            //SqlClient specific
             new SqlCommandExecutor(_settings).
                 ExecuteNonQuery(
                     TSql.NonQueryStatement(
@@ -100,6 +103,7 @@ END"));
             {
                 var storedDescriptor = queryExecutor.
                     ExecuteReader(
+                        //SqlClient specific
                         TSql.QueryStatementFormat(
                             @"SELECT [Identifier], [Version], [Checkpoint] FROM [dbo].[Projac] WHERE [Id] = {0}",
                             TSql.Binary(descriptor.Identifier.ToMD5Hash(), 16))).
@@ -111,7 +115,7 @@ END"));
                     if (storedDescriptor.Version != descriptor.Version)
                     {
                         //Rebuild
-                        new SqlProjector(descriptor.SchemaProjection.Concat(HostProjection), nonQueryExecutor).
+                        new SqlProjector(descriptor.Projection.Concat(HostProjection), nonQueryExecutor).
                             Project(
                                 new RebuildProjection(
                                     descriptor.Identifier,
@@ -122,7 +126,7 @@ END"));
                 else
                 {
                     //Build
-                    new SqlProjector(descriptor.SchemaProjection.Concat(HostProjection), nonQueryExecutor).
+                    new SqlProjector(descriptor.Projection.Concat(HostProjection), nonQueryExecutor).
                         Project(
                             new BuildProjection(
                                 descriptor.Identifier,

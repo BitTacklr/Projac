@@ -9,7 +9,6 @@ namespace Projac
     {
         private readonly string _identifier;
         private readonly string _version;
-        private SqlProjection _schemaProjection;
         private SqlProjection _projection;
 
         /// <summary>
@@ -24,8 +23,20 @@ namespace Projac
             if (version == null) throw new ArgumentNullException("version");
             _identifier = identifier;
             _version = version;
-            _schemaProjection = SqlProjection.Empty;
             _projection = SqlProjection.Empty;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SqlProjectionDescriptorBuilder"/> class.
+        /// </summary>
+        /// <param name="descriptor">The projection descriptor.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="descriptor"/> is <c>null</c>.</exception>
+        public SqlProjectionDescriptorBuilder(SqlProjectionDescriptor descriptor)
+        {
+            if (descriptor == null) throw new ArgumentNullException("descriptor");
+            _identifier = descriptor.Identifier;
+            _version = descriptor.Version;
+            _projection = descriptor.Projection;
         }
 
         /// <summary>
@@ -51,23 +62,6 @@ namespace Projac
         }
 
         /// <summary>
-        /// Gets or sets the schema projection.
-        /// </summary>
-        /// <value>
-        /// The schema projection.
-        /// </value>
-        public SqlProjection SchemaProjection
-        {
-            get { return _schemaProjection; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-                _schemaProjection = value;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the projection.
         /// </summary>
         /// <value>
@@ -90,7 +84,7 @@ namespace Projac
         /// <returns>A <see cref="SqlProjectionDescriptor"/>.</returns>
         public SqlProjectionDescriptor Build()
         {
-            return new SqlProjectionDescriptor(Identifier, Version, SchemaProjection, Projection);
+            return new SqlProjectionDescriptor(Identifier, Version, Projection);
         }
     }
 }

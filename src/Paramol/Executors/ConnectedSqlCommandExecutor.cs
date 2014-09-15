@@ -203,6 +203,68 @@ namespace Paramol.Executors
         }
 
         /// <summary>
+        ///     Executes the specified command.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <returns>A <see cref="object">scalar value</see>.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="command" /> is <c>null</c>.</exception>
+        public object ExecuteScalar(SqlQueryCommand command)
+        {
+            if (command == null)
+                throw new ArgumentNullException("command");
+
+            using (var dbCommand = _dbConnection.CreateCommand())
+            {
+                dbCommand.Connection = _dbConnection;
+                dbCommand.CommandTimeout = _commandTimeout;
+
+                dbCommand.CommandType = command.Type;
+                dbCommand.CommandText = command.Text;
+                dbCommand.Parameters.AddRange(command.Parameters);
+                return dbCommand.ExecuteScalar();
+            }
+        }
+
+        /// <summary>
+        ///     Executes the specified command asynchronously.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <returns>
+        ///     A <see cref="Task" /> that will return a <see cref="object">scalar value</see>.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="command" /> is <c>null</c>.</exception>
+        public Task<object> ExecuteScalarAsync(SqlQueryCommand command)
+        {
+            return ExecuteScalarAsync(command, CancellationToken.None);
+        }
+
+        /// <summary>
+        ///     Executes the specified command asynchronously.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        ///     A <see cref="Task" /> that will return a <see cref="object">scalar value</see>.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="command" /> is <c>null</c>.</exception>
+        public Task<object> ExecuteScalarAsync(SqlQueryCommand command, CancellationToken cancellationToken)
+        {
+            if (command == null)
+                throw new ArgumentNullException("command");
+
+            using (var dbCommand = _dbConnection.CreateCommand())
+            {
+                dbCommand.Connection = _dbConnection;
+                dbCommand.CommandTimeout = _commandTimeout;
+
+                dbCommand.CommandType = command.Type;
+                dbCommand.CommandText = command.Text;
+                dbCommand.Parameters.AddRange(command.Parameters);
+                return dbCommand.ExecuteScalarAsync(cancellationToken);
+            }
+        }
+
+        /// <summary>
         ///     Executes the specified command asynchronously.
         /// </summary>
         /// <param name="command">The command.</param>

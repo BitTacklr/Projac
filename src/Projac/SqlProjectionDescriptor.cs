@@ -9,7 +9,6 @@ namespace Projac
     {
         private readonly string _identifier;
         private readonly string _version;
-        private readonly SqlProjection _schemaProjection;
         private readonly SqlProjection _projection;
 
         /// <summary>
@@ -17,18 +16,15 @@ namespace Projac
         /// </summary>
         /// <param name="identifier">The projection identifier.</param>
         /// <param name="version">The projection version.</param>
-        /// <param name="schemaProjection">The schema projection.</param>
         /// <param name="projection">The projection.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/>, <paramref name="version"/>, <paramref name="schemaProjection"/> or <paramref name="projection"/> is <c>null</c>.</exception>
-        public SqlProjectionDescriptor(string identifier, string version, SqlProjection schemaProjection, SqlProjection projection)
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/>, <paramref name="version"/> or <paramref name="projection"/> is <c>null</c>.</exception>
+        public SqlProjectionDescriptor(string identifier, string version, SqlProjection projection)
         {
             if (identifier == null) throw new ArgumentNullException("identifier");
             if (version == null) throw new ArgumentNullException("version");
-            if (schemaProjection == null) throw new ArgumentNullException("schemaProjection");
             if (projection == null) throw new ArgumentNullException("projection");
             _identifier = identifier;
             _version = version;
-            _schemaProjection = schemaProjection;
             _projection = projection;
         }
 
@@ -55,17 +51,6 @@ namespace Projac
         }
 
         /// <summary>
-        /// Gets the schema projection.
-        /// </summary>
-        /// <value>
-        /// The schema projection.
-        /// </value>
-        public SqlProjection SchemaProjection
-        {
-            get { return _schemaProjection; }
-        }
-
-        /// <summary>
         /// Gets the projection.
         /// </summary>
         /// <value>
@@ -74,6 +59,15 @@ namespace Projac
         public SqlProjection Projection
         {
             get { return _projection; }
+        }
+
+        /// <summary>
+        /// Creates a <see cref="SqlProjectionDescriptorBuilder"/> based on this descriptor.
+        /// </summary>
+        /// <returns>A <see cref="SqlProjectionDescriptorBuilder"/>.</returns>
+        public SqlProjectionDescriptorBuilder ToBuilder()
+        {
+            return new SqlProjectionDescriptorBuilder(this);
         }
     }
 }

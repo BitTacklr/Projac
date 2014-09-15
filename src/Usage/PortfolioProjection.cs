@@ -1,22 +1,19 @@
 ﻿using Paramol;
 using Paramol.SqlClient;
 using Projac;
+using Projac.Messages;
 using Usage.Messages;
-using Usage.SystemMessages;
 
 namespace Usage
 {
     public static class PortfolioProjection
     {
         public static readonly SqlProjectionDescriptor Descriptor =
-            new SqlProjectionDescriptorBuilder("photo:Portfolio", "v1")
+            new SqlProjectionDescriptorBuilder("photo:Portfolio", "v2")
             {
-                SchemaProjection = new SqlProjectionBuilder().
+                Projection = new SqlProjectionBuilder().
                     When<BuildProjection>(_ => CreateTable()).
                     When<RebuildProjection>(_ => TSql.Compose(DropTableIfExists(), CreateTable())).
-                    Build(),
-
-                Projection = new SqlProjectionBuilder().
                     When<PortfolioAdded>(@event =>
                         TSql.NonQueryStatement(
                             "INSERT INTO [Portfolio] ([Id], [Name], [PhotoCount]) VALUES (@P1, @P2, 0)",

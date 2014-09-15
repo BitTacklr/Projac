@@ -103,7 +103,6 @@ namespace Projac
                     ToArray());
         }
 
-
         /// <summary>
         ///     Builds a projection specification based on the handlers collected by this builder.
         /// </summary>

@@ -113,6 +113,30 @@ namespace Paramol.Tests.Executors
                 async () => await sut.ExecuteReaderAsync(null, CancellationToken.None));
         }
 
+        [Test]
+        public void ExecuteScalarCommandCanNotBeNull()
+        {
+            var sut = SutFactory();
+            Assert.Throws<ArgumentNullException>(
+                () => sut.ExecuteScalar(null));
+        }
+
+        [Test]
+        public void ExecuteScalarAsyncCommandCanNotBeNull()
+        {
+            var sut = SutFactory();
+            Assert.Throws<ArgumentNullException>(
+                async () => await sut.ExecuteScalarAsync(null));
+        }
+
+        [Test]
+        public void ExecuteScalarAsyncTokenCommandsCanNotBeNull()
+        {
+            var sut = SutFactory();
+            Assert.Throws<ArgumentNullException>(
+                async () => await sut.ExecuteScalarAsync(null, CancellationToken.None));
+        }
+
         private static ConnectedSqlCommandExecutor SutFactory()
         {
             var connection = new TestDbConnection();

@@ -130,6 +130,36 @@ namespace Projac.Tests
         }
 
         [Test]
+        public void EmptyToBuilderReturnsExpectedResult()
+        {
+            var sut = SqlProjection.Empty;
+            
+            var result = sut.ToBuilder().Build().Handlers;
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void ToBuilderReturnsExpectedResult()
+        {
+            var handler1 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
+            var handler2 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
+            var sut = new SqlProjection(new[]
+            {
+                handler1,
+                handler2
+            });
+
+            var result = sut.ToBuilder().Build().Handlers;
+
+            Assert.That(result, Is.EquivalentTo(new[]
+            {
+                handler1,
+                handler2
+            }));
+        }
+
+        [Test]
         public void ImplicitConversionToSqlProjectionHandlerArray()
         {
             var handler1 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);

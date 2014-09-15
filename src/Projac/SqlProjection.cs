@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Projac
 {
@@ -82,6 +81,15 @@ namespace Projac
             Handlers.CopyTo(concatenated, 0);
             handlers.CopyTo(concatenated, Handlers.Length);
             return new SqlProjection(concatenated);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="SqlProjectionBuilder"/> based on the handlers of this projection.
+        /// </summary>
+        /// <returns>A <see cref="SqlProjectionBuilder"/>.</returns>
+        public SqlProjectionBuilder ToBuilder()
+        {
+            return new SqlProjectionBuilder(this);
         }
 
         /// <summary>
