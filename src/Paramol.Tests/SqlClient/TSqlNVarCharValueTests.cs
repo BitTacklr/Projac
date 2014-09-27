@@ -33,7 +33,7 @@ namespace Paramol.Tests.SqlClient
 
             var result = sut.ToDbParameter(parameterName);
 
-            result.ExpectSqlParameter(parameterName, SqlDbType.VarChar, value, false, 123);
+            result.ExpectSqlParameter(parameterName, SqlDbType.NVarChar, value, false, 123);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace Paramol.Tests.SqlClient
 
             var result = sut.ToSqlParameter(parameterName);
 
-            result.ExpectSqlParameter(parameterName, SqlDbType.VarChar, value, false, 123);
+            result.ExpectSqlParameter(parameterName, SqlDbType.NVarChar, value, false, 123);
         }
 
         [Test]

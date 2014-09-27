@@ -50,7 +50,7 @@ namespace Paramol.SqlClient
         {
             return new SqlParameter(
                 parameterName,
-                SqlDbType.VarChar,
+                SqlDbType.NVarChar,
                 _size,
                 ParameterDirection.Input,
                 false,

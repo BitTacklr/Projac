@@ -11,12 +11,7 @@
     <description>Paramol provides lightweight infrastructure for producing SQL DML statements.</description>
     <projectUrl>https://github.com/yreynhout/Paramol</projectUrl>
     <releaseNotes>Changes: 
-- SqlProjectionDescriptor no longer contains SchemaProjection, use the built-in messages (RebuildProjection, BuildProjection, ReplayProjection) instead on the regular projection.
-- SqlProjection/-Descriptor can now roundtrip to their respective Builders.
-- Executors moved into their own namespace, reduced the number of types to 1 per datasource connection model, made names more explicit to avoid collision.
-- Added execution of queries with support for DbDataReader and scalars.
-- Added ability to concatenate projections, handler or set of handlers to an existing projection.
-- Async-/SqlProjector now take an enumeration of messages to project as well.</releaseNotes>
+- Fix bug where TSql.NChar/NVarChar would output Char/VarChar parameter types instead of NChar/NVarChar parameter types.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
   </metadata>
