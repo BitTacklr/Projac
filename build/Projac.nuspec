@@ -11,22 +11,17 @@
     <description>Projac provides lightweight infrastructure for producing SQL based projections.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
     <releaseNotes>Changes: 
-- SqlProjectionDescriptor/-Builder now use SchemaProjection instead of DataDefinitionStatements
-- SqlProjectionBuilder can now decorate an existing projection, just pass it into the ctor
-- Added support for invoking stored procedures using QueryProcedure* and NonQueryProcedure*
-- Renamed Query* to QueryStatement*
-- Renamed NonQuery* to NonQueryStatement*
-- Moved from SqlQueryStatement to SqlQueryCommand (supporting stored procedures)
-- Moved from SqlNonQueryStatement to SqlNonQueryCommand (supporting stored procedures)
-- Executors now use the command type from SqlNon/-QueryCommand
-- ParameterCount limit now moved to TSql syntax
-- Dropped F# support
-- Moved nomenclature from "event" to "message" (relaxes how projections can be used)</releaseNotes>
+- SqlProjectionDescriptor no longer contains SchemaProjection, use the built-in messages (RebuildProjection, BuildProjection, ReplayProjection) instead on the regular projection.
+- SqlProjection/-Descriptor can now roundtrip to their respective Builders.
+- Executors moved into their own namespace, reduced the number of types to 1 per datasource connection model, made names more explicit to avoid collision.
+- Added execution of queries with support for DbDataReader and scalars.
+- Added ability to concatenate projections, handler or set of handlers to an existing projection.
+- Async-/SqlProjector now take an enumeration of messages to project as well.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Paramol" version="0.0.93" />
+        <dependency id="Paramol" version="0.0.95" />
       </group>
     </dependencies>
   </metadata>
@@ -35,6 +30,7 @@
     <file src="output\csharp\Projac.pdb" target="lib\net45\Projac.pdb" />
     <file src="output\csharp\Projac.xml" target="lib\net45\Projac.xml" />
     <file src="..\src\Projac\*.cs" target="src\Projac" />
+    <file src="..\src\Projac\Messages\*.cs" target="src\Projac\Messages" />
     <file src="..\src\Projac\Properties\*.cs" target="src\Projac\Properties" />
   </files>
 </package>
