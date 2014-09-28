@@ -69,7 +69,7 @@ There are also methods that allow you to conditionally emit commands. Look for m
 
 # Authoring projections
 
-## The "Handler" Style
+## The Handler Style
 
 With this approach, you're implementing an IHandle (or similar - not part of this library in any case) on a projection class for each message that projection is interested in. There's a number of ways this can work.
 
