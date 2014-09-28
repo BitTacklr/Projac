@@ -1,8 +1,8 @@
 using System;
 
-namespace Usage.Messages
+namespace Recipes.Shared
 {
-    public class PortfolioRenamed
+    public class PortfolioAdded
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

@@ -51,13 +51,8 @@
     </Compile>
     <Compile Include="AsyncSqlProjectorTests.cs" />
     <Compile Include="Framework\SqlNonQueryCommandStub.cs" />
-    <Compile Include="Messages\BuildProjectionTests.cs" />
-    <Compile Include="Messages\RebuildProjectionTests.cs" />
-    <Compile Include="Messages\ReplayProjectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlProjectionBuilderTests.cs" />
-    <Compile Include="SqlProjectionDescriptorBuilderTests.cs" />
-    <Compile Include="SqlProjectionDescriptorTests.cs" />
     <Compile Include="SqlProjectionHandlerTests.cs" />
     <Compile Include="SqlProjectionTests.cs" />
     <Compile Include="SqlProjectorTests.cs" />

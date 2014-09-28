@@ -1,6 +1,6 @@
 using System;
 
-namespace Usage.Messages
+namespace Recipes.Shared
 {
     public class PortfolioRemoved
     {
