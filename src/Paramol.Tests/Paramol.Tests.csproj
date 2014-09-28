@@ -70,11 +70,14 @@
     <Compile Include="SqlClient\TSqlCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlCharValueTests.cs" />
+    <Compile Include="SqlClient\TSqlDateTimeNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlDateTimeOffsetNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlDateTimeOffsetValueTests.cs" />
     <Compile Include="SqlClient\TSqlDateTimeValueTests.cs" />
     <Compile Include="SqlClient\TSqlIntNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlIntValueTests.cs" />
+    <Compile Include="SqlClient\TSqlMoneyNullValueTests.cs" />
+    <Compile Include="SqlClient\TSqlMoneyValueTests.cs" />
     <Compile Include="SqlClient\TSqlNCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlNCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlNCharValueTests.cs" />

@@ -167,6 +167,21 @@ namespace Paramol.SqlClient
         }
 
         /// <summary>
+        ///     Returns a DATETIME parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="IDbParameterValue" />.</returns>
+        public static IDbParameterValue DateTime(DateTime? value)
+        {
+            if (!value.HasValue)
+            {
+                return TSqlDateTimeNullValue.Instance;
+            }
+
+            return new TSqlDateTimeValue(value.Value);
+        }
+
+        /// <summary>
         ///     Returns a DATETIMEOFFSET parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
@@ -176,6 +191,21 @@ namespace Paramol.SqlClient
             if (!value.HasValue)
                 return TSqlDateTimeOffsetNullValue.Instance;
             return new TSqlDateTimeOffsetValue(value.Value);
+        }
+
+        /// <summary>
+        ///     Returns a MONEY parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="IDbParameterValue" />.</returns>
+        public static IDbParameterValue Money(decimal? value)
+        {
+            if (!value.HasValue)
+            {
+                return TSqlMoneyNullValue.Instance;
+            }
+
+            return new TSqlMoneyValue(value.Value);
         }
     }
 }
