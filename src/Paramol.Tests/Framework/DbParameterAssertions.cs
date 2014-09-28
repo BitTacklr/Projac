@@ -19,7 +19,7 @@ namespace Paramol.Tests.Framework
             Assert.That(parameter, Is.Not.Null);
             Assert.That(parameter, Is.InstanceOf<SqlParameter>());
             
-            ((SqlParameter)parameter).ExpectSqlParameter(name, sqlDbType, value, nullable, size, scale);
+            ((SqlParameter)parameter).ExpectSqlParameter(name, sqlDbType, value, nullable, size, precision, scale);
         }
 
         public static void ExpectSqlParameter(this SqlParameter parameter,
