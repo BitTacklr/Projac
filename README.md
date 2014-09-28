@@ -1,12 +1,14 @@
 # Projac & Paramol
 
-Projac provides a set of simple abstractions that allow one to write projections targeting relational databases (only support for Microsoft SQL Server at this point). It doesn't shove any ```IEventHandler<T>```, ```IHandle<T>```, or ```IMessageHandler<T>``` down your throat. Use your own or the ones provided by the framework you're integrating with. Paramol provides abstractions to capture the essence of statements to send to a relational database, along with a fluent syntax to author them (only support for Microsoft SQL Server at this point).
+Projac provides a set of simple abstractions that allow one to write projections targeting relational databases. It doesn't shove any ```IEventHandler<T>```, ```IHandle<T>```, or ```IMessageHandler<T>``` down your throat. Use your own or the ones provided by the framework you're integrating with, or use the declarative style. Paramol provides abstractions to capture the essence of statements to send to a relational database, along with a fluent syntax to author them. At this point in time only Microsoft SQL Server is supported. You're free to contribute a typed syntax for other relational databases.
 
-It's on NuGet already: [CSharp version](https://www.nuget.org/packages/Projac/))
+It's on NuGet already: [Projac](https://www.nuget.org/packages/Projac/) - [Paramol](https://www.nuget.org/packages/Paramol/)
+
+# Basics
 
 ## SqlNonQueryCommand & SqlQueryCommand
 
-Abstracts the text and the parameters to be sent to the database. Both non-query (INSERT, UPDATE, DELETE) and query (SELECT) text statements/procedures are supported, but as a word of advice, you should generally bias towards non-query statements, since they're the only ones that make sense for writing projections that perform well.
+Abstracts the text and the parameters to be sent to the database. Both non-query (INSERT, UPDATE, DELETE) and query (SELECT) text statements/procedures are supported, but as a word of advice, you should generally bias towards the non-query ones, since they're the only ones that make sense for writing projections that perform well. They use the ``System.Data.Common`` types such that the command execution code is - in theory - reusable across various ``ADO.NET providers``.
 
 ## TSql
 
@@ -29,69 +31,47 @@ TSql.NonQueryStatementFormat(
   TSql.Int(message.Id), TSql.VarChar(message.Value, 40));
 ```
 
-## Declarative Projections
-
-Syntactic sugar to allow you to specify projections without the need for a dedicated class. The code should speak for itself, but does require some playing around with. Mind you, only non query SQL statements are supported (pit of success and all that).
+Composition plays a big role and can be accessed using the ``TSql.Compose`` method.
 
 ```csharp
-var projection =
-  new SqlProjectionBuilder().
-    When<PortfolioAdded>(@event =>
-      TSql.NonQueryStatement(
-        "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
-        new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
-    )).
-    When<PortfolioRemoved>(@event =>
-      TSql.NonQueryStatement(
-        "DELETE FROM [Portfolio] WHERE Id = @P1",
-        new { P1 = TSql.Int(@event.Id) }
-    )).
-    When<PortfolioRenamed>(@event =>
-      TSql.NonQueryStatement(
-        "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
-        new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
-    )).
-    Build();
-```
+TSql.Compose(DropSchema()).Compose(CreateSchema());
 
-How and when you decide to execute the projection specification is still left as an exercise to you. Typically, you'll turn the handlers into a map where you can lookup the handler based on the type of event to be handled. Familiarity with plain old ADO.NET is assumed. You can take a look at the ```TSqlNonQueryStatementFlusher``` (in the tests under Usage) to get an idea of how to flush the resulting statements.
-
-## Projection Descriptor
-
-Next to the actual projection, you'll want to somehow identify the projection. A name and/or version or a date and time. It's just a piece of string. SchemaProjection describes the schema of the current projection as a bunch of ``SqlNonQueryStatements``, e.g. drop any database objects pertaining to previous versions of the projection and create any new database objects pertaining to the *current* version. Note that schema projection is entirely optional, under your control and omit any form of handholding (unlike traditional database schema migration tooling). What's the motivation behind this? Traditionally one would manage the database object schema *on-the-side* using a database project (or an equivalent there of). Yet this is counter to the idea of treating projections as individual units. As such you should see this as an attempt to bring what is usually separated closer together. 
-
-```csharp
-public static class PortfolioProjection
+SqlNonQueryCommand[] DropSchema() 
 {
-  public static readonly SqlProjectionDescriptor Descriptor =
-    new SqlProjectionDescriptorBuilder("portfolio-v1")
-    {
-      SchemaProjection = new SqlProjectionBuilder().
-          ...,
-      Projection = new SqlProjectionBuilder().
-          When<PortfolioAdded>(@event =>
-              TSql.NonQuery(
-                  "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
-                  new {P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40)}
-                  )).
-          When<PortfolioRemoved>(@event =>
-              TSql.NonQuery(
-                  "DELETE FROM [Portfolio] WHERE Id = @P1",
-                  new {P1 = TSql.Int(@event.Id)}
-                  )).
-          When<PortfolioRenamed>(@event =>
-              TSql.NonQuery(
-                  "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
-                  new {P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40)}
-                  )).
-          Build()
-    }.
-    Build();
+  return TSql.
+	Compose(
+		TSql.NonQueryStatement("DROP TABLE [Room]")).
+	Compose(
+		TSql.NonQueryStatement("DROP TABLE [RoomWardCache]"));
+}
+
+SqlNonQueryCommand[] CreateSchema() 
+{
+  return TSql.
+	Compose(
+		TSql.NonQueryStatement(
+@"CREATE TABLE [Room] (
+  [RoomId] INT NOT NULL CONSTRAINT PK_Room PRIMARY KEY,
+  [Name] NVARCHAR(MAX) NOT NULL,
+  [WardId] INT NOT NULL,
+  [WardName] NVARCHAR(MAX) NOT NULL
+)")).
+	Compose(
+		TSql.NonQueryStatement(
+@"CREATE TABLE [RoomWardCache] (
+  [WardId] INT NOT NULL CONSTRAINT PK_RoomWardCache PRIMARY KEY,
+  [Name] NVARCHAR(MAX) NOT NULL
+)"));
 }
 ```
-## Projection Handler
 
-Your projection handlers should either accept an ```IObserver<SqlNonQueryStatement>``` to push their SQL statements on or the projection handling methods should return ```IEnumerable<SqlNonQueryStatement>```. This is not something that is part of the library. This is your code and optionally the framework you depend upon. The declarative projection syntax above only supports the ```Enumerable``` approach.
+There are also methods that allow you to conditionally emit commands. Look for methods with ``-If`` and ``-Unless`` suffix.
+
+# Authoring projections
+
+## The "Handler" Style
+
+With this approach, you're implementing an IHandle (or similar - not part of this library in any case) on a projection class for each message that projection is interested in. There's a number of ways this can work.
 
 ```csharp
 // Observable approach - void IHandle.Handle(TMessage message)
@@ -128,7 +108,11 @@ public class PortfolioListProjectionHandler :
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }));
   }
 }
+```
 
+Here, your projection handlers should accept an ```IObserver<SqlNonQueryStatement>``` to push their SQL statements on. It's up to you to decide when it's appropriate to flush the observed statements.
+
+```csharp
 // Enumerable approach - IEnumerable<SqlNonQueryStatement> IHandle.Handle(TMessage message)
 
 public class PortfolioListProjectionHandler : 
@@ -159,3 +143,43 @@ public class PortfolioListProjectionHandler :
 }
 
 ```
+
+Here, the projection handling methods return ```IEnumerable<SqlNonQueryStatement>```. Again, how you collect these statements and flush them to the underlying store is up to you.
+
+## The Declarative Style
+
+This approach sports syntactic sugar to allow you to specify projections without the need for an IHandle interface nor a dedicated class. The code should speak for itself, but does require some playing around with, especially if multiple statements need to be emitted. Mind you, only non query SQL statements are supported.
+
+```csharp
+var projection =
+  new SqlProjectionBuilder().
+    When<PortfolioAdded>(@event =>
+      TSql.NonQueryStatement(
+        "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
+        new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
+    )).
+    When<PortfolioRemoved>(@event =>
+      TSql.NonQueryStatement(
+        "DELETE FROM [Portfolio] WHERE Id = @P1",
+        new { P1 = TSql.Int(@event.Id) }
+    )).
+    When<PortfolioRenamed>(@event =>
+      TSql.NonQueryStatement(
+        "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
+        new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
+    )).
+    Build();
+```
+
+# Executing projections
+
+How and when you decide to execute the projections is still left as an exercise to you. Typically the will sit behind a message subscription that pushes the appropriate messages into them, causing sql commands to be emitted as a side effect. Once these sql commands have been captured you can use one of the built-in executors to execute them (Paramol). If on the other hand, you've authored your projections using the declarative style, then Projac offers a higher level of abstraction called the Async-/SqlProjector.
+
+You'll notice that projections don't know anything about the execution. This is deliberate, allowing you to decide when and how to flush commands to the relational database.
+
+# FAQ
+
+## Do I need Projac or Paramol?
+
+It's safe to say that Projac is all about the declarative style while Paramol is all about sql syntax and execution of sql commands. So, if you're not using the declarative style, Paramol should be enough.
+
