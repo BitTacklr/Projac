@@ -173,7 +173,7 @@ var projection =
 
 # Executing projections
 
-How and when you decide to execute the projections is still left as an exercise to you. Typically the will sit behind a message subscription that pushes the appropriate messages into them, causing sql commands to be emitted as a side effect. Once these sql commands have been captured you can use one of the built-in executors to execute them (Paramol). If on the other hand, you've authored your projections using the declarative style, then Projac offers a higher level of abstraction called the Async-/SqlProjector.
+How and when you decide to execute the projections is still left as an exercise to you. Typically they will sit behind a message subscription that pushes the appropriate messages into them, causing sql commands to be emitted as a side effect. Once these sql commands have been captured you can use one of the built-in executors to execute them (Paramol). If on the other hand, you've authored your projections using the declarative style, then Projac offers a higher level of abstraction called the Async-/SqlProjector.
 
 You'll notice that projections don't know anything about the execution. This is deliberate, allowing you to decide when and how to flush commands to the relational database.
 
