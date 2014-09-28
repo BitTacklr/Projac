@@ -70,6 +70,7 @@
     <Compile Include="SqlClient\TSqlCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlCharValueTests.cs" />
+    <Compile Include="SqlClient\TSqlDateTimeNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlDateTimeOffsetNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlDateTimeOffsetValueTests.cs" />
     <Compile Include="SqlClient\TSqlDateTimeValueTests.cs" />

@@ -167,6 +167,21 @@ namespace Paramol.SqlClient
         }
 
         /// <summary>
+        ///     Returns a DATETIME parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="IDbParameterValue" />.</returns>
+        public static IDbParameterValue DateTime(DateTime? value)
+        {
+            if (!value.HasValue)
+            {
+                return TSqlDateTimeNullValue.Instance;
+            }
+
+            return new TSqlDateTimeValue(value.Value);
+        }
+
+        /// <summary>
         ///     Returns a DATETIMEOFFSET parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
