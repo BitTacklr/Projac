@@ -79,6 +79,8 @@
     <Compile Include="SqlClient\TSqlDateTimeValue.cs" />
     <Compile Include="SqlClient\TSqlIntNullValue.cs" />
     <Compile Include="SqlClient\TSqlIntValue.cs" />
+    <Compile Include="SqlClient\TSqlMoneyNullValue.cs" />
+    <Compile Include="SqlClient\TSqlMoneyValue.cs" />
     <Compile Include="SqlClient\TSqlNCharNullValue.cs" />
     <Compile Include="SqlClient\TSqlNCharSize.cs" />
     <Compile Include="SqlClient\TSqlNCharValue.cs" />
