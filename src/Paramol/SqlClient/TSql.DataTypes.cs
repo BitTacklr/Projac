@@ -182,6 +182,22 @@ namespace Paramol.SqlClient
         }
 
         /// <summary>
+        ///     Returns a DATETIME2 parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <param name="precision">The parameter precision.</param>
+        /// <returns>A <see cref="IDbParameterValue" />.</returns>
+        public static IDbParameterValue DateTime2(DateTime? value, TSqlDateTime2Precision precision)
+        {
+            if (!value.HasValue)
+            {
+                return new TSqlDateTime2NullValue(precision);
+            }
+
+            return new TSqlDateTime2Value(value.Value, precision);
+        }
+
+        /// <summary>
         ///     Returns a DATETIMEOFFSET parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
