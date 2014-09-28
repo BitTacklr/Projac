@@ -73,6 +73,7 @@
     <Compile Include="SqlClient\TSqlCharNullValue.cs" />
     <Compile Include="SqlClient\TSqlCharSize.cs" />
     <Compile Include="SqlClient\TSqlCharValue.cs" />
+    <Compile Include="SqlClient\TSqlDateTimeNullValue.cs" />
     <Compile Include="SqlClient\TSqlDateTimeOffsetNullValue.cs" />
     <Compile Include="SqlClient\TSqlDateTimeOffsetValue.cs" />
     <Compile Include="SqlClient\TSqlDateTimeValue.cs" />
