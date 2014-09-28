@@ -23,7 +23,7 @@ TSql.NonQueryStatement(
 * The parameters prefixed with the ```@``` defined in the text refer - by convention - to the properties defined in the parameter type. Properties are automatically prefixed with ```@``` during conversion.
 * Use the ```TSql.<DataTypeName>(...)``` methods to specify parameters. This allows for passing in just enough meta-data next to the actual value. The data types have a deliberate focus on the TSQL data types and not the .NET type system.
 
-Alternatively you can use a positional syntax, reminiscent of ODBC parameters, where parameter names will be auto assigned and formatted into the text. Don't thank me, thank @tojans for the suggestion.
+Alternatively you can use a positional syntax, reminiscent of ODBC parameters, where parameter names will be auto assigned and formatted into the text.
 
 ```csharp
 TSql.NonQueryStatementFormat(
@@ -182,4 +182,9 @@ You'll notice that projections don't know anything about the execution. This is 
 ## Do I need Projac or Paramol?
 
 It's safe to say that Projac is all about the declarative style while Paramol is all about sql syntax and execution of sql commands. So, if you're not using the declarative style, Paramol should be enough.
+
+# Contributions
+
+* DateTime, DateTime2, Money data types in TSql by [@xt0rted](https://github.com/xt0rted)
+* The ``positional syntax`` suggestion by [@tojans](https://github.com/tojans).
 
