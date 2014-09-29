@@ -25,7 +25,6 @@
     <file src="output\csharp\Projac.pdb" target="lib\net45\Projac.pdb" />
     <file src="output\csharp\Projac.xml" target="lib\net45\Projac.xml" />
     <file src="..\src\Projac\*.cs" target="src\Projac" />
-    <file src="..\src\Projac\Messages\*.cs" target="src\Projac\Messages" />
     <file src="..\src\Projac\Properties\*.cs" target="src\Projac\Properties" />
   </files>
 </package>
