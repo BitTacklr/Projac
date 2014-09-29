@@ -200,5 +200,17 @@ namespace Paramol.Tests.SqlClient
         {
             Assert.That(TSql.DateTimeOffset(null), Is.EqualTo(TSqlDateTimeOffsetNullValue.Instance));
         }
+
+        [Test]
+        public void MoneyReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Money(123.45M), Is.EqualTo(new TSqlMoneyValue(123.45M)));
+        }
+
+        [Test]
+        public void MoneyNullReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Money(null), Is.EqualTo(TSqlMoneyNullValue.Instance));
+        }
     }
 }
