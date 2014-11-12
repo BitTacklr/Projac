@@ -163,6 +163,19 @@ namespace Paramol.Tests.SqlClient
         }
 
         [Test]
+        public void DateReturnsExpectedInstance()
+        {
+            var value = DateTime.UtcNow;
+            Assert.That(TSql.Date(value), Is.EqualTo(new TSqlDateValue(value)));
+        }
+
+        [Test]
+        public void DateNullReturnsExpectedInstance()
+        {
+            Assert.That(TSql.Date(null), Is.EqualTo(TSqlDateNullValue.Instance));
+        }
+
+        [Test]
         public void DateTimeReturnsExpectedInstance()
         {
             var value = DateTime.UtcNow;
