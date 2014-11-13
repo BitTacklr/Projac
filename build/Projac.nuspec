@@ -11,12 +11,12 @@
     <description>Projac provides lightweight infrastructure for producing SQL based projections.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
     <releaseNotes>Changes: 
-- Fix bug where TSql.NChar/NVarChar would output Char/VarChar parameter types instead of NChar/NVarChar parameter types.</releaseNotes>
+- xt0rted added support for Date datatype.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Paramol" version="0.0.96" />
+        <dependency id="Paramol" version="0.0.103" />
       </group>
     </dependencies>
   </metadata>

@@ -11,7 +11,7 @@
     <description>Paramol provides lightweight infrastructure for producing SQL DML statements.</description>
     <projectUrl>https://github.com/yreynhout/Paramol</projectUrl>
     <releaseNotes>Changes: 
-- Fix bug where TSql.NChar/NVarChar would output Char/VarChar parameter types instead of NChar/NVarChar parameter types.</releaseNotes>
+- xt0rted added support for Date datatype.</releaseNotes>
     <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
   </metadata>

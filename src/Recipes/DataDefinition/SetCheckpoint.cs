@@ -1,7 +1,7 @@
 ﻿namespace Recipes.DataDefinition
 {
     /// <summary>
-    /// Instructs a projection to delete its data.
+    /// Instructs a projection to record its checkpoint.
     /// </summary>
     public class SetCheckpoint
     {
