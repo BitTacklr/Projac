@@ -89,21 +89,21 @@ public class PortfolioListProjectionHandler :
 
   public void Handle(PortfolioAdded @event) {
     statements.OnNext(
-      TSql.NonQuery(
+      TSql.NonQueryStatement(
         "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }));
   }
 
   public void Handle(PortfolioRemoved @event) {
     statements.OnNext(
-      TSql.NonQuery(
+      TSql.NonQueryStatement(
         "DELETE FROM [Portfolio] WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id) }));
   }
 
   public void Handle(PortfolioRenamed @event) {
     statements.OnNext(
-      TSql.NonQuery(
+      TSql.NonQueryStatement(
         "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }));
   }
@@ -122,21 +122,21 @@ public class PortfolioListProjectionHandler :
 
   public IEnumerable<SqlNonQueryStatement> Handle(PortfolioAdded @event) {
     yield return
-      TSql.NonQuery(
+      TSql.NonQueryStatement(
         "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) });
   }
 
   public IEnumerable<SqlNonQueryStatement> Handle(PortfolioRemoved @event) {
     yield return
-      TSql.NonQuery(
+      TSql.NonQueryStatement(
         "DELETE FROM [Portfolio] WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id) });
   }
 
   public IEnumerable<SqlNonQueryStatement> Handle(PortfolioRenamed @event) {
     yield return
-      TSql.NonQuery(
+      TSql.NonQueryStatement(
         "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) });
   }
@@ -185,6 +185,6 @@ It's safe to say that Projac is all about the declarative style while Paramol is
 
 # Contributions
 
-* DateTime, DateTime2, Money data types in TSql by [@xt0rted](https://github.com/xt0rted)
+* Date, DateTime, DateTime2, Money data types in TSql by [@xt0rted](https://github.com/xt0rted)
 * The ``positional syntax`` suggestion by [@tojans](https://github.com/tojans).
 
