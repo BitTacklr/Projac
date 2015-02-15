@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
+  <TopNode>[0-1258]Paramol.Tests.SqlClient.TSqlTests.DateTimeOffsetNullReturnsExpectedInstance</TopNode>
+  <SelectedNode>[0-1621]Paramol.Tests.Executors.SqlCommandExecutorTests</SelectedNode>
+  <ExcludeCategories>false</ExcludeCategories>
+  <Nodes>
+    <Node UniqueName="[0-1000]D:\GitHub\BitTacklr\Projac\src\Projac.nunit" Expanded="true" />
+    <Node UniqueName="[0-1856]D:\GitHub\BitTacklr\Projac\src\Paramol.Tests\bin\Debug\Paramol.Tests.dll" Expanded="true" />
+    <Node UniqueName="[0-1857]Paramol" Expanded="true" />
+    <Node UniqueName="[0-1858]Paramol.Tests" Expanded="true" />
+    <Node UniqueName="[0-1859]Paramol.Tests.Executors" Expanded="true" />
+    <Node UniqueName="[0-1001]Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests" Expanded="true" />
+    <Node UniqueName="[0-1860]Paramol.Tests.SqlClient" Expanded="true" />
+    <Node UniqueName="[0-1253]Paramol.Tests.SqlClient.TSqlTests" Expanded="true" />
+    <Node UniqueName="[0-1696]Paramol.Tests.SqlNonQueryCommandComposerTests" Expanded="true" />
+    <Node UniqueName="[0-1610]Paramol.Tests.SqlNonQueryCommandTests" Expanded="true" />
+    <Node UniqueName="[0-1685]Paramol.Tests.SqlQueryCommandTests" Expanded="true" />
+  </Nodes>
+</VisualState>

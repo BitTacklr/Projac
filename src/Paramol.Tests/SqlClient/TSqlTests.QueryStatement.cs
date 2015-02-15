@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using Paramol.SqlClient;
@@ -10,6 +12,29 @@ namespace Paramol.Tests.SqlClient
 {
     public partial class TSqlTests
     {
+        [Test]
+        public void QueryStatementParameterCollectorPerformance()
+        {
+            var random = new Random();
+            var watch = Stopwatch.StartNew();
+            var results = new List<long>();
+            const int collections = 10000;
+            for(var run = 0; run < collections; run++)
+            {
+                watch.Restart();
+                var _ = TSql.QueryStatement("text",
+                    new
+                    {
+                        P1 = TSql.UniqueIdentifier(Guid.NewGuid()),
+                        P2 = TSql.Int(random.Next()),
+                        P3 = "", // ignored
+                        P4 = 0 // ignored
+                    });
+                results.Add(watch.ElapsedTicks);
+            }
+            Assert.Pass("{0} collections took {1} ticks on average.", collections, results.Average());
+        }
+
         [TestCaseSource("QueryStatementCases")]
         public void QueryStatementReturnsExpectedInstance(SqlQueryCommand actual, SqlQueryCommand expected)
         {

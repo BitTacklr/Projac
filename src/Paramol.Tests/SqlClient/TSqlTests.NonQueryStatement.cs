@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Paramol.SqlClient;
@@ -10,6 +13,37 @@ namespace Paramol.Tests.SqlClient
 {
     public partial class TSqlTests
     {
+        [Test]
+        public void NonQueryStatementParameterCollectorPerformance()
+        {
+            var random = new Random();
+            var watch = Stopwatch.StartNew();
+            var results = new List<long>();
+            const int collections = 10000;
+            for (var run = 0; run < collections; run++)
+            {
+                watch.Restart();
+                var _ = TSql.NonQueryStatement("text",
+                    ParameterCountLimitMaxed.Instance);
+                    //new
+                    //{
+                    //    P1 = TSql.UniqueIdentifier(Guid.NewGuid()),
+                    //    P2 = TSql.Int(random.Next()),
+                    //    P3 = "", // ignored
+                    //    P4 = 0 // ignored
+                    //});
+                results.Add(watch.ElapsedTicks);
+            }
+
+            //File.WriteAllLines(@"D:\ExpressionRun.csv", results.Select(result => result.ToString()));
+
+            Assert.Fail("{0} collections took {1} ticks on average (first collection took {2} ticks).", 
+                collections - 1, 
+                results.Skip(1).Average(), results[0]);
+
+            
+        }
+
         [TestCaseSource("NonQueryStatementCases")]
         public void NonQueryStatementReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {

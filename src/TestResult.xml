@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="D:\GitHub\BitTacklr\Projac\src\Projac.nunit" total="17" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2015-02-11" time="20:43:03">
+  <environment nunit-version="2.6.4.14350" clr-version="2.0.50727.5485" os-version="Microsoft Windows NT 6.1.7601 Service Pack 1" platform="Win32NT" cwd="D:\NUnit-2.6.4\NUnit-2.6.4\bin" machine-name="SEAKING" user="Yves1975" user-domain="SEAKING" />
+  <culture-info current-culture="nl-BE" current-uiculture="nl-NL" />
+  <test-suite type="Project" name="D:\GitHub\BitTacklr\Projac\src\Projac.nunit" executed="True" result="Success" success="True" time="0.031" asserts="0">
+    <results>
+      <test-suite type="Assembly" name="D:\GitHub\BitTacklr\Projac\src\Paramol.Tests\bin\Debug\Paramol.Tests.dll" executed="True" result="Success" success="True" time="0.030" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="Paramol" executed="True" result="Success" success="True" time="0.030" asserts="0">
+            <results>
+              <test-suite type="Namespace" name="Tests" executed="True" result="Success" success="True" time="0.030" asserts="0">
+                <results>
+                  <test-suite type="Namespace" name="Executors" executed="True" result="Success" success="True" time="0.030" asserts="0">
+                    <results>
+                      <test-suite type="TestFixture" name="ConnectedSqlCommandExecutorTests" executed="True" result="Success" success="True" time="0.029" asserts="0">
+                        <results>
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ConnectionCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ConnectionMustBeOpen" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteNonQueryAsyncCommandCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteNonQueryAsyncTokenCommandCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteNonQueryCommandCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteNonQueryCommandsCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteReaderAsyncCommandCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteReaderAsyncTokenCommandsCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteReaderCommandCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteScalarAsyncCommandCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteScalarAsyncTokenCommandsCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.ExecuteScalarCommandCanNotBeNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.IsAsynchronousSqlNonQueryCommandExecutor" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.IsAsynchronousSqlQueryCommandExecutor" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.IsSynchronousSqlNonQueryCommandExecutor" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.IsSynchronousSqlQueryCommandExecutor" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="Paramol.Tests.Executors.ConnectedSqlCommandExecutorTests.OpenConnectionIsAccepted" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                        </results>
+                      </test-suite>
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

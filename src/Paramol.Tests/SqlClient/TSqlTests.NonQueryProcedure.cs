@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Paramol.SqlClient;
 using Paramol.Tests.Framework;
@@ -10,6 +15,43 @@ namespace Paramol.Tests.SqlClient
 {
     public partial class TSqlTests
     {
+        [Test]
+        public void NonQueryProcedureParameterCollectorPerformance()
+        {
+            var random = new Random();
+            //var watch = Stopwatch.StartNew();
+            var results = new ConcurrentBag<long>();
+            const int collections = 10000;
+            var result = Parallel.For(0, collections, operation =>
+            {
+                var watch = Stopwatch.StartNew();
+                var _ = TSql.NonQueryProcedure("text",
+                    new
+                    {
+                        P1 = TSql.UniqueIdentifier(Guid.NewGuid()),
+                        P2 = TSql.Int(random.Next()),
+                        P3 = "", // ignored
+                        P4 = 0 // ignored
+                    });
+                results.Add(watch.ElapsedTicks);
+            });
+            while(!result.IsCompleted) Thread.Sleep(100);
+            //for (var run = 0; run < collections; run++)
+            //{
+            //    watch.Restart();
+            //    var _ = TSql.NonQueryProcedure("text",
+            //        new
+            //        {
+            //            P1 = TSql.UniqueIdentifier(Guid.NewGuid()),
+            //            P2 = TSql.Int(random.Next()),
+            //            P3 = "", // ignored
+            //            P4 = 0 // ignored
+            //        });
+            //    results.Add(watch.ElapsedTicks);
+            //}
+            Assert.Pass("{0} collections took {1} ticks on average.", collections, results.Average());
+        }
+
         [TestCaseSource("NonQueryProcedureCases")]
         public void NonQueryProcedureReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
