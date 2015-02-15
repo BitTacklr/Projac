@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
 using EventStore.ClientAPI.SystemData;
@@ -88,6 +89,69 @@ namespace Recipes.EventStoreIntegration
                             Encoding.UTF8.GetString(@event.Event.Data),
                             Type.GetType(@event.Event.EventType, true))));
 
+            node.Stop();
+        }
+
+        [Test]
+        public async void ShowWithCatchupSubscription()
+        {
+            //setup a projection schema (one of many ways)
+            var projector = new SqlProjector(Instance.Handlers,
+                new TransactionalSqlCommandExecutor(
+                    new ConnectionStringSettings(
+                        "projac",
+                        @"Data Source=(localdb)\ProjectsV12;Initial Catalog=ProjacUsage;Integrated Security=SSPI;",
+                        "System.Data.SqlClient"),
+                    IsolationLevel.ReadCommitted));
+            projector.Project(new object[] { new DropSchema(), new CreateSchema() });
+
+            //setup an embedded eventstore
+            var node = EmbeddedVNodeBuilder.
+                AsSingleNode().
+                NoGossipOnPublicInterface().
+                NoStatsOnPublicInterface().
+                NoAdminOnPublicInterface().
+                OnDefaultEndpoints().
+                RunInMemory().
+                Build();
+            node.Start();
+
+            var connection = EmbeddedEventStoreConnection.Create(node);
+            await connection.ConnectAsync();
+
+            //setup a sample stream (using some sample events)
+            var portfolioId = Guid.NewGuid();
+            var events = new object[]
+            {
+                new PortfolioAdded {Id = portfolioId, Name = "My Portfolio"},
+                new PortfolioRenamed {Id = portfolioId, Name = "Your Portfolio"},
+                new PortfolioRemoved {Id = portfolioId}
+            };
+            var stream = string.Format("portfolio-{0}", portfolioId.ToString("N"));
+            var credentials = new UserCredentials("admin", "changeit");
+            await connection.AppendToStreamAsync(
+                stream,
+                ExpectedVersion.Any,
+                events.Select(@event => new EventData(
+                    Guid.NewGuid(),
+                    @event.GetType().FullName,
+                    true,
+                    Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event)),
+                    new byte[0])).ToArray(),
+                credentials);
+
+            //project the sample stream (until end of stream)
+            var subscription = connection.SubscribeToStreamFrom(stream, StreamPosition.Start, false, (_, @event) =>
+            {
+                projector.Project(
+                    JsonConvert.DeserializeObject(
+                        Encoding.UTF8.GetString(@event.Event.Data),
+                        Type.GetType(@event.Event.EventType, true)));
+            }, userCredentials: credentials);
+            //should complete within 5 seconds.
+            await Task.Delay(TimeSpan.FromSeconds(5));
+            subscription.Stop();
+            
             node.Stop();
         }
 
