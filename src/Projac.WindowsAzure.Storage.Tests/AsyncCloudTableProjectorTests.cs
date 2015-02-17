@@ -146,7 +146,7 @@ namespace Projac.WindowsAzure.Storage.Tests
                 }));
             }
 
-            [Test]
+            [Test, Repeat(10)]
             public async void ProjectManyAsyncHasExpectedResult()
             {
                 var message1 = new MatchMessage();
@@ -175,12 +175,22 @@ namespace Projac.WindowsAzure.Storage.Tests
                 {
                     message1,
                     new MismatchMessage(),
+                    message2,
+                    message1,
+                    new MismatchMessage(),
+                    message2,
+                    message1,
+                    new MismatchMessage(),
                     message2
                 };
                 
                 await _sut.ProjectAsync(_client, messages, source.Token);
                 Assert.That(_calls, Is.EquivalentTo(new[]
                 {
+                    new CloudTableProjectionHandlerCall(_client, message1, source.Token),
+                    new CloudTableProjectionHandlerCall(_client, message2, source.Token),
+                    new CloudTableProjectionHandlerCall(_client, message1, source.Token),
+                    new CloudTableProjectionHandlerCall(_client, message2, source.Token),
                     new CloudTableProjectionHandlerCall(_client, message1, source.Token),
                     new CloudTableProjectionHandlerCall(_client, message2, source.Token)
                 }));
