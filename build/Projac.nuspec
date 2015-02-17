@@ -10,13 +10,12 @@
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
     <description>Projac provides lightweight infrastructure for producing SQL based projections.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
-    <releaseNotes>Changes: 
-- xt0rted added support for Date datatype.</releaseNotes>
-    <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
+    <releaseNotes>None.</releaseNotes>
+    <copyright>Copyright 2015, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Paramol" version="0.0.103" />
+        <dependency id="Paramol" version="0.0.110" />
       </group>
     </dependencies>
   </metadata>

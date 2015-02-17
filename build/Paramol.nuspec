@@ -10,9 +10,8 @@
     <licenseUrl>https://raw.github.com/yreynhout/Paramol/master/LICENSE.txt</licenseUrl>
     <description>Paramol provides lightweight infrastructure for producing SQL DML statements.</description>
     <projectUrl>https://github.com/yreynhout/Paramol</projectUrl>
-    <releaseNotes>Changes: 
-- xt0rted added support for Date datatype.</releaseNotes>
-    <copyright>Copyright 2014, BitTacklr. All rights reserved.</copyright>
+    <releaseNotes>None.</releaseNotes>
+    <copyright>Copyright 2015, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
   </metadata>
   <files>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Projac.WindowsAzure.Storage</id>
+    <version>0.0.0</version>
+    <authors>Yves Reynhout</authors>
+    <owners>Yves Reynhout</owners>
+    <title>Projac.WindowsAzure.Storage</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
+    <description>Projac.WindowsAzure.Storage provides lightweight infrastructure for producing Windows Azure Table Storage based projections.</description>
+    <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2015, BitTacklr. All rights reserved.</copyright>
+    <tags>eventsourcing DDDesign</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="WindowsAzure.Storage" version="4.3.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="output\csharp\Projac.WindowsAzure.Storage.dll" target="lib\net45\Projac.WindowsAzure.Storage.dll" />
+    <file src="output\csharp\Projac.WindowsAzure.Storage.pdb" target="lib\net45\Projac.WindowsAzure.Storage.pdb" />
+    <file src="output\csharp\Projac.WindowsAzure.Storage.xml" target="lib\net45\Projac.WindowsAzure.Storage.xml" />
+    <file src="..\src\Projac.WindowsAzure.Storage\*.cs" target="src\Projac.WindowsAzure.Storage" />
+    <file src="..\src\Projac.WindowsAzure.Storage\Properties\*.cs" target="src\Projac.WindowsAzure.Storage\Properties" />
+  </files>
+</package>

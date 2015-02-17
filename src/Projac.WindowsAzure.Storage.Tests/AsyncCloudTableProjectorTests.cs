@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
@@ -28,28 +26,28 @@ namespace Projac.WindowsAzure.Storage.Tests
             public void HandlersCanNotBeNull()
             {
                 Assert.Throws<ArgumentNullException>(
-                    () => SutFactory(null));
+                    () => new AsyncCloudTableProjector(null));
             }
 
             [Test]
             public void ProjectAsync_ClientCanNotBeNull()
             {
                 var sut = SutFactory();
-                Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync(null, new object()));
+                Assert.Throws<ArgumentNullException>(async () => await sut.ProjectAsync(null, new object()));
             }
 
             [Test]
             public void ProjectAsync_MessageCanNotBeNull()
             {
                 var sut = SutFactory();
-                Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync(_client, (object) null));
+                Assert.Throws<ArgumentNullException>(async () => await sut.ProjectAsync(_client, (object) null));
             }
 
             [Test]
             public void ProjectAsyncToken_ClientCanNotBeNull()
             {
                 var sut = SutFactory();
-                Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync(null, new object(), CancellationToken.None));
+                Assert.Throws<ArgumentNullException>(async () => await sut.ProjectAsync(null, new object(), CancellationToken.None));
             }
 
             [Test]
@@ -57,28 +55,28 @@ namespace Projac.WindowsAzure.Storage.Tests
             {
                 var sut = SutFactory();
                 Assert.Throws<ArgumentNullException>(
-                    () => sut.ProjectAsync(_client, (object) null, CancellationToken.None));
+                    async () => await sut.ProjectAsync(_client, (object) null, CancellationToken.None));
             }
 
             [Test]
             public void ProjectManyAsync_ClientCanNotBeNull()
             {
                 var sut = SutFactory();
-                Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync(null, new object[0]));
+                Assert.Throws<ArgumentNullException>(async () => await sut.ProjectAsync(null, new object[0]));
             }
 
             [Test]
             public void ProjectManyAsync_MessageCanNotBeNull()
             {
                 var sut = SutFactory();
-                Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync(_client, (object[]) null));
+                Assert.Throws<ArgumentNullException>(async () => await sut.ProjectAsync(_client, (object[]) null));
             }
 
             [Test]
             public void ProjectManyAsyncToken_ClientCanNotBeNull()
             {
                 var sut = SutFactory();
-                Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync(null, new object[0], CancellationToken.None));
+                Assert.Throws<ArgumentNullException>(async () => await sut.ProjectAsync(null, new object[0], CancellationToken.None));
             }
 
             [Test]
@@ -86,17 +84,12 @@ namespace Projac.WindowsAzure.Storage.Tests
             {
                 var sut = SutFactory();
                 Assert.Throws<ArgumentNullException>(
-                    () => sut.ProjectAsync(_client, (object[]) null, CancellationToken.None));
+                    async () => await sut.ProjectAsync(_client, (object[]) null, CancellationToken.None));
             }
 
             private static AsyncCloudTableProjector SutFactory()
             {
-                return SutFactory(new CloudTableProjectionHandler[0]);
-            }
-
-            private static AsyncCloudTableProjector SutFactory(CloudTableProjectionHandler[] handlers)
-            {
-                return new AsyncCloudTableProjector(handlers);
+                return new AsyncCloudTableProjector(new CloudTableProjectionHandler[0]);
             }
         }
 
@@ -114,7 +107,7 @@ namespace Projac.WindowsAzure.Storage.Tests
                 _client = account.CreateCloudTableClient();
                 _calls = new List<CloudTableProjectionHandlerCall>();
                 var handler = new CloudTableProjectionHandler(
-                    typeof(MatchMessage),
+                    typeof(MatchMessage1),
                     (client, msg, token) =>
                     {
                         _calls.Add(new CloudTableProjectionHandlerCall(client, msg, token));
@@ -126,7 +119,7 @@ namespace Projac.WindowsAzure.Storage.Tests
             [Test]
             public async void ProjectAsyncHasExpectedResult()
             {
-                var message = new MatchMessage();
+                var message = new MatchMessage1();
                 await _sut.ProjectAsync(_client, message);
                 Assert.That(_calls, Is.EquivalentTo(new[]
                 {
@@ -138,7 +131,7 @@ namespace Projac.WindowsAzure.Storage.Tests
             public async void ProjectAsyncTokenHasExpectedResult()
             {
                 var source = new CancellationTokenSource();
-                var message = new MatchMessage();
+                var message = new MatchMessage1();
                 await _sut.ProjectAsync(_client, message, source.Token);
                 Assert.That(_calls, Is.EquivalentTo(new[]
                 {
@@ -146,11 +139,11 @@ namespace Projac.WindowsAzure.Storage.Tests
                 }));
             }
 
-            [Test, Repeat(10)]
+            [Test]
             public async void ProjectManyAsyncHasExpectedResult()
             {
-                var message1 = new MatchMessage();
-                var message2 = new MatchMessage();
+                var message1 = new MatchMessage1();
+                var message2 = new MatchMessage1();
                 var messages = new object[]
                 {
                     message1,
@@ -169,19 +162,13 @@ namespace Projac.WindowsAzure.Storage.Tests
             public async void ProjectManyAsyncTokenHasExpectedResult()
             {
                 var source = new CancellationTokenSource();
-                var message1 = new MatchMessage();
-                var message2 = new MatchMessage();
+                var message1 = new MatchMessage1();
+                var message2 = new MatchMessage1();
                 var messages = new object[]
                 {
                     message1,
                     new MismatchMessage(),
                     message2,
-                    message1,
-                    new MismatchMessage(),
-                    message2,
-                    message1,
-                    new MismatchMessage(),
-                    message2
                 };
                 
                 await _sut.ProjectAsync(_client, messages, source.Token);
@@ -189,9 +176,166 @@ namespace Projac.WindowsAzure.Storage.Tests
                 {
                     new CloudTableProjectionHandlerCall(_client, message1, source.Token),
                     new CloudTableProjectionHandlerCall(_client, message2, source.Token),
+                }));
+            }
+
+            [Test]
+            public async void ProjectAsyncHasExpectedResultWhenMessageTypeMismatch()
+            {
+                var message = new MismatchMessage();
+                await _sut.ProjectAsync(_client, message);
+                Assert.That(_calls, Is.Empty);
+            }
+
+            [Test]
+            public async void ProjectAsyncTokenHasExpectedResultWhenMessageTypeMismatch()
+            {
+                var source = new CancellationTokenSource();
+                var message = new MismatchMessage();
+                await _sut.ProjectAsync(_client, message, source.Token);
+                Assert.That(_calls, Is.Empty);
+            }
+
+            [Test]
+            public async void ProjectManyAsyncHasExpectedResultWhenMessageTypeMismatch()
+            {
+                var messages = new object[]
+                {
+                    new MismatchMessage(),
+                    new MismatchMessage()
+                };
+                await _sut.ProjectAsync(_client, messages);
+                Assert.That(_calls, Is.Empty);
+            }
+
+            [Test]
+            public async void ProjectManyAsyncTokenHasExpectedResultWhenMessageTypeMismatch()
+            {
+                var source = new CancellationTokenSource();
+                var messages = new object[]
+                {
+                    new MismatchMessage(),
+                    new MismatchMessage()
+                };
+                await _sut.ProjectAsync(_client, messages, source.Token);
+                Assert.That(_calls, Is.Empty);
+            }
+
+            private static AsyncCloudTableProjector SutFactory(CloudTableProjectionHandler[] handlers)
+            {
+                return new AsyncCloudTableProjector(handlers);
+            }
+        }
+
+        [TestFixture]
+        public class MultiHandlerTests
+        {
+            private CloudTableClient _client;
+            private List<CloudTableProjectionHandlerCall> _calls;
+            private AsyncCloudTableProjector _sut;
+
+            [SetUp]
+            public void SetUp()
+            {
+                var account = CloudStorageAccount.DevelopmentStorageAccount;
+                _client = account.CreateCloudTableClient();
+                _calls = new List<CloudTableProjectionHandlerCall>();
+                var handler1 = new CloudTableProjectionHandler(
+                    typeof (MatchMessage1),
+                    (client, msg, token) =>
+                    {
+                        _calls.Add(new CloudTableProjectionHandlerCall(client, msg, token));
+                        return Task.FromResult(false);
+                    });
+                var handler2 = new CloudTableProjectionHandler(
+                    typeof(MatchMessage2),
+                    (client, msg, token) =>
+                    {
+                        _calls.Add(new CloudTableProjectionHandlerCall(client, msg, token));
+                        return Task.FromResult(false);
+                    });
+                var handler3 = new CloudTableProjectionHandler(
+                    typeof(MatchMessage1),
+                    (client, msg, token) =>
+                    {
+                        _calls.Add(new CloudTableProjectionHandlerCall(client, msg, token));
+                        return Task.FromResult(false);
+                    });
+                var handler4 = new CloudTableProjectionHandler(
+                    typeof(MatchMessage2),
+                    (client, msg, token) =>
+                    {
+                        _calls.Add(new CloudTableProjectionHandlerCall(client, msg, token));
+                        return Task.FromResult(false);
+                    });
+                _sut = SutFactory(new[] {handler1, handler2, handler3, handler4});
+            }
+
+            [Test]
+            public async void ProjectAsyncHasExpectedResult()
+            {
+                var message = new MatchMessage1();
+                await _sut.ProjectAsync(_client, message);
+                Assert.That(_calls, Is.EquivalentTo(new[]
+                {
+                    new CloudTableProjectionHandlerCall(_client, message, CancellationToken.None),
+                    new CloudTableProjectionHandlerCall(_client, message, CancellationToken.None)
+                }));
+            }
+
+            [Test]
+            public async void ProjectAsyncTokenHasExpectedResult()
+            {
+                var source = new CancellationTokenSource();
+                var message = new MatchMessage1();
+                await _sut.ProjectAsync(_client, message, source.Token);
+                Assert.That(_calls, Is.EquivalentTo(new[]
+                {
+                    new CloudTableProjectionHandlerCall(_client, message, source.Token),
+                    new CloudTableProjectionHandlerCall(_client, message, source.Token)
+                }));
+            }
+
+            [Test]
+            public async void ProjectManyAsyncHasExpectedResult()
+            {
+                var message1 = new MatchMessage1();
+                var message2 = new MatchMessage2();
+                var messages = new object[]
+                {
+                    message1,
+                    new MismatchMessage(),
+                    message2
+                };
+                await _sut.ProjectAsync(_client, messages);
+                Assert.That(_calls, Is.EquivalentTo(new[]
+                {
+                    new CloudTableProjectionHandlerCall(_client, message1, CancellationToken.None),
+                    new CloudTableProjectionHandlerCall(_client, message1, CancellationToken.None),
+                    new CloudTableProjectionHandlerCall(_client, message2, CancellationToken.None),
+                    new CloudTableProjectionHandlerCall(_client, message2, CancellationToken.None)
+                }));
+            }
+
+            [Test]
+            public async void ProjectManyAsyncTokenHasExpectedResult()
+            {
+                var source = new CancellationTokenSource();
+                var message1 = new MatchMessage1();
+                var message2 = new MatchMessage2();
+                var messages = new object[]
+                {
+                    message1,
+                    new MismatchMessage(),
+                    message2,
+                };
+
+                await _sut.ProjectAsync(_client, messages, source.Token);
+                Assert.That(_calls, Is.EquivalentTo(new[]
+                {
+                    new CloudTableProjectionHandlerCall(_client, message1, source.Token),
                     new CloudTableProjectionHandlerCall(_client, message1, source.Token),
                     new CloudTableProjectionHandlerCall(_client, message2, source.Token),
-                    new CloudTableProjectionHandlerCall(_client, message1, source.Token),
                     new CloudTableProjectionHandlerCall(_client, message2, source.Token)
                 }));
             }
@@ -210,6 +354,31 @@ namespace Projac.WindowsAzure.Storage.Tests
                 var source = new CancellationTokenSource();
                 var message = new MismatchMessage();
                 await _sut.ProjectAsync(_client, message, source.Token);
+                Assert.That(_calls, Is.Empty);
+            }
+
+            [Test]
+            public async void ProjectManyAsyncHasExpectedResultWhenMessageTypeMismatch()
+            {
+                var messages = new object[]
+                {
+                    new MismatchMessage(),
+                    new MismatchMessage()
+                };
+                await _sut.ProjectAsync(_client, messages);
+                Assert.That(_calls, Is.Empty);
+            }
+
+            [Test]
+            public async void ProjectManyAsyncTokenHasExpectedResultWhenMessageTypeMismatch()
+            {
+                var source = new CancellationTokenSource();
+                var messages = new object[]
+                {
+                    new MismatchMessage(),
+                    new MismatchMessage()
+                };
+                await _sut.ProjectAsync(_client, messages, source.Token);
                 Assert.That(_calls, Is.Empty);
             }
 
@@ -256,7 +425,11 @@ namespace Projac.WindowsAzure.Storage.Tests
             }
         }
 
-        public class MatchMessage
+        public class MatchMessage1
+        {
+        }
+
+        public class MatchMessage2
         {
         }
 

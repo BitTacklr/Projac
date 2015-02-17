@@ -15,13 +15,14 @@
       Include="
       $(MSBuildProjectDirectory)\output\csharp\Projac.Tests.dll;
       $(MSBuildProjectDirectory)\output\csharp\Paramol.Tests.dll;
+      $(MSBuildProjectDirectory)\output\csharp\Projac.WindowsAzure.Storage.Tests.dll;
       ">
       <Output TaskParameter="Include" ItemName="AssembliesToTest" />
     </CreateItem>
 
     <NUnit
         Assemblies="@(AssembliesToTest)"
-        ToolPath="$(PackagesPath)\NUnit.Runners.2.6.3\tools"
+        ToolPath="$(PackagesPath)\NUnit.Runners.2.6.4\tools"
         Force32Bit="true"
         ContinueOnError="false"
         Framework="4.0"

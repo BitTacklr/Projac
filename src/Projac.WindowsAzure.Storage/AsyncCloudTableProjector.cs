@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -52,43 +51,24 @@ namespace Projac.WindowsAzure.Storage
         ///     A <see cref="Task" />.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="client"/> or <paramref name="message"/> is <c>null</c>.</exception>
-        public Task ProjectAsync(CloudTableClient client, object message, CancellationToken cancellationToken)
+        public async Task ProjectAsync(CloudTableClient client, object message, CancellationToken cancellationToken)
         {
             if (client == null) throw new ArgumentNullException("client");
             if (message == null) throw new ArgumentNullException("message");
 
-            HandlerNode handlerNode;
-            if (_handlers.TryGetValue(message.GetType(), out handlerNode) && handlerNode != null)
+            HandlerNode node;
+            if (_handlers.TryGetValue(message.GetType(), out node) && node != null)
             {
-                return handlerNode.
-                    Handler.Handler(client, message, cancellationToken).
-                    ContinueWith(
-                        _ => ProjectMessageAsyncContinuation(handlerNode.Next, client, message, cancellationToken), 
-                        cancellationToken,
-                        TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.NotOnFaulted,
-                        TaskScheduler.Current).
-                    Unwrap();
+                while (node != null)
+                {
+                    await node.Handler.Handler(client, message, cancellationToken);
+                    node = node.Next;
+                }
             }
-            return Task.FromResult(false);
-        }
-
-        private static Task ProjectMessageAsyncContinuation(HandlerNode handlerNode, CloudTableClient client, object message, CancellationToken cancellationToken)
-        {
-            if (handlerNode != null)
-            {
-                return handlerNode.
-                    Handler.Handler(client, message, cancellationToken).
-                    ContinueWith(
-                        _ => ProjectMessageAsyncContinuation(handlerNode.Next, client, message, cancellationToken),
-                        cancellationToken,
-                        TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.NotOnFaulted,
-                        TaskScheduler.Current);
-            }
-            return Task.FromResult(false);
         }
 
         /// <summary>
-        /// Projects the specified messages to project.
+        /// Projects the specified messages asynchronously.
         /// </summary>
         /// <param name="client">The cloud table client used during projection.</param>
         /// <param name="messages">The messages to project.</param>
@@ -111,73 +91,21 @@ namespace Projac.WindowsAzure.Storage
         ///     A <see cref="Task" />.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="client"/> or <paramref name="messages"/> are <c>null</c>.</exception>
-        public Task ProjectAsync(CloudTableClient client, IEnumerable<object> messages, CancellationToken cancellationToken)
+        public async Task ProjectAsync(CloudTableClient client, IEnumerable<object> messages, CancellationToken cancellationToken)
         {
             if (client == null) throw new ArgumentNullException("client");
             if (messages == null) throw new ArgumentNullException("messages");
 
-            var sequence = new TaskContinuationSequence(
-                new TaskCompletionSource<object>(),
-                new HandleMessageTaskEnumerator(
-                    _handlers,
-                    messages,
-                    client,
-                    cancellationToken),
-                cancellationToken);
+            foreach (var message in messages)
+            {
+                HandlerNode node;
+                if (!_handlers.TryGetValue(message.GetType(), out node) || node == null) 
+                    continue;
 
-            if (sequence.Tasks.MoveNext())
-            {
-                sequence.
-                    Tasks.
-                    Current.
-                    ContinueWith(
-                        parentTask => ContinueProjectAsync(
-                            parentTask,
-                            sequence),
-                        cancellationToken);
-                        //,
-                        //TaskContinuationOptions.ExecuteSynchronously, 
-                        //TaskScheduler.Current);
-                return sequence.TaskCompletionSource.Task;
-            }
-            sequence.Tasks.Dispose();
-            return sequence.TaskCompletionSource.Task;
-        }
-
-        private static void ContinueProjectAsync(
-            Task antecedentTask,
-            TaskContinuationSequence sequence)
-        {
-            if (antecedentTask.IsCanceled)
-            {
-                sequence.Tasks.Dispose();
-                sequence.TaskCompletionSource.SetCanceled();
-            }
-            else if (antecedentTask.IsFaulted)
-            {
-                sequence.Tasks.Dispose();
-                sequence.TaskCompletionSource.SetException(antecedentTask.Exception);
-            }
-            else
-            {
-                if (sequence.Tasks.MoveNext())
+                while (node != null)
                 {
-                    sequence.
-                        Tasks.
-                        Current.
-                        ContinueWith(
-                            parentTask => ContinueProjectAsync(
-                                parentTask,
-                                sequence),
-                            sequence.CancellationToken);
-                            //,
-                            //TaskContinuationOptions.ExecuteSynchronously, 
-                            //TaskScheduler.Current);
-                }
-                else
-                {
-                    sequence.Tasks.Dispose();
-                    sequence.TaskCompletionSource.SetResult(null);
+                    await node.Handler.Handler(client, message, cancellationToken);
+                    node = node.Next;
                 }
             }
         }
@@ -204,110 +132,6 @@ namespace Projac.WindowsAzure.Storage
             {
                 Handler = handler;
                 Next = next;
-            }
-        }
-
-        private class TaskContinuationSequence
-        {
-            private readonly TaskCompletionSource<object> _taskCompletionSource;
-            private readonly IEnumerator<Task> _tasks;
-            private readonly CancellationToken _cancellationToken;
-
-            public TaskContinuationSequence(
-                TaskCompletionSource<object> taskCompletionSource,
-                IEnumerator<Task> tasks,
-                CancellationToken cancellationToken)
-            {
-                if (taskCompletionSource == null) throw new ArgumentNullException("taskCompletionSource");
-                if (tasks == null) throw new ArgumentNullException("tasks");
-                _taskCompletionSource = taskCompletionSource;
-                _tasks = tasks;
-                _cancellationToken = cancellationToken;
-            }
-
-            public TaskCompletionSource<object> TaskCompletionSource
-            {
-                get { return _taskCompletionSource; }
-            }
-
-            public IEnumerator<Task> Tasks
-            {
-                get { return _tasks; }
-            }
-
-            public CancellationToken CancellationToken
-            {
-                get { return _cancellationToken; }
-            }
-        }
-
-        private class HandleMessageTaskEnumerator : IEnumerator<Task>
-        {
-            private readonly Dictionary<Type, HandlerNode> _handlers;
-            private readonly IEnumerator<object> _enumerator;
-            private readonly CloudTableClient _client;
-            private readonly CancellationToken _cancellationToken;
-            private bool _moved;
-            private HandlerNode _node;
-            private Task _task;
-
-            public HandleMessageTaskEnumerator(
-                Dictionary<Type, HandlerNode> handlers, 
-                IEnumerable<object> messages,
-                CloudTableClient client,
-                CancellationToken cancellationToken)
-            {
-                _handlers = handlers;
-                _enumerator = messages.GetEnumerator();
-                _client = client;
-                _cancellationToken = cancellationToken;
-                _moved = false;
-                _node = null;
-                _task = null;
-            }
-
-            public void Dispose()
-            {
-                _enumerator.Dispose();
-            }
-
-            public bool MoveNext()
-            {
-                _task = null;
-                if (_node != null)
-                {
-                    _node = _node.Next;
-                    if (_node != null) return true;
-                }
-                _moved = _enumerator.MoveNext();
-                while (_moved && (!_handlers.TryGetValue(_enumerator.Current.GetType(), out _node) || _node == null))
-                {
-                    _moved = _enumerator.MoveNext();
-                }
-                return _moved;
-            }
-
-            public void Reset()
-            {
-                _enumerator.Reset();
-                _moved = false;
-                _node = null;
-                _task = null;
-            }
-
-            public Task Current
-            {
-                get
-                {
-                    return _task ?? (_task = _node.
-                        Handler.
-                        Handler(_client, _enumerator.Current, _cancellationToken));
-                }
-            }
-
-            object IEnumerator.Current
-            {
-                get { return Current; }
             }
         }
     }
