@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Paramol;
@@ -9,15 +10,15 @@ using Paramol.Executors;
 namespace Projac
 {
     /// <summary>
-    /// Projects a single message in an asynchronous manner to the matching handlers.
+    /// Projects a single message or set of messages in an asynchronous manner to the matching handlers.
     /// </summary>
     public class AsyncSqlProjector
     {
-        private readonly SqlProjectionHandler[] _handlers;
+        private readonly Dictionary<Type, SqlProjectionHandler[]> _handlers;
         private readonly IAsyncSqlNonQueryCommandExecutor _executor;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SqlProjector"/> class.
+        /// Initializes a new instance of the <see cref="AsyncSqlProjector"/> class.
         /// </summary>
         /// <param name="handlers">The handlers.</param>
         /// <param name="executor">The command executor.</param>
@@ -26,7 +27,9 @@ namespace Projac
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
             if (executor == null) throw new ArgumentNullException("executor");
-            _handlers = handlers;
+            _handlers = handlers.
+                GroupBy(handler => handler.Message).
+                ToDictionary(@group => @group.Key, @group => @group.ToArray());
             _executor = executor;
         }
 
@@ -60,8 +63,7 @@ namespace Projac
 
             return _executor.
                 ExecuteNonQueryAsync(
-                    from handler in _handlers
-                    where handler.Message == message.GetType()
+                    from handler in GetMessageHandlers(_handlers, message.GetType())
                     from statement in handler.Handler(message)
                     select statement,
                     cancellationToken);
@@ -98,11 +100,24 @@ namespace Projac
             return _executor.
                 ExecuteNonQueryAsync(
                     from message in messages
-                    from handler in _handlers
-                    where handler.Message == message.GetType()
+                    from handler in GetMessageHandlers(_handlers, message.GetType())
                     from statement in handler.Handler(message)
                     select statement,
                     cancellationToken);
+        }
+
+        private static IEnumerable<SqlProjectionHandler> GetMessageHandlers(
+            Dictionary<Type, SqlProjectionHandler[]> index,
+            Type message)
+        {
+            SqlProjectionHandler[] handlers;
+            if (index.TryGetValue(message, out handlers))
+            {
+                foreach (var handler in handlers)
+                {
+                    yield return handler;
+                }
+            }
         }
     }
 }

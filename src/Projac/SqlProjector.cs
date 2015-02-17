@@ -7,11 +7,11 @@ using Paramol.Executors;
 namespace Projac
 {
     /// <summary>
-    /// Projects a single message in a synchronous manner to the matching handlers.
+    /// Projects a single message or a set of messages in a synchronous manner to the matching handlers.
     /// </summary>
     public class SqlProjector
     {
-        private readonly SqlProjectionHandler[] _handlers;
+        private readonly Dictionary<Type, SqlProjectionHandler[]> _handlers;
         private readonly ISqlNonQueryCommandExecutor _executor;
 
         /// <summary>
@@ -24,7 +24,9 @@ namespace Projac
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
             if (executor == null) throw new ArgumentNullException("executor");
-            _handlers = handlers;
+            _handlers = handlers.
+                GroupBy(handler => handler.Message).
+                ToDictionary(@group => @group.Key, @group => @group.ToArray());
             _executor = executor;
         }
 
@@ -40,8 +42,7 @@ namespace Projac
 
             return _executor.
                 ExecuteNonQuery(
-                    from handler in _handlers
-                    where handler.Message == message.GetType()
+                    from handler in GetMessageHandlers(_handlers, message.GetType())
                     from statement in handler.Handler(message)
                     select statement);
         }
@@ -60,10 +61,23 @@ namespace Projac
             return _executor.
                 ExecuteNonQuery(
                     from message in messages
-                    from handler in _handlers
-                    where handler.Message == message.GetType()
+                    from handler in GetMessageHandlers(_handlers, message.GetType())
                     from statement in handler.Handler(message)
                     select statement);
+        }
+
+        private static IEnumerable<SqlProjectionHandler> GetMessageHandlers(
+            Dictionary<Type, SqlProjectionHandler[]> index,
+            Type message)
+        {
+            SqlProjectionHandler[] handlers;
+            if (index.TryGetValue(message, out handlers))
+            {
+                foreach (var handler in handlers)
+                {
+                    yield return handler;
+                }
+            }
         }
     }
 }

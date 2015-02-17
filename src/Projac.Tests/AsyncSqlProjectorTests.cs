@@ -31,28 +31,28 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void ProjectAsyncMessageCanNotBeNull()
+        public void ProjectAsync_MessageCanNotBeNull()
         {
             var sut = SutFactory();
             Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((object)null));
         }
 
         [Test]
-        public void ProjectAsyncTokenMessageCanNotBeNull()
+        public void ProjectAsyncToken_MessageCanNotBeNull()
         {
             var sut = SutFactory();
             Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((object)null, CancellationToken.None));
         }
 
         [Test]
-        public void ProjectAsyncMessagesCanNotBeNull()
+        public void ProjectAsync_MessagesCanNotBeNull()
         {
             var sut = SutFactory();
             Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((IEnumerable<object>)null));
         }
 
         [Test]
-        public void ProjectAsyncTokenMessagesCanNotBeNull()
+        public void ProjectAsyncToken_MessagesCanNotBeNull()
         {
             var sut = SutFactory();
             Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((IEnumerable<object>)null, CancellationToken.None));
