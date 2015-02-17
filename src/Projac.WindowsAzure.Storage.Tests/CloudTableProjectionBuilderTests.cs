@@ -74,11 +74,33 @@ namespace Projac.WindowsAzure.Storage.Tests
         }
 
         [Test]
+        public void WhenHandlerRetainsMessageType()
+        {
+            _sut.When<Message>((client, message) =>
+            {
+                Message _ = message;
+                return Task.FromResult(0);
+            });
+        }
+
+        class Message { }
+
+        [Test]
         public void WhenHandlerWithTokenReturnsExpectedResult()
         {
             var result = _sut.When<object>((client, message, token) => Task.FromResult(0));
 
             Assert.That(result, Is.InstanceOf<CloudTableProjectionBuilder>());
+        }
+
+        [Test]
+        public void WhenHandlerWithTokenRetainsMessageType()
+        {
+            _sut.When<Message>((client, message, token) =>
+            {
+                Message _ = message;
+                return Task.FromResult(0);
+            });
         }
 
         [Test]

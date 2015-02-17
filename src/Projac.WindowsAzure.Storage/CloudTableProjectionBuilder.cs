@@ -30,7 +30,7 @@ namespace Projac.WindowsAzure.Storage
             _handlers = projection.Handlers;
         }
 
-        private CloudTableProjectionBuilder(CloudTableProjectionHandler[] handlers)
+        CloudTableProjectionBuilder(CloudTableProjectionHandler[] handlers)
         {
             _handlers = handlers;
         }
@@ -42,7 +42,7 @@ namespace Projac.WindowsAzure.Storage
         /// <param name="handler">The message handler.</param>
         /// <returns>A <see cref="CloudTableProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public CloudTableProjectionBuilder When<TMessage>(Func<CloudTableClient, object, Task> handler)
+        public CloudTableProjectionBuilder When<TMessage>(Func<CloudTableClient, TMessage, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new CloudTableProjectionBuilder(
@@ -63,7 +63,7 @@ namespace Projac.WindowsAzure.Storage
         /// <param name="handler">The message handler.</param>
         /// <returns>A <see cref="CloudTableProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public CloudTableProjectionBuilder When<TMessage>(Func<CloudTableClient, object, CancellationToken, Task> handler)
+        public CloudTableProjectionBuilder When<TMessage>(Func<CloudTableClient, TMessage, CancellationToken, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new CloudTableProjectionBuilder(
