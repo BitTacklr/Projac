@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace Recipes.AzureStorageIntegration
+namespace Recipes.WindowsAzureStorageIntegration
 {
     public class PortfolioModel : TableEntity
     {

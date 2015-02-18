@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Projac.WindowsAzure.Storage;
 using Recipes.Shared;
 
-namespace Recipes.AzureStorageIntegration
+namespace Recipes.WindowsAzureStorageIntegration
 {
     [TestFixture]
     public class Usage

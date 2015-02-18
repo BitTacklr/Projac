@@ -60,9 +60,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -81,9 +80,9 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AzureStorageIntegration\PortfolioModel.cs" />
-    <Compile Include="AzureStorageIntegration\RebuildProjection.cs" />
-    <Compile Include="AzureStorageIntegration\Usage.cs" />
+    <Compile Include="WindowsAzureStorageIntegration\PortfolioModel.cs" />
+    <Compile Include="WindowsAzureStorageIntegration\RebuildProjection.cs" />
+    <Compile Include="WindowsAzureStorageIntegration\Usage.cs" />
     <Compile Include="DataDefinition\CreateSchema.cs" />
     <Compile Include="DataDefinition\DeleteData.cs" />
     <Compile Include="DataDefinition\DropSchema.cs" />

@@ -112,9 +112,9 @@
     <Compile Include="Executors\TransactionalSqlCommandExecutorTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Paramol\Paramol.csproj">
+    <ProjectReference Include="..\Projac\Projac.csproj">
       <Project>{359863ed-13ea-4c04-bf6f-c9cf611a7129}</Project>
-      <Name>Paramol</Name>
+      <Name>Projac</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
