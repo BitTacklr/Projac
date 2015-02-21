@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Projac.Elasticsearch</id>
+    <version>0.0.0</version>
+    <authors>Yves Reynhout</authors>
+    <owners>Yves Reynhout</owners>
+    <title>Projac.Elasticsearch</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
+    <description>Projac.Elasticsearch provides lightweight infrastructure for producing Elasticsearch based projections.</description>
+    <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2015, BitTacklr. All rights reserved.</copyright>
+    <tags>eventsourcing DDDesign</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Elasticsearch.Net" version="1.4.1" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="output\csharp\Projac.Elasticsearch.dll" target="lib\net45\Projac.Elasticsearch.dll" />
+    <file src="output\csharp\Projac.Elasticsearch.pdb" target="lib\net45\Projac.Elasticsearch.pdb" />
+    <file src="output\csharp\Projac.Elasticsearch.xml" target="lib\net45\Projac.Elasticsearch.xml" />
+    <file src="..\src\Projac.Elasticsearch\*.cs" target="src\Projac.Elasticsearch" />
+    <file src="..\src\Projac.Elasticsearch\Properties\*.cs" target="src\Projac.Elasticsearch\Properties" />
+  </files>
+</package>
