@@ -7,7 +7,7 @@ using Recipes.Shared;
 
 namespace Recipes.WindowsAzureStorageIntegration
 {
-    [TestFixture]
+    [TestFixture, Explicit]
     public class Usage
     {
         [Test]

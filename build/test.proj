@@ -18,6 +18,7 @@
       $(MSBuildProjectDirectory)\output\csharp\Projac.WindowsAzure.Storage.Tests.dll;
       $(MSBuildProjectDirectory)\output\csharp\Projac.Redis.Tests.dll;
       $(MSBuildProjectDirectory)\output\csharp\Projac.Elasticsearch.Tests.dll;
+      $(MSBuildProjectDirectory)\output\csharp\Projac.RavenDB.Tests.dll;
       ">
       <Output TaskParameter="Include" ItemName="AssembliesToTest" />
     </CreateItem>
