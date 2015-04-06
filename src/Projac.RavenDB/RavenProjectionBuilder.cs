@@ -42,7 +42,7 @@ namespace Projac.RavenDB
         /// <param name="handler">The message handler.</param>
         /// <returns>A <see cref="RavenProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public RavenProjectionBuilder When<TMessage>(Func<IDocumentSession, TMessage, Task> handler)
+        public RavenProjectionBuilder When<TMessage>(Func<IAsyncDocumentSession, TMessage, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new RavenProjectionBuilder(
@@ -63,7 +63,7 @@ namespace Projac.RavenDB
         /// <param name="handler">The message handler.</param>
         /// <returns>A <see cref="RavenProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public RavenProjectionBuilder When<TMessage>(Func<IDocumentSession, TMessage, CancellationToken, Task> handler)
+        public RavenProjectionBuilder When<TMessage>(Func<IAsyncDocumentSession, TMessage, CancellationToken, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new RavenProjectionBuilder(

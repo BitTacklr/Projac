@@ -17,7 +17,7 @@ using Recipes.Shared;
 
 namespace Recipes.EventStoreIntegration
 {
-    [TestFixture]
+    [TestFixture, Explicit]
     public class Usage
     {
         [Test]

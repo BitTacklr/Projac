@@ -36,7 +36,7 @@ namespace Projac.RavenDB
         ///     A <see cref="Task" />.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="session"/> or <paramref name="message"/> is <c>null</c>.</exception>
-        public Task ProjectAsync(IDocumentSession session, object message)
+        public Task ProjectAsync(IAsyncDocumentSession session, object message)
         {
             return ProjectAsync(session, message, CancellationToken.None);
         }
@@ -51,7 +51,7 @@ namespace Projac.RavenDB
         ///     A <see cref="Task" />.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="session"/> or <paramref name="message"/> is <c>null</c>.</exception>
-        public async Task ProjectAsync(IDocumentSession session, object message, CancellationToken cancellationToken)
+        public async Task ProjectAsync(IAsyncDocumentSession session, object message, CancellationToken cancellationToken)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (message == null) throw new ArgumentNullException("message");
@@ -75,7 +75,7 @@ namespace Projac.RavenDB
         ///     A <see cref="Task" />.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="session"/> or <paramref name="messages"/> are <c>null</c>.</exception>
-        public Task ProjectAsync(IDocumentSession session, IEnumerable<object> messages)
+        public Task ProjectAsync(IAsyncDocumentSession session, IEnumerable<object> messages)
         {
             return ProjectAsync(session, messages, CancellationToken.None);
         }
@@ -90,7 +90,7 @@ namespace Projac.RavenDB
         ///     A <see cref="Task" />.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="session"/> or <paramref name="messages"/> are <c>null</c>.</exception>
-        public async Task ProjectAsync(IDocumentSession session, IEnumerable<object> messages, CancellationToken cancellationToken)
+        public async Task ProjectAsync(IAsyncDocumentSession session, IEnumerable<object> messages, CancellationToken cancellationToken)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (messages == null) throw new ArgumentNullException("messages");

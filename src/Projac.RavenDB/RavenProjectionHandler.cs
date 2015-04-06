@@ -11,7 +11,7 @@ namespace Projac.RavenDB
     public class RavenProjectionHandler
     {
         private readonly Type _message;
-        private readonly Func<IDocumentSession, object, CancellationToken, Task> _handler;
+        private readonly Func<IAsyncDocumentSession, object, CancellationToken, Task> _handler;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="RavenProjectionHandler" /> class.
@@ -22,7 +22,7 @@ namespace Projac.RavenDB
         ///     Throw when <paramref name="message" /> or <paramref name="handler" /> is
         ///     <c>null</c>.
         /// </exception>
-        public RavenProjectionHandler(Type message, Func<IDocumentSession, object, CancellationToken, Task> handler)
+        public RavenProjectionHandler(Type message, Func<IAsyncDocumentSession, object, CancellationToken, Task> handler)
         {
             if (message == null) throw new ArgumentNullException("message");
             if (handler == null) throw new ArgumentNullException("handler");
@@ -41,7 +41,7 @@ namespace Projac.RavenDB
         /// <summary>
         ///     The function that handles the message.
         /// </summary>
-        public Func<IDocumentSession, object, CancellationToken, Task> Handler
+        public Func<IAsyncDocumentSession, object, CancellationToken, Task> Handler
         {
             get { return _handler; }
         }

@@ -69,11 +69,21 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\packages\RavenDB.Database.3.0.3599\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\packages\RavenDB.Client.3.0.3599\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Database">
+      <HintPath>..\packages\RavenDB.Database.3.0.3599\lib\net45\Raven.Database.dll</HintPath>
+    </Reference>
     <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\StackExchange.Redis.1.0.414\lib\net45\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -91,6 +101,7 @@
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
     <Compile Include="ElasticsearchIntegration\Usage.cs" />
+    <Compile Include="RavenDBIntegration\Usage.cs" />
     <Compile Include="RedisIntegration\Usage.cs" />
     <Compile Include="WindowsAzureStorageIntegration\PortfolioModel.cs" />
     <Compile Include="WindowsAzureStorageIntegration\RebuildProjection.cs" />
@@ -119,6 +130,10 @@
     <ProjectReference Include="..\Projac.Elasticsearch\Projac.Elasticsearch.csproj">
       <Project>{696dc47c-0d2f-42f4-8280-492efc5d1329}</Project>
       <Name>Projac.Elasticsearch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Projac.RavenDB\Projac.RavenDB.csproj">
+      <Project>{da27cd48-2661-4b9e-b15d-29e3e61811c0}</Project>
+      <Name>Projac.RavenDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\Projac.Redis\Projac.Redis.csproj">
       <Project>{77396b9f-4bf5-44cf-b947-a85127665ea2}</Project>
