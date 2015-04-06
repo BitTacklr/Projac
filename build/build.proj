@@ -31,6 +31,8 @@
         $(SourcePath)\Projac.WindowsAzure.Storage.Tests\Projac.WindowsAzure.Storage.Tests.csproj;
         $(SourcePath)\Projac.Redis\Projac.Redis.csproj;
         $(SourcePath)\Projac.Redis.Tests\Projac.Redis.Tests.csproj;
+        $(SourcePath)\Projac.RavenDB\Projac.RavenDB.csproj;
+        $(SourcePath)\Projac.RavenDB.Tests\Projac.RavenDB.Tests.csproj;
         $(SourcePath)\Projac.Elasticsearch\Projac.Elasticsearch.csproj;
         $(SourcePath)\Projac.Elasticsearch.Tests\Projac.Elasticsearch.Tests.csproj;"
       BuildInParallel="true" 

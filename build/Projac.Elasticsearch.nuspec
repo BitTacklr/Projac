@@ -15,7 +15,7 @@
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Elasticsearch.Net" version="1.4.1" />
+        <dependency id="Elasticsearch.Net" version="1.4.3" />
       </group>
     </dependencies>
   </metadata>

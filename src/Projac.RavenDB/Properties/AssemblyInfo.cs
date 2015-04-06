@@ -1,4 +1,4 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("Projac.RavenDb")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Projac.RavenDB")]
+[assembly: AssemblyDescription("This library provides lightweight infrastructure for producing RavenDB based projections.")]
