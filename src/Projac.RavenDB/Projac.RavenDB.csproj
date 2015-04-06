@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{77396B9F-4BF5-44CF-B947-A85127665EA2}</ProjectGuid>
+    <ProjectGuid>{DA27CD48-2661-4B9E-B15D-29E3E61811C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Projac.Redis</RootNamespace>
-    <AssemblyName>Projac.Redis</AssemblyName>
+    <RootNamespace>Projac.RavenDB</RootNamespace>
+    <AssemblyName>Projac.RavenDB</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Projac.Redis.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,14 +28,16 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Projac.Redis.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\StackExchange.Redis.1.0.414\lib\net45\StackExchange.Redis.dll</HintPath>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\packages\RavenDB.Client.3.0.3599\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\packages\RavenDB.Client.3.0.3599\lib\net45\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
@@ -47,11 +48,11 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AsyncRedisProjector.cs" />
-    <Compile Include="RedisProjectionBuilder.cs" />
-    <Compile Include="RedisProjection.cs" />
+    <Compile Include="AsyncRavenProjector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RedisProjectionHandler.cs" />
+    <Compile Include="RavenProjection.cs" />
+    <Compile Include="RavenProjectionBuilder.cs" />
+    <Compile Include="RavenProjectionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

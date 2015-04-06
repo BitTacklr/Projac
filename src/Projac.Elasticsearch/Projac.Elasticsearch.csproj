@@ -32,8 +32,9 @@
     <DocumentationFile>bin\Release\Projac.Elasticsearch.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Elasticsearch.Net">
-      <HintPath>..\packages\Elasticsearch.Net.1.4.1\lib\net45\Elasticsearch.Net.dll</HintPath>
+    <Reference Include="Elasticsearch.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Elasticsearch.Net.1.4.3\lib\net45\Elasticsearch.Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
