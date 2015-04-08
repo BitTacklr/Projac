@@ -8,7 +8,7 @@ It's available on NuGet: [Projac.RavenDB](https://www.nuget.org/packages/Projac.
 
 ## The Declarative Style
 
-Similar to Projac's declarative style for sql projections above, one can author projections that target RavenDB in a declarative way. A fundamental difference is that the handling and interpretation of messages is directly tied to the execution of actions against Redis. Why? Because replicating the entire Redis api into a set of statements was not a goal at this point. Only asynchronous projection handling is supported at the moment.
+Similar to Projac's declarative style for sql projections above, one can author projections that target RavenDB in a declarative way. A fundamental difference is that the handling and interpretation of messages is directly tied to the execution of actions against RavenDB. Why? Because replicating the entire RavenDB api into a set of statements was not a goal at this point. Only asynchronous projection handling is supported at the moment.
 
 ```csharp
 var projection =
