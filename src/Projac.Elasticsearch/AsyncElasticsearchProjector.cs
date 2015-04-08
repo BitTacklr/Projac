@@ -57,7 +57,7 @@ namespace Projac.Elasticsearch
             if (message == null) throw new ArgumentNullException("message");
 
             ElasticsearchProjectionHandler[] handlers;
-            if (_handlers.TryGetValue(message.GetType(), out handlers))
+            if (_handlers.TryGetValue(message.GetType(), out handlers) && handlers.Length > 0)
             {
                 foreach (var handler in handlers)
                 {
