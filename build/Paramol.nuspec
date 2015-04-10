@@ -7,7 +7,7 @@
     <owners>Yves Reynhout</owners>
     <title>Paramol</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://raw.github.com/yreynhout/Paramol/master/LICENSE.txt</licenseUrl>
+    <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
     <description>Paramol provides lightweight infrastructure for producing SQL DML statements.</description>
     <projectUrl>https://github.com/yreynhout/Paramol</projectUrl>
     <releaseNotes>Lowered the framework dependency to .NET 4.5.</releaseNotes>
