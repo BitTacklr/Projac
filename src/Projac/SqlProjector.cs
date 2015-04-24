@@ -11,7 +11,7 @@ namespace Projac
     /// </summary>
     public class SqlProjector
     {
-        private readonly Dictionary<Type, SqlProjectionHandler[]> _handlers;
+        private readonly SqlProjectionHandlerIndexedByMessageTypeCache _cache;
         private readonly ISqlNonQueryCommandExecutor _executor;
 
         /// <summary>
@@ -24,9 +24,8 @@ namespace Projac
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
             if (executor == null) throw new ArgumentNullException("executor");
-            _handlers = handlers.
-                GroupBy(handler => handler.Message).
-                ToDictionary(@group => @group.Key, @group => @group.ToArray());
+
+            _cache = new SqlProjectionHandlerIndexedByMessageTypeCache(handlers);
             _executor = executor;
         }
 
@@ -42,7 +41,7 @@ namespace Projac
 
             return _executor.
                 ExecuteNonQuery(
-                    from handler in GetMessageHandlers(_handlers, message.GetType())
+                    from handler in _cache.GetOrAdd(message.GetType())
                     from statement in handler.Handler(message)
                     select statement);
         }
@@ -61,22 +60,31 @@ namespace Projac
             return _executor.
                 ExecuteNonQuery(
                     from message in messages
-                    from handler in GetMessageHandlers(_handlers, message.GetType())
+                    from handler in _cache.GetOrAdd(message.GetType())
                     from statement in handler.Handler(message)
                     select statement);
         }
 
-        private static IEnumerable<SqlProjectionHandler> GetMessageHandlers(
-            Dictionary<Type, SqlProjectionHandler[]> index,
-            Type message)
+        class SqlProjectionHandlerIndexedByMessageTypeCache
         {
-            SqlProjectionHandler[] handlers;
-            if (index.TryGetValue(message, out handlers))
+            private readonly SqlProjectionHandler[] _handlers;
+            private readonly Dictionary<Type, SqlProjectionHandler[]> _cache;
+
+            public SqlProjectionHandlerIndexedByMessageTypeCache(SqlProjectionHandler[] handlers)
             {
-                foreach (var handler in handlers)
+                _handlers = handlers;
+                _cache = new Dictionary<Type, SqlProjectionHandler[]>();
+            }
+
+            public SqlProjectionHandler[] GetOrAdd(Type message)
+            {
+                SqlProjectionHandler[] handlers;
+                if (!_cache.TryGetValue(message, out handlers))
                 {
-                    yield return handler;
+                    handlers = Array.FindAll(_handlers, handler => handler.Message.IsAssignableFrom(message));
+                    _cache.Add(message, handlers);
                 }
+                return handlers;
             }
         }
     }

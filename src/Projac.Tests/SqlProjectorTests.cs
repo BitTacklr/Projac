@@ -57,6 +57,37 @@ namespace Projac.Tests
         }
 
         [Test]
+        public void ProjectMessageCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches2()
+        {
+            var commands1 = new[] { CommandFactory(), CommandFactory() };
+            var commands2 = new[] { CommandFactory(), CommandFactory() };
+            var mock = new ExecutorMock();
+            var handler1 = new SqlProjectionHandler(typeof(Envelope), _ => commands1);
+            var handler2 = new SqlProjectionHandler(typeof(Envelope<Message>), _ => commands2);
+            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+
+            var result = sut.Project(new MessageEnvelope<Message2>());
+
+            Assert.That(result, Is.EqualTo(4));
+            Assert.That(mock.Commands, Is.EquivalentTo(commands1.Concat(commands2)));
+        }
+
+        interface Message { }
+        interface Message1 : Message { }
+        interface Message2 : Message { }
+        interface Envelope { }
+        interface Envelope<out TMessage> : Envelope { TMessage Message { get; } }
+
+        class MessageEnvelope<TMessage> : Envelope<TMessage>
+        {
+            public TMessage Message
+            {
+                get { return default(TMessage); }
+            }
+        }
+
+
+        [Test]
         public void ProjectMessageCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
         {
             var commands = new[] { CommandFactory(), CommandFactory() };
