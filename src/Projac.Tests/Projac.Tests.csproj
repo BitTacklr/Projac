@@ -52,6 +52,7 @@
     <Compile Include="AsyncSqlProjectorTests.cs" />
     <Compile Include="Framework\SqlNonQueryCommandStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResolveTests.cs" />
     <Compile Include="SqlProjectionBuilderTests.cs" />
     <Compile Include="SqlProjectionHandlerTests.cs" />
     <Compile Include="SqlProjectionTests.cs" />
