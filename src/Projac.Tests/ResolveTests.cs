@@ -207,16 +207,6 @@ namespace Projac.Tests
                 Is.EquivalentTo(new[] { handler1 }));
         }
 
-        [Test, Ignore("Not supported since illegal C# to begin with.")]
-        public void should_handle_for_concrete_envelope_of_interface_of_message()
-        {
-            var handler = HandlerFor<ConcreteEnvelope<IMessage>>();
-            var sut = SutFactory(handler);
-            Assert.That(
-                sut(new ConcreteEnvelope<Message1>()),
-                Is.EquivalentTo(new[] { handler }));
-        }
-
         private static SqlProjectionHandler HandlerFor<TMessage>()
         {
             return new SqlProjectionHandler(typeof(TMessage), _ => new SqlNonQueryCommand[0]);
@@ -234,13 +224,6 @@ namespace Projac.Tests
         private interface Envelope { }
         private interface Envelope<out TMessage> : Envelope { TMessage Message { get; } }
         private class MessageEnvelope<TMessage> : Envelope<TMessage>
-        {
-            public TMessage Message
-            {
-                get { return default(TMessage); }
-            }
-        }
-        private class ConcreteEnvelope<TMessage> : Envelope
         {
             public TMessage Message
             {
