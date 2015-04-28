@@ -6,26 +6,26 @@ using Paramol.Executors;
 
 namespace Projac
 {
-    /// <summary>
+    /// <summary> 
     /// Projects a single message or a set of messages in a synchronous manner to the matching handlers.
     /// </summary>
     public class SqlProjector
     {
-        private readonly SqlProjectionHandlerIndexedByMessageTypeCache _cache;
+        private readonly SqlProjectionHandlerResolver _resolver;
         private readonly ISqlNonQueryCommandExecutor _executor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlProjector"/> class.
         /// </summary>
-        /// <param name="handlers">The handlers.</param>
+        /// <param name="resolver">The handler resolver.</param>
         /// <param name="executor">The command executor.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handlers"/> or <paramref name="executor"/> is <c>null</c>.</exception>
-        public SqlProjector(SqlProjectionHandler[] handlers, ISqlNonQueryCommandExecutor executor)
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="resolver"/> or <paramref name="executor"/> is <c>null</c>.</exception>
+        public SqlProjector(SqlProjectionHandlerResolver resolver, ISqlNonQueryCommandExecutor executor)
         {
-            if (handlers == null) throw new ArgumentNullException("handlers");
+            if (resolver == null) throw new ArgumentNullException("resolver");
             if (executor == null) throw new ArgumentNullException("executor");
 
-            _cache = new SqlProjectionHandlerIndexedByMessageTypeCache(handlers);
+            _resolver = resolver;
             _executor = executor;
         }
 
@@ -41,7 +41,7 @@ namespace Projac
 
             return _executor.
                 ExecuteNonQuery(
-                    from handler in _cache.GetOrAdd(message.GetType())
+                    from handler in _resolver(message)
                     from statement in handler.Handler(message)
                     select statement);
         }
@@ -60,32 +60,9 @@ namespace Projac
             return _executor.
                 ExecuteNonQuery(
                     from message in messages
-                    from handler in _cache.GetOrAdd(message.GetType())
+                    from handler in _resolver(message)
                     from statement in handler.Handler(message)
                     select statement);
-        }
-
-        class SqlProjectionHandlerIndexedByMessageTypeCache
-        {
-            private readonly SqlProjectionHandler[] _handlers;
-            private readonly Dictionary<Type, SqlProjectionHandler[]> _cache;
-
-            public SqlProjectionHandlerIndexedByMessageTypeCache(SqlProjectionHandler[] handlers)
-            {
-                _handlers = handlers;
-                _cache = new Dictionary<Type, SqlProjectionHandler[]>();
-            }
-
-            public SqlProjectionHandler[] GetOrAdd(Type message)
-            {
-                SqlProjectionHandler[] handlers;
-                if (!_cache.TryGetValue(message, out handlers))
-                {
-                    handlers = Array.FindAll(_handlers, handler => handler.Message.IsAssignableFrom(message));
-                    _cache.Add(message, handlers);
-                }
-                return handlers;
-            }
         }
     }
 }

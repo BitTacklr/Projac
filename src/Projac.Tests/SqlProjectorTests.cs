@@ -14,10 +14,10 @@ namespace Projac.Tests
     public class SqlProjectorTests
     {
         [Test]
-        public void HandlersCanNotBeNull()
+        public void ResolverCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => SutFactory((SqlProjectionHandler[])null));
+                () => SutFactory((SqlProjectionHandlerResolver)null));
         }
 
         [Test]
@@ -25,7 +25,6 @@ namespace Projac.Tests
         {
             Assert.Throws<ArgumentNullException>(
                 () => SutFactory((ISqlNonQueryCommandExecutor)null));
-            
         }
 
         [Test]
@@ -48,7 +47,7 @@ namespace Projac.Tests
             var commands = new[] {CommandFactory(), CommandFactory()};
             var mock = new ExecutorMock();
             var handler = new SqlProjectionHandler(typeof(object), _ => commands);
-            var sut = SutFactory(new[] {handler}, mock);
+            var sut = SutFactory(Resolve.WhenType(new[] {handler}), mock);
 
             var result = sut.Project(new object());
 
@@ -61,15 +60,17 @@ namespace Projac.Tests
         {
             var commands1 = new[] { CommandFactory(), CommandFactory() };
             var commands2 = new[] { CommandFactory(), CommandFactory() };
+            var commands3 = new[] { CommandFactory(), CommandFactory() };
             var mock = new ExecutorMock();
             var handler1 = new SqlProjectionHandler(typeof(Envelope), _ => commands1);
             var handler2 = new SqlProjectionHandler(typeof(Envelope<Message>), _ => commands2);
-            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+            var handler3 = new SqlProjectionHandler(typeof(Envelope<Message2>), _ => commands3);
+            var sut = SutFactory(Resolve.WhenAssignableToType(new[] { handler1, handler2, handler3 }), mock);
 
             var result = sut.Project(new MessageEnvelope<Message2>());
 
-            Assert.That(result, Is.EqualTo(4));
-            Assert.That(mock.Commands, Is.EquivalentTo(commands1.Concat(commands2)));
+            Assert.That(result, Is.EqualTo(6));
+            Assert.That(mock.Commands, Is.EquivalentTo(commands1.Concat(commands2).Concat(commands3)));
         }
 
         interface Message { }
@@ -93,7 +94,7 @@ namespace Projac.Tests
             var commands = new[] { CommandFactory(), CommandFactory() };
             var mock = new ExecutorMock();
             var handler = new SqlProjectionHandler(typeof(string), _ => commands);
-            var sut = SutFactory(new[] { handler }, mock);
+            var sut = SutFactory(Resolve.WhenType(new[] { handler }), mock);
 
             var result = sut.Project(new object());
 
@@ -109,7 +110,7 @@ namespace Projac.Tests
             var mock = new ExecutorMock();
             var handler1 = new SqlProjectionHandler(typeof(int), _ => commands1);
             var handler2 = new SqlProjectionHandler(typeof(bool), _ => commands2);
-            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+            var sut = SutFactory(Resolve.WhenType(new[] { handler1, handler2 }), mock);
 
             var result = sut.Project(new object[] { 123, true });
 
@@ -125,7 +126,7 @@ namespace Projac.Tests
             var mock = new ExecutorMock();
             var handler1 = new SqlProjectionHandler(typeof(int), _ => commands1);
             var handler2 = new SqlProjectionHandler(typeof(bool), _ => commands2);
-            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+            var sut = SutFactory(Resolve.WhenType(new[] { handler1, handler2 }), mock);
 
             var result = sut.Project(new object[] { 123 });
 
@@ -135,22 +136,22 @@ namespace Projac.Tests
 
         private static SqlProjector SutFactory()
         {
-            return SutFactory(new SqlProjectionHandler[0], new ExecutorStub());
+            return SutFactory(Resolve.WhenType(new SqlProjectionHandler[0]), new ExecutorStub());
         }
 
-        private static SqlProjector SutFactory(SqlProjectionHandler[] handlers)
+        private static SqlProjector SutFactory(SqlProjectionHandlerResolver resolver)
         {
-            return SutFactory(handlers, new ExecutorStub());
+            return SutFactory(resolver, new ExecutorStub());
         }
 
         private static SqlProjector SutFactory(ISqlNonQueryCommandExecutor executor)
         {
-            return SutFactory(new SqlProjectionHandler[0], executor);
+            return SutFactory(Resolve.WhenType(new SqlProjectionHandler[0]), executor);
         }
 
-        private static SqlProjector SutFactory(SqlProjectionHandler[] handlers, ISqlNonQueryCommandExecutor executor)
+        private static SqlProjector SutFactory(SqlProjectionHandlerResolver resolver, ISqlNonQueryCommandExecutor executor)
         {
-            return new SqlProjector(handlers, executor);
+            return new SqlProjector(resolver, executor);
         }
 
         private static SqlNonQueryCommand CommandFactory()
