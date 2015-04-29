@@ -1,257 +1,187 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Data;
-//using System.Data.Common;
-//using System.Linq;
-//using System.Threading;
-//using System.Threading.Tasks;
-//using NUnit.Framework;
-//using Paramol;
-//using Paramol.Executors;
-//using Projac.Tests.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using NUnit.Framework;
+using Paramol;
+using Paramol.Executors;
 
-//namespace Projac.Tests
-//{
-//    [TestFixture]
-//    public class AsyncSqlProjectorTests
-//    {
-//        [Test]
-//        public void HandlersCanNotBeNull()
-//        {
-//            Assert.Throws<ArgumentNullException>(
-//                () => SutFactory((SqlProjectionHandler[])null));
-//        }
+namespace Projac.Tests
+{
+    [TestFixture]
+    public class AsyncSqlProjectorTests
+    {
+        [Test]
+        public void ResolverCanNotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => SutFactory((SqlProjectionHandlerResolver)null));
+        }
 
-//        [Test]
-//        public void ExecutorCanNotBeNull()
-//        {
-//            Assert.Throws<ArgumentNullException>(
-//                () => SutFactory((IAsyncSqlNonQueryCommandExecutor)null));
+        [Test]
+        public void ExecutorCanNotBeNull()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => SutFactory((IAsyncSqlNonQueryCommandExecutor)null));
+        }
 
-//        }
+        [Test]
+        public void ProjectAsync_MessageCanNotBeNull()
+        {
+            var sut = SutFactory();
+            Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((object)null));
+        }
 
-//        [Test]
-//        public void ProjectAsync_MessageCanNotBeNull()
-//        {
-//            var sut = SutFactory();
-//            Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((object)null));
-//        }
+        [Test]
+        public void ProjectAsyncToken_MessageCanNotBeNull()
+        {
+            var sut = SutFactory();
+            Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((object)null, CancellationToken.None));
+        }
 
-//        [Test]
-//        public void ProjectAsyncToken_MessageCanNotBeNull()
-//        {
-//            var sut = SutFactory();
-//            Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((object)null, CancellationToken.None));
-//        }
+        [Test]
+        public void ProjectAsync_MessagesCanNotBeNull()
+        {
+            var sut = SutFactory();
+            Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((IEnumerable<object>)null));
+        }
 
-//        [Test]
-//        public void ProjectAsync_MessagesCanNotBeNull()
-//        {
-//            var sut = SutFactory();
-//            Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((IEnumerable<object>)null));
-//        }
+        [Test]
+        public void ProjectAsyncToken_MessagesCanNotBeNull()
+        {
+            var sut = SutFactory();
+            Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((IEnumerable<object>)null, CancellationToken.None));
+        }
 
-//        [Test]
-//        public void ProjectAsyncToken_MessagesCanNotBeNull()
-//        {
-//            var sut = SutFactory();
-//            Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((IEnumerable<object>)null, CancellationToken.None));
-//        }
+        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageCases")]
+        public async void ProjectAsyncMessageCausesExecutorToBeCalledWithExpectedCommands(
+            SqlProjectionHandlerResolver resolver,
+            object message,
+            SqlNonQueryCommand[] commands)
+        {
+            var mock = new ExecutorMock();
+            var sut = SutFactory(resolver, mock);
 
-//        [Test]
-//        public async void ProjectAsyncMessageCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
-//        {
-//            var commands = new[] { CommandFactory(), CommandFactory() };
-//            var mock = new ExecutorMock();
-//            var handler = new SqlProjectionHandler(typeof(object), _ => commands);
-//            var sut = SutFactory(new[] { handler }, mock);
+            var result = await sut.ProjectAsync(message);
 
-//            var result = await sut.ProjectAsync(new object());
+            Assert.That(result, Is.EqualTo(commands.Length));
+            Assert.That(mock.Commands, Is.EquivalentTo(commands));
+        }
 
-//            Assert.That(result, Is.EqualTo(2));
-//            Assert.That(mock.Commands, Is.EquivalentTo(commands));
-//        }
+        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesCases")]
+        public async void ProjectAsyncMessagesCausesExecutorToBeCalledWithExpectedCommands(
+            SqlProjectionHandlerResolver resolver,
+            object[] messages,
+            SqlNonQueryCommand[] commands)
+        {
+            var mock = new ExecutorMock();
+            var sut = SutFactory(resolver, mock);
 
-//        [Test]
-//        public async void ProjectAsyncMessagesCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
-//        {
-//            var commands1 = new[] { CommandFactory(), CommandFactory() };
-//            var commands2 = new[] { CommandFactory(), CommandFactory() };
-//            var mock = new ExecutorMock();
-//            var handler1 = new SqlProjectionHandler(typeof(int), _ => commands1);
-//            var handler2 = new SqlProjectionHandler(typeof(bool), _ => commands2);
-//            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+            var result = await sut.ProjectAsync(messages);
 
-//            var result = await sut.ProjectAsync(new object[] { 123, true });
+            Assert.That(result, Is.EqualTo(commands.Length));
+            Assert.That(mock.Commands, Is.EquivalentTo(commands));
+        }
 
-//            Assert.That(result, Is.EqualTo(4));
-//            Assert.That(mock.Commands, Is.EquivalentTo(commands1.Concat(commands2)));
-//        }
+        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageCases")]
+        public async void ProjectAsyncMessageTokenCausesExecutorToBeCalledWithExpectedCommands(
+            SqlProjectionHandlerResolver resolver,
+            object message,
+            SqlNonQueryCommand[] commands)
+        {
+            var mock = new ExecutorMock();
+            var sut = SutFactory(resolver, mock);
 
-//        [Test]
-//        public async void ProjectAsyncMessageCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
-//        {
-//            var commands = new[] { CommandFactory(), CommandFactory() };
-//            var mock = new ExecutorMock();
-//            var handler = new SqlProjectionHandler(typeof(string), _ => commands);
-//            var sut = SutFactory(new[] { handler }, mock);
+            var result = await sut.ProjectAsync(message, CancellationToken.None);
 
-//            var result = await sut.ProjectAsync(new object());
+            Assert.That(result, Is.EqualTo(commands.Length));
+            Assert.That(mock.Commands, Is.EquivalentTo(commands));
+        }
 
-//            Assert.That(result, Is.EqualTo(0));
-//            Assert.That(mock.Commands, Is.Empty);
-//        }
+        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesCases")]
+        public async void ProjectAsyncMessagesTokenCausesExecutorToBeCalledWithExpectedCommands(
+            SqlProjectionHandlerResolver resolver,
+            object[] messages,
+            SqlNonQueryCommand[] commands)
+        {
+            var mock = new ExecutorMock();
+            var sut = SutFactory(resolver, mock);
 
-//        [Test]
-//        public async void ProjectAsyncMessagesCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
-//        {
-//            var commands1 = new[] { CommandFactory(), CommandFactory() };
-//            var commands2 = new[] { CommandFactory(), CommandFactory() };
-//            var mock = new ExecutorMock();
-//            var handler1 = new SqlProjectionHandler(typeof(int), _ => commands1);
-//            var handler2 = new SqlProjectionHandler(typeof(bool), _ => commands2);
-//            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+            var result = await sut.ProjectAsync(messages, CancellationToken.None);
 
-//            var result = await sut.ProjectAsync(new object[] { 123 });
+            Assert.That(result, Is.EqualTo(commands.Length));
+            Assert.That(mock.Commands, Is.EquivalentTo(commands));
+        }
 
-//            Assert.That(result, Is.EqualTo(2));
-//            Assert.That(mock.Commands, Is.EquivalentTo(commands1));
-//        }
+        private static AsyncSqlProjector SutFactory()
+        {
+            return SutFactory(message => new SqlProjectionHandler[0], new ExecutorStub());
+        }
 
-//        [Test]
-//        public async void ProjectAsyncTokenMessageCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
-//        {
-//            var commands = new[] { CommandFactory(), CommandFactory() };
-//            var mock = new ExecutorMock();
-//            var handler = new SqlProjectionHandler(typeof(object), _ => commands);
-//            var sut = SutFactory(new[] { handler }, mock);
+        private static AsyncSqlProjector SutFactory(SqlProjectionHandlerResolver resolver)
+        {
+            return SutFactory(resolver, new ExecutorStub());
+        }
 
-//            var result = await sut.ProjectAsync(new object(), CancellationToken.None);
+        private static AsyncSqlProjector SutFactory(IAsyncSqlNonQueryCommandExecutor executor)
+        {
+            return SutFactory(message => new SqlProjectionHandler[0], executor);
+        }
 
-//            Assert.That(result, Is.EqualTo(2));
-//            Assert.That(mock.Commands, Is.EquivalentTo(commands));
-//        }
+        private static AsyncSqlProjector SutFactory(SqlProjectionHandlerResolver resolver, IAsyncSqlNonQueryCommandExecutor executor)
+        {
+            return new AsyncSqlProjector(resolver, executor);
+        }
 
-//        [Test]
-//        public async void ProjectAsyncTokenMessagesCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMatches()
-//        {
-//            var commands1 = new[] { CommandFactory(), CommandFactory() };
-//            var commands2 = new[] { CommandFactory(), CommandFactory() };
-//            var mock = new ExecutorMock();
-//            var handler1 = new SqlProjectionHandler(typeof(int), _ => commands1);
-//            var handler2 = new SqlProjectionHandler(typeof(bool), _ => commands2);
-//            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+        class ExecutorMock : IAsyncSqlNonQueryCommandExecutor
+        {
+            public readonly List<SqlNonQueryCommand> Commands = new List<SqlNonQueryCommand>();
 
-//            var result = await sut.ProjectAsync(new object[] { 123, true }, CancellationToken.None);
+            public Task ExecuteNonQueryAsync(SqlNonQueryCommand command)
+            {
+                return ExecuteNonQueryAsync(command, CancellationToken.None);
+            }
 
-//            Assert.That(result, Is.EqualTo(4));
-//            Assert.That(mock.Commands, Is.EquivalentTo(commands1.Concat(commands2)));
-//        }
+            public Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
+            {
+                Commands.Add(command);
+                return Task.FromResult<object>(null);
+            }
 
-//        [Test]
-//        public async void ProjectAsyncTokenMessageCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
-//        {
-//            var commands = new[] { CommandFactory(), CommandFactory() };
-//            var mock = new ExecutorMock();
-//            var handler = new SqlProjectionHandler(typeof(string), _ => commands);
-//            var sut = SutFactory(new[] { handler }, mock);
+            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands)
+            {
+                return ExecuteNonQueryAsync(commands, CancellationToken.None);
+            }
 
-//            var result = await sut.ProjectAsync(new object(), CancellationToken.None);
+            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
+            {
+                var count = Commands.Count;
+                Commands.AddRange(commands);
+                return Task.FromResult(Commands.Count - count);
+            }
+        }
 
-//            Assert.That(result, Is.EqualTo(0));
-//            Assert.That(mock.Commands, Is.Empty);
-//        }
+        class ExecutorStub : IAsyncSqlNonQueryCommandExecutor
+        {
+            public Task ExecuteNonQueryAsync(SqlNonQueryCommand command)
+            {
+                return Task.FromResult<object>(null);
+            }
 
-//        [Test]
-//        public async void ProjectAsyncTokenMessagesCausesExecutorToBeCalledWithExpectedCommandsWhenMessageTypeMismatches()
-//        {
-//            var commands1 = new[] { CommandFactory(), CommandFactory() };
-//            var commands2 = new[] { CommandFactory(), CommandFactory() };
-//            var mock = new ExecutorMock();
-//            var handler1 = new SqlProjectionHandler(typeof(int), _ => commands1);
-//            var handler2 = new SqlProjectionHandler(typeof(bool), _ => commands2);
-//            var sut = SutFactory(new[] { handler1, handler2 }, mock);
+            public Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
+            {
+                return Task.FromResult<object>(null);
+            }
 
-//            var result = await sut.ProjectAsync(new object[] { 123 }, CancellationToken.None);
+            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands)
+            {
+                return Task.FromResult(0);
+            }
 
-//            Assert.That(result, Is.EqualTo(2));
-//            Assert.That(mock.Commands, Is.EquivalentTo(commands1));
-//        }
-
-//        private static AsyncSqlProjector SutFactory()
-//        {
-//            return SutFactory(new SqlProjectionHandler[0], new ExecutorStub());
-//        }
-
-//        private static AsyncSqlProjector SutFactory(SqlProjectionHandler[] handlers)
-//        {
-//            return SutFactory(handlers, new ExecutorStub());
-//        }
-
-//        private static AsyncSqlProjector SutFactory(IAsyncSqlNonQueryCommandExecutor executor)
-//        {
-//            return SutFactory(new SqlProjectionHandler[0], executor);
-//        }
-
-//        private static AsyncSqlProjector SutFactory(SqlProjectionHandler[] handlers, IAsyncSqlNonQueryCommandExecutor executor)
-//        {
-//            return new AsyncSqlProjector(handlers, executor);
-//        }
-
-//        private static SqlNonQueryCommand CommandFactory()
-//        {
-//            return new SqlNonQueryCommandStub("text", new DbParameter[0], CommandType.Text);
-//        }
-
-//        class ExecutorMock : IAsyncSqlNonQueryCommandExecutor
-//        {
-//            public readonly List<SqlNonQueryCommand> Commands = new List<SqlNonQueryCommand>();
-
-//            public Task ExecuteNonQueryAsync(SqlNonQueryCommand command)
-//            {
-//                return ExecuteNonQueryAsync(command, CancellationToken.None);
-//            }
-
-//            public Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
-//            {
-//                Commands.Add(command);
-//                return Task.FromResult<object>(null);
-//            }
-
-//            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands)
-//            {
-//                return ExecuteNonQueryAsync(commands, CancellationToken.None);
-//            }
-
-//            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
-//            {
-//                var count = Commands.Count;
-//                Commands.AddRange(commands);
-//                return Task.FromResult(Commands.Count - count);
-//            }
-//        }
-
-//        class ExecutorStub : IAsyncSqlNonQueryCommandExecutor
-//        {
-//            public Task ExecuteNonQueryAsync(SqlNonQueryCommand command)
-//            {
-//                return Task.FromResult<object>(null);
-//            }
-
-//            public Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
-//            {
-//                return Task.FromResult<object>(null);
-//            }
-
-//            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands)
-//            {
-//                return Task.FromResult(0);
-//            }
-
-//            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
-//            {
-//                return Task.FromResult(0);
-//            }
-//        }
-//    }
-//}
+            public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
+            {
+                return Task.FromResult(0);
+            }
+        }
+    }
+}

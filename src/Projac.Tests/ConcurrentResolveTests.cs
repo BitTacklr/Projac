@@ -1,22 +1,22 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 
 namespace Projac.Tests
 {
     [TestFixture]
-    public class ResolveTests
+    public class ConcurrentResolveTests
     {
         [Test]
         public void WhenHandlerMessageTypeHandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Resolve.WhenHandlerMessageType(null));
+                ConcurrentResolve.WhenHandlerMessageType(null));
         }
 
         [Test]
         public void WhenHandlerMessageTypeResolverThrowsWhenMessageIsNull()
         {
-            var sut = Resolve.WhenHandlerMessageType(new SqlProjectionHandler[0]);
+            var sut = ConcurrentResolve.WhenHandlerMessageType(new SqlProjectionHandler[0]);
             Assert.Throws<ArgumentNullException>(() => sut(null));
         }
 
@@ -26,7 +26,7 @@ namespace Projac.Tests
             object message,
             SqlProjectionHandler[] resolved)
         {
-            var sut = Resolve.WhenHandlerMessageType(resolvable);
+            var sut = ConcurrentResolve.WhenHandlerMessageType(resolvable);
             var result = sut(message);
             Assert.That(result, Is.EquivalentTo(resolved));
         }
@@ -35,13 +35,13 @@ namespace Projac.Tests
         public void WhenAssignableToHandlerMessageTypeHandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Resolve.WhenAssignableToHandlerMessageType(null));
+                ConcurrentResolve.WhenAssignableToHandlerMessageType(null));
         }
 
         [Test]
         public void WhenAssignableToHandlerMessageTypeResolverThrowsWhenMessageIsNull()
         {
-            var sut = Resolve.WhenAssignableToHandlerMessageType(new SqlProjectionHandler[0]);
+            var sut = ConcurrentResolve.WhenAssignableToHandlerMessageType(new SqlProjectionHandler[0]);
             Assert.Throws<ArgumentNullException>(() => sut(null));
         }
 
@@ -51,7 +51,7 @@ namespace Projac.Tests
             object message,
             SqlProjectionHandler[] resolved)
         {
-            var sut = Resolve.WhenAssignableToHandlerMessageType(resolvable);
+            var sut = ConcurrentResolve.WhenAssignableToHandlerMessageType(resolvable);
             var result = sut(message);
             Assert.That(result, Is.EquivalentTo(resolved));
         }

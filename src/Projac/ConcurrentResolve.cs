@@ -4,26 +4,26 @@ using System.Collections.Concurrent;
 namespace Projac
 {
     /// <summary>
-    /// Lists the available concurrent <see cref="SqlProjectionHandlerResolver">resolvers</see>.
+    /// Represents the available concurrent <see cref="SqlProjectionHandlerResolver">resolvers</see>.
     /// </summary>
     public static class ConcurrentResolve
     {
         /// <summary>
         /// Resolves the <see cref="SqlProjectionHandler">handlers</see> that match the type of the message exactly.
         /// </summary>
-        /// <param name="handlers">The set of available handlers.</param>
+        /// <param name="handlers">The set of resolvable handlers.</param>
         /// <returns>A <see cref="SqlProjectionHandlerResolver">resolver</see>.</returns>
-        public static SqlProjectionHandlerResolver WhenType(SqlProjectionHandler[] handlers)
+        public static SqlProjectionHandlerResolver WhenHandlerMessageType(SqlProjectionHandler[] handlers)
         {
-            return Resolve.WhenType(handlers);
+            return Resolve.WhenHandlerMessageType(handlers);
         }
 
         /// <summary>
         /// Resolves the <see cref="SqlProjectionHandler">handlers</see> to which the message instance is assignable.
         /// </summary>
-        /// <param name="handlers">The set of available handlers.</param>
+        /// <param name="handlers">The set of resolvable handlers.</param>
         /// <returns>A <see cref="SqlProjectionHandlerResolver">resolver</see>.</returns>
-        public static SqlProjectionHandlerResolver WhenAssignableToType(SqlProjectionHandler[] handlers)
+        public static SqlProjectionHandlerResolver WhenAssignableToHandlerMessageType(SqlProjectionHandler[] handlers)
         {
             if (handlers == null)
                 throw new ArgumentNullException("handlers");
