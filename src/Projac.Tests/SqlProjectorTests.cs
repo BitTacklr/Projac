@@ -69,7 +69,7 @@ namespace Projac.Tests
 
         private static SqlProjector SutFactory()
         {
-            return SutFactory(Resolve.WhenHandlerMessageType(new SqlProjectionHandler[0]), new ExecutorStub());
+            return SutFactory(Resolve.WhenEqualToHandlerMessageType(new SqlProjectionHandler[0]), new ExecutorStub());
         }
 
         private static SqlProjector SutFactory(SqlProjectionHandlerResolver resolver)
@@ -79,7 +79,7 @@ namespace Projac.Tests
 
         private static SqlProjector SutFactory(ISqlNonQueryCommandExecutor executor)
         {
-            return SutFactory(Resolve.WhenHandlerMessageType(new SqlProjectionHandler[0]), executor);
+            return SutFactory(Resolve.WhenEqualToHandlerMessageType(new SqlProjectionHandler[0]), executor);
         }
 
         private static SqlProjector SutFactory(SqlProjectionHandlerResolver resolver, ISqlNonQueryCommandExecutor executor)

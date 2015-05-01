@@ -14,7 +14,7 @@ namespace Projac
         /// </summary>
         /// <param name="handlers">The set of resolvable handlers.</param>
         /// <returns>A <see cref="SqlProjectionHandlerResolver">resolver</see>.</returns>
-        public static SqlProjectionHandlerResolver WhenHandlerMessageType(SqlProjectionHandler[] handlers)
+        public static SqlProjectionHandlerResolver WhenEqualToHandlerMessageType(SqlProjectionHandler[] handlers)
         {
             if (handlers == null) 
                 throw new ArgumentNullException("handlers");
@@ -49,7 +49,8 @@ namespace Projac
                 SqlProjectionHandler[] result;
                 if (!cache.TryGetValue(message.GetType(), out result))
                 {
-                    result = Array.FindAll(handlers, handler => handler.Message.IsInstanceOfType(message));
+                    result = Array.FindAll(handlers, 
+                        handler => handler.Message.IsInstanceOfType(message));
                     cache.Add(message.GetType(), result);
                 }
                 return result;

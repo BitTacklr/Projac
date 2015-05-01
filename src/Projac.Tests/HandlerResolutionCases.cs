@@ -7,7 +7,7 @@ namespace Projac.Tests
 {
     public class HandlerResolutionCases
     {
-        public static IEnumerable<TestCaseData> WhenHandlerMessageTypeCases()
+        public static IEnumerable<TestCaseData> WhenEqualToHandlerMessageTypeCases()
         {
             // * Matches *
 

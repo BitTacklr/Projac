@@ -7,26 +7,26 @@ namespace Projac.Tests
     public class ConcurrentResolveTests
     {
         [Test]
-        public void WhenHandlerMessageTypeHandlersCanNotBeNull()
+        public void WhenEqualToHandlerMessageTypeHandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ConcurrentResolve.WhenHandlerMessageType(null));
+                ConcurrentResolve.WhenEqualToHandlerMessageType(null));
         }
 
         [Test]
-        public void WhenHandlerMessageTypeResolverThrowsWhenMessageIsNull()
+        public void WhenEqualToHandlerMessageTypeResolverThrowsWhenMessageIsNull()
         {
-            var sut = ConcurrentResolve.WhenHandlerMessageType(new SqlProjectionHandler[0]);
+            var sut = ConcurrentResolve.WhenEqualToHandlerMessageType(new SqlProjectionHandler[0]);
             Assert.Throws<ArgumentNullException>(() => sut(null));
         }
 
-        [TestCaseSource(typeof(HandlerResolutionCases), "WhenHandlerMessageTypeCases")]
-        public void WhenHandlerMessageTypeResolverReturnsExpectedResult(
+        [TestCaseSource(typeof(HandlerResolutionCases), "WhenEqualToHandlerMessageTypeCases")]
+        public void WhenEqualToHandlerMessageTypeResolverReturnsExpectedResult(
             SqlProjectionHandler[] resolvable,
             object message,
             SqlProjectionHandler[] resolved)
         {
-            var sut = ConcurrentResolve.WhenHandlerMessageType(resolvable);
+            var sut = ConcurrentResolve.WhenEqualToHandlerMessageType(resolvable);
             var result = sut(message);
             Assert.That(result, Is.EquivalentTo(resolved));
         }
