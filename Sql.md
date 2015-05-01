@@ -177,6 +177,19 @@ How and when you decide to execute the projections is still left as an exercise 
 
 You'll notice that projections don't know anything about the execution. This is deliberate, allowing you to decide when and how to flush commands to the relational database.
 
+Projac has the ability to perform custom resolution of handlers for a particular message. This capability is provided by the ``SqlProjectionHandlerResolver`` delegate. Out of the box, two implementations are provided. ``Resolve.WhenEqualToHandlerMessageType`` where the message type needs to be an exact match with the message type of the handler, and ``Resolve.WhenAssignableToHandlerMessageType`` where the message type needs to be assignable to the message type of the handler. The latter resolver allows you to dispatch to handlers that are a base type of the message or if you want to use a contravariant envelope (e.g. ``Envelope<out TMessage>``). In this case, handler execution order becomes important. The reasoning is simple: the order in which the handlers are passed into the resolver is the order in which the handlers will be returned from the resolver and consequently also be invoked in that order. Obviously, you're free to bring your own resolver. There's also a concurrent variation of the above two, provided by ``ConcurrentResolve``, **IF** you're calling the projector from different threads concurrently. However, the general recommendation is to call the projector either from a single thread or non-concurrent.
+
+```
+var projector = new SqlProjector(
+    Resolve.WhenEqualToHandlerMessageType(projection.Handlers),
+    new TransactionalSqlCommandExecutor(
+        new ConnectionStringSettings(
+            "projac",
+            @"Data Source=(localdb)\ProjectsV12;Initial Catalog=ProjacUsage;Integrated Security=SSPI;",
+            "System.Data.SqlClient"),
+        IsolationLevel.ReadCommitted));
+```
+
 # FAQ
 
 ## Do I need Projac or Paramol?
