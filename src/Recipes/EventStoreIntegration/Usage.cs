@@ -24,7 +24,8 @@ namespace Recipes.EventStoreIntegration
         public async void ShowWithStream()
         {
             //setup a projection schema (one of many ways)
-            var projector = new SqlProjector(Instance.Handlers,
+            var projector = new SqlProjector(
+                Resolve.WhenEqualToHandlerMessageType(Instance.Handlers),
                 new TransactionalSqlCommandExecutor(
                     new ConnectionStringSettings(
                         "projac",
@@ -96,7 +97,8 @@ namespace Recipes.EventStoreIntegration
         public async void ShowWithCatchupSubscription()
         {
             //setup a projection schema (one of many ways)
-            var projector = new SqlProjector(Instance.Handlers,
+            var projector = new SqlProjector(
+                Resolve.WhenEqualToHandlerMessageType(Instance.Handlers),
                 new TransactionalSqlCommandExecutor(
                     new ConnectionStringSettings(
                         "projac",
