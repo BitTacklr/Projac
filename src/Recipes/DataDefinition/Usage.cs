@@ -9,25 +9,32 @@ namespace Recipes.DataDefinition
     {
         private static readonly byte[] Id = "Sample".HashId();
 
-        public static readonly SqlProjection Sample = new SqlProjectionBuilder().
-            When<CreateSchema>(_ => 
-                TSql.NonQueryStatement(
-                    "CREATE TABLE [Sample] ([Id] INT NOT NULL CONSTRAINT PK_Sample PRIMARY KEY, [Value] INT NOT NULL)")).
-            When<DropSchema>(_ => 
-                TSql.NonQueryStatement(
-                    "DROP TABLE [Sample]")).
-            When<DeleteData>(_ => 
-                TSql.NonQueryStatement(
-                    "DELETE FROM [Sample]")).
-            When<SetCheckpoint>(_ => 
-                TSql.NonQueryStatement(
-                    "UPDATE [CheckpointGate] SET Checkpoint = @Checkpoint WHERE [Id] = @Id",
-                new
-                {
-                    Checkpoint = TSql.BigInt(_.Checkpoint), 
-                    Id = TSql.Binary(Id, 16)
-                })).
-            Build();
+        public class Sample : SqlProjection
+        {
+            public Sample()
+            {
+                When<CreateSchema>(_ =>
+                    TSql.NonQueryStatement(
+                        "CREATE TABLE [Sample] ([Id] INT NOT NULL CONSTRAINT PK_Sample PRIMARY KEY, [Value] INT NOT NULL)"));
+                    
+                    When<DropSchema>(_ =>
+                        TSql.NonQueryStatement(
+                            "DROP TABLE [Sample]"));
+
+                    When<DeleteData>(_ =>
+                        TSql.NonQueryStatement(
+                            "DELETE FROM [Sample]"));
+
+                    When<SetCheckpoint>(_ =>
+                        TSql.NonQueryStatement(
+                            "UPDATE [CheckpointGate] SET Checkpoint = @Checkpoint WHERE [Id] = @Id",
+                            new
+                            {
+                                Checkpoint = TSql.BigInt(_.Checkpoint),
+                                Id = TSql.Binary(Id, 16)
+                            }));
+            }
+        }
 
         private static byte[] HashId(this string value)
         {

@@ -51,7 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlProjectionHandlerResolver.cs" />
     <Compile Include="Resolve.cs" />
-    <Compile Include="SqlProjectionBuilder.cs" />
     <Compile Include="SqlProjectionHandler.cs" />
     <Compile Include="SqlProjection.cs" />
     <Compile Include="SqlProjector.cs" />

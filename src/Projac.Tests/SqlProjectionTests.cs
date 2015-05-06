@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -9,21 +10,49 @@ using Projac.Tests.Framework;
 
 namespace Projac.Tests
 {
-    namespace SqlProjection2Tests
+    namespace SqlProjectionTests
     {
         [TestFixture]
-        public class InstanceWithoutHandlersTests
+        public class AnyInstanceTests
         {
-            class WithoutHandlers : SqlProjection2
+            class Any : SqlProjection
             {
             }
 
-            private WithoutHandlers _sut;
+            private SqlProjection _sut;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _sut = new Any();
+            }
+
+            [Test]
+            public void IsEnumerableOfSqlProjectionHandler()
+            {
+                Assert.That(_sut, Is.AssignableTo<IEnumerable<SqlProjectionHandler>>());
+            }
+        }
+
+        [TestFixture]
+        public class InstanceWithoutHandlersTests
+        {
+            class WithoutHandlers : SqlProjection
+            {
+            }
+
+            private SqlProjection _sut;
 
             [SetUp]
             public void SetUp()
             {
                 _sut = new WithoutHandlers();
+            }
+
+            [Test]
+            public void GetEnumeratorReturnsExpectedInstance()
+            {
+                Assert.That(_sut, Is.Empty);
             }
 
             [Test]
@@ -50,7 +79,93 @@ namespace Projac.Tests
         }
 
         [TestFixture]
-        public class SingleSqlNonQueryCommandReturningHandlerTests
+        public class InstanceWithHandlersTests
+        {
+            class WithHandlers : SqlProjection
+            {
+                private readonly SqlNonQueryCommand _command;
+                private readonly SqlNonQueryCommand[] _commandArray;
+                private readonly IEnumerable<SqlNonQueryCommand> _commandEnumeration;
+                private readonly SqlNonQueryCommand[] _result;
+
+                public WithHandlers()
+                {
+                    _command = CommandFactory();
+                    _commandArray = new[]
+                    {
+                        CommandFactory(), CommandFactory()
+                    };
+                    _commandEnumeration = Enumerable.Repeat(CommandFactory(), 1);
+
+                    var commands = new List<SqlNonQueryCommand>();
+                    commands.Add(_command);
+                    commands.AddRange(_commandArray);
+                    commands.AddRange(_commandEnumeration);
+                    _result = commands.ToArray();
+
+                    When<object>(m => _command);
+                    When<object>(m => _commandArray);
+                    When<object>(m => _commandEnumeration);
+                }
+
+                public SqlNonQueryCommand[] Result
+                {
+                    get { return _result; }
+                }
+
+                private static SqlNonQueryCommand CommandFactory()
+                {
+                    return new SqlNonQueryCommandStub("", new DbParameter[0], CommandType.Text);
+                }
+            }
+
+            private WithHandlers _sut;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _sut = new WithHandlers();
+            }
+
+            [Test]
+            public void GetEnumeratorReturnsExpectedInstance()
+            {
+                IEnumerable<SqlProjectionHandler> result = _sut;
+
+                Assert.That(result.SelectMany(_ => _.Handler(null)), 
+                    Is.EqualTo(_sut.Result));
+            }
+
+            [Test]
+            public void HandlersReturnsExpectedResult()
+            {
+                var result = _sut.Handlers;
+
+                Assert.That(result.SelectMany(_ => _.Handler(null)),
+                    Is.EqualTo(_sut.Result));
+            }
+
+            [Test]
+            public void ImplicitConversionToSqlProjectionHandlerArray()
+            {
+                SqlProjectionHandler[] result = _sut;
+
+                Assert.That(result.SelectMany(_ => _.Handler(null)),
+                    Is.EqualTo(_sut.Result));
+            }
+
+            [Test]
+            public void ExplicitConversionToSqlProjectionHandlerArray()
+            {
+                var result = (SqlProjectionHandler[])_sut;
+
+                Assert.That(result.SelectMany(_ => _.Handler(null)),
+                    Is.EqualTo(_sut.Result));
+            }
+        }
+
+        [TestFixture]
+        public class SqlNonQueryCommandReturningHandlerTests
         {
             [Test]
             public void WhenHandlerCanNotBeNull()
@@ -122,7 +237,7 @@ namespace Projac.Tests
                 return new SqlNonQueryCommandStub("", new DbParameter[0], CommandType.Text);
             }
 
-            private class RegisterNullHandler : SqlProjection2
+            private class RegisterNullHandler : SqlProjection
             {
                 public RegisterNullHandler()
                 {
@@ -130,7 +245,7 @@ namespace Projac.Tests
                 }
             }
 
-            private class RegisterHandlers : SqlProjection2
+            private class RegisterHandlers : SqlProjection
             {
                 public RegisterHandlers(params Func<object, SqlNonQueryCommand>[] handlers)
                 {
@@ -214,7 +329,7 @@ namespace Projac.Tests
                 return handlerCommands;
             }
 
-            private class RegisterNullHandler : SqlProjection2
+            private class RegisterNullHandler : SqlProjection
             {
                 public RegisterNullHandler()
                 {
@@ -222,7 +337,7 @@ namespace Projac.Tests
                 }
             }
 
-            private class RegisterHandlers : SqlProjection2
+            private class RegisterHandlers : SqlProjection
             {
                 public RegisterHandlers(params Func<object, SqlNonQueryCommand[]>[] handlers)
                 {
@@ -316,7 +431,7 @@ namespace Projac.Tests
                 return handlerCommands;
             }
 
-            private class RegisterNullHandler : SqlProjection2
+            private class RegisterNullHandler : SqlProjection
             {
                 public RegisterNullHandler()
                 {
@@ -324,7 +439,7 @@ namespace Projac.Tests
                 }
             }
 
-            private class RegisterHandlers : SqlProjection2
+            private class RegisterHandlers : SqlProjection
             {
                 public RegisterHandlers(params Func<object, IEnumerable<SqlNonQueryCommand>>[] handlers)
                 {
@@ -345,202 +460,267 @@ namespace Projac.Tests
         }
 
         [TestFixture]
-        public class AnyInstanceTests
+        public class EnumeratorTests
         {
-        }
-    }
-
-    [TestFixture]
-    public class SqlProjectionTests
-    {
-        [Test]
-        public void HandlersCanNotBeNull()
-        {
-            Assert.Throws<ArgumentNullException>(
-                () => new SqlProjection(null)
-                );
-        }
-
-        [Test]
-        public void HandlersArePreservedAsProperty()
-        {
-            var handler1 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler2 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-
-            var handlers = new[]
+            [Test]
+            public void HandlersCanNotBeNull()
             {
-                handler1,
-                handler2
-            };
+                Assert.Throws<ArgumentNullException>(
+                    () => new SqlProjection.Enumerator(null));
+            }
 
-            var sut = new SqlProjection(handlers);
-
-            var result = sut.Handlers;
-
-            Assert.That(result, Is.EquivalentTo(handlers));
-        }
-
-        [Test]
-        public void EmptyReturnsExpectedInstance()
-        {
-            var result = SqlProjection.Empty;
-
-            Assert.That(result, Is.InstanceOf<SqlProjection>());
-            Assert.That(result.Handlers, Is.Empty);
-        }
-
-        [Test]
-        public void EmptyReturnsSameInstance()
-        {
-            Assert.AreSame(SqlProjection.Empty, SqlProjection.Empty);
-        }
-
-        [Test]
-        public void ConcatProjectionCanNotBeNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => SqlProjection.Empty.Concat((SqlProjection) null));
-        }
-
-        [Test]
-        public void ConcatHandlerCanNotBeNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => SqlProjection.Empty.Concat((SqlProjectionHandler)null));
-        }
-
-        [Test]
-        public void ConcatHandlersCanNotBeNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => SqlProjection.Empty.Concat((SqlProjectionHandler[])null));
-        }
-
-        [Test]
-        public void ConcatProjectionReturnsExpectedResult()
-        {
-            var handler1 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler2 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler3 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler4 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var projection = new SqlProjection(new[]
+            [Test]
+            public void DisposeDoesNotThrow()
             {
-                handler3,
-                handler4
-            });
-            var sut = new SqlProjection(new[]
+                Assert.DoesNotThrow(() => 
+                    new SqlProjection.Enumerator(new SqlProjectionHandler[0]));
+            }
+
+            [TestCaseSource("MoveNextCases")]
+            public void MoveNextReturnsExpectedResult(
+                SqlProjection.Enumerator sut, bool expected)
             {
-                handler1,
-                handler2
-            });
+                var result = sut.MoveNext();
+                Assert.That(result, Is.EqualTo(expected));
+            }
 
-            var result = sut.Concat(projection);
-
-            Assert.That(result.Handlers, Is.EquivalentTo(new[]{ handler1, handler2, handler3, handler4}));
-        }
-
-        [Test]
-        public void ConcatHandlerReturnsExpectedResult()
-        {
-            var handler1 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler2 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler3 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var sut = new SqlProjection(new[]
+            private static IEnumerable<TestCaseData> MoveNextCases()
             {
-                handler1,
-                handler2
-            });
+                //No handlers
+                var enumerator1 = new SqlProjection.Enumerator(new SqlProjectionHandler[0]);
+                yield return new TestCaseData(enumerator1, false);
+                yield return new TestCaseData(enumerator1, false); //idempotency check
 
-            var result = sut.Concat(handler3);
+                //1 handler
+                var enumerator2 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory())
+                });
+                yield return new TestCaseData(enumerator2, true);
+                yield return new TestCaseData(enumerator2, false);
+                yield return new TestCaseData(enumerator2, false); //idempotency check
 
-            Assert.That(result.Handlers, Is.EquivalentTo(new[] { handler1, handler2, handler3 }));
-        }
+                //2 handlers
+                var enumerator3 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory()),
+                    HandlerFactory(CommandFactory())
+                });
+                yield return new TestCaseData(enumerator3, true);
+                yield return new TestCaseData(enumerator3, true);
+                yield return new TestCaseData(enumerator3, false);
+                yield return new TestCaseData(enumerator3, false); //idempotency check
+            }
 
-        [Test]
-        public void ConcatHandlersReturnsExpectedResult()
-        {
-            var handler1 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler2 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler3 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler4 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var sut = new SqlProjection(new[]
+            [TestCaseSource("MoveNextAfterResetCases")]
+            public void MoveNextAfterResetReturnsExpectedResult(
+                SqlProjection.Enumerator sut, bool expected)
             {
-                handler1,
-                handler2
-            });
+                sut.Reset();
 
-            var result = sut.Concat(new[]
+                var result = sut.MoveNext();
+
+                Assert.That(result, Is.EqualTo(expected));
+            }
+
+            private static IEnumerable<TestCaseData> MoveNextAfterResetCases()
             {
-                handler3,
-                handler4
-            });
+                //No handlers
+                var enumerator1 = new SqlProjection.Enumerator(new SqlProjectionHandler[0]);
+                yield return new TestCaseData(enumerator1, false);
+                yield return new TestCaseData(enumerator1, false);
 
-            Assert.That(result.Handlers, Is.EquivalentTo(new[] { handler1, handler2, handler3, handler4 }));
-        }
+                //1 handler
+                var enumerator2 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory())
+                });
+                yield return new TestCaseData(enumerator2, true);
+                yield return new TestCaseData(enumerator2, true);
 
-        [Test]
-        public void EmptyToBuilderReturnsExpectedResult()
-        {
-            var sut = SqlProjection.Empty;
-            
-            var result = sut.ToBuilder().Build().Handlers;
+                //2 handlers
+                var enumerator3 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory()),
+                    HandlerFactory(CommandFactory())
+                });
+                yield return new TestCaseData(enumerator3, true);
+                yield return new TestCaseData(enumerator3, true);
+            }
 
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public void ToBuilderReturnsExpectedResult()
-        {
-            var handler1 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler2 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var sut = new SqlProjection(new[]
+            [TestCaseSource("ResetCases")]
+            public void ResetDoesNotThrow(SqlProjection.Enumerator sut)
             {
-                handler1,
-                handler2
-            });
+                Assert.DoesNotThrow(sut.Reset);
+            }
 
-            var result = sut.ToBuilder().Build().Handlers;
-
-            Assert.That(result, Is.EquivalentTo(new[]
+            private static IEnumerable<TestCaseData> ResetCases()
             {
-                handler1,
-                handler2
-            }));
-        }
+                //No handlers
+                var enumerator1 = new SqlProjection.Enumerator(new SqlProjectionHandler[0]);
+                yield return new TestCaseData(enumerator1);
 
-        [Test]
-        public void ImplicitConversionToSqlProjectionHandlerArray()
-        {
-            var handler1 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler2 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
+                //1 handler
+                var enumerator2 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory())
+                });
+                yield return new TestCaseData(enumerator2);
 
-            var handlers = new[]
+                //2 handlers
+                var enumerator3 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory()),
+                    HandlerFactory(CommandFactory())
+                });
+                yield return new TestCaseData(enumerator3);
+            }
+
+            [TestCaseSource("CurrentNotStartedCases")]
+            public void CurrentReturnsExpectedResultWhenNotStarted(
+                SqlProjection.Enumerator sut)
             {
-                handler1,
-                handler2
-            };
+                Assert.Throws<InvalidOperationException>(
+                    () => { var _ = sut.Current; });
+            }
 
-            var sut = new SqlProjection(handlers);
-
-            SqlProjectionHandler[] result = sut;
-
-            Assert.That(result, Is.EquivalentTo(handlers));
-        }
-
-        [Test]
-        public void ExplicitConversionToSqlProjectionHandlerArray()
-        {
-            var handler1 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-            var handler2 = new SqlProjectionHandler(typeof(object), _ => new SqlNonQueryCommand[0]);
-
-            var handlers = new[]
+            [TestCaseSource("CurrentNotStartedCases")]
+            public void EnumeratorCurrentReturnsExpectedResultWhenNotStarted(
+                IEnumerator sut)
             {
-                handler1,
-                handler2
-            };
+                Assert.Throws<InvalidOperationException>(
+                    () => { var _ = sut.Current; });
+            }
 
-            var sut = new SqlProjection(handlers);
+            private static IEnumerable<TestCaseData> CurrentNotStartedCases()
+            {
+                //No handlers
+                var enumerator1 = new SqlProjection.Enumerator(new SqlProjectionHandler[0]);
+                yield return new TestCaseData(enumerator1);
 
-            var result = (SqlProjectionHandler[])sut;
+                //1 handler
+                var enumerator2 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory())
+                });
+                yield return new TestCaseData(enumerator2);
 
-            Assert.That(result, Is.EquivalentTo(handlers));
+                //2 handlers
+                var enumerator3 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory()),
+                    HandlerFactory(CommandFactory())
+                });
+                yield return new TestCaseData(enumerator3);
+            }
+
+            [TestCaseSource("CurrentCompletedCases")]
+            public void CurrentReturnsExpectedResultWhenCompleted(
+                SqlProjection.Enumerator sut)
+            {
+                Assert.Throws<InvalidOperationException>(
+                    () => { var _ = sut.Current; });
+            }
+
+            [TestCaseSource("CurrentCompletedCases")]
+            public void EnumeratorCurrentReturnsExpectedResultWhenCompleted(
+                IEnumerator sut)
+            {
+                Assert.Throws<InvalidOperationException>(
+                    () => { var _ = sut.Current; });
+            }
+
+            private static IEnumerable<TestCaseData> CurrentCompletedCases()
+            {
+                //No handlers
+                var enumerator1 = new SqlProjection.Enumerator(new SqlProjectionHandler[0]);
+                while (enumerator1.MoveNext()) { }
+                yield return new TestCaseData(enumerator1);
+
+                //1 handler
+                var enumerator2 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory())
+                });
+                while (enumerator2.MoveNext()) { }
+                yield return new TestCaseData(enumerator2);
+
+                //2 handlers
+                var enumerator3 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(CommandFactory()),
+                    HandlerFactory(CommandFactory())
+                });
+                while (enumerator3.MoveNext()) { }
+                yield return new TestCaseData(enumerator3);
+            }
+
+            [TestCaseSource("CurrentStartedCases")]
+            public void CurrentReturnsExpectedResultWhenStarted(
+                SqlProjection.Enumerator sut, SqlNonQueryCommand[] expected)
+            {
+                sut.MoveNext();
+
+                var result = sut.Current.Handler(null);
+
+                Assert.That(result, Is.EqualTo(expected));
+            }
+
+            [TestCaseSource("CurrentStartedCases")]
+            public void EnumeratorCurrentReturnsExpectedResultWhenStarted(
+                IEnumerator sut, SqlNonQueryCommand[] expected)
+            {
+                sut.MoveNext();
+
+                var result = ((SqlProjectionHandler)sut.Current).Handler(null);
+
+                Assert.That(result, Is.EqualTo(expected));
+            }
+
+            private static IEnumerable<TestCaseData> CurrentStartedCases()
+            {
+                //No handlers - not applicable
+
+                //1 handler
+                var command1 = CommandFactory();
+                var enumerator2 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(command1)
+                });
+                yield return new TestCaseData(enumerator2, new[]
+                {
+                    command1
+                });
+
+                //2 handlers
+                var command2 = CommandFactory();
+                var command3 = CommandFactory();
+                var enumerator3 = new SqlProjection.Enumerator(new[]
+                {
+                    HandlerFactory(command2),
+                    HandlerFactory(command3)
+                });
+                yield return new TestCaseData(enumerator3, new[]
+                {
+                    command2
+                });
+                yield return new TestCaseData(enumerator3, new[]
+                {
+                    command3
+                });
+            }
+
+            private static SqlProjectionHandler HandlerFactory(SqlNonQueryCommand command)
+            {
+                return new SqlProjectionHandler(
+                    typeof (object),
+                    o => new[] {command});
+            }
+
+            private static SqlNonQueryCommand CommandFactory()
+            {
+                return new SqlNonQueryCommandStub("", new DbParameter[0], CommandType.Text);
+            }
         }
     }
 }
