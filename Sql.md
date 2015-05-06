@@ -148,27 +148,32 @@ Here, the projection handling methods return ```IEnumerable<SqlNonQueryStatement
 
 ## The Declarative Style
 
-This approach sports syntactic sugar to allow you to specify projections without the need for an IHandle interface nor a dedicated class. The code should speak for itself, but does require some playing around with, especially if multiple statements need to be emitted. Mind you, only non query SQL statements are supported.
+This approach sports syntactic sugar to allow you to specify projections without the need for an IHandle interface. The code should speak for itself, but does require some playing around with, especially if multiple statements need to be emitted. Mind you, only non query SQL statements are supported.
 
 ```csharp
-var projection =
-  new SqlProjectionBuilder().
+public class PortfolioProjection : SqlProjection
+{
+  public PortfolioProjection()
+  {
     When<PortfolioAdded>(@event =>
       TSql.NonQueryStatement(
         "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
-    )).
+    ));
+    
     When<PortfolioRemoved>(@event =>
       TSql.NonQueryStatement(
         "DELETE FROM [Portfolio] WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id) }
-    )).
+    ));
+    
     When<PortfolioRenamed>(@event =>
       TSql.NonQueryStatement(
         "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
-    )).
-    Build();
+    ));
+  }
+}
 ```
 
 # Executing projections
