@@ -6,7 +6,7 @@ using Paramol;
 namespace Projac
 {
     /// <summary>
-    ///     Represents a fluent syntax to build up a <see cref="SqlProjection" />.
+    ///     Represents a fluent syntax to build up a set of <see cref="SqlProjectionHandler" />.
     /// </summary>
     public class SqlProjectionBuilder
     {
@@ -23,14 +23,10 @@ namespace Projac
         /// <summary>
         ///     Initializes a new instance of the <see cref="SqlProjectionBuilder" /> class.
         /// </summary>
-        public SqlProjectionBuilder(SqlProjection projection)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="handlers"/> is <c>null</c>.</exception>
+        public SqlProjectionBuilder(SqlProjectionHandler[] handlers)
         {
-            if (projection == null) throw new ArgumentNullException("projection");
-            _handlers = projection.Handlers;
-        }
-
-        private SqlProjectionBuilder(SqlProjectionHandler[] handlers)
-        {
+            if (handlers == null) throw new ArgumentNullException("handlers");
             _handlers = handlers;
         }
 
@@ -104,12 +100,12 @@ namespace Projac
         }
 
         /// <summary>
-        ///     Builds a projection specification based on the handlers collected by this builder.
+        ///     Builds a set of the handlers collected by this builder.
         /// </summary>
-        /// <returns>A <see cref="SqlProjection" />.</returns>
-        public SqlProjection Build()
+        /// <returns>A <see cref="SqlProjectionHandler" /> array.</returns>
+        public SqlProjectionHandler[] Build()
         {
-            return new SqlProjection(_handlers);
+            return _handlers;
         }
     }
 }

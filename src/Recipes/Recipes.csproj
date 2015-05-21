@@ -112,11 +112,6 @@
     <Compile Include="DataDefinition\DropSchema.cs" />
     <Compile Include="DataDefinition\Usage.cs" />
     <Compile Include="DataDefinition\SetCheckpoint.cs" />
-    <Compile Include="Descriptors\SqlProjectionDescriptor.cs" />
-    <Compile Include="Descriptors\SqlProjectionDescriptorBuilder.cs" />
-    <Compile Include="Descriptors\SqlProjectionDescriptorBuilderTests.cs" />
-    <Compile Include="Descriptors\SqlProjectionDescriptorTests.cs" />
-    <Compile Include="Descriptors\Usage.cs" />
     <Compile Include="EventStoreIntegration\Usage.cs" />
     <Compile Include="Shared\PortfolioAdded.cs" />
     <Compile Include="Shared\PortfolioRemoved.cs" />

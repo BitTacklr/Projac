@@ -15,7 +15,7 @@
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework="net45">
-        <dependency id="Paramol" version="0.0.123" />
+        <dependency id="Paramol" version="0.0.124" />
       </group>
     </dependencies>
   </metadata>

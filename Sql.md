@@ -148,11 +148,36 @@ Here, the projection handling methods return ```IEnumerable<SqlNonQueryStatement
 
 ## The Declarative Style
 
-This approach sports syntactic sugar to allow you to specify projections without the need for an IHandle interface nor a dedicated class. The code should speak for itself, but does require some playing around with, especially if multiple statements need to be emitted. Mind you, only non query SQL statements are supported.
+This approach sports syntactic sugar to allow you to specify projections without the need for an IHandle interface. The code should speak for itself, but does require some playing around with, especially if multiple statements need to be emitted. Mind you, only non query SQL statements are supported.
 
 ```csharp
-var projection =
-  new SqlProjectionBuilder().
+public class PortfolioProjection : SqlProjection
+{
+  public PortfolioProjection()
+  {
+    When<PortfolioAdded>(@event =>
+      TSql.NonQueryStatement(
+        "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
+        new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
+    ));
+    
+    When<PortfolioRemoved>(@event =>
+      TSql.NonQueryStatement(
+        "DELETE FROM [Portfolio] WHERE Id = @P1",
+        new { P1 = TSql.Int(@event.Id) }
+    ));
+    
+    When<PortfolioRenamed>(@event =>
+      TSql.NonQueryStatement(
+        "UPDATE [Portfolio] SET Name = @P2 WHERE Id = @P1",
+        new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
+    ));
+  }
+}
+
+public static class PortfolioProjectionUsingBuilder
+{
+  public static readonly SqlProjectionHandler[] Handlers = new SqlProjectionBuilder().
     When<PortfolioAdded>(@event =>
       TSql.NonQueryStatement(
         "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
@@ -169,6 +194,7 @@ var projection =
         new { P1 = TSql.Int(@event.Id), P2 = TSql.NVarChar(@event.Name, 40) }
     )).
     Build();
+}
 ```
 
 # Executing projections
@@ -176,6 +202,19 @@ var projection =
 How and when you decide to execute the projections is still left as an exercise to you. Typically they will sit behind a message subscription that pushes the appropriate messages into them, causing sql commands to be emitted as a side effect. Once these sql commands have been captured you can use one of the built-in executors to execute them (Paramol). If on the other hand, you've authored your projections using the declarative style, then Projac offers a higher level of abstraction called the Async-/SqlProjector.
 
 You'll notice that projections don't know anything about the execution. This is deliberate, allowing you to decide when and how to flush commands to the relational database.
+
+Projac has the ability to perform custom resolution of handlers for a particular message. This capability is provided by the ``SqlProjectionHandlerResolver`` delegate. Out of the box, two implementations are provided. ``Resolve.WhenEqualToHandlerMessageType`` where the message type needs to be an exact match with the message type of the handler, and ``Resolve.WhenAssignableToHandlerMessageType`` where the message type needs to be assignable to the message type of the handler. The latter resolver allows you to dispatch to handlers that are a base type of the message or if you want to use a contravariant envelope (e.g. ``Envelope<out TMessage>``). In this case, handler execution order becomes important. The reasoning is simple: the order in which the handlers are passed into the resolver is the order in which the handlers will be returned from the resolver and consequently also be invoked in that order. Obviously, you're free to bring your own resolver. There's also a concurrent variation of the above two, provided by ``ConcurrentResolve``, **IF** you're calling the projector from different threads concurrently. However, the general recommendation is to call the projector either from a single thread or non-concurrent.
+
+```
+var projector = new SqlProjector(
+    Resolve.WhenEqualToHandlerMessageType(projection),
+    new TransactionalSqlCommandExecutor(
+        new ConnectionStringSettings(
+            "projac",
+            @"Data Source=(localdb)\ProjectsV12;Initial Catalog=ProjacUsage;Integrated Security=SSPI;",
+            "System.Data.SqlClient"),
+        IsolationLevel.ReadCommitted));
+```
 
 # FAQ
 

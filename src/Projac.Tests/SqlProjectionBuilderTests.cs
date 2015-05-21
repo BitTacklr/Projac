@@ -21,26 +21,25 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void DecoratedProjectionCanNotBeNull()
+        public void HandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => new SqlProjectionBuilder(null));
         }
 
         [Test]
-        public void DecoratedProjectionHandlersAreCopiedOnConstruction()
+        public void HandlersAreCopiedOnConstruction()
         {
             var handler1 = new SqlProjectionHandler(typeof(object), o => new SqlNonQueryCommand[0]);
             var handler2 = new SqlProjectionHandler(typeof(object), o => new SqlNonQueryCommand[0]);
-            var projection = new SqlProjection(new[]
+            var sut = new SqlProjectionBuilder(new[]
             {
                 handler1, 
                 handler2
             });
-            var sut = new SqlProjectionBuilder(projection);
 
             var result = sut.Build();
 
-            Assert.That(result.Handlers, Is.EquivalentTo(new []
+            Assert.That(result, Is.EquivalentTo(new[]
             {
                 handler1, handler2
             }));
@@ -48,11 +47,19 @@ namespace Projac.Tests
         }
 
         [Test]
+        public void EmptyInstanceBuildReturnsExpectedResult()
+        {
+            var result = new SqlProjectionBuilder().Build();
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
         public void InitialInstanceBuildReturnsExpectedResult()
         {
             var result = _sut.Build();
 
-            Assert.That(result.Handlers, Is.Empty);
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
@@ -78,7 +85,7 @@ namespace Projac.Tests
             var result = _sut.When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command })), 
+                result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command })),
                 Is.EqualTo(1));
         }
 
@@ -95,7 +102,7 @@ namespace Projac.Tests
             var result = _sut.When((object _) => commands).When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
+                result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
                 Is.EqualTo(1));
         }
 
@@ -122,7 +129,7 @@ namespace Projac.Tests
             var result = _sut.When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
+                result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
                 Is.EqualTo(1));
         }
 
@@ -140,7 +147,7 @@ namespace Projac.Tests
             var result = _sut.When((object _) => commands).When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
+                result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
                 Is.EqualTo(1));
         }
 
@@ -153,7 +160,7 @@ namespace Projac.Tests
         [Test]
         public void WhenHandlerWithCommandEnumerationReturnsExpectedResult()
         {
-            var result = _sut.When((object _) => (IEnumerable<SqlNonQueryCommand>) new []
+            var result = _sut.When((object _) => (IEnumerable<SqlNonQueryCommand>)new[]
             {
                 CommandFactory(), CommandFactory()
             });
@@ -166,14 +173,14 @@ namespace Projac.Tests
         {
             var command1 = CommandFactory();
             var command2 = CommandFactory();
-            Func<object, IEnumerable<SqlNonQueryCommand>> handler = _ => (IEnumerable<SqlNonQueryCommand>) new []
+            Func<object, IEnumerable<SqlNonQueryCommand>> handler = _ => (IEnumerable<SqlNonQueryCommand>)new[]
             {
                 command1, command2
             };
             var result = _sut.When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
+                result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
                 Is.EqualTo(1));
         }
 
@@ -194,7 +201,7 @@ namespace Projac.Tests
             var result = _sut.When((object _) => commands).When(handler).Build();
 
             Assert.That(
-                result.Handlers.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
+                result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
                 Is.EqualTo(1));
         }
 
