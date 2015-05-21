@@ -50,6 +50,7 @@
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
     <Compile Include="AsyncSqlProjectorTests.cs" />
+    <Compile Include="SqlProjectionBuilderTests.cs" />
     <Compile Include="ConcurrentResolveTests.cs" />
     <Compile Include="Framework\SqlNonQueryCommandStub.cs" />
     <Compile Include="HandlerResolutionCases.cs" />
