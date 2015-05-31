@@ -51,7 +51,7 @@
     </Compile>
     <Compile Include="AnonymousSqlProjectionTests.cs" />
     <Compile Include="AsyncSqlProjectorTests.cs" />
-    <Compile Include="SqlProjectionBuilderTests.cs" />
+    <Compile Include="AnonymousSqlProjectionBuilderTests.cs" />
     <Compile Include="ConcurrentResolveTests.cs" />
     <Compile Include="Framework\SqlNonQueryCommandStub.cs" />
     <Compile Include="HandlerResolutionCases.cs" />
