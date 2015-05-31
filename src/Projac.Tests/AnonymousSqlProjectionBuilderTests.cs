@@ -10,7 +10,7 @@ using Projac.Tests.Framework;
 namespace Projac.Tests
 {
     [TestFixture]
-    public class SqlProjectionBuilderTests
+    public class AnonymousSqlProjectionBuilderTests
     {
         private AnonymousSqlProjectionBuilder _sut;
 
