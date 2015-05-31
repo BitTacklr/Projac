@@ -12,18 +12,18 @@ namespace Projac.Tests
     [TestFixture]
     public class SqlProjectionBuilderTests
     {
-        private SqlProjectionBuilder _sut;
+        private AnonymousSqlProjectionBuilder _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new SqlProjectionBuilder();
+            _sut = new AnonymousSqlProjectionBuilder();
         }
 
         [Test]
         public void HandlersCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new SqlProjectionBuilder(null));
+            Assert.Throws<ArgumentNullException>(() => new AnonymousSqlProjectionBuilder(null));
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace Projac.Tests
         {
             var handler1 = new SqlProjectionHandler(typeof(object), o => new SqlNonQueryCommand[0]);
             var handler2 = new SqlProjectionHandler(typeof(object), o => new SqlNonQueryCommand[0]);
-            var sut = new SqlProjectionBuilder(new[]
+            var sut = new AnonymousSqlProjectionBuilder(new[]
             {
                 handler1, 
                 handler2
@@ -49,7 +49,7 @@ namespace Projac.Tests
         [Test]
         public void EmptyInstanceBuildReturnsExpectedResult()
         {
-            var result = new SqlProjectionBuilder().Build();
+            var result = new AnonymousSqlProjectionBuilder().Build();
 
             Assert.That(result, Is.Empty);
         }
@@ -74,7 +74,7 @@ namespace Projac.Tests
         {
             var result = _sut.When((object _) => CommandFactory());
 
-            Assert.That(result, Is.InstanceOf<SqlProjectionBuilder>());
+            Assert.That(result, Is.InstanceOf<AnonymousSqlProjectionBuilder>());
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace Projac.Tests
         {
             var result = _sut.When((object _) => new[] { CommandFactory(), CommandFactory() });
 
-            Assert.That(result, Is.InstanceOf<SqlProjectionBuilder>());
+            Assert.That(result, Is.InstanceOf<AnonymousSqlProjectionBuilder>());
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace Projac.Tests
                 CommandFactory(), CommandFactory()
             });
 
-            Assert.That(result, Is.InstanceOf<SqlProjectionBuilder>());
+            Assert.That(result, Is.InstanceOf<AnonymousSqlProjectionBuilder>());
         }
 
         [Test]
