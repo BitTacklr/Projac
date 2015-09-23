@@ -6,25 +6,25 @@ using Paramol;
 namespace Projac
 {
     /// <summary>
-    ///     Represents a fluent syntax to build up a set of <see cref="SqlProjectionHandler" />.
+    ///     Represents a fluent syntax to build up an <see cref="AnonymousSqlProjection"/>.
     /// </summary>
-    public class SqlProjectionBuilder
+    public class AnonymousSqlProjectionBuilder
     {
         private readonly SqlProjectionHandler[] _handlers;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SqlProjectionBuilder" /> class.
+        ///     Initializes a new instance of the <see cref="AnonymousSqlProjectionBuilder" /> class.
         /// </summary>
-        public SqlProjectionBuilder() :
+        public AnonymousSqlProjectionBuilder() :
             this(new SqlProjectionHandler[0])
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SqlProjectionBuilder" /> class.
+        ///     Initializes a new instance of the <see cref="AnonymousSqlProjectionBuilder" /> class.
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="handlers"/> is <c>null</c>.</exception>
-        public SqlProjectionBuilder(SqlProjectionHandler[] handlers)
+        public AnonymousSqlProjectionBuilder(SqlProjectionHandler[] handlers)
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
             _handlers = handlers;
@@ -35,12 +35,12 @@ namespace Projac
         /// </summary>
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The single command returning handler.</param>
-        /// <returns>A <see cref="SqlProjectionBuilder" />.</returns>
+        /// <returns>A <see cref="AnonymousSqlProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public SqlProjectionBuilder When<TMessage>(Func<TMessage, SqlNonQueryCommand> handler)
+        public AnonymousSqlProjectionBuilder When<TMessage>(Func<TMessage, SqlNonQueryCommand> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new SqlProjectionBuilder(
+            return new AnonymousSqlProjectionBuilder(
                 _handlers.Concat(
                     new[]
                     {
@@ -58,12 +58,12 @@ namespace Projac
         /// </summary>
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The command array returning handler.</param>
-        /// <returns>A <see cref="SqlProjectionBuilder" />.</returns>
+        /// <returns>A <see cref="AnonymousSqlProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public SqlProjectionBuilder When<TMessage>(Func<TMessage, SqlNonQueryCommand[]> handler)
+        public AnonymousSqlProjectionBuilder When<TMessage>(Func<TMessage, SqlNonQueryCommand[]> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new SqlProjectionBuilder(
+            return new AnonymousSqlProjectionBuilder(
                 _handlers.Concat(
                     new[]
                     {
@@ -81,12 +81,12 @@ namespace Projac
         /// </summary>
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The non query command enumeration returning handler.</param>
-        /// <returns>A <see cref="SqlProjectionBuilder" />.</returns>
+        /// <returns>A <see cref="AnonymousSqlProjectionBuilder" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public SqlProjectionBuilder When<TMessage>(Func<TMessage, IEnumerable<SqlNonQueryCommand>> handler)
+        public AnonymousSqlProjectionBuilder When<TMessage>(Func<TMessage, IEnumerable<SqlNonQueryCommand>> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new SqlProjectionBuilder(
+            return new AnonymousSqlProjectionBuilder(
                 _handlers.Concat(
                     new[]
                     {
@@ -100,12 +100,12 @@ namespace Projac
         }
 
         /// <summary>
-        ///     Builds a set of the handlers collected by this builder.
+        ///     Builds an <see cref="AnonymousSqlProjection"/> using the handlers collected by this builder.
         /// </summary>
-        /// <returns>A <see cref="SqlProjectionHandler" /> array.</returns>
-        public SqlProjectionHandler[] Build()
+        /// <returns>An <see cref="AnonymousSqlProjection" />.</returns>
+        public AnonymousSqlProjection Build()
         {
-            return _handlers;
+            return new AnonymousSqlProjection(_handlers);
         }
     }
 }

@@ -49,14 +49,16 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AnonymousSqlProjectionTests.cs" />
     <Compile Include="AsyncSqlProjectorTests.cs" />
-    <Compile Include="SqlProjectionBuilderTests.cs" />
+    <Compile Include="AnonymousSqlProjectionBuilderTests.cs" />
     <Compile Include="ConcurrentResolveTests.cs" />
     <Compile Include="Framework\SqlNonQueryCommandStub.cs" />
     <Compile Include="HandlerResolutionCases.cs" />
     <Compile Include="ProjectorProjectCases.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResolveTests.cs" />
+    <Compile Include="SqlProjectionHandlerEnumeratorTests.cs" />
     <Compile Include="SqlProjectionHandlerTests.cs" />
     <Compile Include="SqlProjectionTests.cs" />
     <Compile Include="SqlProjectorTests.cs" />

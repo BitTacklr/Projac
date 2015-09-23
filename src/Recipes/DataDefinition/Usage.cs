@@ -38,7 +38,7 @@ namespace Recipes.DataDefinition
 
         public static class SampleUsingBuilder
         {
-            public static readonly SqlProjectionHandler[] Handlers = new SqlProjectionBuilder().
+            public static readonly AnonymousSqlProjection Instance = new AnonymousSqlProjectionBuilder().
                 When<CreateSchema>(_ =>
                     TSql.NonQueryStatement(
                         "CREATE TABLE [Sample] ([Id] INT NOT NULL CONSTRAINT PK_Sample PRIMARY KEY, [Value] INT NOT NULL)")).

@@ -177,7 +177,7 @@ public class PortfolioProjection : SqlProjection
 
 public static class PortfolioProjectionUsingBuilder
 {
-  public static readonly SqlProjectionHandler[] Handlers = new SqlProjectionBuilder().
+  public static readonly AnonymousSqlProjection Instance = new AnonymousSqlProjectionBuilder().
     When<PortfolioAdded>(@event =>
       TSql.NonQueryStatement(
         "INSERT INTO [Portfolio] (Id, Name) VALUES (@P1, @P2)",
