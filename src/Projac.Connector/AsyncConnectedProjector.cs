@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -54,11 +55,11 @@ namespace Projac.Connector
         {
             if (message == null) throw new ArgumentNullException("message");
 
-            return Task.
-                WhenAll(
+            return 
+                (
                     from handler in _resolver(message)
                     select handler.Handler(connection, message, cancellationToken)
-                );
+                ).ExecuteAsync(cancellationToken);
         }
 
         /// <summary>
@@ -89,12 +90,12 @@ namespace Projac.Connector
         {
             if (messages == null) throw new ArgumentNullException("messages");
 
-            return Task.
-                WhenAll(
+            return
+                (
                     from message in messages
                     from handler in _resolver(message)
                     select handler.Handler(connection, message, cancellationToken)
-                );
+                ).ExecuteAsync(cancellationToken);
         }
     }
 }
