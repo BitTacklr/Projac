@@ -10,10 +10,10 @@ namespace Projac.Connector
         public static Task ExecuteAsync(this IEnumerable<Task> enumerable, CancellationToken cancellationToken)
         {
             if (enumerable == null)
-                throw new ArgumentNullException(nameof(enumerable));
+                throw new ArgumentNullException("enumerable");
             var source = new TaskCompletionSource<object>();
             var enumerator = enumerable.GetEnumerator();
-            EnumerateAsyncCore(source, enumerator, cancellationToken);
+            ExecuteAsyncCore(source, enumerator, cancellationToken);
             return source.Task.
                 ContinueWith(
                     next => enumerator.Dispose(),
@@ -22,15 +22,15 @@ namespace Projac.Connector
                     TaskScheduler.Current);
         }
 
-        private static void EnumerateAsyncContinuation(Task previous, TaskCompletionSource<object> source, IEnumerator<Task> enumerator, CancellationToken cancellationToken)
+        private static void ExecuteAsyncContinuation(Task previous, TaskCompletionSource<object> source, IEnumerator<Task> enumerator, CancellationToken cancellationToken)
         {
             if (!previous.IsCanceled || !previous.IsFaulted)
             {
-                EnumerateAsyncCore(source, enumerator, cancellationToken);
+                ExecuteAsyncCore(source, enumerator, cancellationToken);
             }
         }
 
-        private static void EnumerateAsyncCore(TaskCompletionSource<object> source, IEnumerator<Task> enumerator, CancellationToken cancellationToken)
+        private static void ExecuteAsyncCore(TaskCompletionSource<object> source, IEnumerator<Task> enumerator, CancellationToken cancellationToken)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Projac.Connector
                 {
                     enumerator.Current.
                         ContinueWith(
-                            next => EnumerateAsyncContinuation(next, source, enumerator, cancellationToken),
+                            next => ExecuteAsyncContinuation(next, source, enumerator, cancellationToken),
                             cancellationToken,
                             TaskContinuationOptions.ExecuteSynchronously,
                             TaskScheduler.Current);
