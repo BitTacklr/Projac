@@ -42,7 +42,7 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AsyncConnectedProjector.cs" />
+    <Compile Include="ConnectedProjector.cs" />
     <Compile Include="ConcurrentResolve.cs" />
     <Compile Include="ConnectedProjectionBuilder.cs" />
     <Compile Include="ConnectedProjectionHandler.cs" />

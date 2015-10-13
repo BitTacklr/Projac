@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,16 +9,16 @@ namespace Projac.Connector
     /// <summary>
     /// Projects a single message or set of messages in an asynchronous manner to the matching handlers.
     /// </summary>
-    public class AsyncConnectedProjector<TConnection>
+    public class ConnectedProjector<TConnection>
     {
         private readonly ConnectedProjectionHandlerResolver<TConnection> _resolver;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AsyncConnectedProjector{TConnection}"/> class.
+        /// Initializes a new instance of the <see cref="ConnectedProjector{TConnection}"/> class.
         /// </summary>
         /// <param name="resolver">The handler resolver.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="resolver"/> is <c>null</c>.</exception>
-        public AsyncConnectedProjector(ConnectedProjectionHandlerResolver<TConnection> resolver)
+        public ConnectedProjector(ConnectedProjectionHandlerResolver<TConnection> resolver)
         {
             if (resolver == null) 
                 throw new ArgumentNullException("resolver");
