@@ -1,12 +1,14 @@
-# Projac.Elasticsearch
+# Projac.Connector
 
-Projac.Elasticsearch brings Projac's declarative style of authoring projections to projections that target Elasticsearch (TM).
+Projac.Connector brings Projac's declarative style of authoring projections to projections that target any store for which you can bring your own connection.
 
-It's available on NuGet: [Projac.Elasticsearch](https://www.nuget.org/packages/Projac.Elasticsearch/)
+It's available on NuGet: [Projac.Connector](https://www.nuget.org/packages/Projac.Connector/)
 
 # Authoring projections
 
 ## The Declarative Style
+
+**Docs below need love**
 
 Similar to Projac's declarative style for sql projections above, one can author projections that target Elasticsearch in a declarative way. A fundamental difference is that the handling and interpretation of messages is directly tied to the execution of actions against Elasticsearch. Why? Because replicating the entire Elasticsearch api into a set of statements was not a goal at this point. Only asynchronous projection handling is supported at the moment.
 
@@ -30,8 +32,8 @@ var projection =
     When<PortfolioRenamed>((client, message) =>
       client.UpdateAsync(
         "index",
-        "portfolio", 
-        message.Id.ToString("N"), 
+        "portfolio",
+        message.Id.ToString("N"),
         JsonConvert.SerializeObject(new
           {
             Script = "ctx._source.name=name;",

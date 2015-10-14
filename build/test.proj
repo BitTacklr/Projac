@@ -11,14 +11,11 @@
   <Target Name="Test">
     <MSBuild Projects="$(MSBuildProjectDirectory)\build.proj" Targets="Build" />
 
-    <CreateItem 
+    <CreateItem
       Include="
       $(MSBuildProjectDirectory)\output\csharp\Projac.Tests.dll;
       $(MSBuildProjectDirectory)\output\csharp\Paramol.Tests.dll;
-      $(MSBuildProjectDirectory)\output\csharp\Projac.WindowsAzure.Storage.Tests.dll;
-      $(MSBuildProjectDirectory)\output\csharp\Projac.Redis.Tests.dll;
-      $(MSBuildProjectDirectory)\output\csharp\Projac.Elasticsearch.Tests.dll;
-      $(MSBuildProjectDirectory)\output\csharp\Projac.RavenDB.Tests.dll;
+      $(MSBuildProjectDirectory)\output\csharp\Projac.Connector.Tests.dll;
       ">
       <Output TaskParameter="Include" ItemName="AssembliesToTest" />
     </CreateItem>

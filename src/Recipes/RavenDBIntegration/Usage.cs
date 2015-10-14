@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
-using Projac.RavenDB;
+using Projac.Connector;
+using Raven.Client;
 using Raven.Client.Embedded;
 using Recipes.Shared;
 
@@ -23,7 +24,7 @@ namespace Recipes.RavenDBIntegration
                 using (var session = store.OpenAsyncSession())
                 {
                     var portfolioId = Guid.NewGuid();
-                    await new AsyncRavenProjector(Projection.Handlers).
+                    await new ConnectedProjector<IAsyncDocumentSession>(Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
                         ProjectAsync(session, new object[]
                         {
                             new PortfolioAdded {Id = portfolioId, Name = "My portfolio"},
@@ -34,7 +35,7 @@ namespace Recipes.RavenDBIntegration
             }
         }
 
-        public static RavenProjection Projection = new RavenProjectionBuilder().
+        public static AnonymousConnectedProjection<IAsyncDocumentSession> Projection = new AnonymousConnectedProjectionBuilder<IAsyncDocumentSession>().
             When<PortfolioAdded>((session, message) => session.StoreAsync(
                 new PortfolioDocument
                 {

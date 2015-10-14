@@ -15,27 +15,21 @@
   </Target>
 
   <Target Name="Build">
-    <RemoveDir 
+    <RemoveDir
       Condition="Exists('$(MSBuildProjectDirectory)\output')"
       Directories="$(MSBuildProjectDirectory)\output" />
     <MSBuild Projects="$(MSBuildProjectDirectory)\version.proj" />
     <MSBuild Projects="$(MSBuildProjectDirectory)\info.proj" />
     <!-- CSharp -->
-    <MSBuild 
+    <MSBuild
       Projects="
         $(SourcePath)\Paramol\Paramol.csproj;
         $(SourcePath)\Paramol.Tests\Paramol.Tests.csproj;
         $(SourcePath)\Projac\Projac.csproj;
         $(SourcePath)\Projac.Tests\Projac.Tests.csproj;
-        $(SourcePath)\Projac.WindowsAzure.Storage\Projac.WindowsAzure.Storage.csproj;
-        $(SourcePath)\Projac.WindowsAzure.Storage.Tests\Projac.WindowsAzure.Storage.Tests.csproj;
-        $(SourcePath)\Projac.Redis\Projac.Redis.csproj;
-        $(SourcePath)\Projac.Redis.Tests\Projac.Redis.Tests.csproj;
-        $(SourcePath)\Projac.RavenDB\Projac.RavenDB.csproj;
-        $(SourcePath)\Projac.RavenDB.Tests\Projac.RavenDB.Tests.csproj;
-        $(SourcePath)\Projac.Elasticsearch\Projac.Elasticsearch.csproj;
-        $(SourcePath)\Projac.Elasticsearch.Tests\Projac.Elasticsearch.Tests.csproj;"
-      BuildInParallel="true" 
+        $(SourcePath)\Projac.Connector\Projac.Connector.csproj;
+        $(SourcePath)\Projac.Connector.Tests\Projac.Connector.Tests.csproj;"
+      BuildInParallel="true"
       Properties="Configuration=Release;OutputPath=$(MSBuildProjectDirectory)\output\csharp"
       UnloadProjectsOnCompletion="true"/>
   </Target>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
-using Projac.Redis;
+using Projac.Connector;
 using Recipes.Shared;
 using StackExchange.Redis;
 
@@ -21,7 +21,7 @@ namespace Recipes.RedisIntegration
                 }
             });
             var portfolioId = Guid.NewGuid();
-            await new AsyncRedisProjector(Projection.Handlers).
+            await new ConnectedProjector<ConnectionMultiplexer>(Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
                 ProjectAsync(connection, new object[]
                 {
                     new PortfolioAdded {Id = portfolioId, Name = "My portfolio"},
@@ -30,7 +30,7 @@ namespace Recipes.RedisIntegration
                 });
         }
 
-        public static RedisProjection Projection = new RedisProjectionBuilder().
+        public static AnonymousConnectedProjection<ConnectionMultiplexer> Projection = new AnonymousConnectedProjectionBuilder<ConnectionMultiplexer>().
             When<PortfolioAdded>((connection, message) =>
             {
                 var db = connection.GetDatabase();

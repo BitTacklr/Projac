@@ -123,21 +123,9 @@
       <Project>{222d8e5c-eabd-4773-91cd-167c3c66af3e}</Project>
       <Name>Paramol</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Projac.Elasticsearch\Projac.Elasticsearch.csproj">
-      <Project>{696dc47c-0d2f-42f4-8280-492efc5d1329}</Project>
-      <Name>Projac.Elasticsearch</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Projac.RavenDB\Projac.RavenDB.csproj">
-      <Project>{da27cd48-2661-4b9e-b15d-29e3e61811c0}</Project>
-      <Name>Projac.RavenDB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Projac.Redis\Projac.Redis.csproj">
-      <Project>{77396b9f-4bf5-44cf-b947-a85127665ea2}</Project>
-      <Name>Projac.Redis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Projac.WindowsAzure.Storage\Projac.WindowsAzure.Storage.csproj">
-      <Project>{c96f5599-2d8f-40a8-a95a-a5e877a79cd0}</Project>
-      <Name>Projac.WindowsAzure.Storage</Name>
+    <ProjectReference Include="..\Projac.Connector\Projac.Connector.csproj">
+      <Project>{1c52a225-809b-44af-8e8c-b5a44a4b1e9d}</Project>
+      <Name>Projac.Connector</Name>
     </ProjectReference>
     <ProjectReference Include="..\Projac\Projac.csproj">
       <Project>{359863ed-13ea-4c04-bf6f-c9cf611a7129}</Project>

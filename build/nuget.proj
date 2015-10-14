@@ -10,11 +10,11 @@
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
   <Target Name="Pack">
-    <Version 
-      VersionFile="$(RootPath)\build\master_version.txt" 
-      MajorType="None" 
-      MinorType="None" 
-      BuildType="None" 
+    <Version
+      VersionFile="$(RootPath)\build\master_version.txt"
+      MajorType="None"
+      MinorType="None"
+      BuildType="None"
       RevisionType="None">
       <Output TaskParameter="Major" PropertyName="Major"/>
       <Output TaskParameter="Minor" PropertyName="Minor"/>
@@ -28,19 +28,16 @@
       Value="$(Major).$(Minor).$(Build)" />
     <Exec Command='$(NuGetExe) pack Paramol.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
     <Exec Command='$(NuGetExe) pack Projac.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
-    <Exec Command='$(NuGetExe) pack Projac.WindowsAzure.Storage.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
-    <Exec Command='$(NuGetExe) pack Projac.Redis.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
-    <Exec Command='$(NuGetExe) pack Projac.Elasticsearch.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
-    <Exec Command='$(NuGetExe) pack Projac.RavenDB.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
-    
+    <Exec Command='$(NuGetExe) pack Projac.Connector.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
+
   </Target>
 
   <Target Name="Push">
-    <Version 
-      VersionFile="$(RootPath)\build\master_version.txt" 
-      MajorType="None" 
-      MinorType="None" 
-      BuildType="None" 
+    <Version
+      VersionFile="$(RootPath)\build\master_version.txt"
+      MajorType="None"
+      MinorType="None"
+      BuildType="None"
       RevisionType="None">
       <Output TaskParameter="Major" PropertyName="Major"/>
       <Output TaskParameter="Minor" PropertyName="Minor"/>
@@ -49,10 +46,7 @@
 
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.WindowsAzure.Storage.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.Redis.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.Elasticsearch.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.RavenDB.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.Connector.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
+
   </Target>
 </Project>
