@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1C52A225-809B-44AF-8E8C-B5A44A4B1E9D}</ProjectGuid>
+    <ProjectGuid>{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Projac.Connector</RootNamespace>
-    <AssemblyName>Projac.Connector</AssemblyName>
+    <RootNamespace>Projac.Connector.Tests</RootNamespace>
+    <AssemblyName>Projac.Connector.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,16 +45,25 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="ConnectedProjectionHandlerEnumerator.cs" />
-    <Compile Include="ConnectedProjector.cs" />
-    <Compile Include="ConcurrentResolve.cs" />
-    <Compile Include="ConnectedProjectionBuilder.cs" />
-    <Compile Include="ConnectedProjectionHandler.cs" />
-    <Compile Include="ConnectedProjection.cs" />
+    <Compile Include="CallRecordingConnection.cs" />
+    <Compile Include="ConcurrentResolveTests.cs" />
+    <Compile Include="ConnectedProjectionHandlerTests.cs" />
+    <Compile Include="ConnectedProjectionTests.cs" />
+    <Compile Include="ConnectedProjectorTests.cs" />
+    <Compile Include="ProjectorProjectCases.cs" />
+    <Compile Include="ResolveTests.cs" />
+    <Compile Include="HandlerResolutionCases.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resolve.cs" />
-    <Compile Include="ConnectedProjectionHandlerResolver.cs" />
-    <Compile Include="TaskExtensions.cs" />
+    <Compile Include="ConnectedProjectionHandlerEnumeratorTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Projac.Connector\Projac.Connector.csproj">
+      <Project>{1c52a225-809b-44af-8e8c-b5a44a4b1e9d}</Project>
+      <Name>Projac.Connector</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

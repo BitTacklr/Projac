@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac", "Projac\Projac.csproj", "{359863ED-13EA-4C04-BF6F-C9CF611A7129}"
 EndProject
@@ -42,6 +42,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connector", "Connector", "{1C94919D-B674-4DB4-A989-B7F0B4D400E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.Connector", "Projac.Connector\Projac.Connector.csproj", "{1C52A225-809B-44AF-8E8C-B5A44A4B1E9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.Connector.Tests", "Projac.Connector.Tests\Projac.Connector.Tests.csproj", "{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,10 @@ Global
 		{1C52A225-809B-44AF-8E8C-B5A44A4B1E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C52A225-809B-44AF-8E8C-B5A44A4B1E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C52A225-809B-44AF-8E8C-B5A44A4B1E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,5 +129,6 @@ Global
 		{DA27CD48-2661-4B9E-B15D-29E3E61811C0} = {A958A93A-17E1-4624-81B0-4A6C863BEEA2}
 		{5DB7B998-D3A6-43E4-ACB9-D929E1B5880A} = {A958A93A-17E1-4624-81B0-4A6C863BEEA2}
 		{1C52A225-809B-44AF-8E8C-B5A44A4B1E9D} = {1C94919D-B674-4DB4-A989-B7F0B4D400E1}
+		{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E} = {1C94919D-B674-4DB4-A989-B7F0B4D400E1}
 	EndGlobalSection
 EndGlobal
