@@ -9,17 +9,16 @@ namespace Projac.Connector
     {
         public static Task ExecuteAsync(this IEnumerable<Task> enumerable, CancellationToken cancellationToken)
         {
-            if (enumerable == null)
-                throw new ArgumentNullException("enumerable");
             var source = new TaskCompletionSource<object>();
             var enumerator = enumerable.GetEnumerator();
-            ExecuteAsyncCore(source, enumerator, cancellationToken);
-            return source.Task.
+            source.Task.
                 ContinueWith(
                     next => enumerator.Dispose(),
                     cancellationToken,
                     TaskContinuationOptions.ExecuteSynchronously,
                     TaskScheduler.Current);
+            ExecuteAsyncCore(source, enumerator, cancellationToken);
+            return source.Task;
         }
 
         private static void ExecuteAsyncContinuation(Task previous, TaskCompletionSource<object> source, IEnumerator<Task> enumerator, CancellationToken cancellationToken)

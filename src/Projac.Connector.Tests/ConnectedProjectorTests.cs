@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace Projac.Connector.Tests
@@ -68,7 +69,8 @@ namespace Projac.Connector.Tests
         public void ProjectAsyncManyToken_MessagesCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync(new object(), (IEnumerable<object>)null, CancellationToken.None));
+            Assert.Throws<ArgumentNullException>(
+                () => sut.ProjectAsync(new object(), (IEnumerable<object>) null, CancellationToken.None));
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageWithoutTokenCases")]
@@ -127,6 +129,118 @@ namespace Projac.Connector.Tests
             await sut.ProjectAsync(connection, messages, token);
 
             Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
+        }
+
+        [Test]
+        public void ProjectAsyncMessageResolverFailureCausesExpectedResult()
+        {
+            ConnectedProjectionHandlerResolver<object> resolver = m =>
+            {
+                throw new Exception("message");
+            };
+            var sut = SutFactory(resolver);
+            var exception = Assert.Throws<Exception>(async () =>
+                await sut.ProjectAsync(new object(), new object()));
+            Assert.That(exception.Message, Is.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncTokenMessageResolverFailureCausesExpectedResult()
+        {
+            ConnectedProjectionHandlerResolver<object> resolver = m =>
+            {
+                throw new Exception("message");
+            };
+            var sut = SutFactory(resolver);
+            var exception = Assert.Throws<Exception>(async () =>
+                await sut.ProjectAsync(new object(), new object(), new CancellationToken()));
+            Assert.That(exception.Message, Is.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncMessagesResolverFailureCausesExpectedResult()
+        {
+            ConnectedProjectionHandlerResolver<object> resolver = m =>
+            {
+                throw new Exception("message");
+            };
+            var sut = SutFactory(resolver);
+            var exception = Assert.Throws<Exception>(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new object() }));
+            Assert.That(exception.Message, Is.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncTokenMessagesResolverFailureCausesExpectedResult()
+        {
+            ConnectedProjectionHandlerResolver<object> resolver = m =>
+            {
+                throw new Exception("message");
+            };
+            var sut = SutFactory(resolver);
+            var exception = Assert.Throws<Exception>(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new object() }, new CancellationToken()));
+            Assert.That(exception.Message, Is.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncMessageHandlerFailureCausesExpectedResult()
+        {
+            Func<object, object, CancellationToken, Task> handler =
+                (connection, message, token) =>
+                {
+                    throw new Exception("message");
+                };
+            ConnectedProjectionHandlerResolver<object> resolver = m => new[] {new ConnectedProjectionHandler<object>(typeof (object), handler)};
+            var sut = SutFactory(resolver);
+            var exception = Assert.Throws<Exception>(async () =>
+                await sut.ProjectAsync(new object(), new object()));
+            Assert.That(exception.Message, Is.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncTokenMessageHandlerFailureCausesExpectedResult()
+        {
+            Func<object, object, CancellationToken, Task> handler =
+                (connection, message, token) =>
+                {
+                    throw new Exception("message");
+                };
+            ConnectedProjectionHandlerResolver<object> resolver = m => new[] { new ConnectedProjectionHandler<object>(typeof(object), handler) };
+            var sut = SutFactory(resolver);
+            var exception = Assert.Throws<Exception>(async () =>
+                await sut.ProjectAsync(new object(), new object(), new CancellationToken()));
+            Assert.That(exception.Message, Is.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncMessagesHandlerFailureCausesExpectedResult()
+        {
+            Func<object, object, CancellationToken, Task> handler =
+                (connection, message, token) =>
+                {
+                    throw new Exception("message");
+                };
+            ConnectedProjectionHandlerResolver<object> resolver = m => new[] { new ConnectedProjectionHandler<object>(typeof(object), handler) };
+            var sut = SutFactory(resolver);
+            var exception = Assert.Throws<Exception>(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new object() }));
+            Assert.That(exception.Message, Is.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncTokenMessagesHandlerFailureCausesExpectedResult()
+        {
+            Func<object, object, CancellationToken, Task> handler =
+                (connection, message, token) =>
+                {
+                    throw new Exception("message");
+                };
+            ConnectedProjectionHandlerResolver<object> resolver = m => new[] { new ConnectedProjectionHandler<object>(typeof(object), handler) };
+            var sut = SutFactory(resolver);
+            var exception = Assert.Throws<Exception>(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new object() }, new CancellationToken()));
+            Assert.That(exception.Message, Is.EqualTo("message"));
         }
 
         private static ConnectedProjector<object> SutFactory()

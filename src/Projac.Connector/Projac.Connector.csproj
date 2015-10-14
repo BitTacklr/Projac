@@ -42,10 +42,11 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AnonymousConnectedProjection.cs" />
     <Compile Include="ConnectedProjectionHandlerEnumerator.cs" />
     <Compile Include="ConnectedProjector.cs" />
     <Compile Include="ConcurrentResolve.cs" />
-    <Compile Include="ConnectedProjectionBuilder.cs" />
+    <Compile Include="AnonymousConnectedProjectionBuilder.cs" />
     <Compile Include="ConnectedProjectionHandler.cs" />
     <Compile Include="ConnectedProjection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

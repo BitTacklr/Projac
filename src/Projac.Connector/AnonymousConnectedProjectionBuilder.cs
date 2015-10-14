@@ -8,23 +8,23 @@ namespace Projac.Connector
     /// <summary>
     ///     Represents a fluent syntax to build up a set of <see cref="ConnectedProjectionHandler{TConnection}" />.
     /// </summary>
-    public class ConnectedProjectionBuilder<TConnection>
+    public class AnonymousConnectedProjectionBuilder<TConnection>
     {
         private readonly ConnectedProjectionHandler<TConnection>[] _handlers;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ConnectedProjectionBuilder{TConnection}" /> class.
+        ///     Initializes a new instance of the <see cref="AnonymousConnectedProjectionBuilder{TConnection}" /> class.
         /// </summary>
-        public ConnectedProjectionBuilder() :
+        public AnonymousConnectedProjectionBuilder() :
             this(new ConnectedProjectionHandler<TConnection>[0])
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ConnectedProjectionBuilder{TConnection}" /> class.
+        ///     Initializes a new instance of the <see cref="AnonymousConnectedProjectionBuilder{TConnection}" /> class.
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="handlers"/> is <c>null</c>.</exception>
-        public ConnectedProjectionBuilder(ConnectedProjectionHandler<TConnection>[] handlers)
+        public AnonymousConnectedProjectionBuilder(ConnectedProjectionHandler<TConnection>[] handlers)
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
             _handlers = handlers;
@@ -35,12 +35,12 @@ namespace Projac.Connector
         /// </summary>
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The single command returning handler.</param>
-        /// <returns>A <see cref="ConnectedProjectionBuilder{TConnection}" />.</returns>
+        /// <returns>A <see cref="AnonymousConnectedProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public ConnectedProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, Task> handler)
+        public AnonymousConnectedProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new ConnectedProjectionBuilder<TConnection>(
+            return new AnonymousConnectedProjectionBuilder<TConnection>(
                 _handlers.Concat(
                     new[]
                     {
@@ -56,12 +56,12 @@ namespace Projac.Connector
         /// </summary>
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The command array returning handler.</param>
-        /// <returns>A <see cref="ConnectedProjectionBuilder{TConnection}" />.</returns>
+        /// <returns>A <see cref="AnonymousConnectedProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public ConnectedProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
+        public AnonymousConnectedProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new ConnectedProjectionBuilder<TConnection>(
+            return new AnonymousConnectedProjectionBuilder<TConnection>(
                 _handlers.Concat(
                     new[]
                     {
@@ -73,12 +73,12 @@ namespace Projac.Connector
         }
 
         /// <summary>
-        ///     Builds a set of the handlers collected by this builder.
+        ///     Builds an <see cref="AnonymousConnectedProjection{TConnection}"/> using the handlers collected by this builder.
         /// </summary>
-        /// <returns>A <see cref="ConnectedProjectionHandler{TConnection}" /> array.</returns>
-        public ConnectedProjectionHandler<TConnection>[] Build()
+        /// <returns>A <see cref="AnonymousConnectedProjection{TConnection}" /> array.</returns>
+        public AnonymousConnectedProjection<TConnection> Build()
         {
-            return _handlers;
+            return new AnonymousConnectedProjection<TConnection>(_handlers);
         }
     }
 }

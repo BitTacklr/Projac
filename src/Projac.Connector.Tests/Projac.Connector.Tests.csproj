@@ -45,6 +45,8 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AnonymousConnectedProjectionBuilderTests.cs" />
+    <Compile Include="AnonymousConnectedProjectionTests.cs" />
     <Compile Include="CallRecordingConnection.cs" />
     <Compile Include="ConcurrentResolveTests.cs" />
     <Compile Include="ConnectedProjectionHandlerTests.cs" />
