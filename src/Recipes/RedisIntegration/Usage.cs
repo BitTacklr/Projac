@@ -17,7 +17,7 @@ namespace Recipes.RedisIntegration
             {
                 EndPoints =
                 {
-                    {IPAddress.Loopback, 6379}
+                    {IPAddress.Parse("192.168.99.100"), 32770}
                 }
             });
             var portfolioId = Guid.NewGuid();

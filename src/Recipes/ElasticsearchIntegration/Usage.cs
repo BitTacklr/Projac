@@ -1,5 +1,6 @@
 ﻿using System;
 using Elasticsearch.Net;
+using Elasticsearch.Net.Connection;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Projac.Connector;
@@ -13,7 +14,9 @@ namespace Recipes.ElasticsearchIntegration
         [Test]
         public async void Show()
         {
-            var client = new ElasticsearchClient();
+            //Spin up a docker image of elastic search and/or change the endpoint below
+            var config = new ConnectionConfiguration(new Uri("http://192.168.99.100:32769/"));
+            var client = new ElasticsearchClient(config);
             var portfolioId = Guid.NewGuid();
             await new ConnectedProjector<ElasticsearchClient>(Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
                 ProjectAsync(client, new object[]
