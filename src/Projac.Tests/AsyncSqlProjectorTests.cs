@@ -54,7 +54,7 @@ namespace Projac.Tests
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageCases")]
-        public async void ProjectAsyncMessageCausesExecutorToBeCalledWithExpectedCommands(
+        public async Task ProjectAsyncMessageCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object message,
             SqlNonQueryCommand[] commands)
@@ -69,7 +69,7 @@ namespace Projac.Tests
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesCases")]
-        public async void ProjectAsyncMessagesCausesExecutorToBeCalledWithExpectedCommands(
+        public async Task ProjectAsyncMessagesCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object[] messages,
             SqlNonQueryCommand[] commands)
@@ -84,7 +84,7 @@ namespace Projac.Tests
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageCases")]
-        public async void ProjectAsyncMessageTokenCausesExecutorToBeCalledWithExpectedCommands(
+        public async Task ProjectAsyncMessageTokenCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object message,
             SqlNonQueryCommand[] commands)
@@ -99,7 +99,7 @@ namespace Projac.Tests
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesCases")]
-        public async void ProjectAsyncMessagesTokenCausesExecutorToBeCalledWithExpectedCommands(
+        public async Task ProjectAsyncMessagesTokenCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object[] messages,
             SqlNonQueryCommand[] commands)

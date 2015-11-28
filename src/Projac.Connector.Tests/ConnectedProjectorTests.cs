@@ -74,7 +74,7 @@ namespace Projac.Connector.Tests
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageWithoutTokenCases")]
-        public async void ProjectAsyncMessageCausesExpectedCalls(
+        public async Task ProjectAsyncMessageCausesExpectedCalls(
             ConnectedProjectionHandlerResolver<CallRecordingConnection> resolver,
             object message,
             Tuple<int, object, CancellationToken>[] expectedCalls)
@@ -88,7 +88,7 @@ namespace Projac.Connector.Tests
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageWithTokenCases")]
-        public async void ProjectAsyncTokenMessageCausesExpectedCalls(
+        public async Task ProjectAsyncTokenMessageCausesExpectedCalls(
             ConnectedProjectionHandlerResolver<CallRecordingConnection> resolver,
             object message,
             CancellationToken token,
@@ -103,7 +103,7 @@ namespace Projac.Connector.Tests
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesWithoutTokenCases")]
-        public async void ProjectAsyncMessagesCausesExpectedCalls(
+        public async Task ProjectAsyncMessagesCausesExpectedCalls(
             ConnectedProjectionHandlerResolver<CallRecordingConnection> resolver,
             object[] messages,
             Tuple<int, object, CancellationToken>[] expectedCalls)
@@ -117,7 +117,7 @@ namespace Projac.Connector.Tests
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesWithTokenCases")]
-        public async void ProjectAsyncTokenMessagesCausesExpectedCalls(
+        public async Task ProjectAsyncTokenMessagesCausesExpectedCalls(
             ConnectedProjectionHandlerResolver<CallRecordingConnection> resolver,
             object[] messages,
             CancellationToken token,
@@ -139,9 +139,9 @@ namespace Projac.Connector.Tests
                 throw new Exception("message");
             };
             var sut = SutFactory(resolver);
-            var exception = Assert.Throws<Exception>(async () =>
-                await sut.ProjectAsync(new object(), new object()));
-            Assert.That(exception.Message, Is.EqualTo("message"));
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new object()),
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -152,9 +152,9 @@ namespace Projac.Connector.Tests
                 throw new Exception("message");
             };
             var sut = SutFactory(resolver);
-            var exception = Assert.Throws<Exception>(async () =>
-                await sut.ProjectAsync(new object(), new object(), new CancellationToken()));
-            Assert.That(exception.Message, Is.EqualTo("message"));
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new object(), new CancellationToken()),
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -165,9 +165,9 @@ namespace Projac.Connector.Tests
                 throw new Exception("message");
             };
             var sut = SutFactory(resolver);
-            var exception = Assert.Throws<Exception>(async () =>
-                await sut.ProjectAsync(new object(), new[] { new object(), new object() }));
-            Assert.That(exception.Message, Is.EqualTo("message"));
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new object() }),
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -178,9 +178,9 @@ namespace Projac.Connector.Tests
                 throw new Exception("message");
             };
             var sut = SutFactory(resolver);
-            var exception = Assert.Throws<Exception>(async () =>
-                await sut.ProjectAsync(new object(), new[] { new object(), new object() }, new CancellationToken()));
-            Assert.That(exception.Message, Is.EqualTo("message"));
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new object() }, new CancellationToken()),
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -193,9 +193,10 @@ namespace Projac.Connector.Tests
                 };
             ConnectedProjectionHandlerResolver<object> resolver = m => new[] {new ConnectedProjectionHandler<object>(typeof (object), handler)};
             var sut = SutFactory(resolver);
-            var exception = Assert.Throws<Exception>(async () =>
-                await sut.ProjectAsync(new object(), new object()));
-            Assert.That(exception.Message, Is.EqualTo("message"));
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new object()),
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -208,9 +209,10 @@ namespace Projac.Connector.Tests
                 };
             ConnectedProjectionHandlerResolver<object> resolver = m => new[] { new ConnectedProjectionHandler<object>(typeof(object), handler) };
             var sut = SutFactory(resolver);
-            var exception = Assert.Throws<Exception>(async () =>
-                await sut.ProjectAsync(new object(), new object(), new CancellationToken()));
-            Assert.That(exception.Message, Is.EqualTo("message"));
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new object(), new CancellationToken()),
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -223,9 +225,10 @@ namespace Projac.Connector.Tests
                 };
             ConnectedProjectionHandlerResolver<object> resolver = m => new[] { new ConnectedProjectionHandler<object>(typeof(object), handler) };
             var sut = SutFactory(resolver);
-            var exception = Assert.Throws<Exception>(async () =>
-                await sut.ProjectAsync(new object(), new[] { new object(), new object() }));
-            Assert.That(exception.Message, Is.EqualTo("message"));
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new object() }),
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -238,9 +241,10 @@ namespace Projac.Connector.Tests
                 };
             ConnectedProjectionHandlerResolver<object> resolver = m => new[] { new ConnectedProjectionHandler<object>(typeof(object), handler) };
             var sut = SutFactory(resolver);
-            var exception = Assert.Throws<Exception>(async () =>
-                await sut.ProjectAsync(new object(), new[] { new object(), new object() }, new CancellationToken()));
-            Assert.That(exception.Message, Is.EqualTo("message"));
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new object() }, new CancellationToken()),
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         private static ConnectedProjector<object> SutFactory()

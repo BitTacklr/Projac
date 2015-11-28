@@ -68,16 +68,18 @@ namespace Paramol.Tests.Executors
         public void ExecuteNonQueryAsyncCommandCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(
-                async () => await sut.ExecuteNonQueryAsync((SqlNonQueryCommand)null));
+            Assert.That(async () =>
+                await sut.ExecuteNonQueryAsync((SqlNonQueryCommand)null),
+                Throws.ArgumentNullException);
         }
 
         [Test]
         public void ExecuteNonQueryAsyncTokenCommandCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(
-                async () => await sut.ExecuteNonQueryAsync((SqlNonQueryCommand)null, CancellationToken.None));
+            Assert.That(async () =>
+                await sut.ExecuteNonQueryAsync((SqlNonQueryCommand)null, CancellationToken.None),
+                Throws.ArgumentNullException);
         }
 
         [Test]
@@ -92,16 +94,18 @@ namespace Paramol.Tests.Executors
         public void ExecuteNonQueryAsyncCommandsCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(
-                async () => await sut.ExecuteNonQueryAsync((IEnumerable<SqlNonQueryCommand>) null));
+            Assert.That(async () =>
+                await sut.ExecuteNonQueryAsync((IEnumerable<SqlNonQueryCommand>)null),
+                Throws.ArgumentNullException);
         }
 
         [Test]
         public void ExecuteNonQueryAsyncTokenCommandsCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(
-                async () => await sut.ExecuteNonQueryAsync((IEnumerable<SqlNonQueryCommand>) null, CancellationToken.None));
+            Assert.That(async () =>
+                await sut.ExecuteNonQueryAsync((IEnumerable<SqlNonQueryCommand>)null, CancellationToken.None),
+                Throws.ArgumentNullException);
         }
 
         [Test]
@@ -116,16 +120,18 @@ namespace Paramol.Tests.Executors
         public void ExecuteReaderAsyncCommandCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(
-                async () => await sut.ExecuteReaderAsync(null));
+            Assert.That(async () =>
+                await sut.ExecuteReaderAsync(null),
+                Throws.ArgumentNullException);
         }
 
         [Test]
         public void ExecuteReaderAsyncTokenCommandsCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(
-                async () => await sut.ExecuteReaderAsync(null, CancellationToken.None));
+            Assert.That(async () =>
+                await sut.ExecuteReaderAsync(null, CancellationToken.None),
+                Throws.ArgumentNullException);
         }
 
         [Test]
@@ -140,16 +146,18 @@ namespace Paramol.Tests.Executors
         public void ExecuteScalarAsyncCommandCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(
-                async () => await sut.ExecuteScalarAsync(null));
+            Assert.That(async () =>
+                await sut.ExecuteScalarAsync(null),
+                Throws.ArgumentNullException);
         }
 
         [Test]
         public void ExecuteScalarAsyncTokenCommandsCanNotBeNull()
         {
             var sut = SutFactory();
-            Assert.Throws<ArgumentNullException>(
-                async () => await sut.ExecuteScalarAsync(null, CancellationToken.None));
+            Assert.That(async () =>
+                await sut.ExecuteScalarAsync(null, CancellationToken.None),
+                Throws.ArgumentNullException);
         }
 
         private static SqlCommandExecutor SutFactory()
