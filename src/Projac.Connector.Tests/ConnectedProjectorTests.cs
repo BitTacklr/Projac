@@ -189,14 +189,16 @@ namespace Projac.Connector.Tests
             Func<object, object, CancellationToken, Task> handler =
                 (connection, message, token) =>
                 {
-                    throw new Exception("message");
+                    var source = new TaskCompletionSource<object>();
+                    source.SetException(new Exception("message"));
+                    return source.Task;
                 };
             ConnectedProjectionHandlerResolver<object> resolver = m => new[] {new ConnectedProjectionHandler<object>(typeof (object), handler)};
             var sut = SutFactory(resolver);
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new object()),
-                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
+                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
         }
 
         [Test]
@@ -207,7 +209,9 @@ namespace Projac.Connector.Tests
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
-                    throw new Exception("message");
+                    var source = new TaskCompletionSource<object>();
+                    source.SetException(new Exception("message"));
+                    return source.Task;
                 };
             ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
             {
@@ -218,7 +222,31 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new int()),
-                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
+                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncMessageSecondHandlerCancellationCausesExpectedResult()
+        {
+            Func<object, object, CancellationToken, Task> handler1 =
+                (connection, message, token) => Task.FromResult<object>(null);
+            Func<object, object, CancellationToken, Task> handler2 =
+                (connection, message, token) =>
+                {
+                    var source = new TaskCompletionSource<object>();
+                    source.SetCanceled();
+                    return source.Task;
+                };
+            ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
+            {
+                new ConnectedProjectionHandler<object>(typeof(object), handler1),
+                new ConnectedProjectionHandler<object>(typeof(int), handler2)
+            });
+            var sut = SutFactory(resolver);
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new int()),
+                Throws.TypeOf<TaskCanceledException>());
         }
 
         [Test]
@@ -227,14 +255,16 @@ namespace Projac.Connector.Tests
             Func<object, object, CancellationToken, Task> handler =
                 (connection, message, token) =>
                 {
-                    throw new Exception("message");
+                    var source = new TaskCompletionSource<object>();
+                    source.SetException(new Exception("message"));
+                    return source.Task;
                 };
             ConnectedProjectionHandlerResolver<object> resolver = m => new[] { new ConnectedProjectionHandler<object>(typeof(object), handler) };
             var sut = SutFactory(resolver);
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new object(), new CancellationToken()),
-                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
+                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
         }
 
         [Test]
@@ -245,7 +275,9 @@ namespace Projac.Connector.Tests
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
-                    throw new Exception("message");
+                    var source = new TaskCompletionSource<object>();
+                    source.SetException(new Exception("message"));
+                    return source.Task;
                 };
             ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
             {
@@ -256,7 +288,31 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new int(), new CancellationToken()),
-                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
+                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncTokenMessageSecondHandlerCancellationCausesExpectedResult()
+        {
+            Func<object, object, CancellationToken, Task> handler1 =
+                (connection, message, token) => Task.FromResult<object>(null);
+            Func<object, object, CancellationToken, Task> handler2 =
+                (connection, message, token) =>
+                {
+                    var source = new TaskCompletionSource<object>();
+                    source.SetCanceled();
+                    return source.Task;
+                };
+            ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
+            {
+                new ConnectedProjectionHandler<object>(typeof(object), handler1),
+                new ConnectedProjectionHandler<object>(typeof(int), handler2)
+            });
+            var sut = SutFactory(resolver);
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new int(), new CancellationToken()),
+                Throws.TypeOf<TaskCanceledException>());
         }
 
 
@@ -266,14 +322,16 @@ namespace Projac.Connector.Tests
             Func<object, object, CancellationToken, Task> handler =
                 (connection, message, token) =>
                 {
-                    throw new Exception("message");
+                    var source = new TaskCompletionSource<object>();
+                    source.SetException(new Exception("message"));
+                    return source.Task;
                 };
             ConnectedProjectionHandlerResolver<object> resolver = m => new[] { new ConnectedProjectionHandler<object>(typeof(object), handler) };
             var sut = SutFactory(resolver);
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new[] { new object(), new object() }),
-                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
+                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
         }
 
         [Test]
@@ -284,7 +342,9 @@ namespace Projac.Connector.Tests
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
-                    throw new Exception("message");
+                    var source = new TaskCompletionSource<object>();
+                    source.SetException(new Exception("message"));
+                    return source.Task;
                 };
             ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
             {
@@ -295,7 +355,31 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new[] { new object(), new int() }),
-                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
+                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncMessagesSecondHandlerCancellationCausesExpectedResult()
+        {
+            Func<object, object, CancellationToken, Task> handler1 =
+                (connection, message, token) => Task.FromResult<object>(null);
+            Func<object, object, CancellationToken, Task> handler2 =
+                (connection, message, token) =>
+                {
+                    var source = new TaskCompletionSource<object>();
+                    source.SetCanceled();
+                    return source.Task;
+                };
+            ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
+            {
+                new ConnectedProjectionHandler<object>(typeof(object), handler1),
+                new ConnectedProjectionHandler<object>(typeof(int), handler2)
+            });
+            var sut = SutFactory(resolver);
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new int() }),
+                Throws.TypeOf<TaskCanceledException>());
         }
 
         [Test]
@@ -304,14 +388,16 @@ namespace Projac.Connector.Tests
             Func<object, object, CancellationToken, Task> handler =
                 (connection, message, token) =>
                 {
-                    throw new Exception("message");
+                    var source = new TaskCompletionSource<object>();
+                    source.SetException(new Exception("message"));
+                    return source.Task;
                 };
             ConnectedProjectionHandlerResolver<object> resolver = m => new[] { new ConnectedProjectionHandler<object>(typeof(object), handler) };
             var sut = SutFactory(resolver);
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new[] { new object(), new object() }, new CancellationToken()),
-                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
+                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
         }
 
         [Test]
@@ -322,7 +408,9 @@ namespace Projac.Connector.Tests
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
-                    throw new Exception("message");
+                    var source = new TaskCompletionSource<object>();
+                    source.SetException(new Exception("message"));
+                    return source.Task;
                 };
             ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
             {
@@ -333,7 +421,31 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new[] { new object(), new int() }, new CancellationToken()),
-                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
+                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+        }
+
+        [Test]
+        public void ProjectAsyncTokenMessagesSecondHandlerCancellationCausesExpectedResult()
+        {
+            Func<object, object, CancellationToken, Task> handler1 =
+                (connection, message, token) => Task.FromResult<object>(null);
+            Func<object, object, CancellationToken, Task> handler2 =
+                (connection, message, token) =>
+                {
+                    var source = new TaskCompletionSource<object>();
+                    source.SetCanceled();
+                    return source.Task;
+                };
+            ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
+            {
+                new ConnectedProjectionHandler<object>(typeof(object), handler1),
+                new ConnectedProjectionHandler<object>(typeof(int), handler2)
+            });
+            var sut = SutFactory(resolver);
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new int() }, new CancellationToken()),
+                Throws.TypeOf<TaskCanceledException>());
         }
 
         private static ConnectedProjector<object> SutFactory()

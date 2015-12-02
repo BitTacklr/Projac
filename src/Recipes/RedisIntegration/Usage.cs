@@ -7,7 +7,7 @@ using StackExchange.Redis;
 
 namespace Recipes.RedisIntegration
 {
-    [TestFixture, Explicit]
+    [TestFixture, Explicit, Ignore("Must be run explicitly")]
     public class Usage
     {
         [Test]

@@ -8,7 +8,7 @@ using Recipes.Shared;
 
 namespace Recipes.RavenDBIntegration
 {
-    [TestFixture, Explicit]
+    [TestFixture, Explicit, Ignore("Must be run explicitly")]
     public class Usage
     {
         [Test]
