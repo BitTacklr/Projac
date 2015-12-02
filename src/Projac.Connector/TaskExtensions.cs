@@ -92,14 +92,6 @@ namespace Projac.Connector
                     }
                 }
             }
-            catch (TaskCanceledException)
-            {
-                source.SetCanceled();
-            }
-            catch (OperationCanceledException)
-            {
-                source.SetCanceled();
-            }
             catch (Exception exception)
             {
                 source.SetException(exception);
