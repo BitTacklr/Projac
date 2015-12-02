@@ -4,7 +4,7 @@
     <RootPath>$(MSBuildProjectDirectory)\..</RootPath>
     <SourcePath>$(RootPath)\src</SourcePath>
     <PackagesPath>$(MSBuildProjectDirectory)\packages</PackagesPath>
-    <MSBuildCommunityTasksPath>$(PackagesPath)\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksPath>$(PackagesPath)\MSBuildTasks.1.4.0.128\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
@@ -22,10 +22,10 @@
 
     <NUnit
         Assemblies="@(AssembliesToTest)"
-        ToolPath="$(PackagesPath)\NUnit.Runners.2.6.4\tools"
-        Force32Bit="true"
+        ToolPath="$(PackagesPath)\NUnit.Console.3.0.0\tools"
+        ToolExe="nunit3-console.exe"
+        Force32Bit="false"
         ContinueOnError="false"
-        Framework="4.0"
-        OutputXmlFile="$(MSBuildProjectDirectory)\nunit_output.xml"/>
+        Framework="4.0"/>
   </Target>
 </Project>

@@ -11,7 +11,7 @@
 *.sln.docstates
 *.log
 output
-nunit_output.xml
+TestResult.xml
 Projac.FSharp.csproj
 Projac.Tests.FSharp.csproj
 
