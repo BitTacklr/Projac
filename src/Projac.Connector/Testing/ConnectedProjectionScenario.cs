@@ -35,7 +35,7 @@ namespace Projac.Connector.Testing
         }
 
         /// <summary>
-        /// Given the following specified messages.
+        /// Given the following specified messages to project.
         /// </summary>
         /// <param name="messages">The messages to project.</param>
         /// <returns>A new <see cref="ConnectedProjectionScenario{TConnection}"/>.</returns>
@@ -49,7 +49,7 @@ namespace Projac.Connector.Testing
         }
 
         /// <summary>
-        /// Given the following specified messages.
+        /// Given the following specified messages to project.
         /// </summary>
         /// <param name="messages">The messages to project.</param>
         /// <returns>A new <see cref="ConnectedProjectionScenario{TConnection}"/>.</returns>
