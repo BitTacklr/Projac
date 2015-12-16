@@ -63,7 +63,7 @@ namespace Projac.Connector.Testing
         }
 
         /// <summary>
-        /// Verifies the test specification using the specified verification method.
+        /// Builds a test specification using the specified verification method.
         /// </summary>
         /// <param name="verification">The verification method.</param>
         /// <returns>A <see cref="ConnectedProjectionTestSpecification{TConnection}"/>.</returns>
@@ -79,7 +79,7 @@ namespace Projac.Connector.Testing
         }
 
         /// <summary>
-        /// Verifies the test specification using the specified verification method.
+        /// Builds a test specification using the specified verification method that takes a cancellation token.
         /// </summary>
         /// <param name="verification">The verification method.</param>
         /// <returns>A <see cref="ConnectedProjectionTestSpecification{TConnection}"/>.</returns>
