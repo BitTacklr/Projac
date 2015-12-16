@@ -12,6 +12,7 @@
 *.log
 output
 TestResult.xml
+nunit_output.xml
 Projac.FSharp.csproj
 Projac.Tests.FSharp.csproj
 
