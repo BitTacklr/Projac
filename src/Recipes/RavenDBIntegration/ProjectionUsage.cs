@@ -1,18 +1,24 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Projac.Connector;
+using Projac.Connector.Testing;
+using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Embedded;
+using Raven.Json.Linq;
 using Recipes.Shared;
 
 namespace Recipes.RavenDBIntegration
 {
     [TestFixture, Explicit, Ignore("Must be run explicitly")]
-    public class Usage
+    public class ProjectionUsage
     {
         [Test]
-        public async void Show()
+        public async Task Show()
         {
             using (var store = new EmbeddableDocumentStore
             {

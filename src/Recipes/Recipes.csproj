@@ -107,7 +107,8 @@
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
     <Compile Include="ElasticsearchIntegration\Usage.cs" />
-    <Compile Include="RavenDBIntegration\Usage.cs" />
+    <Compile Include="RavenDBIntegration\ProjectionUsage.cs" />
+    <Compile Include="RavenDBIntegration\TestingUsage.cs" />
     <Compile Include="RedisIntegration\Usage.cs" />
     <Compile Include="WindowsAzureStorageIntegration\PortfolioModel.cs" />
     <Compile Include="WindowsAzureStorageIntegration\RebuildProjection.cs" />
