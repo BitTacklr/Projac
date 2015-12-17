@@ -68,7 +68,7 @@ namespace Recipes.RavenDBIntegration
 
     public static class RavenTestingExtensions
     {
-        public static async Task ExpectNone(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario)
+        public static Task ExpectNone(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario)
         {
             var specification = scenario.Verify(async session =>
             {
@@ -85,7 +85,18 @@ namespace Recipes.RavenDBIntegration
                 }
                 return VerificationResult.Pass();
             });
+            return specification.Assert();
+        }
 
+        public static Task Expect(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario, object[] documents)
+        {
+            var specification = scenario.Verify(session => Task.FromResult(VerificationResult.Pass("TODO")));
+            return specification.Assert();
+        }
+
+        public static async Task Assert(this ConnectedProjectionTestSpecification<IAsyncDocumentSession> specification)
+        {
+            if (specification == null) throw new ArgumentNullException("specification");
             using (var store = new EmbeddableDocumentStore
             {
                 RunInMemory = true,
