@@ -70,9 +70,9 @@ namespace Recipes.RavenDBIntegration
     {
         public static async Task ExpectNone(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario)
         {
-            var specification = scenario.Verify(async verificationSession =>
+            var specification = scenario.Verify(async session =>
             {
-                var streamer = await verificationSession.Advanced.StreamAsync<RavenJObject>(Etag.Empty);
+                var streamer = await session.Advanced.StreamAsync<RavenJObject>(Etag.Empty);
                 if (await streamer.MoveNextAsync())
                 {
                     var counter = 0;
