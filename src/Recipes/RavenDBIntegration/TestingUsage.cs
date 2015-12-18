@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Projac.Connector;
 using Projac.Connector.Testing;
@@ -13,20 +18,36 @@ using Recipes.Shared;
 
 namespace Recipes.RavenDBIntegration
 {
-    [TestFixture, Explicit, Ignore("Must be run explicitly")]
+    [TestFixture]//, Explicit, Ignore("Must be run explicitly")]
     public class TestingUsage
     {
         [Test]
-        public Task Show()
+        public Task ShowExpectNone()
         {
             var portfolioId = Guid.NewGuid();
-            return RavenProjectionScenario.For(Projection).
-                Given(
-                    new PortfolioAdded {Id = portfolioId, Name = "My portfolio"},
-                    new PortfolioRenamed {Id = portfolioId, Name = "Your portfolio"},
-                    new PortfolioRemoved {Id = portfolioId}
-                ).
-                ExpectNone();
+            return RavenProjectionScenario.For(Projection)
+                .Given(
+                    new PortfolioAdded { Id = portfolioId, Name = "My portfolio" },
+                    new PortfolioRenamed { Id = portfolioId, Name = "Your portfolio" },
+                    new PortfolioRemoved { Id = portfolioId }
+                )
+                .ExpectNone();
+        }
+
+        [Test]
+        public Task ShowExpect()
+        {
+            var portfolioId = Guid.NewGuid();
+            return RavenProjectionScenario.For(Projection)
+                .Given(
+                    new PortfolioAdded { Id = portfolioId, Name = "My portfolio" },
+                    new PortfolioRenamed { Id = portfolioId, Name = "Your portfolio" }
+                )
+                .Expect(new PortfolioDocument
+                {
+                    Id = portfolioId,
+                    Name = "Your portfolio"
+                });
         }
 
         public static AnonymousConnectedProjection<IAsyncDocumentSession> Projection = new AnonymousConnectedProjectionBuilder<IAsyncDocumentSession>().
@@ -64,34 +85,93 @@ namespace Recipes.RavenDBIntegration
             return new ConnectedProjectionScenario<IAsyncDocumentSession>(
                 ConcurrentResolve.WhenEqualToHandlerMessageType(handlers));
         }
-    }
 
-    public static class RavenTestingExtensions
-    {
         public static Task ExpectNone(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario)
         {
-            var specification = scenario.Verify(async session =>
-            {
-                var streamer = await session.Advanced.StreamAsync<RavenJObject>(Etag.Empty);
-                if (await streamer.MoveNextAsync())
+            return scenario
+                .Verify(async session =>
                 {
-                    var counter = 0;
-                    do
+                    using (var streamer = await session.Advanced.StreamAsync<RavenJObject>(Etag.Empty))
                     {
-                        counter++;
-                    } while (await streamer.MoveNextAsync());
-                    return VerificationResult.Fail(
-                        string.Format("Expected no documents, but found {0} document(s).", counter));
-                }
-                return VerificationResult.Pass();
-            });
-            return specification.Assert();
+                        if (await streamer.MoveNextAsync())
+                        {
+                            var storedDocumentIdentifiers = new List<string>();
+                            do
+                            {
+                                storedDocumentIdentifiers.Add(streamer.Current.Key);
+                            } while (await streamer.MoveNextAsync());
+
+                            return VerificationResult.Fail(
+                                string.Format("Expected no documents, but found {0} document(s) ({1}).",
+                                    storedDocumentIdentifiers.Count,
+                                    string.Join(",", storedDocumentIdentifiers)));
+                        }
+                        return VerificationResult.Pass();
+                    }
+                })
+                .Assert();
         }
 
-        public static Task Expect(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario, object[] documents)
+        public static Task Expect(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario, params object[] documents)
         {
-            var specification = scenario.Verify(session => Task.FromResult(VerificationResult.Pass("TODO")));
-            return specification.Assert();
+            if (documents == null) 
+                throw new ArgumentNullException("documents");
+
+            if (documents.Length == 0)
+            {
+                return scenario.ExpectNone();
+            }
+            return scenario
+                .Verify(async session =>
+                {
+                    using (var streamer = await session.Advanced.StreamAsync<object>(Etag.Empty))
+                    {
+                        var storedDocuments = new List<object>();
+                        var storedDocumentIdentifiers = new List<string>();
+                        while (await streamer.MoveNextAsync())
+                        {
+                            storedDocumentIdentifiers.Add(streamer.Current.Key);
+                            storedDocuments.Add(streamer.Current.Document);
+                        }
+
+                        if (documents.Length != storedDocumentIdentifiers.Count)
+                        {
+                            if (storedDocumentIdentifiers.Count == 0)
+                            {
+                                return VerificationResult.Fail(
+                                string.Format("Expected {0} document(s), but found 0 documents.",
+                                    documents.Length));
+                            }
+                            return VerificationResult.Fail(
+                                string.Format("Expected {0} document(s), but found {1} document(s) ({2}).",
+                                    documents.Length,
+                                    storedDocumentIdentifiers.Count,
+                                    string.Join(",", storedDocumentIdentifiers)));
+                        }
+
+                        var expectedDocuments = documents.Select(JToken.FromObject).ToArray();
+                        var actualDocuments = storedDocuments.Select(JToken.FromObject).ToArray();
+
+                        if (!expectedDocuments.SequenceEqual(actualDocuments, new JTokenEqualityComparer()))
+                        {
+                            var builder = new StringBuilder();
+                            builder.AppendLine("Expected the following documents:");
+                            foreach (var expectedDocument in expectedDocuments)
+                            {
+                                builder.AppendLine(expectedDocument.ToString());
+                            }
+                            builder.AppendLine();
+                            builder.AppendLine("But found the following documents:");
+                            foreach (var actualDocument in actualDocuments)
+                            {
+                                builder.AppendLine(actualDocument.ToString());
+                            }
+                            return VerificationResult.Fail(builder.ToString());
+                        }
+                        return VerificationResult.Pass();
+                    }
+                })
+                .Assert();
         }
 
         public static async Task Assert(this ConnectedProjectionTestSpecification<IAsyncDocumentSession> specification)
