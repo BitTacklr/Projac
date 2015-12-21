@@ -69,17 +69,5 @@ namespace Projac.Connector.Testing
         {
             get { return _verification; }
         }
-
-        //public Task<VerificationResult> Verify(TConnection connection, CancellationToken cancellationToken)
-        //{
-        //    return new ConnectedProjector<TConnection>(_resolver).
-        //        ProjectAsync(connection, _messages, cancellationToken).
-        //        ContinueWith(
-        //            _ => _verification(connection, cancellationToken), 
-        //            cancellationToken,
-        //            TaskContinuationOptions.OnlyOnRanToCompletion,
-        //            TaskScheduler.Current).
-        //        Unwrap();
-        //}
     }
 }

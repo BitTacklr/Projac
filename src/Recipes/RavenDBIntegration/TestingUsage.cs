@@ -139,8 +139,8 @@ namespace Recipes.RavenDBIntegration
                             if (storedDocumentIdentifiers.Count == 0)
                             {
                                 return VerificationResult.Fail(
-                                string.Format("Expected {0} document(s), but found 0 documents.",
-                                    documents.Length));
+                                    string.Format("Expected {0} document(s), but found 0 documents.",
+                                        documents.Length));
                             }
                             return VerificationResult.Fail(
                                 string.Format("Expected {0} document(s), but found {1} document(s) ({2}).",
