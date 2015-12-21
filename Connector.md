@@ -241,7 +241,7 @@ public class PortfolioProjectionTests
   public Task when_a_portfolio_was_deleted()
   {
       var portfolioId = Guid.NewGuid();
-      return RavenProjectionScenario.For(Projection)
+      return RavenProjectionScenario.For(new PortfolioProjection())
           .Given(
               new PortfolioAdded { Id = portfolioId, Name = "My portfolio" },
               new PortfolioRemoved { Id = portfolioId }
@@ -253,7 +253,7 @@ public class PortfolioProjectionTests
   public Task when_a_portfolio_was_renamed()
   {
       var portfolioId = Guid.NewGuid();
-      return RavenProjectionScenario.For(Projection)
+      return RavenProjectionScenario.For(new PortfolioProjection())
           .Given(
               new PortfolioAdded { Id = portfolioId, Name = "My portfolio" },
               new PortfolioRenamed { Id = portfolioId, Name = "Your portfolio" }
