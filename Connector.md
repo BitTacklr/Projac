@@ -91,17 +91,17 @@ public class PortfolioProjection : ConnectedProjection<IAsyncDocumentSession>
       {
         Id = message.Id,
         Name = message.Name
-      }, message.Id.ToString("N")));
+      }));
 
     When<PortfolioRemoved>(async (session, message) =>
       {
-        var document = await session.LoadAsync<PortfolioDocument>(message.Id.ToString("N"));
+        var document = await session.LoadAsync<PortfolioDocument>(message.Id);
         session.Delete(document);
       });
 
     When<PortfolioRenamed>(async (session, message) =>
       {
-        var document = await session.LoadAsync<PortfolioDocument>(message.Id.ToString("N"));
+        var document = await session.LoadAsync<PortfolioDocument>(message.Id);
         document.Name = message.Name;
       });
   }
@@ -196,3 +196,202 @@ var projection =
 # Executing projections
 
 How and when you decide to execute the projections is still left as an exercise to you. Typically they will sit behind a message subscription that pushes the appropriate messages into them, causing the execution of actions against the store. You can use the ConnectedProjector to perform the actual execution.
+
+# Testing projections
+
+Projac.Connector comes with an *API* that allows you to write tests for your projections at the right level of abstraction. Depending on the store you are integrating with, you may want to extend the syntax with extension methods that tuck away any boilerplate code. The general idea is that you author a scenario using *givens*, which are just messages, and verify that the store contains the expected data (and only the expected data) after projecting those messages using the projection under test.
+
+Given the following RavenDb projection ...
+
+```csharp
+public class PortfolioProjection : ConnectedProjection<IAsyncDocumentSession>
+{
+  public PortfolioProjection()
+  {
+    When<PortfolioAdded>((session, message) => 
+      session.StoreAsync(
+      new PortfolioDocument
+      {
+        Id = message.Id,
+        Name = message.Name
+      }));
+
+    When<PortfolioRemoved>(async (session, message) =>
+      {
+        var document = await session.LoadAsync<PortfolioDocument>(message.Id);
+        session.Delete(document);
+      });
+
+    When<PortfolioRenamed>(async (session, message) =>
+      {
+        var document = await session.LoadAsync<PortfolioDocument>(message.Id);
+        document.Name = message.Name;
+      });
+  }
+}
+```
+
+... we could test it as shown below ...
+
+```csharp
+[TestFixture]
+public class PortfolioProjectionTests
+{
+  [Test]
+  public Task when_a_portfolio_was_deleted()
+  {
+      var portfolioId = Guid.NewGuid();
+      return RavenProjectionScenario.For(Projection)
+          .Given(
+              new PortfolioAdded { Id = portfolioId, Name = "My portfolio" },
+              new PortfolioRemoved { Id = portfolioId }
+          )
+          .ExpectNone();
+  }
+
+  [Test]
+  public Task when_a_portfolio_was_renamed()
+  {
+      var portfolioId = Guid.NewGuid();
+      return RavenProjectionScenario.For(Projection)
+          .Given(
+              new PortfolioAdded { Id = portfolioId, Name = "My portfolio" },
+              new PortfolioRenamed { Id = portfolioId, Name = "Your portfolio" }
+          )
+          .Expect(new PortfolioDocument
+          {
+              Id = portfolioId,
+              Name = "Your portfolio"
+          });
+  }
+}
+```
+
+... using the following test syntax extension methods ...
+
+```csharp
+public static class RavenProjectionScenario
+{
+    public static ConnectedProjectionScenario<IAsyncDocumentSession> For(
+        ConnectedProjectionHandler<IAsyncDocumentSession>[] handlers)
+    {
+        if (handlers == null) throw new ArgumentNullException("handlers");
+        return new ConnectedProjectionScenario<IAsyncDocumentSession>(
+            ConcurrentResolve.WhenEqualToHandlerMessageType(handlers));
+    }
+
+    public static Task ExpectNone(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario)
+    {
+        return scenario
+            .Verify(async session =>
+            {
+                using (var streamer = await session.Advanced.StreamAsync<RavenJObject>(Etag.Empty))
+                {
+                    if (await streamer.MoveNextAsync())
+                    {
+                        var storedDocumentIdentifiers = new List<string>();
+                        do
+                        {
+                            storedDocumentIdentifiers.Add(streamer.Current.Key);
+                        } while (await streamer.MoveNextAsync());
+
+                        return VerificationResult.Fail(
+                            string.Format("Expected no documents, but found {0} document(s) ({1}).",
+                                storedDocumentIdentifiers.Count,
+                                string.Join(",", storedDocumentIdentifiers)));
+                    }
+                    return VerificationResult.Pass();
+                }
+            })
+            .Assert();
+    }
+
+    public static Task Expect(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario, params object[] documents)
+    {
+        if (documents == null) 
+            throw new ArgumentNullException("documents");
+
+        if (documents.Length == 0)
+        {
+            return scenario.ExpectNone();
+        }
+        return scenario
+            .Verify(async session =>
+            {
+                using (var streamer = await session.Advanced.StreamAsync<object>(Etag.Empty))
+                {
+                    var storedDocuments = new List<object>();
+                    var storedDocumentIdentifiers = new List<string>();
+                    while (await streamer.MoveNextAsync())
+                    {
+                        storedDocumentIdentifiers.Add(streamer.Current.Key);
+                        storedDocuments.Add(streamer.Current.Document);
+                    }
+
+                    if (documents.Length != storedDocumentIdentifiers.Count)
+                    {
+                        if (storedDocumentIdentifiers.Count == 0)
+                        {
+                            return VerificationResult.Fail(
+                                string.Format("Expected {0} document(s), but found 0 documents.",
+                                    documents.Length));
+                        }
+                        return VerificationResult.Fail(
+                            string.Format("Expected {0} document(s), but found {1} document(s) ({2}).",
+                                documents.Length,
+                                storedDocumentIdentifiers.Count,
+                                string.Join(",", storedDocumentIdentifiers)));
+                    }
+
+                    var expectedDocuments = documents.Select(JToken.FromObject).ToArray();
+                    var actualDocuments = storedDocuments.Select(JToken.FromObject).ToArray();
+
+                    if (!expectedDocuments.SequenceEqual(actualDocuments, new JTokenEqualityComparer()))
+                    {
+                        var builder = new StringBuilder();
+                        builder.AppendLine("Expected the following documents:");
+                        foreach (var expectedDocument in expectedDocuments)
+                        {
+                            builder.AppendLine(expectedDocument.ToString());
+                        }
+                        builder.AppendLine();
+                        builder.AppendLine("But found the following documents:");
+                        foreach (var actualDocument in actualDocuments)
+                        {
+                            builder.AppendLine(actualDocument.ToString());
+                        }
+                        return VerificationResult.Fail(builder.ToString());
+                    }
+                    return VerificationResult.Pass();
+                }
+            })
+            .Assert();
+    }
+
+    public static async Task Assert(this ConnectedProjectionTestSpecification<IAsyncDocumentSession> specification)
+    {
+        if (specification == null) throw new ArgumentNullException("specification");
+        using (var store = new EmbeddableDocumentStore
+        {
+            RunInMemory = true,
+            DataDirectory = Path.GetTempPath()
+        })
+        {
+            store.Configuration.Storage.Voron.AllowOn32Bits = true;
+            store.Initialize();
+            using (var session = store.OpenAsyncSession())
+            {
+                await new ConnectedProjector<IAsyncDocumentSession>(specification.Resolver).
+                    ProjectAsync(session, specification.Messages);
+                await session.SaveChangesAsync();
+
+                var result = await specification.Verification(session, CancellationToken.None);
+                if (result.Failed)
+                {
+                    throw new AssertionException(result.Message);
+                }
+            }
+        }
+    }
+}
+```
