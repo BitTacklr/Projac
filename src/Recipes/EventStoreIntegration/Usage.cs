@@ -21,7 +21,7 @@ namespace Recipes.EventStoreIntegration
     public class Usage
     {
         [Test]
-        public async void ShowWithStream()
+        public async Task ShowWithStream()
         {
             //setup a projection schema (one of many ways)
             var projector = new SqlProjector(
@@ -94,7 +94,7 @@ namespace Recipes.EventStoreIntegration
         }
 
         [Test]
-        public async void ShowWithCatchupSubscription()
+        public async Task ShowWithCatchupSubscription()
         {
             //setup a projection schema (one of many ways)
             var projector = new SqlProjector(

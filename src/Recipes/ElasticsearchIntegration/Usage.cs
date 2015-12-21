@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Elasticsearch.Net;
 using Elasticsearch.Net.Connection;
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ namespace Recipes.ElasticsearchIntegration
     public class Usage
     {
         [Test]
-        public async void Show()
+        public async Task Show()
         {
             //Spin up a docker image of elastic search and/or change the endpoint below
             var config = new ConnectionConfiguration(new Uri("http://192.168.99.100:32769/"));

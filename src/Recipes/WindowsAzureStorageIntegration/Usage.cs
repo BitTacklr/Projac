@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using NUnit.Framework;
@@ -11,7 +12,7 @@ namespace Recipes.WindowsAzureStorageIntegration
     public class Usage
     {
         [Test]
-        public async void ShowUsingDevStorage()
+        public async Task ShowUsingDevStorage()
         {
             var account = CloudStorageAccount.DevelopmentStorageAccount;
             var client = account.CreateCloudTableClient();

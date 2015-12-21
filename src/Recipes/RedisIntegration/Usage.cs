@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Projac.Connector;
 using Recipes.Shared;
@@ -11,7 +12,7 @@ namespace Recipes.RedisIntegration
     public class Usage
     {
         [Test]
-        public async void Show()
+        public async Task Show()
         {
             var connection = await ConnectionMultiplexer.ConnectAsync(new ConfigurationOptions
             {
