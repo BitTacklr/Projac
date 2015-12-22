@@ -10,12 +10,12 @@
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
     <description>Projac provides lightweight infrastructure for producing SQL based projections.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
-    <releaseNotes>Support for Projac.Connector.Testing landed.</releaseNotes>
+    <releaseNotes>Added WhenSync method to ConnectedProjection and AnonymousConnectedProjectionBuilder.</releaseNotes>
     <copyright>Copyright 2015, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework="net45">
-        <dependency id="Paramol" version="0.0.140" />
+        <dependency id="Paramol" version="0.0.142" />
       </group>
     </dependencies>
   </metadata>

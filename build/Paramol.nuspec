@@ -10,7 +10,7 @@
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
     <description>Paramol provides lightweight infrastructure for producing SQL DML statements.</description>
     <projectUrl>https://github.com/yreynhout/Paramol</projectUrl>
-    <releaseNotes>Support for Projac.Connector.Testing landed.</releaseNotes>
+    <releaseNotes>Added WhenSync method to ConnectedProjection and AnonymousConnectedProjectionBuilder.</releaseNotes>
     <copyright>Copyright 2015, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
   </metadata>
