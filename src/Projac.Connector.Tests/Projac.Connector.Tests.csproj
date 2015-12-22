@@ -57,6 +57,7 @@
     <Compile Include="HandlerResolutionCases.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConnectedProjectionHandlerEnumeratorTests.cs" />
+    <Compile Include="Signal.cs" />
     <Compile Include="Testing\ConnectedProjectionScenarioTests.cs" />
     <Compile Include="Testing\ConnectedProjectionTestSpecificationTests.cs" />
     <Compile Include="Testing\VerificationResultTests.cs" />

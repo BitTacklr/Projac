@@ -80,23 +80,28 @@ namespace Projac.Connector.Tests
         {
             class WithHandlers : ConnectedProjection<object>
             {
-                private readonly Task _taskWithoutCancellation;
-                private readonly Task _taskWithCancellation;
-                private readonly Task[] _result;
+                private readonly Signal _signalWhenWithoutCancellation;
+                private readonly Signal _signalWhenWithCancellation;
+                private readonly Signal _signalWhenSync;
+                private readonly Signal[] _signals;
 
                 public WithHandlers()
                 {
-                    _taskWithoutCancellation = TaskFactory();
-                    _taskWithCancellation = TaskFactory();
-                    _result = new[] { _taskWithoutCancellation, _taskWithCancellation };
-
-                    When<object>((_, __) => _taskWithoutCancellation);
-                    When<object>((_, __, ___) => _taskWithCancellation);
+                    _signalWhenWithoutCancellation = new Signal();
+                    _signalWhenWithCancellation = new Signal();
+                    _signalWhenSync = new Signal();
+                    _signals = new []
+                    {
+                        _signalWhenWithoutCancellation, _signalWhenWithCancellation, _signalWhenSync
+                    };
+                    When<object>((_, __) => { _signalWhenWithoutCancellation.Set(); return TaskFactory(); });
+                    When<object>((_, __, ___) => { _signalWhenWithCancellation.Set(); return TaskFactory(); });
+                    WhenSync<object>((_, __) => { _signalWhenSync.Set(); });
                 }
 
-                public Task[] Result
+                public Signal[] Signals
                 {
-                    get { return _result; }
+                    get { return _signals; }
                 }
 
                 private static Task TaskFactory()
@@ -118,8 +123,11 @@ namespace Projac.Connector.Tests
             {
                 IEnumerable<ConnectedProjectionHandler<object>> result = _sut;
 
-                Assert.That(result.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EqualTo(_sut.Result));
+                foreach (var _ in result)
+                {
+                    _.Handler(null, null, CancellationToken.None);
+                }
+                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
             }
 
             [Test]
@@ -127,8 +135,11 @@ namespace Projac.Connector.Tests
             {
                 var result = _sut.Handlers;
 
-                Assert.That(result.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EqualTo(_sut.Result));
+                foreach (var _ in result)
+                {
+                    _.Handler(null, null, CancellationToken.None);
+                }
+                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
             }
 
             [Test]
@@ -136,8 +147,11 @@ namespace Projac.Connector.Tests
             {
                 ConnectedProjectionHandler<object>[] result = _sut;
 
-                Assert.That(result.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EqualTo(_sut.Result));
+                foreach (var _ in result)
+                {
+                    _.Handler(null, null, CancellationToken.None);
+                }
+                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
             }
 
             [Test]
@@ -145,13 +159,16 @@ namespace Projac.Connector.Tests
             {
                 var result = (ConnectedProjectionHandler<object>[])_sut;
 
-                Assert.That(result.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EqualTo(_sut.Result));
+                foreach (var _ in result)
+                {
+                    _.Handler(null, null, CancellationToken.None);
+                }
+                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
             }
         }
 
         [TestFixture]
-        public class WithCancellationHandlerTests
+        public class WhenWithCancellationHandlerTests
         {
             [Test]
             public void WhenHandlerCanNotBeNull()
@@ -242,7 +259,7 @@ namespace Projac.Connector.Tests
         }
 
         [TestFixture]
-        public class WithoutCancellationHandlerTests
+        public class WhenWithoutCancellationHandlerTests
         {
             [Test]
             public void WhenHandlerCanNotBeNull()
@@ -328,6 +345,99 @@ namespace Projac.Connector.Tests
                 {
                     foreach (var handler in handlers)
                         When(handler);
+                }
+            }
+        }
+
+        [TestFixture]
+        public class WhenSyncHandlerTests
+        {
+            [Test]
+            public void WhenSyncHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(
+                    () => new RegisterNullHandler());
+            }
+
+            [Test]
+            public void WhenSyncHasExpectedResult()
+            {
+                var signal = new Signal();
+                var handler = HandlerFactory(signal);
+                var sut = new RegisterHandlers(handler);
+
+                foreach (var _ in sut.Handlers)
+                {
+                    _.Handler(null, null, CancellationToken.None);
+                }
+
+                Assert.That(signal.IsSet, Is.True);
+            }
+
+            [Test]
+            public void SuccessiveWhenHasExpectedResult()
+            {
+                var signals = new List<Signal>();
+                var handlers = new List<Action<object, object>>();
+                for (var index = 0; index < Random.Next(2, 100); index++)
+                {
+                    signals.Add(new Signal());
+                    handlers.Add(HandlerFactory(signals[signals.Count - 1]));
+                }
+                var sut = new RegisterHandlers(handlers.ToArray());
+
+                foreach (var _ in sut.Handlers)
+                {
+                    _.Handler(null, null, CancellationToken.None);
+                }
+
+                Assert.That(signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+            }
+
+            [Test]
+            public void SuccessiveWhenRetainsOrder()
+            {
+                var signals = new List<Signal>();
+                var handlers = new List<Action<object, object>>();
+                for (var index = 0; index < Random.Next(2, 100); index++)
+                {
+                    signals.Add(new Signal());
+                    handlers.Add(HandlerFactory(signals[signals.Count - 1]));
+                }
+                signals.Reverse();
+                handlers.Reverse();
+
+                var sut = new RegisterHandlers(handlers.ToArray());
+
+                foreach (var _ in sut.Handlers)
+                {
+                    _.Handler(null, null, CancellationToken.None);
+                }
+
+                Assert.That(signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+            }
+
+            private static readonly Random Random = new Random();
+
+            private static Action<object, object> HandlerFactory(Signal signal)
+            {
+                return (_, __) => { signal.Set(); };
+            }
+
+            private class RegisterNullHandler : ConnectedProjection<object>
+            {
+                public RegisterNullHandler()
+                {
+                    WhenSync((Action<object, object>)null);
+                }
+            }
+
+            private class RegisterHandlers : ConnectedProjection<object>
+            {
+                public RegisterHandlers(params Action<object, object>[] handlers)
+                {
+                    foreach (var handler in handlers)
+                        WhenSync(handler);
                 }
             }
         }

@@ -42,6 +42,25 @@ namespace Projac.Connector
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The message handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
+        protected void WhenSync<TMessage>(Action<TConnection, TMessage> handler)
+        {
+            if (handler == null) throw new ArgumentNullException("handler");
+            _handlers.Add(
+                new ConnectedProjectionHandler<TConnection>(
+                    typeof(TMessage),
+                    (connection, message, token) =>
+                    {
+                        handler(connection, (TMessage) message);
+                        return Task.FromResult<object>(null);
+                    }));
+        }
+
+        /// <summary>
+        ///     Specifies the message handler to be invoked when a particular message occurs.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="handler">The message handler.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         protected void When<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");

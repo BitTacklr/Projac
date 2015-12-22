@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Projac.Connector;
-using Projac.Connector.Testing;
-using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Embedded;
-using Raven.Json.Linq;
 using Recipes.Shared;
 
 namespace Recipes.RavenDBIntegration

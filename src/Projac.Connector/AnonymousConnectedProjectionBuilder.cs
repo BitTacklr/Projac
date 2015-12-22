@@ -31,10 +31,10 @@ namespace Projac.Connector
         }
 
         /// <summary>
-        ///     Specifies the single non query command returning handler to be invoked when a particular message occurs.
+        ///     Specifies the message handler to be invoked when a particular message occurs.
         /// </summary>
         /// <typeparam name="TMessage">The type of the message.</typeparam>
-        /// <param name="handler">The single command returning handler.</param>
+        /// <param name="handler">The message handler that handles the message asynchronously.</param>
         /// <returns>A <see cref="AnonymousConnectedProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         public AnonymousConnectedProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, Task> handler)
@@ -52,10 +52,35 @@ namespace Projac.Connector
         }
 
         /// <summary>
-        ///     Specifies the non query command array returning handler to be invoked when a particular message occurs.
+        ///     Specifies the message handler to be invoked when a particular message occurs.
         /// </summary>
         /// <typeparam name="TMessage">The type of the message.</typeparam>
-        /// <param name="handler">The command array returning handler.</param>
+        /// <param name="handler">The message handler that handles the message synchronously.</param>
+        /// <returns>A <see cref="AnonymousConnectedProjectionBuilder{TConnection}" />.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
+        public AnonymousConnectedProjectionBuilder<TConnection> WhenSync<TMessage>(Action<TConnection, TMessage> handler)
+        {
+            if (handler == null) throw new ArgumentNullException("handler");
+            return new AnonymousConnectedProjectionBuilder<TConnection>(
+                _handlers.Concat(
+                    new[]
+                    {
+                        new ConnectedProjectionHandler<TConnection>(
+                            typeof (TMessage),
+                            (connection, message, token) =>
+                            {
+                                handler(connection, (TMessage) message);
+                                return Task.FromResult<object>(null);
+                            })
+                    }).
+                    ToArray());
+        }
+
+        /// <summary>
+        ///     Specifies the message handler to be invoked when a particular message occurs.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="handler">The message handler that handles the message asynchronously and with cancellation support.</param>
         /// <returns>A <see cref="AnonymousConnectedProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         public AnonymousConnectedProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
