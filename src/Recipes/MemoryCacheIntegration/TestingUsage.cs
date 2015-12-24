@@ -14,7 +14,7 @@ using Recipes.Shared;
 
 namespace Recipes.MemoryCacheIntegration
 {
-    [TestFixture]
+    [TestFixture, Ignore("Because 'Explicit' is not respected by R#")]
     public class TestingUsage
     {
         [Test]
@@ -50,7 +50,7 @@ namespace Recipes.MemoryCacheIntegration
         }
 
         public static AnonymousConnectedProjection<MemoryCache> Projection = new AnonymousConnectedProjectionBuilder<MemoryCache>().
-            WhenSync<PortfolioAdded>((cache, message) =>
+            When<PortfolioAdded>((cache, message) =>
             {
                 cache.Add(
                     new CacheItem(
@@ -64,11 +64,11 @@ namespace Recipes.MemoryCacheIntegration
                             AbsoluteExpiration = ObjectCache.InfiniteAbsoluteExpiration
                         });
                 }).
-            WhenSync<PortfolioRemoved>((cache, message) =>
+            When<PortfolioRemoved>((cache, message) =>
             {
                 cache.Remove(message.Id.ToString());
             }).
-            WhenSync<PortfolioRenamed>((cache, message) =>
+            When<PortfolioRenamed>((cache, message) =>
             {
                 var item = cache.GetCacheItem(message.Id.ToString());
                 if (item != null)

@@ -96,7 +96,7 @@ namespace Projac.Connector.Tests
                     };
                     When<object>((_, __) => { _signalWhenWithoutCancellation.Set(); return TaskFactory(); });
                     When<object>((_, __, ___) => { _signalWhenWithCancellation.Set(); return TaskFactory(); });
-                    WhenSync<object>((_, __) => { _signalWhenSync.Set(); });
+                    When<object>((_, __) => { _signalWhenSync.Set(); });
                 }
 
                 public Signal[] Signals
@@ -428,7 +428,7 @@ namespace Projac.Connector.Tests
             {
                 public RegisterNullHandler()
                 {
-                    WhenSync((Action<object, object>)null);
+                    When((Action<object, object>)null);
                 }
             }
 
@@ -437,7 +437,7 @@ namespace Projac.Connector.Tests
                 public RegisterHandlers(params Action<object, object>[] handlers)
                 {
                     foreach (var handler in handlers)
-                        WhenSync(handler);
+                        When(handler);
                 }
             }
         }

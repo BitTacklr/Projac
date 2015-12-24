@@ -58,9 +58,11 @@ namespace Projac.Connector
         /// <param name="handler">The message handler that handles the message synchronously.</param>
         /// <returns>A <see cref="AnonymousConnectedProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public AnonymousConnectedProjectionBuilder<TConnection> WhenSync<TMessage>(Action<TConnection, TMessage> handler)
+        public AnonymousConnectedProjectionBuilder<TConnection> When<TMessage>(Action<TConnection, TMessage> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null)
+                throw new ArgumentNullException("handler");
+
             return new AnonymousConnectedProjectionBuilder<TConnection>(
                 _handlers.Concat(
                     new[]

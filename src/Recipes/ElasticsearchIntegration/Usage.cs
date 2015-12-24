@@ -9,7 +9,7 @@ using Recipes.Shared;
 
 namespace Recipes.ElasticsearchIntegration
 {
-    [TestFixture, Explicit, Ignore("Must be run explicitly")]
+    [TestFixture, Ignore("Because 'Explicit' is not respected by R#")]
     public class Usage
     {
         [Test]

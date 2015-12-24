@@ -83,7 +83,7 @@ namespace Projac.Connector.Tests
         public void WhenSyncHandlerCanNotBeNull()
         {
             var sut = new AnonymousConnectedProjectionBuilder<object>();
-            Assert.Throws<ArgumentNullException>(() => sut.WhenSync((Action<object, object>)null));
+            Assert.Throws<ArgumentNullException>(() => sut.When((Action<object, object>)null));
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace Projac.Connector.Tests
         {
             var sut = new AnonymousConnectedProjectionBuilder<object>();
 
-            var result = sut.WhenSync<object>((_, __) => { });
+            var result = sut.When<object>((_, __) => { });
 
             Assert.That(result, Is.InstanceOf<AnonymousConnectedProjectionBuilder<object>>());
         }
@@ -156,7 +156,7 @@ namespace Projac.Connector.Tests
                     connection.RecordCall(1, message, CancellationToken.None);
                 };
 
-            var result = _sut.WhenSync(handler).Build();
+            var result = _sut.When(handler).Build();
 
             Assert.That(
                 result.Count(_ =>
@@ -264,7 +264,7 @@ namespace Projac.Connector.Tests
                     connection.RecordCall(2, message, CancellationToken.None);
                 };
 
-            var result = _sut.When(handler1).WhenSync(handler2).Build();
+            var result = _sut.When(handler1).When(handler2).Build();
 
             Assert.That(
                 result.Count(_ =>
