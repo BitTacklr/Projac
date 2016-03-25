@@ -4,10 +4,7 @@ using System.Linq;
 
 namespace Paramol.SqlClient
 {
-    /// <summary>
-    ///     Fluent SQL syntax.
-    /// </summary>
-    public static partial class TSql
+    public partial class SqlClientSyntax
     {
         /// <summary>
         ///     Starts a composition of commands with the specified <paramref name="commands" />.
@@ -15,7 +12,7 @@ namespace Paramol.SqlClient
         /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
         /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
-        public static SqlNonQueryCommandComposer Compose(IEnumerable<SqlNonQueryCommand> commands)
+        public SqlNonQueryCommandComposer Compose(IEnumerable<SqlNonQueryCommand> commands)
         {
             if (commands == null) throw new ArgumentNullException("commands");
             return new SqlNonQueryCommandComposer(commands.ToArray());
@@ -28,7 +25,7 @@ namespace Paramol.SqlClient
         /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
         /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
-        public static SqlNonQueryCommandComposer ComposeIf(bool condition,
+        public SqlNonQueryCommandComposer ComposeIf(bool condition,
             IEnumerable<SqlNonQueryCommand> commands)
         {
             return Compose(condition ? commands : new SqlNonQueryCommand[0]);
@@ -42,7 +39,7 @@ namespace Paramol.SqlClient
         /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
         /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
-        public static SqlNonQueryCommandComposer ComposeUnless(bool condition,
+        public SqlNonQueryCommandComposer ComposeUnless(bool condition,
             IEnumerable<SqlNonQueryCommand> commands)
         {
             return Compose(!condition ? commands : new SqlNonQueryCommand[0]);
@@ -54,7 +51,7 @@ namespace Paramol.SqlClient
         /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
         /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
-        public static SqlNonQueryCommandComposer Compose(params SqlNonQueryCommand[] commands)
+        public SqlNonQueryCommandComposer Compose(params SqlNonQueryCommand[] commands)
         {
             if (commands == null) throw new ArgumentNullException("commands");
             return new SqlNonQueryCommandComposer(commands);
@@ -67,7 +64,7 @@ namespace Paramol.SqlClient
         /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
         /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
-        public static SqlNonQueryCommandComposer ComposeIf(bool condition, params SqlNonQueryCommand[] commands)
+        public SqlNonQueryCommandComposer ComposeIf(bool condition, params SqlNonQueryCommand[] commands)
         {
             return Compose(condition ? commands : new SqlNonQueryCommand[0]);
         }
@@ -80,7 +77,7 @@ namespace Paramol.SqlClient
         /// <param name="commands">The <see cref="SqlNonQueryCommand">commands</see> to start the composition with.</param>
         /// <returns>A new composition of <see cref="SqlNonQueryCommand">commands</see>.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
-        public static SqlNonQueryCommandComposer ComposeUnless(bool condition,
+        public SqlNonQueryCommandComposer ComposeUnless(bool condition,
             params SqlNonQueryCommand[] commands)
         {
             return Compose(!condition ? commands : new SqlNonQueryCommand[0]);

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac", "Projac\Projac.csproj", "{359863ED-13EA-4C04-BF6F-C9CF611A7129}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.Connector", "Projac.Connector\Projac.Connector.csproj", "{1C52A225-809B-44AF-8E8C-B5A44A4B1E9D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.Connector.Tests", "Projac.Connector.Tests\Projac.Connector.Tests.csproj", "{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paramol.SQLite", "Paramol.SQLite\Paramol.SQLite.csproj", "{83F5E4B1-A8BA-4B7F-9686-09E5B4F9CB21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83F5E4B1-A8BA-4B7F-9686-09E5B4F9CB21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83F5E4B1-A8BA-4B7F-9686-09E5B4F9CB21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83F5E4B1-A8BA-4B7F-9686-09E5B4F9CB21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83F5E4B1-A8BA-4B7F-9686-09E5B4F9CB21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +72,6 @@ Global
 		{1DB95A98-6A5F-44E7-BB6A-AB9D3C92B38F} = {24478CDC-4A58-40F6-A042-E19252568BD6}
 		{1C52A225-809B-44AF-8E8C-B5A44A4B1E9D} = {1C94919D-B674-4DB4-A989-B7F0B4D400E1}
 		{EAC883ED-BB1D-48C3-A0B2-D89D481BB74E} = {1C94919D-B674-4DB4-A989-B7F0B4D400E1}
+		{83F5E4B1-A8BA-4B7F-9686-09E5B4F9CB21} = {24478CDC-4A58-40F6-A042-E19252568BD6}
 	EndGlobalSection
 EndGlobal

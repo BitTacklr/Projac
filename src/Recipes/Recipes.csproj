@@ -117,6 +117,7 @@
     <Compile Include="RavenDBIntegration\ProjectionUsage.cs" />
     <Compile Include="RavenDBIntegration\TestingUsage.cs" />
     <Compile Include="RedisIntegration\Usage.cs" />
+    <Compile Include="Syntax\Usage.cs" />
     <Compile Include="WindowsAzureStorageIntegration\PortfolioModel.cs" />
     <Compile Include="WindowsAzureStorageIntegration\RebuildProjection.cs" />
     <Compile Include="WindowsAzureStorageIntegration\Usage.cs" />
