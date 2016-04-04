@@ -52,7 +52,7 @@
     </Version>
 
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.SQLite$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.SQLite.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.Connector.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
 
