@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace Paramol.Tests.Framework
+namespace Paramol.Tests.SqlClient
 {
     internal class SqlParameterEqualityComparer : IEqualityComparer<SqlParameter>
     {

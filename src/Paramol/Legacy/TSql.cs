@@ -8,6 +8,7 @@ namespace Paramol.SqlClient
     /// <summary>
     ///     Fluent T-SQL syntax.
     /// </summary>
+    [Obsolete("Please use the SqlClientSyntax instead. This will be removed in a future release.")]
     public static partial class TSql
     {
         private static DbParameter[] CollectFromAnonymousType(object parameters)

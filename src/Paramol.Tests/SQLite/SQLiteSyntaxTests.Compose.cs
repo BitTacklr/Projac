@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using NUnit.Framework;
-using Paramol.SqlClient;
 
-namespace Paramol.Tests.SqlClient
+namespace Paramol.Tests.SQLite
 {
-    [TestFixture]
-    public partial class TSqlTests
+    public partial class SQLiteSyntaxTests
     {
         [Test]
         public void ComposeCommandArrayCanNotBeNull()
         {
             // ReSharper disable RedundantCast
-            Assert.Throws<ArgumentNullException>(() => TSql.Compose((SqlNonQueryCommand[])null));
+            Assert.Throws<ArgumentNullException>(() => Sql.Compose((SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
@@ -23,7 +20,7 @@ namespace Paramol.Tests.SqlClient
         public void ComposeIfCommandArrayCanNotBeNullWhenConditionIsTrue()
         {
             // ReSharper disable RedundantCast
-            Assert.Throws<ArgumentNullException>(() => TSql.ComposeIf(true, (SqlNonQueryCommand[])null));
+            Assert.Throws<ArgumentNullException>(() => Sql.ComposeIf(true, (SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
@@ -31,7 +28,7 @@ namespace Paramol.Tests.SqlClient
         public void ComposeIfCommandArrayCanBeNullWhenConditionIsFalse()
         {
             // ReSharper disable RedundantCast
-            Assert.DoesNotThrow(() => TSql.ComposeIf(false, (SqlNonQueryCommand[])null));
+            Assert.DoesNotThrow(() => Sql.ComposeIf(false, (SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
@@ -39,7 +36,7 @@ namespace Paramol.Tests.SqlClient
         public void ComposeUnlessCommandArrayCanNotBeNullWhenConditionIsFalse()
         {
             // ReSharper disable RedundantCast
-            Assert.Throws<ArgumentNullException>(() => TSql.ComposeUnless(false, (SqlNonQueryCommand[])null));
+            Assert.Throws<ArgumentNullException>(() => Sql.ComposeUnless(false, (SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
@@ -47,45 +44,45 @@ namespace Paramol.Tests.SqlClient
         public void ComposeUnlessCommandArrayCanBeNullWhenConditionIsTrue()
         {
             // ReSharper disable RedundantCast
-            Assert.DoesNotThrow(() => TSql.ComposeUnless(true, (SqlNonQueryCommand[])null));
+            Assert.DoesNotThrow(() => Sql.ComposeUnless(true, (SqlNonQueryCommand[])null));
             // ReSharper restore RedundantCast
         }
 
         [Test]
         public void ComposeCommandEnumerationCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => TSql.Compose((IEnumerable<SqlNonQueryCommand>)null));
+            Assert.Throws<ArgumentNullException>(() => Sql.Compose((IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
         public void ComposeIfCommandEnumerationCanNotBeNullWhenConditionIsTrue()
         {
-            Assert.Throws<ArgumentNullException>(() => TSql.ComposeIf(true, (IEnumerable<SqlNonQueryCommand>)null));
+            Assert.Throws<ArgumentNullException>(() => Sql.ComposeIf(true, (IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
         public void ComposeIfCommandEnumerationCanBeNullWhenConditionIsFalse()
         {
-            Assert.DoesNotThrow(() => TSql.ComposeIf(false, (IEnumerable<SqlNonQueryCommand>)null));
+            Assert.DoesNotThrow(() => Sql.ComposeIf(false, (IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
         public void ComposeUnlessCommandEnumerationCanNotBeNullWhenConditionIsFalse()
         {
-            Assert.Throws<ArgumentNullException>(() => TSql.ComposeUnless(false, (IEnumerable<SqlNonQueryCommand>)null));
+            Assert.Throws<ArgumentNullException>(() => Sql.ComposeUnless(false, (IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
         public void ComposeUnlessCommandEnumerationCanBeNullWhenConditionIsTrue()
         {
-            Assert.DoesNotThrow(() => TSql.ComposeUnless(true, (IEnumerable<SqlNonQueryCommand>)null));
+            Assert.DoesNotThrow(() => Sql.ComposeUnless(true, (IEnumerable<SqlNonQueryCommand>)null));
         }
 
         [Test]
         public void ComposeCommandArrayReturnsComposer()
         {
             Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
-                TSql.Compose(
+                Sql.Compose(
                     CommandFactory(),
                     CommandFactory()));
         }
@@ -94,7 +91,7 @@ namespace Paramol.Tests.SqlClient
         public void ComposeIfCommandArrayReturnsComposer([Values(true, false)]bool condition)
         {
             Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
-                TSql.ComposeIf(
+                Sql.ComposeIf(
                     condition,
                     CommandFactory(),
                     CommandFactory()));
@@ -104,7 +101,7 @@ namespace Paramol.Tests.SqlClient
         public void ComposeUnlessCommandArrayReturnsComposer([Values(true, false)]bool condition)
         {
             Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
-                TSql.ComposeUnless(
+                Sql.ComposeUnless(
                     condition,
                     CommandFactory(),
                     CommandFactory()));
@@ -114,7 +111,7 @@ namespace Paramol.Tests.SqlClient
         public void ComposeCommandEnumerationReturnsComposer()
         {
             Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
-                TSql.Compose((IEnumerable<SqlNonQueryCommand>)new[]
+                Sql.Compose((IEnumerable<SqlNonQueryCommand>)new[]
                 {
                     CommandFactory(),
                     CommandFactory()
@@ -125,7 +122,7 @@ namespace Paramol.Tests.SqlClient
         public void ComposeIfCommandEnumerationReturnsComposer([Values(true, false)]bool condition)
         {
             Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
-                TSql.ComposeIf(condition, (IEnumerable<SqlNonQueryCommand>)new[]
+                Sql.ComposeIf(condition, (IEnumerable<SqlNonQueryCommand>)new[]
                 {
                     CommandFactory(),
                     CommandFactory()
@@ -136,7 +133,7 @@ namespace Paramol.Tests.SqlClient
         public void ComposeUnlessCommandEnumerationReturnsComposer([Values(true, false)]bool condition)
         {
             Assert.IsInstanceOf<SqlNonQueryCommandComposer>(
-                TSql.ComposeUnless(condition, (IEnumerable<SqlNonQueryCommand>)new[]
+                Sql.ComposeUnless(condition, (IEnumerable<SqlNonQueryCommand>)new[]
                 {
                     CommandFactory(),
                     CommandFactory()
@@ -149,7 +146,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.Compose(command1, command2);
+            SqlNonQueryCommand[] result = Sql.Compose(command1, command2);
 
             Assert.That(result, Is.EquivalentTo(new []
             {
@@ -163,7 +160,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.ComposeIf(true, command1, command2);
+            SqlNonQueryCommand[] result = Sql.ComposeIf(true, command1, command2);
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
@@ -177,7 +174,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.ComposeIf(false, command1, command2);
+            SqlNonQueryCommand[] result = Sql.ComposeIf(false, command1, command2);
 
             Assert.That(result, Is.EquivalentTo(new SqlNonQueryCommand[0]));
         }
@@ -188,7 +185,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.ComposeUnless(false, command1, command2);
+            SqlNonQueryCommand[] result = Sql.ComposeUnless(false, command1, command2);
 
             Assert.That(result, Is.EquivalentTo(new[]
             {
@@ -202,7 +199,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.ComposeUnless(true, command1, command2);
+            SqlNonQueryCommand[] result = Sql.ComposeUnless(true, command1, command2);
 
             Assert.That(result, Is.EquivalentTo(new SqlNonQueryCommand[0]));
         }
@@ -213,7 +210,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.Compose((IEnumerable<SqlNonQueryCommand>)new[]
+            SqlNonQueryCommand[] result = Sql.Compose((IEnumerable<SqlNonQueryCommand>)new[]
             {
                 command1, command2
             });
@@ -230,7 +227,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.ComposeIf(true, (IEnumerable<SqlNonQueryCommand>)new[]
+            SqlNonQueryCommand[] result = Sql.ComposeIf(true, (IEnumerable<SqlNonQueryCommand>)new[]
             {
                 command1, command2
             });
@@ -247,7 +244,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.ComposeIf(false, (IEnumerable<SqlNonQueryCommand>)new[]
+            SqlNonQueryCommand[] result = Sql.ComposeIf(false, (IEnumerable<SqlNonQueryCommand>)new[]
             {
                 command1, command2
             });
@@ -261,7 +258,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.ComposeUnless(false, (IEnumerable<SqlNonQueryCommand>)new[]
+            SqlNonQueryCommand[] result = Sql.ComposeUnless(false, (IEnumerable<SqlNonQueryCommand>)new[]
             {
                 command1, command2
             });
@@ -278,7 +275,7 @@ namespace Paramol.Tests.SqlClient
             var command1 = CommandFactory();
             var command2 = CommandFactory();
 
-            SqlNonQueryCommand[] result = TSql.ComposeUnless(true, (IEnumerable<SqlNonQueryCommand>)new[]
+            SqlNonQueryCommand[] result = Sql.ComposeUnless(true, (IEnumerable<SqlNonQueryCommand>)new[]
             {
                 command1, command2
             });
@@ -289,14 +286,6 @@ namespace Paramol.Tests.SqlClient
         private static SqlNonQueryCommand CommandFactory()
         {
             return new SqlNonQueryCommand("text", new DbParameter[0], CommandType.Text);
-        }
-
-        class TestDbParameter : IDbParameterValue
-        {
-            public DbParameter ToDbParameter(string parameterName)
-            {
-                return new SqlParameter(parameterName, DBNull.Value);
-            }
         }
     }
 }

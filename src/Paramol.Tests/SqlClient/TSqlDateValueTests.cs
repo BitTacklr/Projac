@@ -6,7 +6,6 @@ namespace Paramol.Tests.SqlClient
     using NUnit.Framework;
 
     using Paramol.SqlClient;
-    using Paramol.Tests.Framework;
 
     [TestFixture]
     public class TSqlDateValueTests

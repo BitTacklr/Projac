@@ -9,52 +9,64 @@ namespace Recipes.DataDefinition
     {
         private static readonly byte[] Id = "Sample".HashId();
 
-        public class SampleUsingProjection : SqlProjection
+        public class SampleUsingProjection : SqlClientProjection
         {
             public SampleUsingProjection()
             {
                 When<CreateSchema>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "CREATE TABLE [Sample] ([Id] INT NOT NULL CONSTRAINT PK_Sample PRIMARY KEY, [Value] INT NOT NULL)"));
 
                 When<DropSchema>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "DROP TABLE [Sample]"));
 
                 When<DeleteData>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "DELETE FROM [Sample]"));
 
                 When<SetCheckpoint>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "UPDATE [CheckpointGate] SET Checkpoint = @Checkpoint WHERE [Id] = @Id",
                         new
                         {
-                            Checkpoint = TSql.BigInt(_.Checkpoint),
-                            Id = TSql.Binary(Id, 16)
+                            Checkpoint = Sql.BigInt(_.Checkpoint),
+                            Id = Sql.Binary(Id, 16)
                         }));
+            }
+        }
+
+        public class SqlClientProjection : SqlProjection
+        {
+            private static readonly SqlClientSyntax Syntax = new SqlClientSyntax();
+
+            protected SqlClientSyntax Sql
+            {
+                get { return Syntax; }
             }
         }
 
         public static class SampleUsingBuilder
         {
+            private static readonly SqlClientSyntax Sql = new SqlClientSyntax();
+
             public static readonly AnonymousSqlProjection Instance = new AnonymousSqlProjectionBuilder().
                 When<CreateSchema>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "CREATE TABLE [Sample] ([Id] INT NOT NULL CONSTRAINT PK_Sample PRIMARY KEY, [Value] INT NOT NULL)")).
                 When<DropSchema>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "DROP TABLE [Sample]")).
                 When<DeleteData>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "DELETE FROM [Sample]")).
                 When<SetCheckpoint>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "UPDATE [CheckpointGate] SET Checkpoint = @Checkpoint WHERE [Id] = @Id",
                         new
                         {
-                            Checkpoint = TSql.BigInt(_.Checkpoint),
-                            Id = TSql.Binary(Id, 16)
+                            Checkpoint = Sql.BigInt(_.Checkpoint),
+                            Id = Sql.Binary(Id, 16)
                         })).
                 Build();
         }

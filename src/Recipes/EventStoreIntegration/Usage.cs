@@ -159,26 +159,28 @@ namespace Recipes.EventStoreIntegration
 
         public class PortfolioProjection : SqlProjection
         {
+            private static readonly SqlClientSyntax Sql = new SqlClientSyntax();
+
             public PortfolioProjection()
             {
                 When<PortfolioAdded>(@event =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "INSERT INTO [Portfolio] ([Id], [Name], [PhotoCount]) VALUES (@P1, @P2, 0)",
-                        new {P1 = TSql.UniqueIdentifier(@event.Id), P2 = TSql.NVarChar(@event.Name, 40)}
+                        new {P1 = Sql.UniqueIdentifier(@event.Id), P2 = Sql.NVarChar(@event.Name, 40)}
                         ));
                 When<PortfolioRemoved>(@event =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "DELETE FROM [Portfolio] WHERE [Id] = @P1",
-                        new {P1 = TSql.UniqueIdentifier(@event.Id)}
+                        new {P1 = Sql.UniqueIdentifier(@event.Id)}
                         ));
                 When<PortfolioRenamed>(@event =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         "UPDATE [Portfolio] SET [Name] = @P2 WHERE [Id] = @P1",
-                        new {P1 = TSql.UniqueIdentifier(@event.Id), P2 = TSql.NVarChar(@event.Name, 40)}
+                        new {P1 = Sql.UniqueIdentifier(@event.Id), P2 = Sql.NVarChar(@event.Name, 40)}
                         ));
 
                 When<CreateSchema>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         @"IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE NAME='Portfolio' AND XTYPE='U')
                         BEGIN
                             CREATE TABLE [Portfolio] (
@@ -187,11 +189,11 @@ namespace Recipes.EventStoreIntegration
                                 [PhotoCount] INT NOT NULL)
                         END"));
                 When<DropSchema>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         @"IF EXISTS (SELECT * FROM SYSOBJECTS WHERE NAME='Portfolio' AND XTYPE='U')
                         DROP TABLE [Portfolio]"));
                 When<DeleteData>(_ =>
-                    TSql.NonQueryStatement(
+                    Sql.NonQueryStatement(
                         @"IF EXISTS (SELECT * FROM SYSOBJECTS WHERE NAME='Portfolio' AND XTYPE='U')
                         DELETE FROM [Portfolio]"));
             }

@@ -3,9 +3,9 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using NUnit.Framework;
 
-namespace Paramol.Tests.Framework
+namespace Paramol.Tests.SqlClient
 {
-    internal static class DbParameterAssertions
+    internal static class SqlParameterAssertions
     {
         public static void ExpectSqlParameter(this DbParameter parameter, 
             string name, 

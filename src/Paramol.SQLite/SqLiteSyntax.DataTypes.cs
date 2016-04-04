@@ -9,7 +9,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue AnsiString(string value)
+        public IDbParameterValue AnsiString(string value)
         {
             if (value == null)
                 return SQLiteDbParameterValue.AnsiStringNull;
@@ -21,7 +21,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue AnsiStringFixedLength(string value)
+        public IDbParameterValue AnsiStringFixedLength(string value)
         {
             if (value == null)
                 return SQLiteDbParameterValue.AnsiStringFixedLengthNull;
@@ -33,7 +33,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Binary(byte[] value)
+        public IDbParameterValue Binary(byte[] value)
         {
             if (value == null)
                 return SQLiteDbParameterValue.BinaryNull;
@@ -45,7 +45,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Boolean(bool? value)
+        public IDbParameterValue Boolean(bool? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.BooleanNull;
@@ -57,7 +57,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Byte(byte? value)
+        public IDbParameterValue Byte(byte? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.ByteNull;
@@ -69,7 +69,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Currency(double? value)
+        public IDbParameterValue Currency(double? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.CurrencyNull;
@@ -81,7 +81,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Date(DateTime? value)
+        public IDbParameterValue Date(DateTime? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.DateNull;
@@ -93,7 +93,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue DateTime(DateTime? value)
+        public IDbParameterValue DateTime(DateTime? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.DateTimeNull;
@@ -105,7 +105,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue DateTime2(DateTime? value)
+        public IDbParameterValue DateTime2(DateTime? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.DateTime2Null;
@@ -117,7 +117,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue DateTimeOffset(DateTimeOffset? value)
+        public IDbParameterValue DateTimeOffset(DateTimeOffset? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.DateTimeOffsetNull;
@@ -129,7 +129,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Decimal(decimal? value)
+        public IDbParameterValue Decimal(decimal? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.DecimalNull;
@@ -141,7 +141,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Double(double? value)
+        public IDbParameterValue Double(double? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.DoubleNull;
@@ -153,7 +153,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Guid(Guid? value)
+        public IDbParameterValue Guid(Guid? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.GuidNull;
@@ -165,7 +165,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Int16(short? value)
+        public IDbParameterValue Int16(short? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.Int16Null;
@@ -177,7 +177,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Int32(int? value)
+        public IDbParameterValue Int32(int? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.Int32Null;
@@ -189,7 +189,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Int64(long? value)
+        public IDbParameterValue Int64(long? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.Int64Null;
@@ -197,23 +197,11 @@ namespace Paramol.SQLite
         }
 
         /// <summary>
-        ///     Returns a Object parameter value.
-        /// </summary>
-        /// <param name="value">The parameter value.</param>
-        /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Object(object value)
-        {
-            if (value == null)
-                return SQLiteDbParameterValue.ObjectNull;
-            return SQLiteDbParameterValue.ObjectFactory(value);
-        }
-
-        /// <summary>
         ///     Returns a SByte parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue SByte(sbyte? value)
+        public IDbParameterValue SByte(sbyte? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.SByteNull;
@@ -225,7 +213,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Single(float? value)
+        public IDbParameterValue Single(float? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.SingleNull;
@@ -237,7 +225,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue String(string value)
+        public IDbParameterValue String(string value)
         {
             if (value == null)
                 return SQLiteDbParameterValue.StringNull;
@@ -249,7 +237,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue StringFixedLength(string value)
+        public IDbParameterValue StringFixedLength(string value)
         {
             if (value == null)
                 return SQLiteDbParameterValue.StringFixedLengthNull;
@@ -261,7 +249,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue Time(TimeSpan? value)
+        public IDbParameterValue Time(TimeSpan? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.TimeNull;
@@ -273,7 +261,7 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue UInt16(ushort? value)
+        public IDbParameterValue UInt16(ushort? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.UInt16Null;
@@ -285,13 +273,25 @@ namespace Paramol.SQLite
         /// </summary>
         /// <param name="value">The parameter value.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public static IDbParameterValue UInt32(uint? value)
+        public IDbParameterValue UInt32(uint? value)
         {
             if (!value.HasValue)
                 return SQLiteDbParameterValue.UInt32Null;
             return SQLiteDbParameterValue.UInt32Factory(value.Value);
         }
 
-        //TODO: VarNumeric, Xml.
+        /// <summary>
+        ///     Returns a UInt64 parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="IDbParameterValue" />.</returns>
+        public IDbParameterValue UInt64(ulong? value)
+        {
+            if (!value.HasValue)
+                return SQLiteDbParameterValue.UInt64Null;
+            return SQLiteDbParameterValue.UInt64Factory(value.Value);
+        }
+
+        //TODO: Object, VarNumeric, Xml.
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Data;
 using NUnit.Framework;
 using Paramol.SqlClient;
-using Paramol.Tests.Framework;
 
 namespace Paramol.Tests.SqlClient
 {

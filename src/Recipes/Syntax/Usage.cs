@@ -1,6 +1,5 @@
 ﻿using Paramol.SqlClient;
 using Projac;
-using Recipes.DataDefinition;
 using Recipes.Shared;
 
 namespace Recipes.Syntax

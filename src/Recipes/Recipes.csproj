@@ -11,7 +11,8 @@
     <AssemblyName>Recipes</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>05a76a01</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -98,6 +99,10 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net45\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -117,6 +122,7 @@
     <Compile Include="RavenDBIntegration\ProjectionUsage.cs" />
     <Compile Include="RavenDBIntegration\TestingUsage.cs" />
     <Compile Include="RedisIntegration\Usage.cs" />
+    <Compile Include="SQLiteIntegration\Usage.cs" />
     <Compile Include="Syntax\Usage.cs" />
     <Compile Include="WindowsAzureStorageIntegration\PortfolioModel.cs" />
     <Compile Include="WindowsAzureStorageIntegration\RebuildProjection.cs" />
@@ -133,6 +139,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Paramol.SQLite\Paramol.SQLite.csproj">
+      <Project>{83f5e4b1-a8ba-4b7f-9686-09e5b4f9cb21}</Project>
+      <Name>Paramol.SQLite</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Paramol\Paramol.csproj">
       <Project>{222d8e5c-eabd-4773-91cd-167c3c66af3e}</Project>
       <Name>Paramol</Name>
@@ -156,6 +166,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\EventStore.Client.Embedded.3.3.1\build\EventStore.Client.Embedded.targets" Condition="Exists('..\packages\EventStore.Client.Embedded.3.3.1\build\EventStore.Client.Embedded.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -163,7 +174,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\EventStore.Client.Embedded.3.3.1\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EventStore.Client.Embedded.3.3.1\build\EventStore.Client.Embedded.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets'))" />
   </Target>
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

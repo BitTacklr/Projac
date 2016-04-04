@@ -4,7 +4,6 @@ using System.Data.Common;
 using System.Linq;
 using NUnit.Framework;
 using Paramol.SqlClient;
-using Paramol.Tests.Framework;
 
 namespace Paramol.Tests.SqlClient
 {
@@ -29,17 +28,17 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedure("text", new { }),
                 new SqlNonQueryCommand("text", new DbParameter[0], CommandType.StoredProcedure));
             yield return new TestCaseData(
-                TSql.NonQueryProcedure("text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryProcedure("text", new { Parameter = new SqlParameterValueStub() }),
                 new SqlNonQueryCommand("text", new[]
                 {
-                    new TestDbParameter().ToDbParameter("@Parameter")
+                    new SqlParameterValueStub().ToDbParameter("@Parameter")
                 }, CommandType.StoredProcedure));
             yield return new TestCaseData(
-                TSql.NonQueryProcedure("text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                TSql.NonQueryProcedure("text", new { Parameter1 = new SqlParameterValueStub(), Parameter2 = new SqlParameterValueStub() }),
                 new SqlNonQueryCommand("text", new[]
                 {
-                    new TestDbParameter().ToDbParameter("@Parameter1"),
-                    new TestDbParameter().ToDbParameter("@Parameter2")
+                    new SqlParameterValueStub().ToDbParameter("@Parameter1"),
+                    new SqlParameterValueStub().ToDbParameter("@Parameter2")
                 }, CommandType.StoredProcedure));
         }
 
@@ -67,23 +66,23 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedureIf(true, "text", new { }),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.StoredProcedure) });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureIf(true, "text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryProcedureIf(true, "text", new { Parameter = new SqlParameterValueStub() }),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@Parameter")
+                        new SqlParameterValueStub().ToDbParameter("@Parameter")
                     }, CommandType.StoredProcedure)
                 });
             yield return new TestCaseData(
                 TSql.NonQueryProcedureIf(true, "text",
-                    new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                    new { Parameter1 = new SqlParameterValueStub(), Parameter2 = new SqlParameterValueStub() }),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@Parameter1"),
-                        new TestDbParameter().ToDbParameter("@Parameter2")
+                        new SqlParameterValueStub().ToDbParameter("@Parameter1"),
+                        new SqlParameterValueStub().ToDbParameter("@Parameter2")
                     }, CommandType.StoredProcedure)
                 });
 
@@ -97,10 +96,10 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedureIf(false, "text", new { }),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureIf(false, "text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryProcedureIf(false, "text", new { Parameter = new SqlParameterValueStub() }),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureIf(false, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                TSql.NonQueryProcedureIf(false, "text", new { Parameter1 = new SqlParameterValueStub(), Parameter2 = new SqlParameterValueStub() }),
                 new SqlNonQueryCommand[0]);
         }
 
@@ -128,23 +127,23 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedureUnless(false, "text", new { }),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.StoredProcedure) });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureUnless(false, "text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryProcedureUnless(false, "text", new { Parameter = new SqlParameterValueStub() }),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@Parameter")
+                        new SqlParameterValueStub().ToDbParameter("@Parameter")
                     }, CommandType.StoredProcedure)
                 });
             yield return new TestCaseData(
                 TSql.NonQueryProcedureUnless(false, "text",
-                    new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                    new { Parameter1 = new SqlParameterValueStub(), Parameter2 = new SqlParameterValueStub() }),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@Parameter1"),
-                        new TestDbParameter().ToDbParameter("@Parameter2")
+                        new SqlParameterValueStub().ToDbParameter("@Parameter1"),
+                        new SqlParameterValueStub().ToDbParameter("@Parameter2")
                     }, CommandType.StoredProcedure)
                 });
 
@@ -158,10 +157,10 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedureUnless(true, "text", new { }),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureUnless(true, "text", new { Parameter = new TestDbParameter() }),
+                TSql.NonQueryProcedureUnless(true, "text", new { Parameter = new SqlParameterValueStub() }),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureUnless(true, "text", new { Parameter1 = new TestDbParameter(), Parameter2 = new TestDbParameter() }),
+                TSql.NonQueryProcedureUnless(true, "text", new { Parameter1 = new SqlParameterValueStub(), Parameter2 = new SqlParameterValueStub() }),
                 new SqlNonQueryCommand[0]);
         }
 
@@ -184,30 +183,30 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedureFormat("text", new IDbParameterValue[0]),
                 new SqlNonQueryCommand("text", new DbParameter[0], CommandType.StoredProcedure));
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormat("text", new TestDbParameter()),
+                TSql.NonQueryProcedureFormat("text", new SqlParameterValueStub()),
                 new SqlNonQueryCommand("text", new[]
                 {
-                    new TestDbParameter().ToDbParameter("@P0")
+                    new SqlParameterValueStub().ToDbParameter("@P0")
                 }, CommandType.StoredProcedure));
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormat("text {0}", new TestDbParameter()),
+                TSql.NonQueryProcedureFormat("text {0}", new SqlParameterValueStub()),
                 new SqlNonQueryCommand("text @P0", new[]
                 {
-                    new TestDbParameter().ToDbParameter("@P0")
+                    new SqlParameterValueStub().ToDbParameter("@P0")
                 }, CommandType.StoredProcedure));
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormat("text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormat("text", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new SqlNonQueryCommand("text", new[]
                 {
-                    new TestDbParameter().ToDbParameter("@P0"),
-                    new TestDbParameter().ToDbParameter("@P1")
+                    new SqlParameterValueStub().ToDbParameter("@P0"),
+                    new SqlParameterValueStub().ToDbParameter("@P1")
                 }, CommandType.StoredProcedure));
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormat("text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormat("text {0} {1}", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new SqlNonQueryCommand("text @P0 @P1", new[]
                 {
-                    new TestDbParameter().ToDbParameter("@P0"),
-                    new TestDbParameter().ToDbParameter("@P1")
+                    new SqlParameterValueStub().ToDbParameter("@P0"),
+                    new SqlParameterValueStub().ToDbParameter("@P1")
                 }, CommandType.StoredProcedure));
         }
 
@@ -235,41 +234,41 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedureFormatIf(true, "text", new IDbParameterValue[0]),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.StoredProcedure) });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatIf(true, "text", new TestDbParameter()),
+                TSql.NonQueryProcedureFormatIf(true, "text", new SqlParameterValueStub()),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@P0")
+                        new SqlParameterValueStub().ToDbParameter("@P0")
                     }, CommandType.StoredProcedure)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatIf(true, "text {0}", new TestDbParameter()),
+                TSql.NonQueryProcedureFormatIf(true, "text {0}", new SqlParameterValueStub()),
                 new[]
                 {
                     new SqlNonQueryCommand("text @P0", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@P0")
+                        new SqlParameterValueStub().ToDbParameter("@P0")
                     }, CommandType.StoredProcedure)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatIf(true, "text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormatIf(true, "text", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@P0"),
-                        new TestDbParameter().ToDbParameter("@P1")
+                        new SqlParameterValueStub().ToDbParameter("@P0"),
+                        new SqlParameterValueStub().ToDbParameter("@P1")
                     }, CommandType.StoredProcedure)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatIf(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormatIf(true, "text {0} {1}", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new[]
                 {
                     new SqlNonQueryCommand("text @P0 @P1", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@P0"),
-                        new TestDbParameter().ToDbParameter("@P1")
+                        new SqlParameterValueStub().ToDbParameter("@P0"),
+                        new SqlParameterValueStub().ToDbParameter("@P1")
                     }, CommandType.StoredProcedure)
                 });
 
@@ -283,16 +282,16 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedureFormatIf(false, "text", new IDbParameterValue[0]),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatIf(false, "text", new TestDbParameter()),
+                TSql.NonQueryProcedureFormatIf(false, "text", new SqlParameterValueStub()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatIf(false, "text {0}", new TestDbParameter()),
+                TSql.NonQueryProcedureFormatIf(false, "text {0}", new SqlParameterValueStub()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatIf(false, "text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormatIf(false, "text", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatIf(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormatIf(false, "text {0} {1}", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new SqlNonQueryCommand[0]);
         }
 
@@ -320,41 +319,41 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedureFormatUnless(false, "text", new IDbParameterValue[0]),
                 new[] { new SqlNonQueryCommand("text", new DbParameter[0], CommandType.StoredProcedure) });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatUnless(false, "text", new TestDbParameter()),
+                TSql.NonQueryProcedureFormatUnless(false, "text", new SqlParameterValueStub()),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@P0")
+                        new SqlParameterValueStub().ToDbParameter("@P0")
                     }, CommandType.StoredProcedure)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatUnless(false, "text {0}", new TestDbParameter()),
+                TSql.NonQueryProcedureFormatUnless(false, "text {0}", new SqlParameterValueStub()),
                 new[]
                 {
                     new SqlNonQueryCommand("text @P0", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@P0")
+                        new SqlParameterValueStub().ToDbParameter("@P0")
                     }, CommandType.StoredProcedure)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatUnless(false, "text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormatUnless(false, "text", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new[]
                 {
                     new SqlNonQueryCommand("text", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@P0"),
-                        new TestDbParameter().ToDbParameter("@P1")
+                        new SqlParameterValueStub().ToDbParameter("@P0"),
+                        new SqlParameterValueStub().ToDbParameter("@P1")
                     }, CommandType.StoredProcedure)
                 });
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatUnless(false, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormatUnless(false, "text {0} {1}", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new[]
                 {
                     new SqlNonQueryCommand("text @P0 @P1", new[]
                     {
-                        new TestDbParameter().ToDbParameter("@P0"),
-                        new TestDbParameter().ToDbParameter("@P1")
+                        new SqlParameterValueStub().ToDbParameter("@P0"),
+                        new SqlParameterValueStub().ToDbParameter("@P1")
                     }, CommandType.StoredProcedure)
                 });
 
@@ -368,16 +367,16 @@ namespace Paramol.Tests.SqlClient
                 TSql.NonQueryProcedureFormatUnless(true, "text", new IDbParameterValue[0]),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatUnless(true, "text", new TestDbParameter()),
+                TSql.NonQueryProcedureFormatUnless(true, "text", new SqlParameterValueStub()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatUnless(true, "text {0}", new TestDbParameter()),
+                TSql.NonQueryProcedureFormatUnless(true, "text {0}", new SqlParameterValueStub()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatUnless(true, "text", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormatUnless(true, "text", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new SqlNonQueryCommand[0]);
             yield return new TestCaseData(
-                TSql.NonQueryProcedureFormatUnless(true, "text {0} {1}", new TestDbParameter(), new TestDbParameter()),
+                TSql.NonQueryProcedureFormatUnless(true, "text {0} {1}", new SqlParameterValueStub(), new SqlParameterValueStub()),
                 new SqlNonQueryCommand[0]);
         }
     }

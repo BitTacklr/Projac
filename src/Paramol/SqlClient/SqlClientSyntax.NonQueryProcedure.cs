@@ -13,7 +13,7 @@ namespace Paramol.SqlClient
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static SqlNonQueryCommand NonQueryProcedure(string text, object parameters = null)
+        public SqlNonQueryCommand NonQueryProcedure(string text, object parameters = null)
         {
             return new SqlNonQueryCommand(text, CollectFromAnonymousType(parameters), CommandType.StoredProcedure);
         }
@@ -25,7 +25,7 @@ namespace Paramol.SqlClient
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlNonQueryCommand> NonQueryProcedureIf(bool condition, string text, object parameters = null)
+        public IEnumerable<SqlNonQueryCommand> NonQueryProcedureIf(bool condition, string text, object parameters = null)
         {
             if (condition)
                 yield return NonQueryProcedure(text, parameters);
@@ -38,7 +38,7 @@ namespace Paramol.SqlClient
         /// <param name="text">The text with named parameters.</param>
         /// <param name="parameters">The named parameters.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlNonQueryCommand> NonQueryProcedureUnless(bool condition, string text,
+        public IEnumerable<SqlNonQueryCommand> NonQueryProcedureUnless(bool condition, string text,
             object parameters = null)
         {
             if (!condition)
@@ -51,7 +51,7 @@ namespace Paramol.SqlClient
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static SqlNonQueryCommand NonQueryProcedureFormat(string format, params IDbParameterValue[] parameters)
+        public SqlNonQueryCommand NonQueryProcedureFormat(string format, params IDbParameterValue[] parameters)
         {
             if (parameters == null || parameters.Length == 0)
             {
@@ -72,7 +72,7 @@ namespace Paramol.SqlClient
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlNonQueryCommand> NonQueryProcedureFormatIf(bool condition, string format,
+        public IEnumerable<SqlNonQueryCommand> NonQueryProcedureFormatIf(bool condition, string format,
             params IDbParameterValue[] parameters)
         {
             if (condition)
@@ -86,7 +86,7 @@ namespace Paramol.SqlClient
         /// <param name="format">The text with positional parameters to be formatted.</param>
         /// <param name="parameters">The positional parameter values.</param>
         /// <returns>A <see cref="SqlNonQueryCommand" />.</returns>
-        public static IEnumerable<SqlNonQueryCommand> NonQueryProcedureFormatUnless(bool condition, string format,
+        public IEnumerable<SqlNonQueryCommand> NonQueryProcedureFormatUnless(bool condition, string format,
             params IDbParameterValue[] parameters)
         {
             if (!condition)
