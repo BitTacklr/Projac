@@ -10,7 +10,7 @@
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
     <description>Projac.Connector provides lightweight infrastructure for producing projections targeting a store using a client provided connection.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
-    <releaseNotes>Added WhenSync method to ConnectedProjection and AnonymousConnectedProjectionBuilder.</releaseNotes>
+    <releaseNotes>Added SQLite support. Replaced TSql with SqlClientSyntax.</releaseNotes>
     <copyright>Copyright 2015, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
     <dependencies />
