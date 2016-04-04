@@ -14,6 +14,6 @@ namespace Paramol.Tests.SqlClient
             _syntax = new SqlClientSyntax();
         }
 
-        private SqlClientSyntax Sql => _syntax;
+        private SqlClientSyntax Sql { get { return _syntax; } }
     }
 }

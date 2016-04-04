@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Paramol.SQLite</id>
@@ -15,7 +15,7 @@
     <tags>eventsourcing DDDesign</tags>
     <dependencies>
       <group targetFramework="net45">
-        <dependency id="Paramol" version="0.0.0" />
+        <dependency id="Paramol" version="0.0.146" />
         <dependency id="System.Data.SQLite.Core" version="1.0.99.0" />
       </group>
     </dependencies>

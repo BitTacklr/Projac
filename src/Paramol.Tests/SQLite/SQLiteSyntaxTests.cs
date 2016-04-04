@@ -14,6 +14,6 @@ namespace Paramol.Tests.SQLite
             _syntax = new SQLiteSyntax();
         }
 
-        private SQLiteSyntax Sql => _syntax;
+        private SQLiteSyntax Sql { get { return _syntax; } }
     }
 }

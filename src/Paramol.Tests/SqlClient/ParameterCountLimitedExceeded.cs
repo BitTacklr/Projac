@@ -13,7 +13,7 @@ namespace Paramol.Tests.SqlClient
             _syntax = new SqlClientSyntax();
         }
 
-        private SqlClientSyntax Sql => _syntax;
+        private SqlClientSyntax Sql { get { return _syntax; } }
 
         public IDbParameterValue P1 { get { return Sql.Int(0); } }
         public IDbParameterValue P2 { get { return Sql.Int(0); } }
