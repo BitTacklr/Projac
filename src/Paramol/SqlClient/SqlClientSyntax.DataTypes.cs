@@ -225,7 +225,7 @@ namespace Paramol.SqlClient
         public IDbParameterValue Decimal(decimal? value, byte precision, byte scale)
         {
             if (!value.HasValue)
-                return TSqlDecimalNullValue.Instance;
+                return new TSqlDecimalNullValue(precision, scale);
             return new TSqlDecimalValue(value.Value, precision, scale);
         }
 

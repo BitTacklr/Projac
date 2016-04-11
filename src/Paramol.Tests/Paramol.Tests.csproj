@@ -77,6 +77,8 @@
     <Compile Include="SqlClient\SqlClientSyntaxTests.QueryProcedure.cs" />
     <Compile Include="SqlClient\SqlClientSyntaxTests.QueryStatement.cs" />
     <Compile Include="SqlClient\TSqlDecimalNullValueTests.cs" />
+    <Compile Include="SqlClient\TSqlDecimalPrecisionTest.cs" />
+    <Compile Include="SqlClient\TSqlDecimalScaleTest.cs" />
     <Compile Include="SqlClient\TSqlDecimalValueTests.cs" />
     <Compile Include="SQLite\SQLiteSyntaxTestCases.cs" />
     <Compile Include="SQLite\SQLiteParameterValueStub.cs" />

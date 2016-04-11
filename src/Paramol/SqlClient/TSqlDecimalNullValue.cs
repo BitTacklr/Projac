@@ -7,18 +7,13 @@
 
     public class TSqlDecimalNullValue : IDbParameterValue
     {
-        private readonly byte _precision;
-        private readonly byte _scale;
+        private readonly TSqlDecimalScale _scale;
+        private readonly TSqlDecimalPrecision _precision;
 
-        /// <summary>
-        ///     The single instance of this value.
-        /// </summary>
-        public static readonly TSqlDecimalNullValue Instance = new TSqlDecimalNullValue();
-
-        private TSqlDecimalNullValue(byte precision = 18, byte scale = 0)
+        public TSqlDecimalNullValue(byte precision = 18, byte scale = 0)
         {
-            _precision = precision;
-            _scale = scale;
+            _scale = new TSqlDecimalScale(precision, scale);
+            _precision = new TSqlDecimalPrecision(precision);
         }
 
         /// <summary>
@@ -55,9 +50,9 @@
                 DBNull.Value);
         }
 
-        private static bool Equals(TSqlDecimalNullValue value)
+        private bool Equals(TSqlDecimalNullValue value)
         {
-            return ReferenceEquals(value, Instance);
+            return ReferenceEquals(value, this);
         }
 
         /// <summary>

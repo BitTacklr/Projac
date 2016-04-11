@@ -90,6 +90,8 @@
     <Compile Include="SqlClient\TSqlDateTimeValue.cs" />
     <Compile Include="SqlClient\TSqlDateValue.cs" />
     <Compile Include="SqlClient\TSqlDecimalNullValue.cs" />
+    <Compile Include="SqlClient\TSqlDecimalPrecision.cs" />
+    <Compile Include="SqlClient\TSqlDecimalScale.cs" />
     <Compile Include="SqlClient\TSqlDecimalValue.cs" />
     <Compile Include="SqlClient\TSqlIntNullValue.cs" />
     <Compile Include="SqlClient\TSqlIntValue.cs" />

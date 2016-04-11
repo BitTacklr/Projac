@@ -13,13 +13,13 @@
         [SetUp]
         public void SetUp()
         {
-            _sut = TSqlDecimalNullValue.Instance;
+            _sut = new TSqlDecimalNullValue();
         }
 
         [Test]
         public void InstanceIsSqlNullValue()
         {
-            Assert.That(TSqlDecimalNullValue.Instance, Is.InstanceOf<TSqlDecimalNullValue>());
+            Assert.That(new TSqlDecimalNullValue(), Is.InstanceOf<TSqlDecimalNullValue>());
         }
 
         [Test]
@@ -46,12 +46,6 @@
             var result = _sut.ToSqlParameter(parameterName);
 
             result.ExpectSqlParameter(parameterName, SqlDbType.Decimal, DBNull.Value, true, 0, 18, 0);
-        }
-
-        [Test]
-        public void DoesEqualItself()
-        {
-            Assert.That(_sut.Equals(TSqlDecimalNullValue.Instance), Is.True);
         }
 
         [Test]

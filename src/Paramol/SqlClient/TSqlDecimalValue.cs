@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 
@@ -10,9 +9,9 @@ namespace Paramol.SqlClient
     /// </summary>
     public class TSqlDecimalValue : IDbParameterValue
     {
-        private readonly byte _scale;
         private readonly decimal _value;
-        private readonly byte _precision;
+        private readonly TSqlDecimalScale _scale;
+        private readonly TSqlDecimalPrecision _precision;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="TSqlDecimalValue" /> class.
@@ -20,19 +19,11 @@ namespace Paramol.SqlClient
         /// <param name="value">The value.</param>
         /// <param name="precision">The maximum total number of decimal digits that will be stored, both to the left and to the right of the decimal point. The precision must be a value from 1 through the maximum precision of 38. The default precision is 18.</param>
         /// <param name="scale">The maximum number of decimal digits that can be stored to the right of the decimal point. Scale must be a value from 0 through p. The default scale is 0.</param>
-        public TSqlDecimalValue(decimal value, byte precision = 18, byte scale = 0)
+        public TSqlDecimalValue(decimal value, byte precision, byte scale)
         {
             _value = value;
-
-            if (precision < 1 || precision > 38)
-                throw new ArgumentOutOfRangeException("precision", precision, "The precision must be between 1 and 38.");
-
-            _precision = precision;
-
-            if (scale > precision)
-                throw new ArgumentOutOfRangeException("scale", scale, "The scale must not be greater than the precision.");
-
-            _scale = scale;
+            _precision = new TSqlDecimalPrecision(precision);
+            _scale = new TSqlDecimalScale(precision, scale);
         }
 
         /// <summary>
