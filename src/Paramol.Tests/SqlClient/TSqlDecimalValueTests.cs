@@ -8,14 +8,6 @@
     [TestFixture]
     public class TSqlDecimalValueTests
     {
-        private TSqlDecimalValue _sut;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _sut = TSqlDecimalValue.Instance;
-        }
-
         [Test]
         public void IsSqlParameterValue()
         {

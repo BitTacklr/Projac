@@ -222,9 +222,9 @@ namespace Paramol.SqlClient
         /// <param name="precision">The parameter precision.</param>
         /// <param name="scale">The parameter scale.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public IDbParameterValue Decimal(decimal? value, int precision, int scale)
+        public IDbParameterValue Decimal(decimal value, byte precision, byte scale)
         {
-            return new TSqlDecimalValue();
+            return new TSqlDecimalValue(value, precision, scale);
         }
 
         /// <summary>

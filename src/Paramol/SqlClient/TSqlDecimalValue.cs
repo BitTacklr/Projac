@@ -10,28 +10,16 @@ namespace Paramol.SqlClient
     /// </summary>
     public class TSqlDecimalValue : IDbParameterValue
     {
-        /// <summary>
-        ///     The single instance of this value.
-        /// </summary>
-        public static readonly TSqlDecimalValue Instance = new TSqlDecimalValue();
-
+        private readonly byte _scale;
         private readonly decimal _value;
         private readonly byte _precision;
-        private readonly byte _scale;
 
         /// <summary>
-        /// 
+        ///     Initializes a new instance of the <see cref="TSqlDecimalValue" /> class.
         /// </summary>
-        public TSqlDecimalValue()
-        {
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="precision"></param>
-        /// <param name="scale"></param>
+        /// <param name="value">The value.</param>
+        /// <param name="precision">The maximum total number of decimal digits that will be stored, both to the left and to the right of the decimal point. The precision must be a value from 1 through the maximum precision of 38. The default precision is 18.</param>
+        /// <param name="scale">The maximum number of decimal digits that can be stored to the right of the decimal point. Scale must be a value from 0 through p. The default scale is 0.</param>
         public TSqlDecimalValue(decimal value, byte precision = 18, byte scale = 0)
         {
             _value = value;
@@ -48,18 +36,24 @@ namespace Paramol.SqlClient
         }
 
         /// <summary>
-        ///     Represents a T-SQL DECIMAL parameter value.
+        ///     Creates a <see cref="DbParameter" /> instance based on this instance.
         /// </summary>
+        /// <param name="parameterName">The name of the parameter.</param>
+        /// <returns>
+        ///     A <see cref="DbParameter" />.
+        /// </returns>
         public DbParameter ToDbParameter(string parameterName)
         {
             return ToSqlParameter(parameterName);
         }
 
         /// <summary>
-        /// 
+        ///     Creates a <see cref="SqlParameter" /> instance based on this instance.
         /// </summary>
-        /// <param name="parameterName"></param>
-        /// <returns></returns>
+        /// <param name="parameterName">The name of the parameter.</param>
+        /// <returns>
+        ///     A <see cref="SqlParameter" />.
+        /// </returns>
         public SqlParameter ToSqlParameter(string parameterName)
         {
             return new SqlParameter(
@@ -75,13 +69,13 @@ namespace Paramol.SqlClient
                 _value);
         }
 
-        private bool Equals(TSqlDecimalValue other)
-        {
-            return _value == other._value 
-                && _precision == other._precision 
-                && _scale == other._scale;
-        }
-
+        /// <summary>
+        ///     Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -90,9 +84,22 @@ namespace Paramol.SqlClient
             return Equals((TSqlDecimalValue) obj);
         }
 
+        /// <summary>
+        ///     Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        /// </returns>
         public override int GetHashCode()
         {
             return _value.GetHashCode();
+        }
+
+        private bool Equals(TSqlDecimalValue other)
+        {
+            return _value == other._value 
+                   && _precision == other._precision 
+                   && _scale == other._scale;
         }
     }
 }
