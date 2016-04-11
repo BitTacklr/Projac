@@ -130,9 +130,9 @@
             return SutFactory(123.0m);
         }
 
-        private static TSqlDecimalValue SutFactory(decimal value, byte presision = 18, byte scale = 0)
+        private static TSqlDecimalValue SutFactory(decimal value, byte precision = 18, byte scale = 0)
         {
-            return new TSqlDecimalValue(value, presision, scale);
+            return new TSqlDecimalValue(value, precision, scale);
         }
     }
 }
