@@ -216,6 +216,18 @@ namespace Paramol.SqlClient
         }
 
         /// <summary>
+        ///     Returns a DECIMAL parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value</param>
+        /// <param name="precision">The parameter precision.</param>
+        /// <param name="scale">The parameter scale.</param>
+        /// <returns>A <see cref="IDbParameterValue" />.</returns>
+        public IDbParameterValue Decimal(decimal? value, int precision, int scale)
+        {
+            return new TSqlDecimalValue();
+        }
+
+        /// <summary>
         ///     Returns a MONEY parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>

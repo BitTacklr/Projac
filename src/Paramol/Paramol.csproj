@@ -89,6 +89,7 @@
     <Compile Include="SqlClient\TSqlDateTimeOffsetValue.cs" />
     <Compile Include="SqlClient\TSqlDateTimeValue.cs" />
     <Compile Include="SqlClient\TSqlDateValue.cs" />
+    <Compile Include="SqlClient\TSqlDecimalValue.cs" />
     <Compile Include="SqlClient\TSqlIntNullValue.cs" />
     <Compile Include="SqlClient\TSqlIntValue.cs" />
     <Compile Include="SqlClient\TSqlMoneyNullValue.cs" />

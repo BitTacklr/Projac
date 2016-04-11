@@ -76,6 +76,7 @@
     <Compile Include="SqlClient\SqlClientSyntaxTests.ParameterCountLimitExceeded.cs" />
     <Compile Include="SqlClient\SqlClientSyntaxTests.QueryProcedure.cs" />
     <Compile Include="SqlClient\SqlClientSyntaxTests.QueryStatement.cs" />
+    <Compile Include="SqlClient\TSqlDecimalValueTests.cs" />
     <Compile Include="SQLite\SQLiteSyntaxTestCases.cs" />
     <Compile Include="SQLite\SQLiteParameterValueStub.cs" />
     <Compile Include="SQLite\SQLiteParameterAssertions.cs" />
