@@ -7,6 +7,21 @@
     /// </summary>
     public struct TSqlDateTime2Precision : IEquatable<TSqlDateTime2Precision>
     {
+        /// <summary>
+        ///     Represents the maximum precision value.
+        /// </summary>
+        public static readonly TSqlDateTime2Precision Max = new TSqlDateTime2Precision(7);
+
+        /// <summary>
+        ///     Represents the minimum precision value.
+        /// </summary>
+        public static readonly TSqlDateTime2Precision Min = new TSqlDateTime2Precision(0);
+
+        /// <summary>
+        ///     Represents the default precision value.
+        /// </summary>
+        public static readonly TSqlDateTime2Precision Default = new TSqlDateTime2Precision(7);
+
         private readonly byte _value;
 
         /// <summary>
@@ -18,7 +33,8 @@
         {
             if (value > 7)
             {
-                throw new ArgumentOutOfRangeException("value", value, "The value must be between 0 and 7.");
+                throw new ArgumentOutOfRangeException("value", value,
+                    string.Format("The value must be between {0} and {1}.", 0, 7));
             }
 
             _value = value;
@@ -58,6 +74,17 @@
         public override int GetHashCode()
         {
             return _value;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return _value.ToString();
         }
 
         /// <summary>

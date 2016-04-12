@@ -8,21 +8,27 @@
     public class TSqlDecimalPrecisionTests
     {
         [Test]
-        public void MaxReturnsExpectedResult()
+        public void MaxReturnsExpectedInstance()
         {
             Assert.That(TSqlDecimalPrecision.Max, Is.EqualTo(new TSqlDecimalPrecision(38)));
         }
 
         [Test]
-        public void MinReturnsExpectedResult()
+        public void MinReturnsExpectedInstance()
         {
             Assert.That(TSqlDecimalPrecision.Min, Is.EqualTo(new TSqlDecimalPrecision(1)));
         }
 
-        [TestCase(Byte.MinValue, false)]
+        [Test]
+        public void DefaultReturnsExpectedInstance()
+        {
+            Assert.That(TSqlDecimalPrecision.Default, Is.EqualTo(new TSqlDecimalPrecision(18)));
+        }
+
+        [TestCase(byte.MinValue, false)]
         [TestCase(1, true)]
         [TestCase(38, true)]
-        [TestCase(Byte.MaxValue, false)]
+        [TestCase(byte.MaxValue, false)]
         public void SizeMustBeWithinRange(byte value, bool withinRange)
         {
             if (!withinRange)
@@ -120,7 +126,17 @@
         {
             var sut = SutFactory(12);
 
-            Byte result = sut;
+            byte result = sut;
+
+            Assert.That(result, Is.EqualTo(12));
+        }
+
+        [Test]
+        public void CanBeExplicitlyConvertedToByte()
+        {
+            var sut = SutFactory(12);
+
+            var result = (byte)sut;
 
             Assert.That(result, Is.EqualTo(12));
         }
@@ -129,6 +145,14 @@
         public void CanBeImplicitlyConvertedFromByte()
         {
             TSqlDecimalPrecision sut = 12;
+
+            Assert.That(sut, Is.EqualTo(SutFactory(12)));
+        }
+
+        [Test]
+        public void CanBeExplicitlyConvertedFromByte()
+        {
+            var sut = (TSqlDecimalPrecision)12;
 
             Assert.That(sut, Is.EqualTo(SutFactory(12)));
         }

@@ -3,19 +3,24 @@
     using System;
 
     /// <summary>
-    ///     Represents the size of a <see cref="TSqlDecimalPrecision" />.
+    ///     Represents the precision of a <see cref="TSqlDecimalValue" />. The maximum total number of decimal digits that will be stored, both to the left and to the right of the decimal point. The precision must be a value from 1 through the maximum precision of 38. The default precision is 18.
     /// </summary>
     public struct TSqlDecimalPrecision : IEquatable<TSqlDecimalPrecision>
     {
         /// <summary>
-        ///     Represents the maximum size value.
+        ///     Represents the maximum precision value.
         /// </summary>
         public static readonly TSqlDecimalPrecision Max = new TSqlDecimalPrecision(38);
 
         /// <summary>
-        ///     Represents the minimum size value.
+        ///     Represents the minimum precision value.
         /// </summary>
         public static readonly TSqlDecimalPrecision Min = new TSqlDecimalPrecision(1);
+
+        /// <summary>
+        ///     Represents the default precision value.
+        /// </summary>
+        public static readonly TSqlDecimalPrecision Default = new TSqlDecimalPrecision(18);
 
         private readonly byte _value;
 
@@ -23,11 +28,15 @@
         ///     Initializes a new instance of the <see cref="TSqlDecimalPrecision" /> struct.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">value;The value must be between 1 and 38.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if the value is not between 1 and 38.</exception>
         public TSqlDecimalPrecision(byte value)
         {
             if (value < 1 || value > 38)
-                throw new ArgumentOutOfRangeException("value", value, "The value must be between 1 and 38.");
+            {
+                throw new ArgumentOutOfRangeException("value", value,
+                    string.Format("The value must be between {0} and {1}.", 1, 38));
+            }
+
             _value = value;
         }
 
@@ -68,6 +77,17 @@
         }
 
         /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return _value.ToString();
+        }
+
+        /// <summary>
         ///     Determines whether two specified instances of <see cref="TSqlDecimalPrecision" /> are equal.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
@@ -98,11 +118,11 @@
         /// <summary>
         ///     Converts a <see cref="TSqlDecimalPrecision" /> instance to an <see cref="Byte" />.
         /// </summary>
-        /// <param name="size">The <see cref="TSqlDecimalPrecision" /> instance to convert.</param>
+        /// <param name="precision">The <see cref="TSqlDecimalPrecision" /> instance to convert.</param>
         /// <returns>The <see cref="Byte" /> size value.</returns>
-        public static implicit operator byte(TSqlDecimalPrecision size)
+        public static implicit operator byte(TSqlDecimalPrecision precision)
         {
-            return size._value;
+            return precision._value;
         }
 
         /// <summary>

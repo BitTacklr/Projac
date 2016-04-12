@@ -1,12 +1,10 @@
+using System;
+using System.Data;
+using NUnit.Framework;
+using Paramol.SqlClient;
+
 namespace Paramol.Tests.SqlClient
 {
-    using System;
-    using System.Data;
-
-    using NUnit.Framework;
-
-    using Paramol.SqlClient;
-
     [TestFixture]
     public class TSqlDateTime2NullValueTests
     {

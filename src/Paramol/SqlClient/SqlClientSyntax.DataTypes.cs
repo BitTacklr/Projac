@@ -194,6 +194,16 @@ namespace Paramol.SqlClient
         ///     Returns a DATETIME2 parameter value.
         /// </summary>
         /// <param name="value">The parameter value.</param>
+        /// <returns>A <see cref="IDbParameterValue" />.</returns>
+        public IDbParameterValue DateTime2(DateTime? value)
+        {
+            return DateTime2(value, TSqlDateTime2Precision.Default);
+        }
+
+        /// <summary>
+        ///     Returns a DATETIME2 parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value.</param>
         /// <param name="precision">The parameter precision.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
         public IDbParameterValue DateTime2(DateTime? value, TSqlDateTime2Precision precision)
@@ -219,10 +229,31 @@ namespace Paramol.SqlClient
         ///     Returns a DECIMAL parameter value.
         /// </summary>
         /// <param name="value">The parameter value</param>
+        /// <returns>A <see cref="IDbParameterValue" />.</returns>
+        public IDbParameterValue Decimal(decimal? value)
+        {
+            return Decimal(value, TSqlDecimalPrecision.Default, TSqlDecimalScale.Default);
+        }
+
+        /// <summary>
+        ///     Returns a DECIMAL parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value</param>
+        /// <param name="precision">The parameter precision.</param>
+        /// <returns>A <see cref="IDbParameterValue" />.</returns>
+        public IDbParameterValue Decimal(decimal? value, TSqlDecimalPrecision precision)
+        {
+            return Decimal(value, precision, TSqlDecimalScale.Default);
+        }
+
+        /// <summary>
+        ///     Returns a DECIMAL parameter value.
+        /// </summary>
+        /// <param name="value">The parameter value</param>
         /// <param name="precision">The parameter precision.</param>
         /// <param name="scale">The parameter scale.</param>
         /// <returns>A <see cref="IDbParameterValue" />.</returns>
-        public IDbParameterValue Decimal(decimal? value, byte precision, byte scale)
+        public IDbParameterValue Decimal(decimal? value, TSqlDecimalPrecision precision, TSqlDecimalScale scale)
         {
             if (!value.HasValue)
                 return new TSqlDecimalNullValue(precision, scale);

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 
@@ -19,11 +20,17 @@ namespace Paramol.SqlClient
         /// <param name="value">The value.</param>
         /// <param name="precision">The maximum total number of decimal digits that will be stored, both to the left and to the right of the decimal point. The precision must be a value from 1 through the maximum precision of 38. The default precision is 18.</param>
         /// <param name="scale">The maximum number of decimal digits that can be stored to the right of the decimal point. Scale must be a value from 0 through p. The default scale is 0.</param>
-        public TSqlDecimalValue(decimal value, byte precision, byte scale)
+        public TSqlDecimalValue(decimal value, TSqlDecimalPrecision precision, TSqlDecimalScale scale)
         {
+            if (scale > precision)
+            {
+                throw new ArgumentOutOfRangeException("scale", scale,
+                    string.Format("The scale ({0}) must be less than or equal to the precision ({1}).", scale, precision));
+            }
+
             _value = value;
-            _precision = new TSqlDecimalPrecision(precision);
-            _scale = new TSqlDecimalScale(precision, scale);
+            _precision = precision;
+            _scale = scale;
         }
 
         /// <summary>
@@ -83,7 +90,9 @@ namespace Paramol.SqlClient
         /// </returns>
         public override int GetHashCode()
         {
-            return _value.GetHashCode();
+            return _value.GetHashCode() 
+                ^ _precision.GetHashCode()
+                ^ _scale.GetHashCode();
         }
 
         private bool Equals(TSqlDecimalValue other)

@@ -21,11 +21,11 @@
         {
             const string parameterName = "name";
 
-            var sut = SutFactory(123.0m);
+            var sut = SutFactory(123.0m, 19, 2);
 
             var result = sut.ToDbParameter(parameterName);
 
-            result.ExpectSqlParameter(parameterName, SqlDbType.Decimal, 123.0m, false, 0, 18, 1);
+            result.ExpectSqlParameter(parameterName, SqlDbType.Decimal, 123.0m, false, 0, 19, 2);
         }
 
         [Test]
@@ -33,11 +33,11 @@
         {
             const string parameterName = "name";
 
-            var sut = SutFactory(123.0m);
+            var sut = SutFactory(123.0m, 19, 2);
 
             var result = sut.ToSqlParameter(parameterName);
 
-            result.ExpectSqlParameter(parameterName, SqlDbType.Decimal, 123, false, 0, 18, 1);
+            result.ExpectSqlParameter(parameterName, SqlDbType.Decimal, 123, false, 0, 19, 2);
         }
 
         [Test]
@@ -63,34 +63,66 @@
         }
 
         [Test]
-        public void TwoInstanceAreEqualIfTheyHaveTheSameValue()
+        public void TwoInstanceAreEqualIfTheyHaveTheSameValueAndPrecisionAndScale()
         {
-            var sut = SutFactory(123.0m);
-            var other = SutFactory(123.0m);
+            var sut = SutFactory(123.0m, 5, 4);
+            var other = SutFactory(123.0m, 5, 4);
             Assert.That(sut.Equals(other), Is.True);
+        }
+
+        [Test]
+        public void TwoInstanceAreNotEqualIfTheirPrecisionDiffers()
+        {
+            var sut = SutFactory(123.0m, 5, 4);
+            var other = SutFactory(123.0m, 6, 4);
+            Assert.That(sut.Equals(other), Is.False);
+        }
+
+        [Test]
+        public void TwoInstanceAreNotEqualIfTheirScaleDiffers()
+        {
+            var sut = SutFactory(123.0m, 5, 4);
+            var other = SutFactory(123.0m, 5, 3);
+            Assert.That(sut.Equals(other), Is.False);
         }
 
         [Test]
         public void TwoInstanceAreNotEqualIfTheirValueDiffers()
         {
-            var sut = SutFactory(123.0m);
-            var other = SutFactory(456.0m);
+            var sut = SutFactory(123.0m, 5, 4);
+            var other = SutFactory(456.0m, 5, 4);
             Assert.That(sut.Equals(other), Is.False);
         }
 
         [Test]
-        public void TwoInstanceHaveTheSameHashCodeIfTheyHaveTheSameValue()
+        public void TwoInstanceHaveTheSameHashCodeIfTheyHaveTheSameValueAndPrecisionAndScale()
         {
-            var sut = SutFactory(123.0m);
-            var other = SutFactory(123.0m);
+            var sut = SutFactory(123.0m, 5, 4);
+            var other = SutFactory(123.0m, 5, 4);
             Assert.That(sut.GetHashCode().Equals(other.GetHashCode()), Is.True);
+        }
+
+        [Test]
+        public void TwoInstanceDoNotHaveTheSameHashCodeIfTheirPrecisionDiffers()
+        {
+            var sut = SutFactory(123.0m, 5, 4);
+            var other = SutFactory(123.0m, 6, 4);
+            Assert.That(sut.GetHashCode().Equals(other.GetHashCode()), Is.False);
+        }
+
+        [Test]
+        public void TwoInstanceDoNotHaveTheSameHashCodeIfTheirScaleDiffers()
+        {
+            var sut = SutFactory(123.0m, 5, 4);
+            var other = SutFactory(123.0m, 5, 3);
+            Assert.That(sut.GetHashCode().Equals(other.GetHashCode()), Is.False);
         }
 
         [Test]
         public void TwoInstanceDoNotHaveTheSameHashCodeIfTheirValueDiffers()
         {
-            var sut = SutFactory(123.0m);
-            var other = SutFactory(456.0m);
+            var sut = SutFactory(123.0m, 5, 4);
+            var other = SutFactory(456.0m, 5, 4);
             Assert.That(sut.GetHashCode().Equals(other.GetHashCode()), Is.False);
         }
 
@@ -98,15 +130,15 @@
         [TestCase(1, true)]
         [TestCase(38, true)]
         [TestCase(39, false)]
-        public void PrecisionMustBeWithinRange(byte scale, bool withinRange)
+        public void PrecisionMustBeWithinRange(byte precision, bool withinRange)
         {
             if (!withinRange)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => SutFactory(123.0m, scale));
+                Assert.Throws<ArgumentOutOfRangeException>(() => SutFactory(123.0m, precision));
             }
             else
             {
-                Assert.DoesNotThrow(() => SutFactory(123.0m, scale));
+                Assert.DoesNotThrow(() => SutFactory(123.0m, precision));
             }
         }
 

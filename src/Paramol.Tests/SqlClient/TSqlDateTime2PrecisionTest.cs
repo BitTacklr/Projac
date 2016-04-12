@@ -7,6 +7,24 @@ namespace Paramol.Tests.SqlClient
     [TestFixture]
     public class TSqlDateTime2PrecisionTest
     {
+        [Test]
+        public void MinReturnsExpectedInstance()
+        {
+            Assert.That(TSqlDateTime2Precision.Max, Is.EqualTo(new TSqlDateTime2Precision(7)));
+        }
+
+        [Test]
+        public void MaxReturnsExpectedInstance()
+        {
+            Assert.That(TSqlDateTime2Precision.Min, Is.EqualTo(new TSqlDateTime2Precision(0)));
+        }
+
+        [Test]
+        public void DefaultReturnsExpectedInstance()
+        {
+            Assert.That(TSqlDateTime2Precision.Default, Is.EqualTo(new TSqlDateTime2Precision(7)));
+        }
+
         [TestCase(0, true)]
         [TestCase(1, true)]
         [TestCase(2, true)]
@@ -16,7 +34,7 @@ namespace Paramol.Tests.SqlClient
         [TestCase(6, true)]
         [TestCase(7, true)]
         [TestCase(8, false)]
-        public void SizeMustBeWithinRange(byte value, bool withinRange)
+        public void PrecisionMustBeWithinRange(byte value, bool withinRange)
         {
             if (!withinRange)
             {
