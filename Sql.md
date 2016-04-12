@@ -226,3 +226,4 @@ It's safe to say that Projac is all about the declarative style while Paramol is
 
 * Date, DateTime, DateTime2, Money data types in TSql by [@xt0rted](https://github.com/xt0rted)
 * The ``positional syntax`` suggestion by [@tojans](https://github.com/tojans).
+* Decimal data type in SqlClientSyntax by [@ritasker](https://github.com/ritasker)
