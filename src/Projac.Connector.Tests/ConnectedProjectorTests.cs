@@ -198,7 +198,7 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new object()),
-                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -222,7 +222,7 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new int()),
-                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -264,7 +264,7 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new object(), new CancellationToken()),
-                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -288,7 +288,7 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new int(), new CancellationToken()),
-                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -331,7 +331,7 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new[] { new object(), new object() }),
-                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -355,7 +355,7 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new[] { new object(), new int() }),
-                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -397,7 +397,7 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new[] { new object(), new object() }, new CancellationToken()),
-                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -421,7 +421,7 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new[] { new object(), new int() }, new CancellationToken()),
-                Throws.TypeOf<AggregateException>().And.InnerException.TypeOf<Exception>().And.InnerException.Message.EqualTo("message"));
+                Throws.TypeOf<Exception>().And.Message.EqualTo("message"));
         }
 
         [Test]
@@ -445,6 +445,88 @@ namespace Projac.Connector.Tests
 
             Assert.That(async () =>
                 await sut.ProjectAsync(new object(), new[] { new object(), new int() }, new CancellationToken()),
+                Throws.TypeOf<TaskCanceledException>());
+        }
+
+        [Test]
+        public void ProjectAsyncTokenMessagesHandlerObservingCancelledTokenCausesExpectedResult()
+        {
+            var tcs = new CancellationTokenSource();
+
+            Func<object, object, CancellationToken, Task> handler1 =
+                (connection, message, token) =>
+                {
+                    var source = new TaskCompletionSource<object>();
+                    token.Register(() => source.SetCanceled());
+
+                    tcs.Cancel();
+                    return source.Task;
+                };
+
+            ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
+            {
+                new ConnectedProjectionHandler<object>(typeof(object), handler1),
+            });
+            var sut = SutFactory(resolver);
+            
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object() }, tcs.Token),
+                Throws.TypeOf<TaskCanceledException>());
+        }
+
+        [Test]
+        public void ProjectAsyncTokenMessagesCancellationAfterSecondHandlerCausesExpectedResult()
+        {
+            var tcs = new CancellationTokenSource();
+
+            Func<object, object, CancellationToken, Task> handler1 =
+                (connection, message, token) => Task.FromResult<object>(null);
+            Func<object, object, CancellationToken, Task> handler2 =
+                (connection, message, token) =>
+                {
+                    tcs.Cancel();
+                    return Task.FromResult<object>(null);
+                };
+            Func<object, object, CancellationToken, Task> handler3 =
+                (connection, message, token) =>
+                {
+                    throw new InvalidOperationException("Should not happen!");
+                };
+
+            ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
+            {
+                new ConnectedProjectionHandler<object>(typeof(object), handler1),
+                new ConnectedProjectionHandler<object>(typeof(object), handler2),
+                new ConnectedProjectionHandler<object>(typeof(object), handler3)
+            });
+            var sut = SutFactory(resolver);
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object(), new object(), new object() }, tcs.Token),
+                Throws.Nothing);
+        }
+
+        [Test]
+        public void ProjectAsyncTokenMessagesCancellationAfterSecondHandlerInContinuationCausesExpectedResult()
+        {
+            var tcs = new CancellationTokenSource();
+            tcs.Cancel();
+
+            Func<object, object, CancellationToken, Task> handler1 =
+                async (connection, message, token) =>
+                {
+                    await Task.Yield();
+                    await Task.Delay(TimeSpan.FromDays(1), token);
+                };
+
+            ConnectedProjectionHandlerResolver<object> resolver = Resolve.WhenEqualToHandlerMessageType(new[]
+            {
+                new ConnectedProjectionHandler<object>(typeof(object), handler1),
+            });
+            var sut = SutFactory(resolver);
+
+            Assert.That(async () =>
+                await sut.ProjectAsync(new object(), new[] { new object() }, tcs.Token),
                 Throws.TypeOf<TaskCanceledException>());
         }
 
