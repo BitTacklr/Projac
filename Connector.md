@@ -53,7 +53,7 @@ public class PortfolioProjection : ConnectedProjection<ElasticsearchClient>
 ### Redis
 
 ```csharp
-public class PortfolioProjection : ConnectecProjection<ConnectionMultiplexer>
+public class PortfolioProjection : ConnectedProjection<ConnectionMultiplexer>
 {
   public PortfolioProjection()
   {
