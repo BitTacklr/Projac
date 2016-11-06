@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.Sql.Tests", "Projac.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.SqlClient", "Projac.SqlClient\Projac.SqlClient.csproj", "{DCCE7FF2-E9F6-43AF-ABE3-443D66A64717}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.SQLite", "Projac.SQLite\Projac.SQLite.csproj", "{34265EC4-8462-489E-ACFB-387A8D369525}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{DCCE7FF2-E9F6-43AF-ABE3-443D66A64717}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCCE7FF2-E9F6-43AF-ABE3-443D66A64717}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCCE7FF2-E9F6-43AF-ABE3-443D66A64717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34265EC4-8462-489E-ACFB-387A8D369525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34265EC4-8462-489E-ACFB-387A8D369525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34265EC4-8462-489E-ACFB-387A8D369525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34265EC4-8462-489E-ACFB-387A8D369525}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,5 +100,6 @@ Global
 		{A1FA5F93-FE37-4448-89B6-1ECBCDAEF043} = {24478CDC-4A58-40F6-A042-E19252568BD6}
 		{4DD77609-8FE0-42FC-ACC2-9AAD8C9CE8E4} = {24478CDC-4A58-40F6-A042-E19252568BD6}
 		{DCCE7FF2-E9F6-43AF-ABE3-443D66A64717} = {24478CDC-4A58-40F6-A042-E19252568BD6}
+		{34265EC4-8462-489E-ACFB-387A8D369525} = {24478CDC-4A58-40F6-A042-E19252568BD6}
 	EndGlobalSection
 EndGlobal
