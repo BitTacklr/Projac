@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{359863ED-13EA-4C04-BF6F-C9CF611A7129}</ProjectGuid>
+    <ProjectGuid>{1C52A225-809B-44AF-8E8C-B5A44A4B1E9D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Projac</RootNamespace>
     <AssemblyName>Projac</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -18,10 +18,11 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Projac.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,13 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Projac.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -46,23 +46,21 @@
     <Compile Include="..\SharedVersionInfo.cs">
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AnonymousSqlProjection.cs" />
-    <Compile Include="AsyncSqlProjector.cs" />
+    <Compile Include="AnonymousProjection.cs" />
+    <Compile Include="ProjectionHandlerEnumerator.cs" />
+    <Compile Include="Projector.cs" />
     <Compile Include="ConcurrentResolve.cs" />
+    <Compile Include="AnonymousProjectionBuilder.cs" />
+    <Compile Include="ProjectionHandler.cs" />
+    <Compile Include="Projection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AnonymousSqlProjectionBuilder.cs" />
-    <Compile Include="SqlProjectionHandlerEnumerator.cs" />
-    <Compile Include="SqlProjectionHandlerResolver.cs" />
     <Compile Include="Resolve.cs" />
-    <Compile Include="SqlProjectionHandler.cs" />
-    <Compile Include="SqlProjection.cs" />
-    <Compile Include="SqlProjector.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Paramol\Paramol.csproj">
-      <Project>{222d8e5c-eabd-4773-91cd-167c3c66af3e}</Project>
-      <Name>Paramol</Name>
-    </ProjectReference>
+    <Compile Include="ProjectionHandlerResolver.cs" />
+    <Compile Include="TaskExtensions.cs" />
+    <Compile Include="Testing\ProjectionTestSpecification.cs" />
+    <Compile Include="Testing\ProjectionScenario.cs" />
+    <Compile Include="Testing\VerificationResult.cs" />
+    <Compile Include="Testing\VerificationResultState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

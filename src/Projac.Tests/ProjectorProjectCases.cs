@@ -1,94 +1,350 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
-using Paramol;
-using Projac.Tests.Framework;
 
 namespace Projac.Tests
 {
     public class ProjectorProjectCases
     {
-        public static IEnumerable<TestCaseData> ProjectMessageCases()
+        public static IEnumerable<TestCaseData> ProjectMessageWithTokenCases()
         {
+            var task = TaskFactory();
             //Match
-            var commands1 = new[] { CommandFactory(), CommandFactory() };
-            var handler1 = new SqlProjectionHandler(typeof(object), _ => commands1);
-            var resolver1 = new SqlProjectionHandlerResolver(message => new[] { handler1 });
+            var token1 = new CancellationToken();
+            var message1 = new object();
+            var handler1 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
+            var resolver1 = new ProjectionHandlerResolver<CallRecordingConnection>(message => new[] { handler1 });
             yield return new TestCaseData(
                 resolver1,
-                new object(),
-                commands1);
+                message1,
+                token1,
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, message1, token1)
+                });
             //Mismatch
-            var resolver2 = new SqlProjectionHandlerResolver(message => new SqlProjectionHandler[0]);
+            var token2 = new CancellationToken();
+            var message2 = new object();
+            var resolver2 = new ProjectionHandlerResolver<CallRecordingConnection>(message => new ProjectionHandler<CallRecordingConnection>[0]);
             yield return new TestCaseData(
                 resolver2,
-                new object(),
-                new SqlNonQueryCommand[0]);
+                message2,
+                token2,
+                new Tuple<int, object, CancellationToken>[0]);
             //Multimatch
-            var commands3 = new[] { CommandFactory(), CommandFactory() };
-            var commands4 = new[] { CommandFactory(), CommandFactory() };
-            var handler3 = new SqlProjectionHandler(typeof(object), _ => commands3);
-            var handler4 = new SqlProjectionHandler(typeof(object), _ => commands4);
-            var resolver3 = new SqlProjectionHandlerResolver(message => new[] { handler3, handler4 });
+            var token3 = new CancellationToken();
+            var message3 = new object();
+            var handler3 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(3, message, token);
+                    return task;
+                });
+            var handler4 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(4, message, token);
+                    return task;
+                });
+            var resolver3 = new ProjectionHandlerResolver<CallRecordingConnection>(message => new[] { handler3, handler4 });
             yield return new TestCaseData(
                 resolver3,
-                new object(),
-                commands3.Concat(commands4).ToArray());
+                message3,
+                token3,
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(3, message3, token3), 
+                    new Tuple<int, object, CancellationToken>(4, message3, token3)
+                });
         }
 
-        public static IEnumerable<TestCaseData> ProjectMessagesCases()
+        public static IEnumerable<TestCaseData> ProjectMessageWithoutTokenCases()
         {
+            var task = TaskFactory();
+            //Match
+            var message1 = new object();
+            var handler1 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
+            var resolver1 = new ProjectionHandlerResolver<CallRecordingConnection>(message => new[] { handler1 });
+            yield return new TestCaseData(
+                resolver1,
+                message1,
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, message1, CancellationToken.None), 
+                });
+            //Mismatch
+            var message2 = new object();
+            var resolver2 = new ProjectionHandlerResolver<CallRecordingConnection>(message => new ProjectionHandler<CallRecordingConnection>[0]);
+            yield return new TestCaseData(
+                resolver2,
+                message2,
+                new Tuple<int, object, CancellationToken>[0]);
+            //Multimatch
+            var message3 = new object();
+            var handler3 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(3, message, token);
+                    return task;
+                });
+            var handler4 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(4, message, token);
+                    return task;
+                });
+            var resolver3 = new ProjectionHandlerResolver<CallRecordingConnection>(message => new[] { handler3, handler4 });
+            yield return new TestCaseData(
+                resolver3,
+                message3,
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(3, message3, CancellationToken.None), 
+                    new Tuple<int, object, CancellationToken>(4, message3, CancellationToken.None)
+                });
+        }
+
+        public static IEnumerable<TestCaseData> ProjectMessagesWithTokenCases()
+        {
+            var task = TaskFactory();
             //Partial match
-            var commands1 = new[] { CommandFactory(), CommandFactory() };
-            var handler1 = new SqlProjectionHandler(typeof(string), _ => commands1);
+            var token1 = new CancellationToken();
+            var handler1 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(string),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
             var resolver1 = Resolve.WhenEqualToHandlerMessageType(new[] { handler1 });
             yield return new TestCaseData(
                 resolver1,
                 new object[] { "123", 123 },
-                commands1);
+                token1,
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, "123", token1)
+                });
             //Mismatch
-            var resolver2 = Resolve.WhenEqualToHandlerMessageType(new SqlProjectionHandler[0]);
+            var token2 = new CancellationToken();
+            var resolver2 = Resolve.WhenEqualToHandlerMessageType(new ProjectionHandler<CallRecordingConnection>[0]);
             yield return new TestCaseData(
                 resolver2,
                 new object[] { new object(), 123 },
-                new SqlNonQueryCommand[0]);
+                token2,
+                new Tuple<int, object, CancellationToken>[0]);
             //Multimatch
-            var commands3 = new[] { CommandFactory(), CommandFactory() };
-            var commands4 = new[] { CommandFactory(), CommandFactory() };
-            var handler3 = new SqlProjectionHandler(typeof(object), _ => commands3);
-            var handler4 = new SqlProjectionHandler(typeof(object), _ => commands4);
+            var token3 = new CancellationToken();
+            var message3 = new object();
+            var message4 = new object();
+            var handler3 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
+            var handler4 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(2, message, token);
+                    return task;
+                });
             var resolver3 = Resolve.WhenEqualToHandlerMessageType(new[] { handler3, handler4 });
             yield return new TestCaseData(
                 resolver3,
-                new object[] { new object(), new object() },
-                commands3.Concat(commands4).Concat(commands3).Concat(commands4).ToArray());
+                new object[] {message3, message4},
+                token3,
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, message3, token3),
+                    new Tuple<int, object, CancellationToken>(2, message3, token3),
+                    new Tuple<int, object, CancellationToken>(1, message4, token3),
+                    new Tuple<int, object, CancellationToken>(2, message4, token3)
+                });
             //Multitype Match
-            var commands5 = new[] { CommandFactory(), CommandFactory() };
-            var commands6 = new[] { CommandFactory(), CommandFactory() };
-            var handler5 = new SqlProjectionHandler(typeof(string), _ => commands5);
-            var handler6 = new SqlProjectionHandler(typeof(int), _ => commands6);
+            var token4 = new CancellationToken();
+            var handler5 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(string),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
+            var handler6 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(int),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(2, message, token);
+                    return task;
+                });
             var resolver4 = Resolve.WhenEqualToHandlerMessageType(new[] { handler5, handler6 });
             yield return new TestCaseData(
                 resolver4,
                 new object[] { "123", 123 },
-                commands5.Concat(commands6).ToArray());
+                token4,
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, "123", token4),
+                    new Tuple<int, object, CancellationToken>(2, 123, token4)
+                });
             //Match
-            var commands7 = new[] { CommandFactory(), CommandFactory() };
-            var commands8 = new[] { CommandFactory(), CommandFactory() };
-            var handler7 = new SqlProjectionHandler(typeof(object), _ => commands7);
-            var handler8 = new SqlProjectionHandler(typeof(object), _ => commands8);
+            var token5 = new CancellationToken();
+            var message5 = new object();
+            var handler7 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
+            var handler8 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(2, message, token);
+                    return task;
+                });
+
             var resolver5 = Resolve.WhenEqualToHandlerMessageType(new[] { handler7, handler8 });
             yield return new TestCaseData(
                 resolver5,
-                new object[] { new object() },
-                commands7.Concat(commands8).ToArray());
+                new object[] { message5 },
+                token5,
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, message5, token5),
+                    new Tuple<int, object, CancellationToken>(2, message5, token5)
+                });
         }
 
-        private static SqlNonQueryCommand CommandFactory()
+        public static IEnumerable<TestCaseData> ProjectMessagesWithoutTokenCases()
         {
-            return new SqlNonQueryCommandStub("text", new DbParameter[0], CommandType.Text);
+            var task = TaskFactory();
+            //Partial match
+            var handler1 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(string),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
+            var resolver1 = Resolve.WhenEqualToHandlerMessageType(new[] { handler1 });
+            yield return new TestCaseData(
+                resolver1,
+                new object[] { "123", 123 },
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, "123", CancellationToken.None)
+                });
+            //Mismatch
+            var resolver2 = Resolve.WhenEqualToHandlerMessageType(new ProjectionHandler<CallRecordingConnection>[0]);
+            yield return new TestCaseData(
+                resolver2,
+                new object[] { new object(), 123 },
+                new Tuple<int, object, CancellationToken>[0]);
+            //Multimatch
+            var message3 = new object();
+            var message4 = new object();
+            var handler3 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
+            var handler4 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(2, message, token);
+                    return task;
+                });
+            var resolver3 = Resolve.WhenEqualToHandlerMessageType(new[] { handler3, handler4 });
+            yield return new TestCaseData(
+                resolver3,
+                new object[] { message3, message4 },
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, message3, CancellationToken.None),
+                    new Tuple<int, object, CancellationToken>(2, message3, CancellationToken.None),
+                    new Tuple<int, object, CancellationToken>(1, message4, CancellationToken.None),
+                    new Tuple<int, object, CancellationToken>(2, message4, CancellationToken.None)
+                });
+            //Multitype Match
+            var handler5 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(string),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
+            var handler6 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(int),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(2, message, token);
+                    return task;
+                });
+            var resolver4 = Resolve.WhenEqualToHandlerMessageType(new[] { handler5, handler6 });
+            yield return new TestCaseData(
+                resolver4,
+                new object[] { "123", 123 },
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, "123", CancellationToken.None),
+                    new Tuple<int, object, CancellationToken>(2, 123, CancellationToken.None)
+                });
+            //Match
+            var message5 = new object();
+            var handler7 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(1, message, token);
+                    return task;
+                });
+            var handler8 = new ProjectionHandler<CallRecordingConnection>(
+                typeof(object),
+                (connection, message, token) =>
+                {
+                    connection.RecordCall(2, message, token);
+                    return task;
+                });
+
+            var resolver5 = Resolve.WhenEqualToHandlerMessageType(new[] { handler7, handler8 });
+            yield return new TestCaseData(
+                resolver5,
+                new object[] { message5 },
+                new[]
+                {
+                    new Tuple<int, object, CancellationToken>(1, message5, CancellationToken.None),
+                    new Tuple<int, object, CancellationToken>(2, message5, CancellationToken.None)
+                });
+        }
+
+        private static Task TaskFactory()
+        {
+            return Task.FromResult<object>(null);
         }
     }
 }

@@ -9,9 +9,9 @@ using EventStore.ClientAPI.Embedded;
 using EventStore.ClientAPI.SystemData;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using Paramol.Executors;
-using Paramol.SqlClient;
-using Projac;
+using Projac.Sql;
+using Projac.Sql.Executors;
+using Projac.SqlClient;
 using Recipes.DataDefinition;
 using Recipes.Shared;
 

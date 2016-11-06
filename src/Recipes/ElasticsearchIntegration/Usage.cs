@@ -4,7 +4,7 @@ using Elasticsearch.Net;
 using Elasticsearch.Net.Connection;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using Projac.Connector;
+using Projac;
 using Recipes.Shared;
 
 namespace Recipes.ElasticsearchIntegration
@@ -19,7 +19,7 @@ namespace Recipes.ElasticsearchIntegration
             var config = new ConnectionConfiguration(new Uri("http://192.168.99.100:32769/"));
             var client = new ElasticsearchClient(config);
             var portfolioId = Guid.NewGuid();
-            await new ConnectedProjector<ElasticsearchClient>(Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
+            await new Projector<ElasticsearchClient>(Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
                 ProjectAsync(client, new object[]
                 {
                     new PortfolioAdded {Id = portfolioId, Name = "My portfolio"},
@@ -28,7 +28,7 @@ namespace Recipes.ElasticsearchIntegration
                 });
         }
 
-        public static AnonymousConnectedProjection<ElasticsearchClient> Projection = new AnonymousConnectedProjectionBuilder<ElasticsearchClient>().
+        public static AnonymousProjection<ElasticsearchClient> Projection = new AnonymousProjectionBuilder<ElasticsearchClient>().
             When<PortfolioAdded>((client, message) =>
                 client.IndexAsync(
                     "index",

@@ -5,10 +5,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Paramol;
-using Paramol.Executors;
-using Paramol.SQLite;
-using Projac;
+using Projac.Sql;
+using Projac.Sql.Executors;
+using Projac.SQLite;
 using Recipes.Shared;
 
 namespace Recipes.SQLiteIntegration

@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Paramol.SqlClient;
-using Projac;
+using Projac.Sql;
+using Projac.SqlClient;
 
 namespace Recipes.DataDefinition
 {

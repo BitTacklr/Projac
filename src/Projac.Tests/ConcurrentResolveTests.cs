@@ -10,21 +10,21 @@ namespace Projac.Tests
         public void WhenEqualToHandlerMessageTypeHandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ConcurrentResolve.WhenEqualToHandlerMessageType(null));
+                ConcurrentResolve.WhenEqualToHandlerMessageType<object>(null));
         }
 
         [Test]
         public void WhenEqualToHandlerMessageTypeResolverThrowsWhenMessageIsNull()
         {
-            var sut = ConcurrentResolve.WhenEqualToHandlerMessageType(new SqlProjectionHandler[0]);
+            var sut = ConcurrentResolve.WhenEqualToHandlerMessageType(new ProjectionHandler<object>[0]);
             Assert.Throws<ArgumentNullException>(() => sut(null));
         }
 
         [TestCaseSource(typeof(HandlerResolutionCases), "WhenEqualToHandlerMessageTypeCases")]
         public void WhenEqualToHandlerMessageTypeResolverReturnsExpectedResult(
-            SqlProjectionHandler[] resolvable,
+            ProjectionHandler<object>[] resolvable,
             object message,
-            SqlProjectionHandler[] resolved)
+            ProjectionHandler<object>[] resolved)
         {
             var sut = ConcurrentResolve.WhenEqualToHandlerMessageType(resolvable);
             var result = sut(message);
@@ -35,21 +35,21 @@ namespace Projac.Tests
         public void WhenAssignableToHandlerMessageTypeHandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                ConcurrentResolve.WhenAssignableToHandlerMessageType(null));
+                ConcurrentResolve.WhenAssignableToHandlerMessageType<object>(null));
         }
 
         [Test]
         public void WhenAssignableToHandlerMessageTypeResolverThrowsWhenMessageIsNull()
         {
-            var sut = ConcurrentResolve.WhenAssignableToHandlerMessageType(new SqlProjectionHandler[0]);
+            var sut = ConcurrentResolve.WhenAssignableToHandlerMessageType(new ProjectionHandler<object>[0]);
             Assert.Throws<ArgumentNullException>(() => sut(null));
         }
 
         [TestCaseSource(typeof(HandlerResolutionCases), "WhenAssignableToHandlerMessageTypeCases")]
         public void WhenAssignableToHandlerMessageTypeResolverReturnsExpectedResult(
-            SqlProjectionHandler[] resolvable,
+            ProjectionHandler<object>[] resolvable,
             object message,
-            SqlProjectionHandler[] resolved)
+            ProjectionHandler<object>[] resolved)
         {
             var sut = ConcurrentResolve.WhenAssignableToHandlerMessageType(resolvable);
             var result = sut(message);

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using KellermanSoftware.CompareNetObjects;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using Projac.Connector;
-using Projac.Connector.Testing;
+using Projac;
+using Projac.Testing;
 using Recipes.Shared;
 
 namespace Recipes.MemoryCacheIntegration
@@ -49,7 +49,7 @@ namespace Recipes.MemoryCacheIntegration
                         }));
         }
 
-        public static AnonymousConnectedProjection<MemoryCache> Projection = new AnonymousConnectedProjectionBuilder<MemoryCache>().
+        public static AnonymousProjection<MemoryCache> Projection = new AnonymousProjectionBuilder<MemoryCache>().
             When<PortfolioAdded>((cache, message) =>
             {
                 cache.Add(
@@ -88,14 +88,14 @@ namespace Recipes.MemoryCacheIntegration
 
     public static class MemoryCacheProjection
     {
-        public static ConnectedProjectionScenario<MemoryCache> For(ConnectedProjectionHandler<MemoryCache>[] handlers)
+        public static ProjectionScenario<MemoryCache> For(ProjectionHandler<MemoryCache>[] handlers)
         {
-            return new ConnectedProjectionScenario<MemoryCache>(
+            return new ProjectionScenario<MemoryCache>(
                 ConcurrentResolve.WhenEqualToHandlerMessageType(handlers)
                 );
         }
 
-        public static Task ExpectNone(this ConnectedProjectionScenario<MemoryCache> scenario)
+        public static Task ExpectNone(this ProjectionScenario<MemoryCache> scenario)
         {
             return scenario.
                 Verify(cache =>
@@ -113,13 +113,13 @@ namespace Recipes.MemoryCacheIntegration
                 Assert();
         }
 
-        public static async Task Assert(this ConnectedProjectionTestSpecification<MemoryCache> specification)
+        public static async Task Assert(this ProjectionTestSpecification<MemoryCache> specification)
         {
             if (specification == null)
                 throw new ArgumentNullException("specification");
             using (var cache = new MemoryCache(new Random().Next().ToString()))
             {
-                await new ConnectedProjector<MemoryCache>(specification.Resolver).
+                await new Projector<MemoryCache>(specification.Resolver).
                     ProjectAsync(cache, specification.Messages);
                 var result = await specification.Verification(cache, CancellationToken.None);
                 if (result.Failed)
@@ -129,7 +129,7 @@ namespace Recipes.MemoryCacheIntegration
             }
         }
 
-        public static Task Expect(this ConnectedProjectionScenario<MemoryCache> scenario, params CacheItem[] items)
+        public static Task Expect(this ProjectionScenario<MemoryCache> scenario, params CacheItem[] items)
         {
             if (items == null)
                 throw new ArgumentNullException("items");

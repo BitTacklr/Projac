@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using NUnit.Framework;
-using Projac.Connector;
+using Projac;
 using Recipes.Shared;
 
 namespace Recipes.WindowsAzureStorageIntegration
@@ -17,7 +17,7 @@ namespace Recipes.WindowsAzureStorageIntegration
             var account = CloudStorageAccount.DevelopmentStorageAccount;
             var client = account.CreateCloudTableClient();
             var portfolioId = Guid.NewGuid();
-            await new ConnectedProjector<CloudTableClient>(Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
+            await new Projector<CloudTableClient>(Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
                 ProjectAsync(client, new object[]
                 {
                     new RebuildProjection(),
@@ -27,7 +27,7 @@ namespace Recipes.WindowsAzureStorageIntegration
                 });
         }
 
-        public static AnonymousConnectedProjection<CloudTableClient> Projection = new AnonymousConnectedProjectionBuilder<CloudTableClient>().
+        public static AnonymousProjection<CloudTableClient> Projection = new AnonymousProjectionBuilder<CloudTableClient>().
             When<RebuildProjection>((client, message) =>
             {
                 var table = client.GetTableReference("Portfolio");

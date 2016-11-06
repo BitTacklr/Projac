@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Recipes</RootNamespace>
     <AssemblyName>Recipes</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -144,24 +144,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Paramol.SQLite\Paramol.SQLite.csproj">
-      <Project>{83f5e4b1-a8ba-4b7f-9686-09e5b4f9cb21}</Project>
-      <Name>Paramol.SQLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Paramol\Paramol.csproj">
-      <Project>{222d8e5c-eabd-4773-91cd-167c3c66af3e}</Project>
-      <Name>Paramol</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Projac.Connector\Projac.Connector.csproj">
-      <Project>{1c52a225-809b-44af-8e8c-b5a44a4b1e9d}</Project>
-      <Name>Projac.Connector</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Projac\Projac.csproj">
-      <Project>{359863ed-13ea-4c04-bf6f-c9cf611a7129}</Project>
-      <Name>Projac</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Raven.Studio.Html5.zip">
@@ -171,7 +153,24 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Projac\Projac.csproj">
+      <Project>{1c52a225-809b-44af-8e8c-b5a44a4b1e9d}</Project>
+      <Name>Projac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Projac.SqlClient\Projac.SqlClient.csproj">
+      <Project>{dcce7ff2-e9f6-43af-abe3-443d66a64717}</Project>
+      <Name>Projac.SqlClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Projac.SQLite\Projac.SQLite.csproj">
+      <Project>{34265ec4-8462-489e-acfb-387a8d369525}</Project>
+      <Name>Projac.SQLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj">
+      <Project>{a1fa5f93-fe37-4448-89b6-1ecbcdaef043}</Project>
+      <Name>Projac.Sql</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\EventStore.Client.Embedded.3.3.1\build\EventStore.Client.Embedded.targets" Condition="Exists('..\packages\EventStore.Client.Embedded.3.3.1\build\EventStore.Client.Embedded.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

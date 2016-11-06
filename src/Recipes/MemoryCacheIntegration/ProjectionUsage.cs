@@ -2,7 +2,7 @@
 using System.Runtime.Caching;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Projac.Connector;
+using Projac;
 using Recipes.Shared;
 
 namespace Recipes.MemoryCacheIntegration
@@ -16,7 +16,7 @@ namespace Recipes.MemoryCacheIntegration
             using (var cache = new MemoryCache(new Random().Next().ToString()))
             {
                 var portfolioId = Guid.NewGuid();
-                await new ConnectedProjector<MemoryCache>(
+                await new Projector<MemoryCache>(
                         Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
                         ProjectAsync(cache, new object[]
                         {
@@ -27,8 +27,8 @@ namespace Recipes.MemoryCacheIntegration
             }
         }
 
-        public static AnonymousConnectedProjection<MemoryCache> Projection =
-            new AnonymousConnectedProjectionBuilder<MemoryCache>().
+        public static AnonymousProjection<MemoryCache> Projection =
+            new AnonymousProjectionBuilder<MemoryCache>().
                 When<PortfolioAdded>((cache, message) =>
                 {
                     cache.Add(

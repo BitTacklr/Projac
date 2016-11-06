@@ -39,6 +39,10 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.MSIL.1.0.103\lib\net46\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -125,6 +129,15 @@
     <Compile Include="SqlClient\TSqlVarCharNullValueTests.cs" />
     <Compile Include="SqlClient\TSqlVarCharSizeTest.cs" />
     <Compile Include="SqlClient\TSqlVarCharValueTests.cs" />
+    <Compile Include="SQLite\SQLiteParameterAssertions.cs" />
+    <Compile Include="SQLite\SQLiteParameterEqualityComparer.cs" />
+    <Compile Include="SQLite\SQLiteParameterValueStub.cs" />
+    <Compile Include="SQLite\SQLiteSyntaxTestCases.cs" />
+    <Compile Include="SQLite\SQLiteSyntaxTests.Compose.cs" />
+    <Compile Include="SQLite\SQLiteSyntaxTests.cs" />
+    <Compile Include="SQLite\SQLiteSyntaxTests.DataTypes.cs" />
+    <Compile Include="SQLite\SQLiteSyntaxTests.NonQueryStatement.cs" />
+    <Compile Include="SQLite\SQLiteSyntaxTests.QueryStatement.cs" />
     <Compile Include="SqlNonQueryCommandComposerTests.cs" />
     <Compile Include="SqlNonQueryCommandTests.cs" />
     <Compile Include="SqlProjectionHandlerEnumeratorTests.cs" />
@@ -137,6 +150,10 @@
     <ProjectReference Include="..\Projac.SqlClient\Projac.SqlClient.csproj">
       <Project>{dcce7ff2-e9f6-43af-abe3-443d66a64717}</Project>
       <Name>Projac.SqlClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Projac.SQLite\Projac.SQLite.csproj">
+      <Project>{34265ec4-8462-489e-acfb-387a8d369525}</Project>
+      <Name>Projac.SQLite</Name>
     </ProjectReference>
     <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj">
       <Project>{a1fa5f93-fe37-4448-89b6-1ecbcdaef043}</Project>

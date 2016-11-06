@@ -7,8 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using Projac.Connector;
-using Projac.Connector.Testing;
+using Projac;
+using Projac.Testing;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Embedded;
@@ -49,7 +49,7 @@ namespace Recipes.RavenDBIntegration
                 });
         }
 
-        public static AnonymousConnectedProjection<IAsyncDocumentSession> Projection = new AnonymousConnectedProjectionBuilder<IAsyncDocumentSession>().
+        public static AnonymousProjection<IAsyncDocumentSession> Projection = new AnonymousProjectionBuilder<IAsyncDocumentSession>().
             When<PortfolioAdded>((session, message) => session.StoreAsync(
                 new PortfolioDocument
                 {
@@ -77,15 +77,15 @@ namespace Recipes.RavenDBIntegration
 
     public static class RavenProjectionScenario
     {
-        public static ConnectedProjectionScenario<IAsyncDocumentSession> For(
-            ConnectedProjectionHandler<IAsyncDocumentSession>[] handlers)
+        public static ProjectionScenario<IAsyncDocumentSession> For(
+            ProjectionHandler<IAsyncDocumentSession>[] handlers)
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
-            return new ConnectedProjectionScenario<IAsyncDocumentSession>(
+            return new ProjectionScenario<IAsyncDocumentSession>(
                 ConcurrentResolve.WhenEqualToHandlerMessageType(handlers));
         }
 
-        public static Task ExpectNone(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario)
+        public static Task ExpectNone(this ProjectionScenario<IAsyncDocumentSession> scenario)
         {
             return scenario
                 .Verify(async session =>
@@ -111,7 +111,7 @@ namespace Recipes.RavenDBIntegration
                 .Assert();
         }
 
-        public static Task Expect(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario, params object[] documents)
+        public static Task Expect(this ProjectionScenario<IAsyncDocumentSession> scenario, params object[] documents)
         {
             if (documents == null) 
                 throw new ArgumentNullException("documents");
@@ -173,7 +173,7 @@ namespace Recipes.RavenDBIntegration
                 .Assert();
         }
 
-        public static async Task Assert(this ConnectedProjectionTestSpecification<IAsyncDocumentSession> specification)
+        public static async Task Assert(this ProjectionTestSpecification<IAsyncDocumentSession> specification)
         {
             if (specification == null) throw new ArgumentNullException("specification");
             using (var store = new EmbeddableDocumentStore
@@ -186,7 +186,7 @@ namespace Recipes.RavenDBIntegration
                 store.Initialize();
                 using (var session = store.OpenAsyncSession())
                 {
-                    await new ConnectedProjector<IAsyncDocumentSession>(specification.Resolver).
+                    await new Projector<IAsyncDocumentSession>(specification.Resolver).
                         ProjectAsync(session, specification.Messages);
                     await session.SaveChangesAsync();
 
