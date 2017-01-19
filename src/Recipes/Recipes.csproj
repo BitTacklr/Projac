@@ -117,6 +117,7 @@
       <Link>Properties\SharedVersionInfo.cs</Link>
     </Compile>
     <Compile Include="ElasticsearchIntegration\Usage.cs" />
+    <Compile Include="Enveloping\Usage.cs" />
     <Compile Include="MemoryCacheIntegration\ProjectionUsage.cs" />
     <Compile Include="MemoryCacheIntegration\TestingUsage.cs" />
     <Compile Include="RavenDBIntegration\ProjectionUsage.cs" />
