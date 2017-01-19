@@ -8,7 +8,7 @@ using Recipes.Shared;
 
 namespace Recipes.Enveloping
 {
-    [TestFixture]//, Ignore("Because 'Explicit' is not respected by R#")]
+    [TestFixture, Ignore("Because 'Explicit' is not respected by R#")]
     public class Usage
     {
         [Test]
