@@ -124,7 +124,7 @@ namespace Recipes.Enveloping
                 });
                 When<Envelope<PortfolioRemoved>>((cache, envelope) =>
                 {
-                    'cache.Remove(envelope.Message.Id.ToString());
+                    cache.Remove(envelope.Message.Id.ToString());
                 });
                 When<Envelope<PortfolioRenamed>>((cache, envelope) =>
                 {
