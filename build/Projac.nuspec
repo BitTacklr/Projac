@@ -10,19 +10,14 @@
     <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
     <description>Projac provides lightweight infrastructure for producing SQL based projections.</description>
     <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
-    <releaseNotes>Added SQLite support. Replaced TSql with SqlClientSyntax.</releaseNotes>
-    <copyright>Copyright 2015, BitTacklr. All rights reserved.</copyright>
+    <releaseNotes>Reorganization.</releaseNotes>
+    <copyright>Copyright 2017, BitTacklr. All rights reserved.</copyright>
     <tags>eventsourcing DDDesign</tags>
-    <dependencies>
-      <group targetFramework="net45">
-        <dependency id="Paramol" version="0.0.147" />
-      </group>
-    </dependencies>
   </metadata>
   <files>
-    <file src="output\csharp\Projac.dll" target="lib\net45\Projac.dll" />
-    <file src="output\csharp\Projac.pdb" target="lib\net45\Projac.pdb" />
-    <file src="output\csharp\Projac.xml" target="lib\net45\Projac.xml" />
+    <file src="output\csharp\Projac.dll" target="lib\net46\Projac.dll" />
+    <file src="output\csharp\Projac.pdb" target="lib\net46\Projac.pdb" />
+    <file src="output\csharp\Projac.xml" target="lib\net46\Projac.xml" />
     <file src="..\src\Projac\*.cs" target="src\Projac" />
     <file src="..\src\Projac\Properties\*.cs" target="src\Projac\Properties" />
   </files>

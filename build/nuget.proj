@@ -23,19 +23,18 @@
     <XmlUpdate
       Prefix="ns"
       Namespace="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
-      XmlFileName="Projac.nuspec"
-      XPath="/ns:package/ns:metadata/ns:dependencies/ns:group/ns:dependency[@id='Paramol']/@version"
+      XmlFileName="Projac.SqlClient.nuspec"
+      XPath="/ns:package/ns:metadata/ns:dependencies/ns:group/ns:dependency[@id='Projac']/@version"
       Value="$(Major).$(Minor).$(Build)" />
     <XmlUpdate
       Prefix="ns"
       Namespace="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
-      XmlFileName="Paramol.SQLite.nuspec"
-      XPath="/ns:package/ns:metadata/ns:dependencies/ns:group/ns:dependency[@id='Paramol']/@version"
+      XmlFileName="Projac.SQLite.nuspec"
+      XPath="/ns:package/ns:metadata/ns:dependencies/ns:group/ns:dependency[@id='Projac']/@version"
       Value="$(Major).$(Minor).$(Build)" />
-    <Exec Command='$(NuGetExe) pack Paramol.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
-    <Exec Command='$(NuGetExe) pack Paramol.SQLite.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
     <Exec Command='$(NuGetExe) pack Projac.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
-    <Exec Command='$(NuGetExe) pack Projac.Connector.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
+    <Exec Command='$(NuGetExe) pack Projac.SqlClient.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
+    <Exec Command='$(NuGetExe) pack Projac.SQLite.nuspec -Version $(Major).$(Minor).$(Build) -Symbols -NonInteractive -o "$(MSBuildProjectDirectory)\output\csharp"' />
 
   </Target>
 
@@ -51,10 +50,9 @@
       <Output TaskParameter="Build" PropertyName="Build"/>
     </Version>
 
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Paramol.SQLite.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
     <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
-    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.Connector.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.SqlClient.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
+    <Exec Command='$(NuGetExe) push "$(MSBuildProjectDirectory)\output\csharp\Projac.SQLite.$(Major).$(Minor).$(Build).nupkg" $(NuGetApiKey) -NonInteractive' ContinueOnError="True" />
 
   </Target>
 </Project>

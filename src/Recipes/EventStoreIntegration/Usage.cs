@@ -143,7 +143,7 @@ namespace Recipes.EventStoreIntegration
                 credentials);
 
             //project the sample stream (until end of stream)
-            var subscription = connection.SubscribeToStreamFrom(stream, StreamPosition.Start, false, (_, @event) =>
+            var subscription = connection.SubscribeToStreamFrom(stream, StreamPosition.Start, CatchUpSubscriptionSettings.Default, (_, @event) =>
             {
                 projector.Project(
                     JsonConvert.DeserializeObject(

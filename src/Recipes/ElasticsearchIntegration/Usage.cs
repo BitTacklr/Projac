@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
-using Elasticsearch.Net.Connection;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Projac;
@@ -17,9 +16,9 @@ namespace Recipes.ElasticsearchIntegration
         {
             //Spin up a docker image of elastic search and/or change the endpoint below
             var config = new ConnectionConfiguration(new Uri("http://192.168.99.100:32769/"));
-            var client = new ElasticsearchClient(config);
+            var client = new ElasticLowLevelClient(config);
             var portfolioId = Guid.NewGuid();
-            await new Projector<ElasticsearchClient>(Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
+            await new Projector<ElasticLowLevelClient>(Resolve.WhenEqualToHandlerMessageType(Projection.Handlers)).
                 ProjectAsync(client, new object[]
                 {
                     new PortfolioAdded {Id = portfolioId, Name = "My portfolio"},
@@ -28,25 +27,27 @@ namespace Recipes.ElasticsearchIntegration
                 });
         }
 
-        public static AnonymousProjection<ElasticsearchClient> Projection = new AnonymousProjectionBuilder<ElasticsearchClient>().
+        public static AnonymousProjection<ElasticLowLevelClient> Projection = new AnonymousProjectionBuilder<ElasticLowLevelClient>().
             When<PortfolioAdded>((client, message) =>
-                client.IndexAsync(
+                client.IndexAsync<object>(
                     "index",
                     "portfolio",
                     message.Id.ToString("N"),
-                    JsonConvert.SerializeObject(new
+                    new PostData<object>(JsonConvert.SerializeObject(new
                     {
                         name = message.Name
-                    }))).
+                    })))).
             When<PortfolioRemoved>((client, message) =>
-                client.DeleteAsync(
+                client.DeleteAsync<object>(
                     "index",
                     "portfolio",
                     message.Id.ToString("N"))).
             When<PortfolioRenamed>((client, message) =>
-                client.UpdateAsync(
+                client.UpdateAsync<object>(
                     "index",
-                    "portfolio", message.Id.ToString("N"), JsonConvert.SerializeObject(
+                    "portfolio", 
+                    message.Id.ToString("N"), 
+                    new PostData<object>(JsonConvert.SerializeObject(
                         new
                         {
                             Script = "ctx._source.name=name;",
@@ -54,7 +55,7 @@ namespace Recipes.ElasticsearchIntegration
                             {
                                 name = message.Name
                             }
-                        }))).
+                        })))).
             Build();
     }
 }

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Projac.SQLite</id>
+    <version>0.0.0</version>
+    <authors>Yves Reynhout</authors>
+    <owners>Yves Reynhout</owners>
+    <title>Projac.SQLite</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.github.com/yreynhout/Projac/master/LICENSE.txt</licenseUrl>
+    <description>Projac.SQLite provides lightweight infrastructure for producing SQL DML statements against SQLite.</description>
+    <projectUrl>https://github.com/yreynhout/Projac</projectUrl>
+    <releaseNotes>Reorganization.</releaseNotes>
+    <copyright>Copyright 2017, BitTacklr. All rights reserved.</copyright>
+    <tags>eventsourcing DDDesign</tags>
+    <dependencies>
+      <group targetFramework="net46">
+        <dependency id="Projac" version="0.0.147" />
+        <dependency id="System.Data.SQLite.Core" version="1.0.99.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="output\csharp\Projac.SQLite.dll" target="lib\net46\Projac.SQLite.dll" />
+    <file src="output\csharp\Projac.SQLite.pdb" target="lib\net46\Projac.SQLite.pdb" />
+    <file src="output\csharp\Projac.SQLite.xml" target="lib\net46\Projac.SQLite.xml" />
+    <file src="..\src\Projac.SQLite\*.cs" target="src\Projac.SQLite" />
+    <file src="..\src\Projac.SQLite\Properties\*.cs" target="src\Projac.SQLite\Properties" />
+  </files>
+</package>

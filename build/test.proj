@@ -12,11 +12,7 @@
     <MSBuild Projects="$(MSBuildProjectDirectory)\build.proj" Targets="Build" />
 
     <CreateItem
-      Include="
-      $(MSBuildProjectDirectory)\output\csharp\Projac.Tests.dll;
-      $(MSBuildProjectDirectory)\output\csharp\Paramol.Tests.dll;
-      $(MSBuildProjectDirectory)\output\csharp\Projac.Connector.Tests.dll;
-      ">
+      Include="$(MSBuildProjectDirectory)\output\csharp\Projac.Tests.dll">
       <Output TaskParameter="Include" ItemName="AssembliesToTest" />
     </CreateItem>
 

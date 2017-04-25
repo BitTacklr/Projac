@@ -26,7 +26,8 @@
         $(SourcePath)\Projac\Projac.csproj;
         $(SourcePath)\Projac.SqlClient\Projac.SqlClient.csproj;
         $(SourcePath)\Projac.SQLite\Projac.SQLite.csproj;
-        $(SourcePath)\Projac.Tests\Projac.Tests.csproj;"
+        $(SourcePath)\Projac.Tests\Projac.Tests.csproj;
+        $(SourcePath)\Recipes\Recipes.csproj;"
       BuildInParallel="true"
       Properties="Configuration=Release;OutputPath=$(MSBuildProjectDirectory)\output\csharp"
       UnloadProjectsOnCompletion="true"/>
