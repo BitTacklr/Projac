@@ -55,6 +55,7 @@ namespace Projac.SqlClient
         /// </returns>
         public SqlParameter ToSqlParameter(string parameterName)
         {
+#if NET46
             return new SqlParameter(
                 parameterName,
                 SqlDbType.Decimal,
@@ -66,6 +67,21 @@ namespace Projac.SqlClient
                 "",
                 DataRowVersion.Default,
                 _value);
+#elif NETSTANDARD2_0
+            return new SqlParameter 
+                {
+                    ParameterName = parameterName,
+                    Direction = ParameterDirection.Input,
+                    SqlDbType = SqlDbType.Decimal,
+                    Size = 0,
+                    Value = _value,
+                    SourceColumn = "",
+                    IsNullable = false,
+                    Precision = _precision,
+                    Scale = _scale,
+                    SourceVersion = DataRowVersion.Default
+                };
+#endif
         }
 
         /// <summary>

@@ -30,17 +30,7 @@ namespace Projac.SqlClient
         /// </returns>
         public DbParameter ToDbParameter(string parameterName)
         {
-            return new SqlParameter(
-                parameterName,
-                SqlDbType.BigInt,
-                8,
-                ParameterDirection.Input,
-                false,
-                0,
-                0,
-                "",
-                DataRowVersion.Default,
-                _value);
+            return ToSqlParameter(parameterName);
         }
 
         /// <summary>
@@ -52,6 +42,7 @@ namespace Projac.SqlClient
         /// </returns>
         public SqlParameter ToSqlParameter(string parameterName)
         {
+#if NET46
             return new SqlParameter(
                 parameterName,
                 SqlDbType.BigInt,
@@ -63,6 +54,21 @@ namespace Projac.SqlClient
                 "",
                 DataRowVersion.Default,
                 _value);
+#elif NETSTANDARD2_0
+            return new SqlParameter 
+                {
+                    ParameterName = parameterName,
+                    Direction = ParameterDirection.Input,
+                    SqlDbType = SqlDbType.BigInt,
+                    Size = 8,
+                    Value = _value,
+                    SourceColumn = "",
+                    IsNullable = false,
+                    Precision = 0,
+                    Scale = 0,
+                    SourceVersion = DataRowVersion.Default
+                };
+#endif
         }
 
         private bool Equals(TSqlBigIntValue other)

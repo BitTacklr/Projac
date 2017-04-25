@@ -46,6 +46,7 @@ namespace Projac.SqlClient
         /// </returns>
         public SqlParameter ToSqlParameter(string parameterName)
         {
+#if NET46
             return new SqlParameter(
                 parameterName,
                 SqlDbType.DateTime2,
@@ -57,6 +58,21 @@ namespace Projac.SqlClient
                 "",
                 DataRowVersion.Default,
                 _value);
+#elif NETSTANDARD2_0
+            return new SqlParameter 
+                {
+                    ParameterName = parameterName,
+                    Direction = ParameterDirection.Input,
+                    SqlDbType = SqlDbType.DateTime2,
+                    Size = 8,
+                    Value = _value,
+                    SourceColumn = "",
+                    IsNullable = false,
+                    Precision = _precision,
+                    Scale = 0,
+                    SourceVersion = DataRowVersion.Default
+                };
+#endif
         }
 
         private bool Equals(TSqlDateTime2Value other)

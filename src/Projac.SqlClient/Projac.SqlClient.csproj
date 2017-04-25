@@ -1,112 +1,47 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DCCE7FF2-E9F6-43AF-ABE3-443D66A64717}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Projac.SqlClient</RootNamespace>
+    <Description>Projac.SqlClient provides the syntax to write projections that target Microsoft SQL Server (TM).</Description>
     <AssemblyName>Projac.SqlClient</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <AssemblyTitle>Projac.SqlClient</AssemblyTitle>
+    <Version>0.0.0.0</Version>
+    <Authors>Yves Reynhout</Authors>
+    <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
+    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <PackageId>Projac.SqlClient</PackageId>
+    <PackageOwners>Yves Reynhout</PackageOwners>
+    <PackageTitle>Projac.SqlClient</PackageTitle>
+    <PackageTags>cqrs;event-sourcing;domain-driven-design</PackageTags>
+    <PackageReleaseNotes>Reorganization - Support for NetStandard 2.0</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/yreynhout/Projac</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/yreynhout/Projac/blob/master/LICENSE</PackageLicenseUrl>
+
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
+    <ProjectReference Include="..\Projac\Projac.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">  
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.0-preview2-25225-02" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Legacy\TSql.Compose.cs" />
-    <Compile Include="Legacy\TSql.cs" />
-    <Compile Include="Legacy\TSql.DataTypes.cs" />
-    <Compile Include="Legacy\TSql.NonQueryProcedure.cs" />
-    <Compile Include="Legacy\TSql.NonQueryStatement.cs" />
-    <Compile Include="Legacy\TSql.QueryProcedure.cs" />
-    <Compile Include="Legacy\TSql.QueryStatement.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Limits.cs" />
-    <Compile Include="SqlClientSyntax.Compose.cs" />
-    <Compile Include="SqlClientSyntax.cs" />
-    <Compile Include="SqlClientSyntax.DataTypes.cs" />
-    <Compile Include="SqlClientSyntax.NonQueryProcedure.cs" />
-    <Compile Include="SqlClientSyntax.NonQueryStatement.cs" />
-    <Compile Include="SqlClientSyntax.QueryProcedure.cs" />
-    <Compile Include="SqlClientSyntax.QueryStatement.cs" />
-    <Compile Include="TSqlBigIntNullValue.cs" />
-    <Compile Include="TSqlBigIntValue.cs" />
-    <Compile Include="TSqlBinaryNullValue.cs" />
-    <Compile Include="TSqlBinarySize.cs" />
-    <Compile Include="TSqlBinaryValue.cs" />
-    <Compile Include="TSqlBitNullValue.cs" />
-    <Compile Include="TSqlBitValue.cs" />
-    <Compile Include="TSqlCharNullValue.cs" />
-    <Compile Include="TSqlCharSize.cs" />
-    <Compile Include="TSqlCharValue.cs" />
-    <Compile Include="TSqlDateNullValue.cs" />
-    <Compile Include="TSqlDateTime2NullValue.cs" />
-    <Compile Include="TSqlDateTime2Precision.cs" />
-    <Compile Include="TSqlDateTime2Value.cs" />
-    <Compile Include="TSqlDateTimeNullValue.cs" />
-    <Compile Include="TSqlDateTimeOffsetNullValue.cs" />
-    <Compile Include="TSqlDateTimeOffsetValue.cs" />
-    <Compile Include="TSqlDateTimeValue.cs" />
-    <Compile Include="TSqlDateValue.cs" />
-    <Compile Include="TSqlDecimalNullValue.cs" />
-    <Compile Include="TSqlDecimalPrecision.cs" />
-    <Compile Include="TSqlDecimalScale.cs" />
-    <Compile Include="TSqlDecimalValue.cs" />
-    <Compile Include="TSqlIntNullValue.cs" />
-    <Compile Include="TSqlIntValue.cs" />
-    <Compile Include="TSqlMoneyNullValue.cs" />
-    <Compile Include="TSqlMoneyValue.cs" />
-    <Compile Include="TSqlNCharNullValue.cs" />
-    <Compile Include="TSqlNCharSize.cs" />
-    <Compile Include="TSqlNCharValue.cs" />
-    <Compile Include="TSqlNVarCharNullValue.cs" />
-    <Compile Include="TSqlNVarCharSize.cs" />
-    <Compile Include="TSqlNVarCharValue.cs" />
-    <Compile Include="TSqlUniqueIdentifierNullValue.cs" />
-    <Compile Include="TSqlUniqueIdentifierValue.cs" />
-    <Compile Include="TSqlVarBinaryNullValue.cs" />
-    <Compile Include="TSqlVarBinarySize.cs" />
-    <Compile Include="TSqlVarBinaryValue.cs" />
-    <Compile Include="TSqlVarCharNullValue.cs" />
-    <Compile Include="TSqlVarCharSize.cs" />
-    <Compile Include="TSqlVarCharValue.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Projac\Projac.csproj">
-      <Project>{1c52a225-809b-44af-8e8c-b5a44a4b1e9d}</Project>
-      <Name>Projac.Sql</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <Import Project="..\..\.paket\paket.targets" />
 </Project>
