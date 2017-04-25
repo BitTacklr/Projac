@@ -23,13 +23,10 @@
     <!-- CSharp -->
     <MSBuild
       Projects="
-        $(SourcePath)\Paramol\Paramol.csproj;
-        $(SourcePath)\Paramol.SQLite\Paramol.SQLite.csproj;
-        $(SourcePath)\Paramol.Tests\Paramol.Tests.csproj;
         $(SourcePath)\Projac\Projac.csproj;
-        $(SourcePath)\Projac.Tests\Projac.Tests.csproj;
-        $(SourcePath)\Projac.Connector\Projac.Connector.csproj;
-        $(SourcePath)\Projac.Connector.Tests\Projac.Connector.Tests.csproj;"
+        $(SourcePath)\Projac.SqlClient\Projac.SqlClient.csproj;
+        $(SourcePath)\Projac.SQLite\Projac.SQLite.csproj;
+        $(SourcePath)\Projac.Tests\Projac.Tests.csproj;"
       BuildInParallel="true"
       Properties="Configuration=Release;OutputPath=$(MSBuildProjectDirectory)\output\csharp"
       UnloadProjectsOnCompletion="true"/>

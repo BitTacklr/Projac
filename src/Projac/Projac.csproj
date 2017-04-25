@@ -36,8 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -61,6 +63,28 @@
     <Compile Include="Testing\ProjectionScenario.cs" />
     <Compile Include="Testing\VerificationResult.cs" />
     <Compile Include="Testing\VerificationResultState.cs" />
+    <Compile Include="Sql\AnonymousSqlProjection.cs" />
+    <Compile Include="Sql\AnonymousSqlProjectionBuilder.cs" />
+    <Compile Include="Sql\AsyncSqlProjector.cs" />
+    <Compile Include="Sql\ConcurrentResolve.cs" />
+    <Compile Include="Sql\Executors\ConnectedSqlCommandExecutor.cs" />
+    <Compile Include="Sql\Executors\ConnectedTransactionalSqlCommandExecutor.cs" />
+    <Compile Include="Sql\Executors\IAsyncSqlNonQueryCommandExecutor.cs" />
+    <Compile Include="Sql\Executors\IAsyncSqlQueryCommandExecutor.cs" />
+    <Compile Include="Sql\Executors\ISqlNonQueryCommandExecutor.cs" />
+    <Compile Include="Sql\Executors\ISqlQueryCommandExecutor.cs" />
+    <Compile Include="Sql\Executors\SqlCommandExecutor.cs" />
+    <Compile Include="Sql\Executors\TransactionalSqlCommandExecutor.cs" />
+    <Compile Include="Sql\IDbParameterValue.cs" />
+    <Compile Include="Sql\Resolve.cs" />
+    <Compile Include="Sql\SqlNonQueryCommand.cs" />
+    <Compile Include="Sql\SqlNonQueryCommandComposer.cs" />
+    <Compile Include="Sql\SqlProjection.cs" />
+    <Compile Include="Sql\SqlProjectionHandler.cs" />
+    <Compile Include="Sql\SqlProjectionHandlerEnumerator.cs" />
+    <Compile Include="Sql\SqlProjectionHandlerResolver.cs" />
+    <Compile Include="Sql\SqlProjector.cs" />
+    <Compile Include="Sql\SqlQueryCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

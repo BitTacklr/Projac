@@ -1,4 +1,4 @@
 ﻿using System.Reflection;
 
 [assembly: AssemblyTitle("Projac")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("This library provides lightweight infrastructure for producing projections.")]

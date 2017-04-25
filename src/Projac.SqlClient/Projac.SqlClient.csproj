@@ -95,8 +95,8 @@
     <Compile Include="TSqlVarCharValue.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj">
-      <Project>{a1fa5f93-fe37-4448-89b6-1ecbcdaef043}</Project>
+    <ProjectReference Include="..\Projac\Projac.csproj">
+      <Project>{1c52a225-809b-44af-8e8c-b5a44a4b1e9d}</Project>
       <Name>Projac.Sql</Name>
     </ProjectReference>
   </ItemGroup>

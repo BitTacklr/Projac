@@ -36,8 +36,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.MSIL.1.0.103\lib\net46\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -62,8 +68,109 @@
     <Compile Include="Testing\ProjectionScenarioTests.cs" />
     <Compile Include="Testing\ProjectionTestSpecificationTests.cs" />
     <Compile Include="Testing\VerificationResultTests.cs" />
+    <Compile Include="Sql\AnonymousSqlProjectionBuilderTests.cs" />
+    <Compile Include="Sql\AnonymousSqlProjectionTests.cs" />
+    <Compile Include="Sql\AsyncSqlProjectorTests.cs" />
+    <Compile Include="Sql\ConcurrentResolveTests.cs" />
+    <Compile Include="Sql\Executors\ConnectedSqlCommandExecutorTests.cs" />
+    <Compile Include="Sql\Executors\ConnectedTransactionalSqlCommandExecutorTests.cs" />
+    <Compile Include="Sql\Executors\SqlCommandExecutorTests.cs" />
+    <Compile Include="Sql\Executors\TestDbConnection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Sql\Executors\TestDbTransaction.cs" />
+    <Compile Include="Sql\Executors\TransactionalSqlCommandExecutorTests.cs" />
+    <Compile Include="Sql\Framework\SqlNonQueryCommandStub.cs" />
+    <Compile Include="Sql\HandlerResolutionCases.cs" />
+    <Compile Include="Sql\Legacy\TSqlTests.Compose.cs" />
+    <Compile Include="Sql\Legacy\TSqlTests.DataTypes.cs" />
+    <Compile Include="Sql\Legacy\TSqlTests.NonQueryProcedure.cs" />
+    <Compile Include="Sql\Legacy\TSqlTests.NonQueryStatement.cs" />
+    <Compile Include="Sql\Legacy\TSqlTests.ParameterCountLimitExceeded.cs" />
+    <Compile Include="Sql\Legacy\TSqlTests.QueryProcedure.cs" />
+    <Compile Include="Sql\Legacy\TSqlTests.QueryStatement.cs" />
+    <Compile Include="Sql\ProjectorProjectCases.cs" />
+    <Compile Include="Sql\ResolveTests.cs" />
+    <Compile Include="Sql\SqlClient\ParameterCountLimitedExceeded.cs" />
+    <Compile Include="Sql\SqlClient\SqlClientSyntaxTestCases.cs" />
+    <Compile Include="Sql\SqlClient\SqlClientSyntaxTests.Compose.cs" />
+    <Compile Include="Sql\SqlClient\SqlClientSyntaxTests.cs" />
+    <Compile Include="Sql\SqlClient\SqlClientSyntaxTests.DataTypes.cs" />
+    <Compile Include="Sql\SqlClient\SqlClientSyntaxTests.NonQueryProcedure.cs" />
+    <Compile Include="Sql\SqlClient\SqlClientSyntaxTests.NonQueryStatement.cs" />
+    <Compile Include="Sql\SqlClient\SqlClientSyntaxTests.ParameterCountLimitExceeded.cs" />
+    <Compile Include="Sql\SqlClient\SqlClientSyntaxTests.QueryProcedure.cs" />
+    <Compile Include="Sql\SqlClient\SqlClientSyntaxTests.QueryStatement.cs" />
+    <Compile Include="Sql\SqlClient\SqlParameterAssertions.cs" />
+    <Compile Include="Sql\SqlClient\SqlParameterEqualityComparer.cs" />
+    <Compile Include="Sql\SqlClient\SqlParameterValueStub.cs" />
+    <Compile Include="Sql\SqlClient\TSqlBigIntNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlBigIntValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlBinaryNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlBinarySizeTest.cs" />
+    <Compile Include="Sql\SqlClient\TSqlBinaryValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlBitNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlBitValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlCharNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlCharSizeTest.cs" />
+    <Compile Include="Sql\SqlClient\TSqlCharValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDateNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDateTime2NullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDateTime2PrecisionTest.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDateTime2ValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDateTimeNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDateTimeOffsetNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDateTimeOffsetValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDateTimeValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDateValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDecimalNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDecimalPrecisionTest.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDecimalScaleTest.cs" />
+    <Compile Include="Sql\SqlClient\TSqlDecimalValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlIntNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlIntValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlMoneyNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlMoneyValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlNCharNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlNCharSizeTest.cs" />
+    <Compile Include="Sql\SqlClient\TSqlNCharValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlNVarCharNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlNVarCharSizeTest.cs" />
+    <Compile Include="Sql\SqlClient\TSqlNVarCharValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlUniqueIdentifierNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlUniqueIdentifierValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlVarBinaryNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlVarBinarySizeTest.cs" />
+    <Compile Include="Sql\SqlClient\TSqlVarBinaryValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlVarCharNullValueTests.cs" />
+    <Compile Include="Sql\SqlClient\TSqlVarCharSizeTest.cs" />
+    <Compile Include="Sql\SqlClient\TSqlVarCharValueTests.cs" />
+    <Compile Include="Sql\SQLite\SQLiteParameterAssertions.cs" />
+    <Compile Include="Sql\SQLite\SQLiteParameterEqualityComparer.cs" />
+    <Compile Include="Sql\SQLite\SQLiteParameterValueStub.cs" />
+    <Compile Include="Sql\SQLite\SQLiteSyntaxTestCases.cs" />
+    <Compile Include="Sql\SQLite\SQLiteSyntaxTests.Compose.cs" />
+    <Compile Include="Sql\SQLite\SQLiteSyntaxTests.cs" />
+    <Compile Include="Sql\SQLite\SQLiteSyntaxTests.DataTypes.cs" />
+    <Compile Include="Sql\SQLite\SQLiteSyntaxTests.NonQueryStatement.cs" />
+    <Compile Include="Sql\SQLite\SQLiteSyntaxTests.QueryStatement.cs" />
+    <Compile Include="Sql\SqlNonQueryCommandComposerTests.cs" />
+    <Compile Include="Sql\SqlNonQueryCommandTests.cs" />
+    <Compile Include="Sql\SqlProjectionHandlerEnumeratorTests.cs" />
+    <Compile Include="Sql\SqlProjectionHandlerTests.cs" />
+    <Compile Include="Sql\SqlProjectionTests.cs" />
+    <Compile Include="Sql\SqlProjectorTests.cs" />
+    <Compile Include="Sql\SqlQueryStatementTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Projac.SqlClient\Projac.SqlClient.csproj">
+      <Project>{dcce7ff2-e9f6-43af-abe3-443d66a64717}</Project>
+      <Name>Projac.SqlClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Projac.SQLite\Projac.SQLite.csproj">
+      <Project>{34265ec4-8462-489e-acfb-387a8d369525}</Project>
+      <Name>Projac.SQLite</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Projac\Projac.csproj">
       <Project>{1c52a225-809b-44af-8e8c-b5a44a4b1e9d}</Project>
       <Name>Projac</Name>
