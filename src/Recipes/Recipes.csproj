@@ -89,6 +89,9 @@
       <HintPath>..\packages\RavenDB.Database.3.0.3800\lib\net45\Raven.Database.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SqlStreamStore, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SqlStreamStore.0.5.1\lib\Portable-Net45+Win8+WP8+WPA81\SqlStreamStore.dll</HintPath>
+    </Reference>
     <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.0.481\lib\net45\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
@@ -124,6 +127,7 @@
     <Compile Include="RavenDBIntegration\TestingUsage.cs" />
     <Compile Include="RedisIntegration\Usage.cs" />
     <Compile Include="SQLiteIntegration\Usage.cs" />
+    <Compile Include="SqlStreamStoreIntegration\Usage.cs" />
     <Compile Include="Syntax\Usage.cs" />
     <Compile Include="WindowsAzureStorageIntegration\PortfolioModel.cs" />
     <Compile Include="WindowsAzureStorageIntegration\RebuildProjection.cs" />
