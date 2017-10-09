@@ -1,24 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Description>Projac provides lightweight infrastructure for producing projections.</Description>
-    <AssemblyName>Projac</AssemblyName>
-    <AssemblyTitle>Projac</AssemblyTitle>
+    <Description>Projac.SqlCLient.Tests contains all the SQL projection related tests that target Microsoft SQL Server (TM).</Description>
+    <AssemblyName>Projac.SqlCLient.Tests</AssemblyName>
+    <AssemblyTitle>Projac.SqlCLient.Tests</AssemblyTitle>
     <Version>0.0.0.0</Version>
     <Authors>Yves Reynhout</Authors>
     <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
     <TargetFrameworks>netstandard2.0;net46;net452</TargetFrameworks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageId>Projac</PackageId>
-    <PackageOwners>Yves Reynhout</PackageOwners>
-    <PackageTitle>Projac</PackageTitle>
-    <PackageTags>cqrs;event-sourcing;domain-driven-design</PackageTags>
-    <PackageReleaseNotes>Reorganization - Support for .NET Standard 2.0, .NET Framework 4.6 and 4.5.2</PackageReleaseNotes>
-    <PackageProjectUrl>https://github.com/yreynhout/Projac</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/yreynhout/Projac/blob/master/LICENSE</PackageLicenseUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <!-- Suppress warning that TSql has become obsolete. -->
+    <NoWarn>CS0618</NoWarn>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj" />
+    <ProjectReference Include="..\Projac.SqlClient\Projac.SqlClient.csproj" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>
@@ -28,6 +26,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

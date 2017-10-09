@@ -1,0 +1,9 @@
+NUnit
+CompareNETObjects
+Newtonsoft.Json
+Elasticsearch.Net
+EventStore.Client.Embedded
+RavenDB.Embedded
+StackExchange.Redis
+System.Data.SQLite.Core
+WindowsAzure.Storage

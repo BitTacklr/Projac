@@ -49,7 +49,7 @@ namespace Projac.SqlClient
         /// </returns>
         public SqlParameter ToSqlParameter(string parameterName)
         {
-#if NET46
+#if NET46 || NET452
             return new SqlParameter(
                 parameterName,
                 SqlDbType.VarChar,

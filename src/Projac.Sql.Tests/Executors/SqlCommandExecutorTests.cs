@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if NET46 || NET452
 using System.Configuration;
+#endif
 using System.Threading;
 using NUnit.Framework;
 using Projac.Sql.Executors;
@@ -34,6 +36,7 @@ namespace Projac.Sql.Tests.Executors
             Assert.IsInstanceOf<IAsyncSqlQueryCommandExecutor>(SutFactory());
         }
 
+#if NET46 || NET452
         [Test]
         public void ConnectionStringSettingsCanNotBeNull()
         {
@@ -54,6 +57,7 @@ namespace Projac.Sql.Tests.Executors
             Assert.Throws<ArgumentException>(
                 () => SutFactory(ConnectionStringSettingsFactory(Guid.NewGuid().ToString("N"))));
         }
+#endif
 
         [Test]
         public void ExecuteNonQueryCommandCanNotBeNull()
@@ -160,6 +164,12 @@ namespace Projac.Sql.Tests.Executors
                 Throws.ArgumentNullException);
         }
 
+#if NETSTANDARD2_0
+        private static SqlCommandExecutor SutFactory()
+        {
+            return new SqlCommandExecutor(System.Data.SqlClient.SqlClientFactory.Instance, "");
+        }
+#elif NET46 || NET452
         private static SqlCommandExecutor SutFactory()
         {
             return SutFactory(ConnectionStringSettingsFactory("System.Data.SqlClient"));
@@ -174,5 +184,6 @@ namespace Projac.Sql.Tests.Executors
         {
             return new ConnectionStringSettings("name", "", providerName);
         }
+#endif
     }
 }

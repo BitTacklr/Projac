@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Recipes contains various recipes on how to use Projac.</Description>
+    <AssemblyName>Projac.Recipes</AssemblyName>
+    <AssemblyTitle>Projac.Recipes</AssemblyTitle>
+    <Version>0.0.0.0</Version>
+    <Authors>Yves Reynhout</Authors>
+    <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
+    <TargetFrameworks>net46</TargetFrameworks>
+    <GenerateAssemblyTitleAttribute>true</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>true</GenerateAssemblyDescriptionAttribute>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="AppReadme\Compare-NET-Objects-Help.txt">
+      <Paket>True</Paket>
+    </Content>
+    <ProjectReference Include="..\Projac\Projac.csproj" />
+    <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj" />
+    <ProjectReference Include="..\Projac.SqlClient\Projac.SqlClient.csproj" />
+    <ProjectReference Include="..\Projac.SQLite\Projac.SQLite.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Projac.SqlClient provides the syntax to write projections that target Microsoft SQL Server (TM).</Description>
     <AssemblyName>Projac.SqlClient</AssemblyName>
@@ -7,41 +7,32 @@
     <Version>0.0.0.0</Version>
     <Authors>Yves Reynhout</Authors>
     <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
-    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net46;net452</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-
     <PackageId>Projac.SqlClient</PackageId>
     <PackageOwners>Yves Reynhout</PackageOwners>
     <PackageTitle>Projac.SqlClient</PackageTitle>
     <PackageTags>cqrs;event-sourcing;domain-driven-design</PackageTags>
-    <PackageReleaseNotes>Reorganization - Support for NetStandard 2.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Reorganization - Support for .NET Standard 2.0, .NET Framework 4.6 and 4.5.2</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/yreynhout/Projac</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/yreynhout/Projac/blob/master/LICENSE</PackageLicenseUrl>
-
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\Projac\Projac.csproj" />
+    <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">  
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="System.Data.SqlClient" Version="4.4.0-preview2-25225-02" />
-  </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' ">
     <DebugType>full</DebugType>
   </PropertyGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

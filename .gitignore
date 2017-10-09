@@ -17,6 +17,8 @@ nunit_output.xml
 Projac.FSharp.csproj
 Projac.Tests.FSharp.csproj
 .paket/paket.exe
+paket-files
+packages
 
 # Build results
 [Dd]ebug/

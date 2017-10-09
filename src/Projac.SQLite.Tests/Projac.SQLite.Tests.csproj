@@ -1,27 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Description>Projac.SQLite provides the syntax to write projections that target SQLite.</Description>
-    <AssemblyName>Projac.SQLite</AssemblyName>
-    <AssemblyTitle>Projac.SQLite</AssemblyTitle>
+    <Description>Projac.SQLite.Tests contains all the SQL projection related tests that target SQLite.</Description>
+    <AssemblyName>Projac.SQLite.Tests</AssemblyName>
+    <AssemblyTitle>Projac.SQLite.Tests</AssemblyTitle>
     <Version>0.0.0.0</Version>
     <Authors>Yves Reynhout</Authors>
     <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
     <TargetFrameworks>net46;net452</TargetFrameworks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageId>Projac.SQLite</PackageId>
-    <PackageOwners>Yves Reynhout</PackageOwners>
-    <PackageTitle>Projac.SQLite</PackageTitle>
-    <PackageTags>cqrs;event-sourcing;domain-driven-design</PackageTags>
-    <PackageReleaseNotes>Reorganization - Support for .NET Framework 4.6 and 4.5.2</PackageReleaseNotes>
-    <PackageProjectUrl>https://github.com/yreynhout/Projac</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/yreynhout/Projac/blob/master/LICENSE</PackageLicenseUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj" />
+    <ProjectReference Include="..\Projac.SQLite\Projac.SQLite.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -5,9 +5,6 @@ using Projac.Sql;
 
 namespace Projac.SqlClient.Legacy
 {
-    /// <summary>
-    ///     Fluent SQL syntax.
-    /// </summary>
     public static partial class TSql
     {
         /// <summary>
