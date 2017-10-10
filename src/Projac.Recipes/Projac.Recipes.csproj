@@ -13,9 +13,6 @@
     <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="AppReadme\Compare-NET-Objects-Help.txt">
-      <Paket>True</Paket>
-    </Content>
     <ProjectReference Include="..\Projac\Projac.csproj" />
     <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj" />
     <ProjectReference Include="..\Projac.SqlClient\Projac.SqlClient.csproj" />
@@ -29,5 +26,17 @@
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="CompareNETObjects" Version="3.09.0.0" />
+    <PackageReference Include="ElasticSearch.Net" Version="5.5.0" />
+    <PackageReference Include="EventStore.Client.Embedded" Version="4.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="NUnit" Version="3.8.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="RavenDB.Embedded" Version="3.5.4" />
+    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.105.2" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
+  </ItemGroup>
 </Project>
