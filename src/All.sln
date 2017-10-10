@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.SqlClient", "Projac.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.SQLite", "Projac.SQLite\Projac.SQLite.csproj", "{34265EC4-8462-489E-ACFB-387A8D369525}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes", "Recipes\Recipes.csproj", "{E87B6569-3455-451D-A101-373D086CFF8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projac.Recipes", "Projac.Recipes\Projac.Recipes.csproj", "{E87B6569-3455-451D-A101-373D086CFF8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

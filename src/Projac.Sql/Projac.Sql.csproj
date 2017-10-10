@@ -32,5 +32,4 @@
     <Reference Include="System.Data" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

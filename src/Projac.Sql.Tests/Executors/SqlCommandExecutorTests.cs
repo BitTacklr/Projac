@@ -164,7 +164,7 @@ namespace Projac.Sql.Tests.Executors
                 Throws.ArgumentNullException);
         }
 
-#if NETSTANDARD2_0
+#if NETCOREAPP2_0
         private static SqlCommandExecutor SutFactory()
         {
             return new SqlCommandExecutor(System.Data.SqlClient.SqlClientFactory.Instance, "");

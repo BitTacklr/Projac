@@ -100,7 +100,7 @@ namespace Projac.Sql.Tests.Executors
                 Throws.ArgumentNullException);
         }
 
-#if NETSTANDARD2_0
+#if NETCOREAPP2_0
         private static TransactionalSqlCommandExecutor SutFactory()
         {
             return new TransactionalSqlCommandExecutor(System.Data.SqlClient.SqlClientFactory.Instance, "", IsolationLevel.Unspecified);

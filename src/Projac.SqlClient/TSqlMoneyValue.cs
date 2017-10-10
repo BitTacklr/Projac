@@ -64,8 +64,8 @@ namespace Projac.SqlClient
                     Value = _value,
                     SourceColumn = "",
                     IsNullable = false,
-                    Precision = 4,
-                    Scale = 0,
+                    Precision = 0,
+                    Scale = 4,
                     SourceVersion = DataRowVersion.Default
                 };
 #endif

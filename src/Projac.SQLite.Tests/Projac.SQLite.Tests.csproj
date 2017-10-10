@@ -21,6 +21,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="System.Data.SQLite.Core.MSIL" Version="1.0.105.2" />
+    <PackageReference Include="NUnit" Version="3.8.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />    
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

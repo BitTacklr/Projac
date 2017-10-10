@@ -28,6 +28,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="System.Data.SQLite.Core.MSIL" Version="1.0.105.2" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
