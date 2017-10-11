@@ -1,19 +1,19 @@
-# Projac.Connector
+# Projac
 
-Projac.Connector brings Projac's declarative style of authoring projections to projections that target any store for which you can bring your own connection.
+Projac brings a declarative style of authoring projections to projections that target any store for which you can bring your own connection.
 
-It's available on NuGet: [Projac.Connector](https://www.nuget.org/packages/Projac.Connector/)
+It's available on NuGet: [Projac](https://www.nuget.org/packages/Projac/)
 
 # Authoring projections
 
 ## The Declarative Style
 
-Similar to Projac's declarative style for sql projections, one can author projections that target Elasticsearch, Redis, RavenDb, WindowsAzure Table Storage, etc ... in a declarative way. A fundamental difference is that the handling and interpretation of messages is directly tied to the execution of actions against the respective store. Why? Because replicating the entire connection api into a set of statements would be too ambitious and brittle a goal. Only asynchronous projection handling is supported at the moment. Given we're dealing with I/O intensive operations that decision seems reasonable.
+One can author projections that target Elasticsearch, Redis, RavenDb, WindowsAzure Table Storage, etc ... in a declarative way. The handling and interpretation of messages is directly tied to the execution of actions against the respective store. Only asynchronous projection handling is supported at the moment. Given we're dealing with I/O intensive operations that decision seems reasonable.
 
 ### Elasticsearch
 
 ```csharp
-public class PortfolioProjection : ConnectedProjection<ElasticsearchClient>
+public class PortfolioProjection : Projection<ElasticsearchClient>
 {
   public PortfolioProjection()
   {
@@ -53,7 +53,7 @@ public class PortfolioProjection : ConnectedProjection<ElasticsearchClient>
 ### Redis
 
 ```csharp
-public class PortfolioProjection : ConnectedProjection<ConnectionMultiplexer>
+public class PortfolioProjection : Projection<ConnectionMultiplexer>
 {
   public PortfolioProjection()
   {
@@ -81,7 +81,7 @@ public class PortfolioProjection : ConnectedProjection<ConnectionMultiplexer>
 ### RavenDb
 
 ```csharp
-public class PortfolioProjection : ConnectedProjection<IAsyncDocumentSession>
+public class PortfolioProjection : Projection<IAsyncDocumentSession>
 {
   public PortfolioProjection()
   {
@@ -111,7 +111,7 @@ public class PortfolioProjection : ConnectedProjection<IAsyncDocumentSession>
 ### Windows Azure Table Storage
 
 ```csharp
-public class PortfolioProjection : ConnectedProjection<CloudTableClient>
+public class PortfolioProjection : Projection<CloudTableClient>
 {
   public PortfolioProjection()
   {
@@ -158,11 +158,11 @@ public class PortfolioProjection : ConnectedProjection<CloudTableClient>
 
 ### Anonymous
 
-Next to the *ConnectedProjection* approach, one can also use the *AnonymousConnectedProjectionBuilder* approach if you prefer to go class-less.
+Next to the *Projection* approach, one can also use the *AnonymousProjectionBuilder* approach if you prefer to go class-less.
 
 ```csharp
 var projection =
-  new AnonymousConnectedProjectionBuilder<ElasticsearchClient>().
+  new AnonymousProjectionBuilder<ElasticsearchClient>().
     When<PortfolioAdded>((client, message) =>
       client.IndexAsync(
         "index",
@@ -195,16 +195,16 @@ var projection =
 
 # Executing projections
 
-How and when you decide to execute the projections is still left as an exercise to you. Typically they will sit behind a message subscription that pushes the appropriate messages into them, causing the execution of actions against the store. You can use the ConnectedProjector to perform the actual execution.
+How and when you decide to execute the projections is still left as an exercise to you. Typically they will sit behind a message subscription that pushes the appropriate messages into them, causing the execution of actions against the store. You can use the Projector to perform the actual execution.
 
 # Testing projections
 
-Projac.Connector comes with an *API* that allows you to write tests for your projections at the right level of abstraction. Depending on the store you are integrating with, you may want to extend the syntax with extension methods that tuck away any boilerplate code. The general idea is that you author a scenario using *givens*, which are just messages, and verify that the store contains the expected data (and only the expected data) after projecting those messages using the projection under test.
+Projac comes with an *API* that allows you to write tests for your projections at the right level of abstraction. Depending on the store you are integrating with, you may want to extend the syntax with extension methods that tuck away any boilerplate code. The general idea is that you author a scenario using *givens*, which are just messages, and verify that the store contains the expected data (and only the expected data) after projecting those messages using the projection under test.
 
 Given the following RavenDb projection ...
 
 ```csharp
-public class PortfolioProjection : ConnectedProjection<IAsyncDocumentSession>
+public class PortfolioProjection : Projection<IAsyncDocumentSession>
 {
   public PortfolioProjection()
   {
@@ -272,15 +272,15 @@ public class PortfolioProjectionTests
 ```csharp
 public static class RavenProjectionScenario
 {
-    public static ConnectedProjectionScenario<IAsyncDocumentSession> For(
-        ConnectedProjectionHandler<IAsyncDocumentSession>[] handlers)
+    public static ProjectionScenario<IAsyncDocumentSession> For(
+        ProjectionHandler<IAsyncDocumentSession>[] handlers)
     {
         if (handlers == null) throw new ArgumentNullException("handlers");
-        return new ConnectedProjectionScenario<IAsyncDocumentSession>(
+        return new ProjectionScenario<IAsyncDocumentSession>(
             ConcurrentResolve.WhenEqualToHandlerMessageType(handlers));
     }
 
-    public static Task ExpectNone(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario)
+    public static Task ExpectNone(this ProjectionScenario<IAsyncDocumentSession> scenario)
     {
         return scenario
             .Verify(async session =>
@@ -306,7 +306,7 @@ public static class RavenProjectionScenario
             .Assert();
     }
 
-    public static Task Expect(this ConnectedProjectionScenario<IAsyncDocumentSession> scenario, params object[] documents)
+    public static Task Expect(this ProjectionScenario<IAsyncDocumentSession> scenario, params object[] documents)
     {
         if (documents == null) 
             throw new ArgumentNullException("documents");
@@ -368,7 +368,7 @@ public static class RavenProjectionScenario
             .Assert();
     }
 
-    public static async Task Assert(this ConnectedProjectionTestSpecification<IAsyncDocumentSession> specification)
+    public static async Task Assert(this ProjectionTestSpecification<IAsyncDocumentSession> specification)
     {
         if (specification == null) throw new ArgumentNullException("specification");
         using (var store = new EmbeddableDocumentStore
@@ -381,7 +381,7 @@ public static class RavenProjectionScenario
             store.Initialize();
             using (var session = store.OpenAsyncSession())
             {
-                await new ConnectedProjector<IAsyncDocumentSession>(specification.Resolver).
+                await new Projector<IAsyncDocumentSession>(specification.Resolver).
                     ProjectAsync(session, specification.Messages);
                 await session.SaveChangesAsync();
 

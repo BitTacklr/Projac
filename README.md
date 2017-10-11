@@ -1,5 +1,7 @@
 # Projac
 
+**Important Changes**
+
 [![Join the chat at https://gitter.im/yreynhout/Projac](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/yreynhout/Projac?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Projac is a set of projection libraries that allow you to write projections targetting various backing stores.
