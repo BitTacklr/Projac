@@ -1,15 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Description>Recipes contains various recipes on how to use Projac.</Description>
+    <TargetFrameworks>net46</TargetFrameworks>
+    
     <AssemblyName>Projac.Recipes</AssemblyName>
     <AssemblyTitle>Projac.Recipes</AssemblyTitle>
     <Version>0.0.0.0</Version>
+
+    <Description>Projac.Recipes contains various recipes on how to use Projac.</Description>
     <Authors>Yves Reynhout</Authors>
+    <Company>BitTacklr</Company>
+    <Product>Projac</Product>
     <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
-    <TargetFrameworks>net46</TargetFrameworks>
-    <GenerateAssemblyTitleAttribute>true</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyDescriptionAttribute>true</GenerateAssemblyDescriptionAttribute>
+    <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryUrl>https://github.com/yreynhout/Projac</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    
     <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>

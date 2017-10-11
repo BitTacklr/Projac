@@ -1,15 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Description>Projac.SqlCLient.Tests contains all the SQL projection related tests that target Microsoft SQL Server (TM).</Description>
+    <TargetFrameworks>netcoreapp2.0;net46;net452</TargetFrameworks>
+    
     <AssemblyName>Projac.SqlCLient.Tests</AssemblyName>
     <AssemblyTitle>Projac.SqlCLient.Tests</AssemblyTitle>
     <Version>0.0.0.0</Version>
+    
+    <Description>Projac.SqlCLient.Tests contains all the SQL projection related tests that target Microsoft SQL Server (TM).</Description>
     <Authors>Yves Reynhout</Authors>
+    <Company>BitTacklr</Company>
+    <Product>Projac</Product>
     <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
-    <TargetFrameworks>netcoreapp2.0;net46;net452</TargetFrameworks>
-    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryUrl>https://github.com/yreynhout/Projac</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    
     <!-- Suppress warning that TSql has become obsolete. -->
     <NoWarn>CS0618</NoWarn>
   </PropertyGroup>

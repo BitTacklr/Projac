@@ -1,14 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Description>Projac.SQLite provides the syntax to write projections that target SQLite.</Description>
+    <TargetFrameworks>net46;net452</TargetFrameworks>
+    
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    
     <AssemblyName>Projac.SQLite</AssemblyName>
     <AssemblyTitle>Projac.SQLite</AssemblyTitle>
     <Version>0.0.0.0</Version>
+    
+    <Description>Projac.SQLite provides the syntax to write projections that target SQLite.</Description>
     <Authors>Yves Reynhout</Authors>
+    <Company>BitTacklr</Company>
+    <Product>Projac</Product>
     <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
-    <TargetFrameworks>net46;net452</TargetFrameworks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryUrl>https://github.com/yreynhout/Projac</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
     <PackageId>Projac.SQLite</PackageId>
     <PackageOwners>Yves Reynhout</PackageOwners>
     <PackageTitle>Projac.SQLite</PackageTitle>
@@ -16,8 +25,7 @@
     <PackageReleaseNotes>Reorganization - Support for .NET Framework 4.6 and 4.5.2</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/yreynhout/Projac</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/yreynhout/Projac/blob/master/LICENSE</PackageLicenseUrl>
-    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+
     <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
