@@ -1,20 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;net46;net452</TargetFrameworks>
-    
     <AssemblyName>Projac.Sql.Tests</AssemblyName>
     <AssemblyTitle>Projac.Sql.Tests</AssemblyTitle>
-    <Version>0.0.0.0</Version>
-    
-    <Description>Projac.Sql.Tests contains all the SQL projection related tests.</Description>
+    <!-- <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard2.0</TargetFrameworks> -->
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">netcoreapp2.0;net46;net452</TargetFrameworks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RootNamespace>Projac.Sql.Tests</RootNamespace>
+    <DebugSymbols>true</DebugSymbols>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyVersion Condition="$(AssemblyVersion) == ''">0.0.0</AssemblyVersion>
+    <FileVersion Condition="$(FileVersion) == ''">0.0.0</FileVersion>
+    <InformationalVersion Condition="$(InformationalVersion) == ''">0.0.0</InformationalVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <Optimize>False</Optimize>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <Optimize>True</Optimize>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <Title>Projac.Sql.Tests</Title>
     <Authors>Yves Reynhout</Authors>
     <Company>BitTacklr</Company>
     <Product>Projac</Product>
-    <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
+    <Description>Projac.Sql.Tests unit tests Projac.Sql.</Description>
+    <Copyright>Copyright © BitTacklr 2017. All rights reserved.</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-    <RepositoryUrl>https://github.com/yreynhout/Projac</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj" />

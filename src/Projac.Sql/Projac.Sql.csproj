@@ -1,30 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net46;net452</TargetFrameworks>
-    
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    
     <AssemblyName>Projac.Sql</AssemblyName>
     <AssemblyTitle>Projac.Sql</AssemblyTitle>
-    <Version>0.0.0.0</Version>
-
-    <Description>Projac.Sql provides lightweight infrastructure for producing SQL projections.</Description>
-    <Authors>Yves Reynhout</Authors>
-    <Company>BitTacklr</Company>
-    <Product>Projac</Product>
-    <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
-    <NeutralLanguage>en</NeutralLanguage>
-    <RepositoryUrl>https://github.com/yreynhout/Projac</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-
+    <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">netstandard2.0;net46;net452</TargetFrameworks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RootNamespace>Projac.Sql</RootNamespace>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyVersion Condition="$(AssemblyVersion) == ''">0.0.0</AssemblyVersion>
+    <FileVersion Condition="$(FileVersion) == ''">0.0.0</FileVersion>
+    <InformationalVersion Condition="$(InformationalVersion) == ''">0.0.0</InformationalVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <Optimize>False</Optimize>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <Optimize>True</Optimize>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageVersion Condition="$(PackageVersion) == ''">0.0.0</PackageVersion>
     <PackageId>Projac.Sql</PackageId>
     <PackageOwners>Yves Reynhout</PackageOwners>
     <PackageTitle>Projac.Sql</PackageTitle>
-    <PackageTags>cqrs;event-sourcing;domain-driven-design</PackageTags>
-    <PackageReleaseNotes>Reorganization - Support for .NET Standard 2.0, .NET Framework 4.6 and 4.5.2</PackageReleaseNotes>
-    <PackageProjectUrl>https://github.com/yreynhout/Projac</PackageProjectUrl>
+    <Title>Projac.Sql</Title>
+    <Authors>Yves Reynhout</Authors>
+    <Company>BitTacklr</Company>
+    <Product>Projac</Product>
+    <Description>Projac.Sql provides lightweight infrastructure for authoring SQL projections.</Description>
+    <Copyright>Copyright © BitTacklr 2017. All rights reserved.</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/yreynhout/Projac/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/yreynhout/Projac</PackageProjectUrl>
+    <PackageReleaseNotes>Please visit https://github.com/BitTacklr/Projac/wiki/Changes$(PackageVersion) .</PackageReleaseNotes>
+    <PackageTags>command and query responsibility segregation;cqrs;event sourcing;es;domain driven design;ddd</PackageTags>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <IsTool>false</IsTool>
+    <RepositoryUrl>https://github.com/yreynhout/Projac</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <IncludeContentInPack>false</IncludeContentInPack>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <DebugType>portable</DebugType>

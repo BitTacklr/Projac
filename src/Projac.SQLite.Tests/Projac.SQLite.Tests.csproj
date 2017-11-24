@@ -1,33 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net46;net452</TargetFrameworks>
-
     <AssemblyName>Projac.SQLite.Tests</AssemblyName>
     <AssemblyTitle>Projac.SQLite.Tests</AssemblyTitle>
-    <Version>0.0.0.0</Version>
-    
-    <Description>Projac.SQLite.Tests contains all the SQL projection related tests that target SQLite.</Description>
+    <!-- <TargetFrameworks Condition="'$(OS)' == 'Unix'">netcoreapp2.0</TargetFrameworks> -->
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net46;net452</TargetFrameworks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RootNamespace>Projac.SQLite.Tests</RootNamespace>
+    <DebugSymbols>true</DebugSymbols>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyVersion Condition="$(AssemblyVersion) == ''">0.0.0</AssemblyVersion>
+    <FileVersion Condition="$(FileVersion) == ''">0.0.0</FileVersion>
+    <InformationalVersion Condition="$(InformationalVersion) == ''">0.0.0</InformationalVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <Optimize>False</Optimize>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <Optimize>True</Optimize>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <Title>Projac.SQLite.Tests</Title>
     <Authors>Yves Reynhout</Authors>
     <Company>BitTacklr</Company>
     <Product>Projac</Product>
-    <Copyright>Copyright 2017, BitTacklr. All rights reserved.</Copyright>
+    <Description>Projac.SQLite.Tests unit tests Projac.SQLite.</Description>
+    <Copyright>Copyright © BitTacklr 2017. All rights reserved.</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-    <RepositoryUrl>https://github.com/yreynhout/Projac</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    
-    <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj" />
     <ProjectReference Include="..\Projac.SQLite\Projac.SQLite.csproj" />
   </ItemGroup>
-  <ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="Microsoft.CSharp" />
-    <PackageReference Include="System.Data.SQLite.Core.MSIL" Version="1.0.105.2" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="NUnit" Version="3.8.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />    
