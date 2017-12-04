@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Projac.Recipes</AssemblyName>
     <AssemblyTitle>Projac.Recipes</AssemblyTitle>
-    <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Unix'">netcoreapp2.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net46</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Projac.Recipes</RootNamespace>
@@ -41,13 +41,16 @@
     <ProjectReference Include="..\Projac.SqlClient\Projac.SqlClient.csproj" />
     <ProjectReference Include="..\Projac.SQLite\Projac.SQLite.csproj" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
+    <PackageReference Include="System.Runtime.Caching" Version="4.5.0-preview1-25914-04" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CompareNETObjects" Version="3.09.0.0" />
