@@ -19,4 +19,12 @@ The custom MyGet feed can be found [here](https://www.myget.org/F/projac/api/v3/
 
 **Important Changes**
 
-If you're using a version prior to 0.1.0, not only has your cheese been moved, it probably has been broken in unexpected places. Please check out the [changes made in 0.1.0](https://github.com/BitTacklr/Projac/wiki/Changes.0.1.0) as well as the [how do I upgrade to 0.1.0 guide](https://github.com/BitTacklr/Projac/wiki/UpgradeTo0.1.0). If you want to keep your cheese as is, you can always fork this code base and use the `legacy` branch.
+If you're using a version prior to 0.1.0, not only has your cheese been moved, it probably has been broken in unexpected places. Please check out the [changes made in 0.1.0](https://github.com/BitTacklr/Projac/wiki/Changes0.1.0) as well as the [how do I upgrade to 0.1.0 guide](https://github.com/BitTacklr/Projac/wiki/UpgradeTo0.1.0). If you want to keep your cheese as is, you can always fork this code base and use the `legacy` branch.
+
+---
+
+# Contributions
+
+* Date, DateTime, DateTime2, Money data types in TSql by [@xt0rted](https://github.com/xt0rted)
+* The ``positional syntax`` suggestion by [@tojans](https://github.com/tojans).
+* Decimal data type in SqlClientSyntax by [@ritasker](https://github.com/ritasker)
