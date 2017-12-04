@@ -2,7 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 
-namespace Projac.Sql.Tests.SQLite
+namespace Projac.SQLite.Tests
 {
     public partial class SQLiteSyntaxTests
     {

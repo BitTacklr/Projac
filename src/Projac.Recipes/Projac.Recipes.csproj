@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Projac.Recipes</AssemblyName>
     <AssemblyTitle>Projac.Recipes</AssemblyTitle>
-    <!-- <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard2.0</TargetFrameworks> -->
+    <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard2.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net46</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Projac.Recipes</RootNamespace>
@@ -55,13 +55,14 @@
     <PackageReference Include="EventStore.Client.Embedded" Version="4.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="RavenDB.Embedded" Version="3.5.4" />
+    <PackageReference Include="SqlStreamStore" Version="1.1.1" />
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.105.2" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.8.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.8" />
+    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
   </ItemGroup>
 </Project>

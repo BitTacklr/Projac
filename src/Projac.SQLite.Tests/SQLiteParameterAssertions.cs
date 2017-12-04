@@ -3,7 +3,7 @@ using System.Data.Common;
 using System.Data.SQLite;
 using NUnit.Framework;
 
-namespace Projac.Sql.Tests.SQLite
+namespace Projac.SQLite.Tests
 {
     internal static class SQLiteParameterAssertions
     {

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Projac.SQLite.Tests</AssemblyName>
     <AssemblyTitle>Projac.SQLite.Tests</AssemblyTitle>
-    <!-- <TargetFrameworks Condition="'$(OS)' == 'Unix'">netcoreapp2.0</TargetFrameworks> -->
+    <TargetFrameworks Condition="'$(OS)' == 'Unix'">netcoreapp2.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net46;net452</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Projac.SQLite.Tests</RootNamespace>
@@ -53,8 +53,8 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.8.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.8" />
+    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />    
   </ItemGroup>
 </Project>

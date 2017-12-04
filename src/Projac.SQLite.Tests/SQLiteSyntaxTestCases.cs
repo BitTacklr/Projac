@@ -4,7 +4,7 @@ using System.Data.Common;
 using NUnit.Framework;
 using Projac.SQLite;
 
-namespace Projac.Sql.Tests.SQLite
+namespace Projac.SQLite.Tests
 {
     public class SQLiteSyntaxTestCases
     {

@@ -3,7 +3,7 @@ using System.Data;
 using NUnit.Framework;
 using Projac.SQLite;
 
-namespace Projac.Sql.Tests.SQLite
+namespace Projac.SQLite.Tests
 {
     public partial class SQLiteSyntaxTests
     {

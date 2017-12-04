@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 
-namespace Projac.Sql.Tests.SQLite
+namespace Projac.SQLite.Tests
 {
     internal class SQLiteParameterEqualityComparer : IEqualityComparer<SQLiteParameter>
     {

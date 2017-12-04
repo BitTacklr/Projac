@@ -2,7 +2,7 @@
 
 Projac provides a set of simple abstractions that allow one to write projections targeting relational databases. It doesn't shove any ```IEventHandler<T>```, ```IHandle<T>```, or ```IMessageHandler<T>``` down your throat. Use your own or the ones provided by the framework you're integrating with, or use the declarative style. Paramol provides abstractions to capture the essence of statements to send to a relational database, along with a fluent syntax to author them. At this point in time only Microsoft SQL Server is supported. You're free to contribute a typed syntax for other relational databases.
 
-It's available on NuGet: [Projac](https://www.nuget.org/packages/Projac/) - [Paramol](https://www.nuget.org/packages/Paramol/)
+
 
 # Basics
 

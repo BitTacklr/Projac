@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Projac.SQLite</AssemblyName>
     <AssemblyTitle>Projac.SQLite</AssemblyTitle>
-    <!-- <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard2.0</TargetFrameworks> -->
+    <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard2.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net46;net452</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Projac.SQLite</RootNamespace>

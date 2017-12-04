@@ -1,6 +1,7 @@
 [CmdLetBinding()]
 param(
-    [Parameter(Mandatory=$false)][string]$ApiKey=""
+    [Parameter(Mandatory=$false)][string]$NugetApiKey="",
+    [Parameter(Mandatory=$false)][string]$MygetApiKey=""
 )
 
 # terminate upon any error encountered
@@ -11,7 +12,8 @@ function Say($message)
     Write-Host $message -foreground "Blue"
 }
 
-Say "apikey: $ApiKey"
+Say "nuget-apikey: $NugetApiKey"
+Say "myget-apikey: $MygetApiKey"
 
 # install .net core sdk
 Say "dotnet-install: installing .net core 2.0 sdk"
@@ -51,15 +53,25 @@ if($Error.Count -ne 0 -or $LastExitCode -eq 0) {
             Say "dotnet-pack: packaging"
             dotnet pack .\src\All.sln --no-build --configuration Release /p:AssemblyVersion=$MajorMinorPatch /p:FileVersion=$MajorMinorPatch /p:InformationalVersion=$InformationalVersion /p:PackageVersion=$MajorMinorPatch
             if($LastExitCode -eq 0) {
-                if ($ApiKey -ne "") {
+                if ($NugetApiKey -ne "") {
                     Say "dotnet-nuget-push: pushing projac package to nuget"
-                    dotnet nuget push .\src\Projac\bin\Release\Projac.$MajorMinorPatch.nupkg --source https://www.nuget.org/api/v2/package --api-key $ApiKey
+                    dotnet nuget push .\src\Projac\bin\Release\Projac.$MajorMinorPatch.nupkg --source https://www.nuget.org/api/v2/package --api-key $NugetApiKey
                     Say "dotnet-nuget-push: pushing projac.sql package to nuget"
-                    dotnet nuget push .\src\Projac.Sql\bin\Release\Projac.Sql.$MajorMinorPatch.nupkg --source https://www.nuget.org/api/v2/package --api-key $ApiKey
+                    dotnet nuget push .\src\Projac.Sql\bin\Release\Projac.Sql.$MajorMinorPatch.nupkg --source https://www.nuget.org/api/v2/package --api-key $NugetApiKey
                     Say "dotnet-nuget-push: pushing projac.sqlclient package to nuget"
-                    dotnet nuget push .\src\Projac.SqlClient\bin\Release\Projac.SqlClient.$MajorMinorPatch.nupkg --source https://www.nuget.org/api/v2/package --api-key $ApiKey
+                    dotnet nuget push .\src\Projac.SqlClient\bin\Release\Projac.SqlClient.$MajorMinorPatch.nupkg --source https://www.nuget.org/api/v2/package --api-key $NugetApiKey
                     Say "dotnet-nuget-push: pushing projac.sqlite package to nuget"
-                    dotnet nuget push .\src\Projac.SQLite\bin\Release\Projac.SQLite.$MajorMinorPatch.nupkg --source https://www.nuget.org/api/v2/package --api-key $ApiKey
+                    dotnet nuget push .\src\Projac.SQLite\bin\Release\Projac.SQLite.$MajorMinorPatch.nupkg --source https://www.nuget.org/api/v2/package --api-key $NugetApiKey
+                }
+                if ($MygetApiKey -ne "") {
+                    Say "dotnet-nuget-push: pushing projac package to myget"
+                    dotnet nuget push .\src\Projac\bin\Release\Projac.$MajorMinorPatch.nupkg --source https://www.myget.org/F/projac/api/v2/package --api-key $MygetApiKey
+                    Say "dotnet-nuget-push: pushing projac.sql package to myget"
+                    dotnet nuget push .\src\Projac.Sql\bin\Release\Projac.Sql.$MajorMinorPatch.nupkg --source https://www.myget.org/F/projac/api/v2/package --api-key $MygetApiKey
+                    Say "dotnet-nuget-push: pushing projac.sqlclient package to myget"
+                    dotnet nuget push .\src\Projac.SqlClient\bin\Release\Projac.SqlClient.$MajorMinorPatch.nupkg --source https://www.myget.org/F/projac/api/v2/package --api-key $MygetApiKey
+                    Say "dotnet-nuget-push: pushing projac.sqlite package to myget"
+                    dotnet nuget push .\src\Projac.SQLite\bin\Release\Projac.SQLite.$MajorMinorPatch.nupkg --source https://www.myget.org/F/projac/api/v2/package --api-key $MygetApiKey
                 }
             }
         } else {

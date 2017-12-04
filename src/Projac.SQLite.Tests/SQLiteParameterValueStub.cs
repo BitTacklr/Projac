@@ -2,7 +2,7 @@ using System;
 using System.Data.Common;
 using System.Data.SQLite;
 
-namespace Projac.Sql.Tests.SQLite
+namespace Projac.SQLite.Tests
 {
     internal class SQLiteParameterValueStub : IDbParameterValue
     {
