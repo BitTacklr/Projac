@@ -4,7 +4,7 @@
     <AssemblyName>Projac.Recipes</AssemblyName>
     <AssemblyTitle>Projac.Recipes</AssemblyTitle>
     <TargetFrameworks Condition="'$(OS)' == 'Unix'">netcoreapp2.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net46</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net452;net46;net462</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Projac.Recipes</RootNamespace>
     <DebugSymbols>true</DebugSymbols>
@@ -41,7 +41,7 @@
     <ProjectReference Include="..\Projac.SqlClient\Projac.SqlClient.csproj" />
     <ProjectReference Include="..\Projac.SQLite\Projac.SQLite.csproj" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net462' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Configuration" />
@@ -55,13 +55,17 @@
   <ItemGroup>
     <PackageReference Include="CompareNETObjects" Version="3.09.0.0" />
     <PackageReference Include="ElasticSearch.Net" Version="5.5.0" />
-    <PackageReference Include="EventStore.Client.Embedded" Version="4.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="RavenDB.Embedded" Version="3.5.4" />
-    <PackageReference Include="SqlStreamStore" Version="1.1.1" />
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.105.2" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <PackageReference Include="SqlStreamStore" Version="1.1.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net462' ">
+    <PackageReference Include="EventStore.Client.Embedded" Version="4.0.3" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.9.0" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET46 || NET462
+using System;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -200,3 +201,4 @@ namespace Recipes.EventStoreIntegration
         }
     }
 }
+#endif

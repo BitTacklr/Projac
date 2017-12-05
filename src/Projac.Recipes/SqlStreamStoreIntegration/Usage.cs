@@ -1,3 +1,4 @@
+#if NET462
 using System;
 using System.Configuration;
 using System.Data;
@@ -174,3 +175,4 @@ namespace Recipes.SqlStreamStoreIntegration
         }
     }
 }
+#endif

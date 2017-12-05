@@ -1,6 +1,7 @@
 using System;
 using System.Data.Common;
 using System.Data.SQLite;
+using Projac.Sql;
 
 namespace Projac.SQLite.Tests
 {
