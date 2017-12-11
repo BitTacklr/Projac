@@ -101,9 +101,9 @@ namespace Projac.Sql.Tests
                     commands.AddRange(_commandEnumeration);
                     _result = commands.ToArray();
 
-                    When<object>(m => _command);
-                    When<object>(m => _commandArray);
-                    When<object>(m => _commandEnumeration);
+                    Handle<object>(m => _command);
+                    Handle<object>(m => _commandArray);
+                    Handle<object>(m => _commandEnumeration);
                 }
 
                 public SqlNonQueryCommand[] Result
@@ -166,14 +166,14 @@ namespace Projac.Sql.Tests
         public class SqlNonQueryCommandReturningHandlerTests
         {
             [Test]
-            public void WhenHandlerCanNotBeNull()
+            public void HandleHandlerCanNotBeNull()
             {
                 Assert.Throws<ArgumentNullException>(
                     () => new RegisterNullHandler());
             }
 
             [Test]
-            public void WhenHasExpectedResult()
+            public void HandleHasExpectedResult()
             {
                 var command = CommandFactory();
                 var handler = HandlerFactory(command);
@@ -186,7 +186,7 @@ namespace Projac.Sql.Tests
             }
 
             [Test]
-            public void SuccessiveWhenHasExpectedResult()
+            public void SuccessiveHandleHasExpectedResult()
             {
                 var commands = new List<SqlNonQueryCommand>();
                 var handlers = new List<Func<object, SqlNonQueryCommand>>();
@@ -204,7 +204,7 @@ namespace Projac.Sql.Tests
             }
 
             [Test]
-            public void SuccessiveWhenRetainsOrder()
+            public void SuccessiveHandleRetainsOrder()
             {
                 var commands = new List<SqlNonQueryCommand>();
                 var handlers = new List<Func<object, SqlNonQueryCommand>>();
@@ -239,7 +239,7 @@ namespace Projac.Sql.Tests
             {
                 public RegisterNullHandler()
                 {
-                    When((Func<object, SqlNonQueryCommand>) null);
+                    Handle((Func<object, SqlNonQueryCommand>) null);
                 }
             }
 
@@ -248,7 +248,7 @@ namespace Projac.Sql.Tests
                 public RegisterHandlers(params Func<object, SqlNonQueryCommand>[] handlers)
                 {
                     foreach (var handler in handlers)
-                        When(handler);
+                        Handle(handler);
                 }
             }
         }
@@ -257,14 +257,14 @@ namespace Projac.Sql.Tests
         public class SqlNonQueryCommandArrayReturningHandlerTests
         {
             [Test]
-            public void WhenHandlerCanNotBeNull()
+            public void HandleHandlerCanNotBeNull()
             {
                 Assert.Throws<ArgumentNullException>(
                     () => new RegisterNullHandler());
             }
 
             [Test]
-            public void WhenHasExpectedResult()
+            public void HandleHasExpectedResult()
             {
                 var command1 = CommandFactory();
                 var command2 = CommandFactory();
@@ -278,7 +278,7 @@ namespace Projac.Sql.Tests
             }
 
             [Test]
-            public void SuccessiveWhenHasExpectedResult()
+            public void SuccessiveHandleHasExpectedResult()
             {
                 var commands = new List<SqlNonQueryCommand>();
                 var handlers = new List<Func<object, SqlNonQueryCommand[]>>();
@@ -297,7 +297,7 @@ namespace Projac.Sql.Tests
             }
 
             [Test]
-            public void SuccessiveWhenRetainsOrder()
+            public void SuccessiveHandleRetainsOrder()
             {
                 var commands = new List<SqlNonQueryCommand>();
                 var handlers = new List<Func<object, SqlNonQueryCommand[]>>();
@@ -331,7 +331,7 @@ namespace Projac.Sql.Tests
             {
                 public RegisterNullHandler()
                 {
-                    When((Func<object, SqlNonQueryCommand[]>) null);
+                    Handle((Func<object, SqlNonQueryCommand[]>) null);
                 }
             }
 
@@ -340,7 +340,7 @@ namespace Projac.Sql.Tests
                 public RegisterHandlers(params Func<object, SqlNonQueryCommand[]>[] handlers)
                 {
                     foreach (var handler in handlers)
-                        When(handler);
+                        Handle(handler);
                 }
             }
 
@@ -359,14 +359,14 @@ namespace Projac.Sql.Tests
         public class SqlNonQueryCommandEnumerationReturningHandlerTests
         {
             [Test]
-            public void WhenHandlerCanNotBeNull()
+            public void HandleHandlerCanNotBeNull()
             {
                 Assert.Throws<ArgumentNullException>(
                     () => new RegisterNullHandler());
             }
 
             [Test]
-            public void WhenHasExpectedResult()
+            public void HandleHasExpectedResult()
             {
                 var command1 = CommandFactory();
                 var command2 = CommandFactory();
@@ -380,7 +380,7 @@ namespace Projac.Sql.Tests
             }
 
             [Test]
-            public void SuccessiveWhenHasExpectedResult()
+            public void SuccessiveHandleHasExpectedResult()
             {
                 var commands = new List<SqlNonQueryCommand>();
                 var handlers = new List<Func<object, IEnumerable<SqlNonQueryCommand>>>();
@@ -399,7 +399,7 @@ namespace Projac.Sql.Tests
             }
 
             [Test]
-            public void SuccessiveWhenRetainsOrder()
+            public void SuccessiveHandleRetainsOrder()
             {
                 var commands = new List<SqlNonQueryCommand>();
                 var handlers = new List<Func<object, IEnumerable<SqlNonQueryCommand>>>();
@@ -433,7 +433,7 @@ namespace Projac.Sql.Tests
             {
                 public RegisterNullHandler()
                 {
-                    When((Func<object, IEnumerable<SqlNonQueryCommand>>) null);
+                    Handle((Func<object, IEnumerable<SqlNonQueryCommand>>) null);
                 }
             }
 
@@ -442,7 +442,7 @@ namespace Projac.Sql.Tests
                 public RegisterHandlers(params Func<object, IEnumerable<SqlNonQueryCommand>>[] handlers)
                 {
                     foreach (var handler in handlers)
-                        When(handler);
+                        Handle(handler);
                 }
             }
 

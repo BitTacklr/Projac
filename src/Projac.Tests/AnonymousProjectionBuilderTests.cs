@@ -66,58 +66,58 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithoutTokenCanNotBeNull()
+        public void HandleHandlerWithoutTokenCanNotBeNull()
         {
             var sut = new AnonymousProjectionBuilder<object>();
-            Assert.Throws<ArgumentNullException>(() => sut.When((Func<object, object, Task>)null));
+            Assert.Throws<ArgumentNullException>(() => sut.Handle((Func<object, object, Task>)null));
         }
 
         [Test]
-        public void WhenHandlerWithTokenCanNotBeNull()
+        public void HandleHandlerWithTokenCanNotBeNull()
         {
             var sut = new AnonymousProjectionBuilder<object>();
-            Assert.Throws<ArgumentNullException>(() => sut.When((Func<object, object, CancellationToken, Task>)null));
+            Assert.Throws<ArgumentNullException>(() => sut.Handle((Func<object, object, CancellationToken, Task>)null));
         }
 
         [Test]
-        public void WhenSyncHandlerCanNotBeNull()
+        public void HandleSyncHandlerCanNotBeNull()
         {
             var sut = new AnonymousProjectionBuilder<object>();
-            Assert.Throws<ArgumentNullException>(() => sut.When((Action<object, object>)null));
+            Assert.Throws<ArgumentNullException>(() => sut.Handle((Action<object, object>)null));
         }
 
         [Test]
-        public void WhenHandlerWithoutTokenReturnsExpectedResult()
+        public void HandleHandlerWithoutTokenReturnsExpectedResult()
         {
             var sut = new AnonymousProjectionBuilder<object>();
 
-            var result = sut.When<object>((_, __) => TaskFactory());
+            var result = sut.Handle<object>((_, __) => TaskFactory());
 
             Assert.That(result, Is.InstanceOf<AnonymousProjectionBuilder<object>>());
         }
 
         [Test]
-        public void WhenHandlerWithTokenReturnsExpectedResult()
+        public void HandleHandlerWithTokenReturnsExpectedResult()
         {
             var sut = new AnonymousProjectionBuilder<object>();
 
-            var result = sut.When<object>((_, __, ___) => TaskFactory());
+            var result = sut.Handle<object>((_, __, ___) => TaskFactory());
 
             Assert.That(result, Is.InstanceOf<AnonymousProjectionBuilder<object>>());
         }
 
         [Test]
-        public void WhenSyncHandlerReturnsExpectedResult()
+        public void HandleSyncHandlerReturnsExpectedResult()
         {
             var sut = new AnonymousProjectionBuilder<object>();
 
-            var result = sut.When<object>((_, __) => { });
+            var result = sut.Handle<object>((_, __) => { });
 
             Assert.That(result, Is.InstanceOf<AnonymousProjectionBuilder<object>>());
         }
 
         [Test]
-        public void WhenHandlerWithoutTokenIsPreservedUponBuild()
+        public void HandleHandlerWithoutTokenIsPreservedUponBuild()
         {
             Func<CallRecordingConnection,object, Task> handler =
                 (connection, message) =>
@@ -126,7 +126,7 @@ namespace Projac.Tests
                     return TaskFactory();
                 };
             
-            var result = _sut.When(handler).Build();
+            var result = _sut.Handle(handler).Build();
 
             Assert.That(
                 result.Count(_ =>
@@ -148,7 +148,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenSyncHandlerIsPreservedUponBuild()
+        public void HandleSyncHandlerIsPreservedUponBuild()
         {
             Action<CallRecordingConnection, object> handler =
                 (connection, message) =>
@@ -156,7 +156,7 @@ namespace Projac.Tests
                     connection.RecordCall(1, message, CancellationToken.None);
                 };
 
-            var result = _sut.When(handler).Build();
+            var result = _sut.Handle(handler).Build();
 
             Assert.That(
                 result.Count(_ =>
@@ -178,7 +178,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithTokenIsPreservedUponBuild()
+        public void HandleHandlerWithTokenIsPreservedUponBuild()
         {
             Func<CallRecordingConnection, object, CancellationToken, Task> handler =
                 (connection, message, token) =>
@@ -187,7 +187,7 @@ namespace Projac.Tests
                     return TaskFactory();
                 };
 
-            var result = _sut.When(handler).Build();
+            var result = _sut.Handle(handler).Build();
 
             Assert.That(
                 result.Count(_ =>
@@ -210,7 +210,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithTokenPreservesPreviouslyRegisteredHandlersUponBuild()
+        public void HandleHandlerWithTokenPreservesPreviouslyRegisteredHandlersUponBuild()
         {
             Func<CallRecordingConnection, object, CancellationToken, Task> handler1 =
                 (connection, message, token) =>
@@ -226,7 +226,7 @@ namespace Projac.Tests
                     return TaskFactory();
                 };
 
-            var result = _sut.When(handler1).When(handler2).Build();
+            var result = _sut.Handle(handler1).Handle(handler2).Build();
 
             Assert.That(
                 result.Count(_ =>
@@ -249,7 +249,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenSyncHandlerPreservesPreviouslyRegisteredHandlersUponBuild()
+        public void HandleSyncHandlerPreservesPreviouslyRegisteredHandlersUponBuild()
         {
             Func<CallRecordingConnection, object, CancellationToken, Task> handler1 =
                 (connection, message, token) =>
@@ -264,7 +264,7 @@ namespace Projac.Tests
                     connection.RecordCall(2, message, CancellationToken.None);
                 };
 
-            var result = _sut.When(handler1).When(handler2).Build();
+            var result = _sut.Handle(handler1).Handle(handler2).Build();
 
             Assert.That(
                 result.Count(_ =>
@@ -287,7 +287,7 @@ namespace Projac.Tests
         }
 
         [Test]
-        public void WhenHandlerWithoutTokenPreservesPreviouslyRegisteredHandlersUponBuild()
+        public void HandleHandlerWithoutTokenPreservesPreviouslyRegisteredHandlersUponBuild()
         {
             Func<CallRecordingConnection, object, Task> handler1 =
                 (connection, message) =>
@@ -303,7 +303,7 @@ namespace Projac.Tests
                     return TaskFactory();
                 };
 
-            var result = _sut.When(handler1).When(handler2).Build();
+            var result = _sut.Handle(handler1).Handle(handler2).Build();
 
             Assert.That(
                 result.Count(_ =>

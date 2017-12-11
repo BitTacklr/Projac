@@ -62,26 +62,26 @@ namespace Projac.Sql.Tests
         }
 
         [Test]
-        public void WhenHandlerWithSingleCommandCanNotBeNull()
+        public void HandleHandlerWithSingleCommandCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, SqlNonQueryCommand>)null));
+            Assert.Throws<ArgumentNullException>(() => _sut.Handle((Func<object, SqlNonQueryCommand>)null));
         }
 
 
         [Test]
-        public void WhenHandlerWithSingleCommandReturnsExpectedResult()
+        public void HandleHandlerWithSingleCommandReturnsExpectedResult()
         {
-            var result = _sut.When((object _) => CommandFactory());
+            var result = _sut.Handle((object _) => CommandFactory());
 
             Assert.That(result, Is.InstanceOf<AnonymousSqlProjectionBuilder>());
         }
 
         [Test]
-        public void WhenHandlerWithSingleCommandIsPreservedUponBuild()
+        public void HandleHandlerWithSingleCommandIsPreservedUponBuild()
         {
             var command = CommandFactory();
             Func<object, SqlNonQueryCommand> handler = _ => command;
-            var result = _sut.When(handler).Build();
+            var result = _sut.Handle(handler).Build();
 
             Assert.That(
                 result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command })),
@@ -89,7 +89,7 @@ namespace Projac.Sql.Tests
         }
 
         [Test]
-        public void WhenHandlerWithSingleStatementPreservesPreviouslyCollectedStatementsUponBuild()
+        public void HandleHandlerWithSingleStatementPreservesPreviouslyCollectedStatementsUponBuild()
         {
             var commands = new[]
             {
@@ -98,7 +98,7 @@ namespace Projac.Sql.Tests
             };
             var command = CommandFactory();
             Func<object, SqlNonQueryCommand> handler = _ => command;
-            var result = _sut.When((object _) => commands).When(handler).Build();
+            var result = _sut.Handle((object _) => commands).Handle(handler).Build();
 
             Assert.That(
                 result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
@@ -106,26 +106,26 @@ namespace Projac.Sql.Tests
         }
 
         [Test]
-        public void WhenHandlerWithCommandArrayCanNotBeNull()
+        public void HandleHandlerWithCommandArrayCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, SqlNonQueryCommand[]>)null));
+            Assert.Throws<ArgumentNullException>(() => _sut.Handle((Func<object, SqlNonQueryCommand[]>)null));
         }
 
         [Test]
-        public void WhenHandlerWithCommandArrayReturnsExpectedResult()
+        public void HandleHandlerWithCommandArrayReturnsExpectedResult()
         {
-            var result = _sut.When((object _) => new[] { CommandFactory(), CommandFactory() });
+            var result = _sut.Handle((object _) => new[] { CommandFactory(), CommandFactory() });
 
             Assert.That(result, Is.InstanceOf<AnonymousSqlProjectionBuilder>());
         }
 
         [Test]
-        public void WhenHandlerWithStatementArrayIsPreservedUponBuild()
+        public void HandleHandlerWithStatementArrayIsPreservedUponBuild()
         {
             var command1 = CommandFactory();
             var command2 = CommandFactory();
             Func<object, SqlNonQueryCommand[]> handler = _ => new[] { command1, command2 };
-            var result = _sut.When(handler).Build();
+            var result = _sut.Handle(handler).Build();
 
             Assert.That(
                 result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
@@ -133,7 +133,7 @@ namespace Projac.Sql.Tests
         }
 
         [Test]
-        public void WhenHandlerWithStatementArrayPreservesPreviouslyCollectedStatementsUponBuild()
+        public void HandleHandlerWithStatementArrayPreservesPreviouslyCollectedStatementsUponBuild()
         {
             var commands = new[]
             {
@@ -143,7 +143,7 @@ namespace Projac.Sql.Tests
             var command1 = CommandFactory();
             var command2 = CommandFactory();
             Func<object, SqlNonQueryCommand[]> handler = _ => new[] { command1, command2 };
-            var result = _sut.When((object _) => commands).When(handler).Build();
+            var result = _sut.Handle((object _) => commands).Handle(handler).Build();
 
             Assert.That(
                 result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),
@@ -151,15 +151,15 @@ namespace Projac.Sql.Tests
         }
 
         [Test]
-        public void WhenHandlerWithCommandEnumerationCanNotBeNull()
+        public void HandleHandlerWithCommandEnumerationCanNotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _sut.When((Func<object, IEnumerable<SqlNonQueryCommand>>)null));
+            Assert.Throws<ArgumentNullException>(() => _sut.Handle((Func<object, IEnumerable<SqlNonQueryCommand>>)null));
         }
 
         [Test]
-        public void WhenHandlerWithCommandEnumerationReturnsExpectedResult()
+        public void HandleHandlerWithCommandEnumerationReturnsExpectedResult()
         {
-            var result = _sut.When((object _) => (IEnumerable<SqlNonQueryCommand>)new[]
+            var result = _sut.Handle((object _) => (IEnumerable<SqlNonQueryCommand>)new[]
             {
                 CommandFactory(), CommandFactory()
             });
@@ -168,7 +168,7 @@ namespace Projac.Sql.Tests
         }
 
         [Test]
-        public void WhenHandlerWithStatementEnumerationIsPreservedUponBuild()
+        public void HandleHandlerWithStatementEnumerationIsPreservedUponBuild()
         {
             var command1 = CommandFactory();
             var command2 = CommandFactory();
@@ -176,7 +176,7 @@ namespace Projac.Sql.Tests
             {
                 command1, command2
             };
-            var result = _sut.When(handler).Build();
+            var result = _sut.Handle(handler).Build();
 
             Assert.That(
                 result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(new[] { command1, command2 })),
@@ -184,7 +184,7 @@ namespace Projac.Sql.Tests
         }
 
         [Test]
-        public void WhenHandlerWithCommandEnumerationPreservesPreviouslyCollectedStatementsUponBuild()
+        public void HandleHandlerWithCommandEnumerationPreservesPreviouslyCollectedStatementsUponBuild()
         {
             var commands = new[]
             {
@@ -197,7 +197,7 @@ namespace Projac.Sql.Tests
             {
                 command1, command2
             };
-            var result = _sut.When((object _) => commands).When(handler).Build();
+            var result = _sut.Handle((object _) => commands).Handle(handler).Build();
 
             Assert.That(
                 result.Count(_ => _.Message == typeof(object) && _.Handler(null).SequenceEqual(commands)),

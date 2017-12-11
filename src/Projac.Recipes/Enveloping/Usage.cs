@@ -107,7 +107,7 @@ namespace Recipes.Enveloping
         {
             public Projection()
             {
-                When<Envelope<PortfolioAdded>>((cache, envelope) =>
+                Handle<Envelope<PortfolioAdded>>((cache, envelope) =>
                 {
                     cache.Add(
                         new CacheItem(
@@ -122,11 +122,11 @@ namespace Recipes.Enveloping
                                 AbsoluteExpiration = ObjectCache.InfiniteAbsoluteExpiration
                             });
                 });
-                When<Envelope<PortfolioRemoved>>((cache, envelope) =>
+                Handle<Envelope<PortfolioRemoved>>((cache, envelope) =>
                 {
                     cache.Remove(envelope.Message.Id.ToString());
                 });
-                When<Envelope<PortfolioRenamed>>((cache, envelope) =>
+                Handle<Envelope<PortfolioRenamed>>((cache, envelope) =>
                 {
                     var item = cache.GetCacheItem(envelope.Message.Id.ToString());
                     if (item != null)

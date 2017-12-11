@@ -8,7 +8,7 @@ namespace Projac
     /// <summary>
     ///     Represents a fluent syntax to build up a set of <see cref="ProjectionHandler{TConnection}" />.
     /// </summary>
-    public class AnonymousProjectionBuilder<TConnection>
+    public partial class AnonymousProjectionBuilder<TConnection>
     {
         private readonly ProjectionHandler<TConnection>[] _handlers;
 
@@ -37,7 +37,7 @@ namespace Projac
         /// <param name="handler">The message handler that handles the message asynchronously.</param>
         /// <returns>A <see cref="AnonymousProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public AnonymousProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, Task> handler)
+        public AnonymousProjectionBuilder<TConnection> Handle<TMessage>(Func<TConnection, TMessage, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new AnonymousProjectionBuilder<TConnection>(
@@ -58,7 +58,7 @@ namespace Projac
         /// <param name="handler">The message handler that handles the message synchronously.</param>
         /// <returns>A <see cref="AnonymousProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public AnonymousProjectionBuilder<TConnection> When<TMessage>(Action<TConnection, TMessage> handler)
+        public AnonymousProjectionBuilder<TConnection> Handle<TMessage>(Action<TConnection, TMessage> handler)
         {
             if (handler == null)
                 throw new ArgumentNullException("handler");
@@ -85,7 +85,7 @@ namespace Projac
         /// <param name="handler">The message handler that handles the message asynchronously and with cancellation support.</param>
         /// <returns>A <see cref="AnonymousProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public AnonymousProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
+        public AnonymousProjectionBuilder<TConnection> Handle<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             return new AnonymousProjectionBuilder<TConnection>(

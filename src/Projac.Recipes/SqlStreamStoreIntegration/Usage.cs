@@ -138,23 +138,23 @@ namespace Recipes.SqlStreamStoreIntegration
 
             public PortfolioProjection()
             {
-                When<PortfolioAdded>(@event =>
+                Handle<PortfolioAdded>(@event =>
                     Sql.NonQueryStatement(
                         "INSERT INTO [Portfolio] ([Id], [Name], [PhotoCount]) VALUES (@P1, @P2, 0)",
                         new {P1 = Sql.UniqueIdentifier(@event.Id), P2 = Sql.NVarChar(@event.Name, 40)}
                         ));
-                When<PortfolioRemoved>(@event =>
+                Handle<PortfolioRemoved>(@event =>
                     Sql.NonQueryStatement(
                         "DELETE FROM [Portfolio] WHERE [Id] = @P1",
                         new {P1 = Sql.UniqueIdentifier(@event.Id)}
                         ));
-                When<PortfolioRenamed>(@event =>
+                Handle<PortfolioRenamed>(@event =>
                     Sql.NonQueryStatement(
                         "UPDATE [Portfolio] SET [Name] = @P2 WHERE [Id] = @P1",
                         new {P1 = Sql.UniqueIdentifier(@event.Id), P2 = Sql.NVarChar(@event.Name, 40)}
                         ));
 
-                When<CreateSchema>(_ =>
+                Handle<CreateSchema>(_ =>
                     Sql.NonQueryStatement(
                         @"IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE NAME='Portfolio' AND XTYPE='U')
                         BEGIN
@@ -163,11 +163,11 @@ namespace Recipes.SqlStreamStoreIntegration
                                 [Name] NVARCHAR(MAX) NOT NULL,
                                 [PhotoCount] INT NOT NULL)
                         END"));
-                When<DropSchema>(_ =>
+                Handle<DropSchema>(_ =>
                     Sql.NonQueryStatement(
                         @"IF EXISTS (SELECT * FROM SYSOBJECTS WHERE NAME='Portfolio' AND XTYPE='U')
                         DROP TABLE [Portfolio]"));
-                When<DeleteData>(_ =>
+                Handle<DeleteData>(_ =>
                     Sql.NonQueryStatement(
                         @"IF EXISTS (SELECT * FROM SYSOBJECTS WHERE NAME='Portfolio' AND XTYPE='U')
                         DELETE FROM [Portfolio]"));

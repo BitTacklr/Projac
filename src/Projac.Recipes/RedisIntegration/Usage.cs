@@ -32,17 +32,17 @@ namespace Recipes.RedisIntegration
         }
 
         public static AnonymousProjection<ConnectionMultiplexer> Projection = new AnonymousProjectionBuilder<ConnectionMultiplexer>().
-            When<PortfolioAdded>((connection, message) =>
+            Handle<PortfolioAdded>((connection, message) =>
             {
                 var db = connection.GetDatabase();
                 return db.HashSetAsync(message.Id.ToString("N"), "Name", message.Name);
             }).
-            When<PortfolioRemoved>((connection, message) =>
+            Handle<PortfolioRemoved>((connection, message) =>
             {
                 var db = connection.GetDatabase();
                 return db.HashDeleteAsync(message.Id.ToString("N"), "Name");
             }).
-            When<PortfolioRenamed>((connection, message) =>
+            Handle<PortfolioRenamed>((connection, message) =>
             {
                 var db = connection.GetDatabase();
                 return db.HashSetAsync(message.Id.ToString("N"), "Name", message.Name);

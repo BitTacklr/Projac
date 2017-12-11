@@ -13,19 +13,19 @@ namespace Recipes.DataDefinition
         {
             public SampleUsingProjection()
             {
-                When<CreateSchema>(_ =>
+                Handle<CreateSchema>(_ =>
                     Sql.NonQueryStatement(
                         "CREATE TABLE [Sample] ([Id] INT NOT NULL CONSTRAINT PK_Sample PRIMARY KEY, [Value] INT NOT NULL)"));
 
-                When<DropSchema>(_ =>
+                Handle<DropSchema>(_ =>
                     Sql.NonQueryStatement(
                         "DROP TABLE [Sample]"));
 
-                When<DeleteData>(_ =>
+                Handle<DeleteData>(_ =>
                     Sql.NonQueryStatement(
                         "DELETE FROM [Sample]"));
 
-                When<SetCheckpoint>(_ =>
+                Handle<SetCheckpoint>(_ =>
                     Sql.NonQueryStatement(
                         "UPDATE [CheckpointGate] SET Checkpoint = @Checkpoint WHERE [Id] = @Id",
                         new
@@ -51,16 +51,16 @@ namespace Recipes.DataDefinition
             private static readonly SqlClientSyntax Sql = new SqlClientSyntax();
 
             public static readonly AnonymousSqlProjection Instance = new AnonymousSqlProjectionBuilder().
-                When<CreateSchema>(_ =>
+                Handle<CreateSchema>(_ =>
                     Sql.NonQueryStatement(
                         "CREATE TABLE [Sample] ([Id] INT NOT NULL CONSTRAINT PK_Sample PRIMARY KEY, [Value] INT NOT NULL)")).
-                When<DropSchema>(_ =>
+                Handle<DropSchema>(_ =>
                     Sql.NonQueryStatement(
                         "DROP TABLE [Sample]")).
-                When<DeleteData>(_ =>
+                Handle<DeleteData>(_ =>
                     Sql.NonQueryStatement(
                         "DELETE FROM [Sample]")).
-                When<SetCheckpoint>(_ =>
+                Handle<SetCheckpoint>(_ =>
                     Sql.NonQueryStatement(
                         "UPDATE [CheckpointGate] SET Checkpoint = @Checkpoint WHERE [Id] = @Id",
                         new

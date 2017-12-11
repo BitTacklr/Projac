@@ -37,18 +37,18 @@ namespace Recipes.RavenDBIntegration
         }
 
         public static AnonymousProjection<IAsyncDocumentSession> Projection = new AnonymousProjectionBuilder<IAsyncDocumentSession>().
-            When<PortfolioAdded>((session, message) => session.StoreAsync(
+            Handle<PortfolioAdded>((session, message) => session.StoreAsync(
                 new PortfolioDocument
                 {
                     Id = message.Id,
                     Name = message.Name
                 }, message.Id.ToString("N"))).
-            When<PortfolioRemoved>(async (session, message) =>
+            Handle<PortfolioRemoved>(async (session, message) =>
             {
                 var document = await session.LoadAsync<PortfolioDocument>(message.Id.ToString("N"));
                 session.Delete(document);
             }).
-            When<PortfolioRenamed>(async (session, message) =>
+            Handle<PortfolioRenamed>(async (session, message) =>
             {
                 var document = await session.LoadAsync<PortfolioDocument>(message.Id.ToString("N"));
                 document.Name = message.Name;

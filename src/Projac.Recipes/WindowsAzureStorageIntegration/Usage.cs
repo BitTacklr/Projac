@@ -28,12 +28,12 @@ namespace Recipes.WindowsAzureStorageIntegration
         }
 
         public static AnonymousProjection<CloudTableClient> Projection = new AnonymousProjectionBuilder<CloudTableClient>().
-            When<RebuildProjection>((client, message) =>
+            Handle<RebuildProjection>((client, message) =>
             {
                 var table = client.GetTableReference("Portfolio");
                 return table.CreateIfNotExistsAsync();
             }).
-            When<PortfolioAdded>((client, message) =>
+            Handle<PortfolioAdded>((client, message) =>
             {
                 var table = client.GetTableReference("Portfolio");
                 return table.ExecuteAsync(
@@ -43,7 +43,7 @@ namespace Recipes.WindowsAzureStorageIntegration
                         Name = message.Name
                     }));
             }).
-            When<PortfolioRemoved>((client, message) =>
+            Handle<PortfolioRemoved>((client, message) =>
             {
                 var table = client.GetTableReference("Portfolio");
                 return table.ExecuteAsync(
@@ -52,7 +52,7 @@ namespace Recipes.WindowsAzureStorageIntegration
                         ETag = "*"
                     }));   
             }).
-            When<PortfolioRenamed>((client, message) =>
+            Handle<PortfolioRenamed>((client, message) =>
             {
                 var table = client.GetTableReference("Portfolio");
                 return table.ExecuteAsync(

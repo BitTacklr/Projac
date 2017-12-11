@@ -9,7 +9,7 @@ namespace Projac
     /// <summary>
     ///     Represent a projection.
     /// </summary>
-    public abstract class Projection<TConnection> : IEnumerable<ProjectionHandler<TConnection>>
+    public abstract partial class Projection<TConnection> : IEnumerable<ProjectionHandler<TConnection>>
     {
         private readonly List<ProjectionHandler<TConnection>> _handlers;
 
@@ -27,7 +27,7 @@ namespace Projac
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The message handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        protected void When<TMessage>(Func<TConnection, TMessage, Task> handler)
+        protected void Handle<TMessage>(Func<TConnection, TMessage, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             _handlers.Add(
@@ -42,7 +42,7 @@ namespace Projac
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The message handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        protected void When<TMessage>(Action<TConnection, TMessage> handler)
+        protected void Handle<TMessage>(Action<TConnection, TMessage> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             _handlers.Add(
@@ -61,7 +61,7 @@ namespace Projac
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The message handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        protected void When<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
+        protected void Handle<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             _handlers.Add(

@@ -29,7 +29,7 @@ namespace Recipes.MemoryCacheIntegration
 
         public static AnonymousProjection<MemoryCache> Projection =
             new AnonymousProjectionBuilder<MemoryCache>().
-                When<PortfolioAdded>((cache, message) =>
+                Handle<PortfolioAdded>((cache, message) =>
                 {
                     cache.Add(
                         new CacheItem(
@@ -43,11 +43,11 @@ namespace Recipes.MemoryCacheIntegration
                                 AbsoluteExpiration = ObjectCache.InfiniteAbsoluteExpiration
                             });
                 }).
-                When<PortfolioRemoved>((cache, message) =>
+                Handle<PortfolioRemoved>((cache, message) =>
                 {
                     cache.Remove(message.Id.ToString());
                 }).
-                When<PortfolioRenamed>((cache, message) =>
+                Handle<PortfolioRenamed>((cache, message) =>
                 {
                     var item = cache.GetCacheItem(message.Id.ToString());
                     if (item != null)

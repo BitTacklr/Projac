@@ -10,15 +10,15 @@ namespace Recipes.Syntax
         {
             public SampleUsingProjection()
             {
-                When<PortfolioAdded>(_ =>
+                Handle<PortfolioAdded>(_ =>
                     Sql.NonQueryStatement(
                         "INSERT INTO [Portfolio] () VALUES ()"));
 
-                When<PortfolioRenamed>(_ =>
+                Handle<PortfolioRenamed>(_ =>
                     Sql.NonQueryStatement(
                         "UPDATE [Portfolio] SET WHERE"));
 
-                When<PortfolioRemoved>(_ =>
+                Handle<PortfolioRemoved>(_ =>
                     Sql.NonQueryStatement(
                         "DELETE FROM [Portfolio] WHERE [Id]=@Id", Sql.UniqueIdentifier(_.Id)));
             }

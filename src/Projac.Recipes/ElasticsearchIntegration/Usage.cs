@@ -28,7 +28,7 @@ namespace Recipes.ElasticsearchIntegration
         }
 
         public static AnonymousProjection<ElasticLowLevelClient> Projection = new AnonymousProjectionBuilder<ElasticLowLevelClient>().
-            When<PortfolioAdded>((client, message) =>
+            Handle<PortfolioAdded>((client, message) =>
                 client.IndexAsync<object>(
                     "index",
                     "portfolio",
@@ -37,12 +37,12 @@ namespace Recipes.ElasticsearchIntegration
                     {
                         name = message.Name
                     })))).
-            When<PortfolioRemoved>((client, message) =>
+            Handle<PortfolioRemoved>((client, message) =>
                 client.DeleteAsync<object>(
                     "index",
                     "portfolio",
                     message.Id.ToString("N"))).
-            When<PortfolioRenamed>((client, message) =>
+            Handle<PortfolioRenamed>((client, message) =>
                 client.UpdateAsync<object>(
                     "index",
                     "portfolio", 

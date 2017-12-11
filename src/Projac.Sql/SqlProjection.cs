@@ -7,7 +7,7 @@ namespace Projac.Sql
     /// <summary>
     ///     Represent a SQL projection.
     /// </summary>
-    public abstract class SqlProjection : IEnumerable<SqlProjectionHandler>
+    public abstract partial class SqlProjection : IEnumerable<SqlProjectionHandler>
     {
         private readonly List<SqlProjectionHandler> _handlers;
 
@@ -25,7 +25,7 @@ namespace Projac.Sql
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The single command returning handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        protected void When<TMessage>(Func<TMessage, SqlNonQueryCommand> handler)
+        protected void Handle<TMessage>(Func<TMessage, SqlNonQueryCommand> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             _handlers.Add(new SqlProjectionHandler(typeof (TMessage), message => new[] {handler((TMessage) message)}));
@@ -37,7 +37,7 @@ namespace Projac.Sql
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The command array returning handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        protected void When<TMessage>(Func<TMessage, SqlNonQueryCommand[]> handler)
+        protected void Handle<TMessage>(Func<TMessage, SqlNonQueryCommand[]> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             _handlers.Add(new SqlProjectionHandler(typeof (TMessage), message => handler((TMessage) message)));
@@ -49,7 +49,7 @@ namespace Projac.Sql
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The command enumeration returning handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        protected void When<TMessage>(Func<TMessage, IEnumerable<SqlNonQueryCommand>> handler)
+        protected void Handle<TMessage>(Func<TMessage, IEnumerable<SqlNonQueryCommand>> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             _handlers.Add(new SqlProjectionHandler(typeof(TMessage), message => handler((TMessage)message)));

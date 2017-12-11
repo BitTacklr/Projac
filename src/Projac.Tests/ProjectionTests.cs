@@ -80,23 +80,23 @@ namespace Projac.Tests
         {
             class WithHandlers : Projection<object>
             {
-                private readonly Signal _signalWhenWithoutCancellation;
-                private readonly Signal _signalWhenWithCancellation;
-                private readonly Signal _signalWhenSync;
+                private readonly Signal _signalHandleWithoutCancellation;
+                private readonly Signal _signalHandleWithCancellation;
+                private readonly Signal _signalHandleSync;
                 private readonly Signal[] _signals;
 
                 public WithHandlers()
                 {
-                    _signalWhenWithoutCancellation = new Signal();
-                    _signalWhenWithCancellation = new Signal();
-                    _signalWhenSync = new Signal();
+                    _signalHandleWithoutCancellation = new Signal();
+                    _signalHandleWithCancellation = new Signal();
+                    _signalHandleSync = new Signal();
                     _signals = new []
                     {
-                        _signalWhenWithoutCancellation, _signalWhenWithCancellation, _signalWhenSync
+                        _signalHandleWithoutCancellation, _signalHandleWithCancellation, _signalHandleSync
                     };
-                    When<object>((_, __) => { _signalWhenWithoutCancellation.Set(); return TaskFactory(); });
-                    When<object>((_, __, ___) => { _signalWhenWithCancellation.Set(); return TaskFactory(); });
-                    When<object>((_, __) => { _signalWhenSync.Set(); });
+                    Handle<object>((_, __) => { _signalHandleWithoutCancellation.Set(); return TaskFactory(); });
+                    Handle<object>((_, __, ___) => { _signalHandleWithCancellation.Set(); return TaskFactory(); });
+                    Handle<object>((_, __) => { _signalHandleSync.Set(); });
                 }
 
                 public Signal[] Signals
@@ -168,17 +168,17 @@ namespace Projac.Tests
         }
 
         [TestFixture]
-        public class WhenWithCancellationHandlerTests
+        public class HandleWithCancellationHandlerTests
         {
             [Test]
-            public void WhenHandlerCanNotBeNull()
+            public void HandleHandlerCanNotBeNull()
             {
                 Assert.Throws<ArgumentNullException>(
                     () => new RegisterNullHandler());
             }
 
             [Test]
-            public void WhenHasExpectedResult()
+            public void HandleHasExpectedResult()
             {
                 var task = TaskFactory();
                 var handler = HandlerFactory(task);
@@ -191,7 +191,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void SuccessiveWhenHasExpectedResult()
+            public void SuccessiveHandleHasExpectedResult()
             {
                 var tasks = new List<Task>();
                 var handlers = new List<Func<object, object, CancellationToken, Task>>();
@@ -209,7 +209,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void SuccessiveWhenRetainsOrder()
+            public void SuccessiveHandleRetainsOrder()
             {
                 var tasks = new List<Task>();
                 var handlers = new List<Func<object, object, CancellationToken, Task>>();
@@ -244,7 +244,7 @@ namespace Projac.Tests
             {
                 public RegisterNullHandler()
                 {
-                    When((Func<object, object, CancellationToken, Task>)null);
+                    Handle((Func<object, object, CancellationToken, Task>)null);
                 }
             }
 
@@ -253,23 +253,23 @@ namespace Projac.Tests
                 public RegisterHandlers(params Func<object, object, CancellationToken, Task>[] handlers)
                 {
                     foreach (var handler in handlers)
-                        When(handler);
+                        Handle(handler);
                 }
             }
         }
 
         [TestFixture]
-        public class WhenWithoutCancellationHandlerTests
+        public class HandleWithoutCancellationHandlerTests
         {
             [Test]
-            public void WhenHandlerCanNotBeNull()
+            public void HandleHandlerCanNotBeNull()
             {
                 Assert.Throws<ArgumentNullException>(
                     () => new RegisterNullHandler());
             }
 
             [Test]
-            public void WhenHasExpectedResult()
+            public void HandleHasExpectedResult()
             {
                 var task = TaskFactory();
                 var handler = HandlerFactory(task);
@@ -282,7 +282,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void SuccessiveWhenHasExpectedResult()
+            public void SuccessiveHandleHasExpectedResult()
             {
                 var tasks = new List<Task>();
                 var handlers = new List<Func<object, object, Task>>();
@@ -300,7 +300,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void SuccessiveWhenRetainsOrder()
+            public void SuccessiveHandleRetainsOrder()
             {
                 var tasks = new List<Task>();
                 var handlers = new List<Func<object, object, Task>>();
@@ -335,7 +335,7 @@ namespace Projac.Tests
             {
                 public RegisterNullHandler()
                 {
-                    When((Func<object, object, Task>)null);
+                    Handle((Func<object, object, Task>)null);
                 }
             }
 
@@ -344,23 +344,23 @@ namespace Projac.Tests
                 public RegisterHandlers(params Func<object, object, Task>[] handlers)
                 {
                     foreach (var handler in handlers)
-                        When(handler);
+                        Handle(handler);
                 }
             }
         }
 
         [TestFixture]
-        public class WhenSyncHandlerTests
+        public class HandleSyncHandlerTests
         {
             [Test]
-            public void WhenSyncHandlerCanNotBeNull()
+            public void HandleSyncHandlerCanNotBeNull()
             {
                 Assert.Throws<ArgumentNullException>(
                     () => new RegisterNullHandler());
             }
 
             [Test]
-            public void WhenSyncHasExpectedResult()
+            public void HandleSyncHasExpectedResult()
             {
                 var signal = new Signal();
                 var handler = HandlerFactory(signal);
@@ -375,7 +375,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void SuccessiveWhenHasExpectedResult()
+            public void SuccessiveHandleHasExpectedResult()
             {
                 var signals = new List<Signal>();
                 var handlers = new List<Action<object, object>>();
@@ -395,7 +395,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void SuccessiveWhenRetainsOrder()
+            public void SuccessiveHandleRetainsOrder()
             {
                 var signals = new List<Signal>();
                 var handlers = new List<Action<object, object>>();
@@ -428,7 +428,7 @@ namespace Projac.Tests
             {
                 public RegisterNullHandler()
                 {
-                    When((Action<object, object>)null);
+                    Handle((Action<object, object>)null);
                 }
             }
 
@@ -437,7 +437,7 @@ namespace Projac.Tests
                 public RegisterHandlers(params Action<object, object>[] handlers)
                 {
                     foreach (var handler in handlers)
-                        When(handler);
+                        Handle(handler);
                 }
             }
         }

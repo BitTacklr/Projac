@@ -47,7 +47,7 @@ namespace Recipes.SQLiteIntegration
 
             var projector =
                 new AsyncSqlProjector(
-                    Resolve.WhenEqualToHandlerMessageType(new PortfolioProjection()),
+                    Resolve.HandleEqualToHandlerMessageType(new PortfolioProjection()),
                     new SQLiteExecutor(() => new SQLiteConnection(builder.ToString()))
                     );
 
@@ -65,22 +65,22 @@ namespace Recipes.SQLiteIntegration
         {
             public PortfolioProjection()
             {
-                When<PortfolioAdded>(@event =>
+                Handle<PortfolioAdded>(@event =>
                     Sql.NonQueryStatement(
                         "INSERT INTO [Portfolio] ([Id], [Name], [PhotoCount]) VALUES (@P1, @P2, 0)",
                         new { P1 = Sql.Guid(@event.Id), P2 = Sql.String(@event.Name) }
                         ));
-                When<PortfolioRemoved>(@event =>
+                Handle<PortfolioRemoved>(@event =>
                     Sql.NonQueryStatement(
                         "DELETE FROM [Portfolio] WHERE [Id] = @P1",
                         new { P1 = Sql.Guid(@event.Id) }
                         ));
-                When<PortfolioRenamed>(@event =>
+                Handle<PortfolioRenamed>(@event =>
                     Sql.NonQueryStatement(
                         "UPDATE [Portfolio] SET [Name] = @P2 WHERE [Id] = @P1",
                         new { P1 = Sql.Guid(@event.Id), P2 = Sql.String(@event.Name) }
                         ));
-                When<CreateSchema>(_ =>
+                Handle<CreateSchema>(_ =>
                     Sql.NonQueryStatement(
                         @"CREATE TABLE [Portfolio] (
                             [Id] BLOB NOT NULL CONSTRAINT PK_Portfolio PRIMARY KEY,
