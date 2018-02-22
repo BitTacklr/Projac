@@ -144,7 +144,7 @@ namespace Projac.Sql.Tests
             public Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
             {
                 Commands.Add(command);
-                return Task.FromResult<object>(null);
+                return Task.CompletedTask;
             }
 
             public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands)
@@ -164,12 +164,12 @@ namespace Projac.Sql.Tests
         {
             public Task ExecuteNonQueryAsync(SqlNonQueryCommand command)
             {
-                return Task.FromResult<object>(null);
+                return Task.CompletedTask;
             }
 
             public Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
             {
-                return Task.FromResult<object>(null);
+                return Task.CompletedTask;
             }
 
             public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands)

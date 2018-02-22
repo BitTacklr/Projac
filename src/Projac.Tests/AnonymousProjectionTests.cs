@@ -36,7 +36,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void IsEnumerableOfSqlProjectionHandler()
+            public void IsEnumerableOfProjectionHandler()
             {
                 Assert.That(_sut, Is.AssignableTo<IEnumerable<ProjectionHandler<object>>>());
             }
@@ -74,7 +74,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void ImplicitConversionToSqlProjectionHandlerArray()
+            public void ImplicitConversionToProjectionHandlerArray()
             {
                 ProjectionHandler<object>[] result = _sut;
 
@@ -82,7 +82,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void ExplicitConversionToSqlProjectionHandlerArray()
+            public void ExplicitConversionToProjectionHandlerArray()
             {
                 var result = (ProjectionHandler<object>[])_sut;
 
@@ -103,7 +103,7 @@ namespace Projac.Tests
 
             private static Task TaskFactory()
             {
-                return Task.FromResult<object>(null);
+                return Task.CompletedTask;
             }
 
             private static ProjectionHandler<object> HandlerFactory(Task task)
@@ -149,7 +149,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void ImplicitConversionToSqlProjectionHandlerArray()
+            public void ImplicitConversionToProjectionHandlerArray()
             {
                 ProjectionHandler<object>[] result = _sut;
 
@@ -158,7 +158,7 @@ namespace Projac.Tests
             }
 
             [Test]
-            public void ExplicitConversionToSqlProjectionHandlerArray()
+            public void ExplicitConversionToProjectionHandlerArray()
             {
                 var result = (ProjectionHandler<object>[])_sut;
 

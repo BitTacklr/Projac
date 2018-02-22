@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <TargetFrameworks>netcoreapp2.0;net46;net452</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(OS)' == 'Unix'">
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
   <PropertyGroup>
     <AssemblyName>Projac.Sql.Tests</AssemblyName>
     <AssemblyTitle>Projac.Sql.Tests</AssemblyTitle>
-    <TargetFrameworks Condition="'$(OS)' == 'Unix'">netcoreapp2.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">netcoreapp2.0;net46;net452</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Projac.Sql.Tests</RootNamespace>
     <DebugSymbols>true</DebugSymbols>

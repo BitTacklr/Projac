@@ -9,16 +9,16 @@ namespace Projac
     /// <summary>
     ///     Represent a projection.
     /// </summary>
-    public abstract partial class Projection<TConnection> : IEnumerable<ProjectionHandler<TConnection>>
+    public abstract partial class Projection<TConnection, TMetadata> : IEnumerable<ProjectionHandler<TConnection, TMetadata>>
     {
-        private readonly List<ProjectionHandler<TConnection>> _handlers;
+        private readonly List<ProjectionHandler<TConnection, TMetadata>> _handlers;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Projection{TConnection}" /> class.
         /// </summary>
         protected Projection()
         {
-            _handlers = new List<ProjectionHandler<TConnection>>();
+            _handlers = new List<ProjectionHandler<TConnection, TMetadata>>();
         }
  
         /// <summary>
@@ -27,13 +27,13 @@ namespace Projac
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The message handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        protected void Handle<TMessage>(Func<TConnection, TMessage, Task> handler)
+        protected void Handle<TMessage>(Func<TConnection, TMessage, TMetadata, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             _handlers.Add(
-                new ProjectionHandler<TConnection>(
+                new ProjectionHandler<TConnection, TMetadata>(
                     typeof(TMessage),
-                    (connection, message, token) => handler(connection, (TMessage)message)));
+                    (connection, message, metadata, token) => handler(connection, (TMessage)message, metadata)));
         }
 
         /// <summary>
@@ -42,15 +42,15 @@ namespace Projac
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The message handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        protected void Handle<TMessage>(Action<TConnection, TMessage> handler)
+        protected void Handle<TMessage>(Action<TConnection, TMessage, TMetadata> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             _handlers.Add(
-                new ProjectionHandler<TConnection>(
+                new ProjectionHandler<TConnection, TMetadata>(
                     typeof(TMessage),
-                    (connection, message, token) =>
+                    (connection, message, metadata, token) =>
                     {
-                        handler(connection, (TMessage) message);
+                        handler(connection, (TMessage) message, metadata);
                         return Task.CompletedTask;
                     }));
         }
@@ -61,13 +61,13 @@ namespace Projac
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="handler">The message handler.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        protected void Handle<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
+        protected void Handle<TMessage>(Func<TConnection, TMessage, TMetadata, CancellationToken, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
             _handlers.Add(
-                new ProjectionHandler<TConnection>(
+                new ProjectionHandler<TConnection, TMetadata>(
                     typeof(TMessage),
-                    (connection, message, token) => handler(connection, (TMessage)message, token)));
+                    (connection, message, metadata, token) => handler(connection, (TMessage)message, metadata, token)));
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Projac
         /// <value>
         ///     The projection handlers associated with this specification.
         /// </value>
-        public ProjectionHandler<TConnection>[] Handlers
+        public ProjectionHandler<TConnection, TMetadata>[] Handlers
         {
             get { return _handlers.ToArray(); }
         }
@@ -88,7 +88,7 @@ namespace Projac
         /// <returns>
         /// The result of the conversion.
         /// </returns>
-        public static implicit operator ProjectionHandler<TConnection>[](Projection<TConnection> instance)
+        public static implicit operator ProjectionHandler<TConnection, TMetadata>[](Projection<TConnection, TMetadata> instance)
         {
             return instance.Handlers;
         }
@@ -99,9 +99,9 @@ namespace Projac
         /// <returns>
         /// An <see cref="ProjectionHandlerEnumerator{TConnection}" /> that can be used to iterate through a copy of the handlers.
         /// </returns>
-        public ProjectionHandlerEnumerator<TConnection> GetEnumerator()
+        public ProjectionHandlerEnumerator<TConnection, TMetadata> GetEnumerator()
         {
-            return new ProjectionHandlerEnumerator<TConnection>(Handlers);
+            return new ProjectionHandlerEnumerator<TConnection, TMetadata>(Handlers);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Projac
         /// <returns>
         /// An <see cref="ProjectionHandlerEnumerator{TConnection}" /> that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator<ProjectionHandler<TConnection>> IEnumerable<ProjectionHandler<TConnection>>.GetEnumerator()
+        IEnumerator<ProjectionHandler<TConnection, TMetadata>> IEnumerable<ProjectionHandler<TConnection, TMetadata>>.GetEnumerator()
         {
             return GetEnumerator();
         }

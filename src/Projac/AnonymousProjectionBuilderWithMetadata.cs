@@ -6,25 +6,25 @@ using System.Threading.Tasks;
 namespace Projac
 {
     /// <summary>
-    ///     Represents a fluent syntax to build up a set of <see cref="ProjectionHandler{TConnection}" />.
+    ///     Represents a fluent syntax to build up a set of <see cref="ProjectionHandler{TConnection, TMetadata}" />.
     /// </summary>
-    public partial class AnonymousProjectionBuilder<TConnection>
+    public partial class AnonymousProjectionBuilder<TConnection, TMetadata>
     {
-        private readonly ProjectionHandler<TConnection>[] _handlers;
+        private readonly ProjectionHandler<TConnection, TMetadata>[] _handlers;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="AnonymousProjectionBuilder{TConnection}" /> class.
+        ///     Initializes a new instance of the <see cref="AnonymousProjectionBuilder{TConnection, TMetadata}" /> class.
         /// </summary>
         public AnonymousProjectionBuilder() :
-            this(new ProjectionHandler<TConnection>[0])
+            this(new ProjectionHandler<TConnection, TMetadata>[0])
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="AnonymousProjectionBuilder{TConnection}" /> class.
+        ///     Initializes a new instance of the <see cref="AnonymousProjectionBuilder{TConnection, TMetadata}" /> class.
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="handlers"/> is <c>null</c>.</exception>
-        public AnonymousProjectionBuilder(ProjectionHandler<TConnection>[] handlers)
+        public AnonymousProjectionBuilder(ProjectionHandler<TConnection, TMetadata>[] handlers)
         {
             if (handlers == null) throw new ArgumentNullException("handlers");
             _handlers = handlers;
@@ -37,16 +37,16 @@ namespace Projac
         /// <param name="handler">The message handler that handles the message asynchronously.</param>
         /// <returns>A <see cref="AnonymousProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public AnonymousProjectionBuilder<TConnection> Handle<TMessage>(Func<TConnection, TMessage, Task> handler)
+        public AnonymousProjectionBuilder<TConnection, TMetadata> Handle<TMessage>(Func<TConnection, TMessage, TMetadata, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new AnonymousProjectionBuilder<TConnection>(
+            return new AnonymousProjectionBuilder<TConnection, TMetadata>(
                 _handlers.Concat(
                     new[]
                     {
-                        new ProjectionHandler<TConnection>(
+                        new ProjectionHandler<TConnection, TMetadata>(
                             typeof (TMessage),
-                            (connection, message, token) => handler(connection, (TMessage) message))
+                            (connection, message, metadata, token) => handler(connection, (TMessage) message, metadata))
                     }).
                     ToArray());
         }
@@ -58,20 +58,20 @@ namespace Projac
         /// <param name="handler">The message handler that handles the message synchronously.</param>
         /// <returns>A <see cref="AnonymousProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public AnonymousProjectionBuilder<TConnection> Handle<TMessage>(Action<TConnection, TMessage> handler)
+        public AnonymousProjectionBuilder<TConnection, TMetadata> Handle<TMessage>(Action<TConnection, TMessage, TMetadata> handler)
         {
             if (handler == null)
                 throw new ArgumentNullException("handler");
 
-            return new AnonymousProjectionBuilder<TConnection>(
+            return new AnonymousProjectionBuilder<TConnection, TMetadata>(
                 _handlers.Concat(
                     new[]
                     {
-                        new ProjectionHandler<TConnection>(
+                        new ProjectionHandler<TConnection, TMetadata>(
                             typeof (TMessage),
-                            (connection, message, token) =>
+                            (connection, message, metadata, token) =>
                             {
-                                handler(connection, (TMessage) message);
+                                handler(connection, (TMessage) message, metadata);
                                 return Task.CompletedTask;
                             })
                     }).
@@ -85,16 +85,16 @@ namespace Projac
         /// <param name="handler">The message handler that handles the message asynchronously and with cancellation support.</param>
         /// <returns>A <see cref="AnonymousProjectionBuilder{TConnection}" />.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
-        public AnonymousProjectionBuilder<TConnection> Handle<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
+        public AnonymousProjectionBuilder<TConnection, TMetadata> Handle<TMessage>(Func<TConnection, TMessage, TMetadata, CancellationToken, Task> handler)
         {
             if (handler == null) throw new ArgumentNullException("handler");
-            return new AnonymousProjectionBuilder<TConnection>(
+            return new AnonymousProjectionBuilder<TConnection, TMetadata>(
                 _handlers.Concat(
                     new[]
                     {
-                        new ProjectionHandler<TConnection>(
+                        new ProjectionHandler<TConnection, TMetadata>(
                             typeof (TMessage),
-                            (connection, message, token) => handler(connection, (TMessage) message, token))
+                            (connection, message, metadata, token) => handler(connection, (TMessage) message, metadata, token))
                     }).
                     ToArray());
         }
@@ -103,9 +103,9 @@ namespace Projac
         ///     Builds an <see cref="AnonymousProjection{TConnection}"/> using the handlers collected by this builder.
         /// </summary>
         /// <returns>A <see cref="AnonymousProjection{TConnection}" /> array.</returns>
-        public AnonymousProjection<TConnection> Build()
+        public AnonymousProjection<TConnection, TMetadata> Build()
         {
-            return new AnonymousProjection<TConnection>(_handlers);
+            return new AnonymousProjection<TConnection, TMetadata>(_handlers);
         }
     }
 }

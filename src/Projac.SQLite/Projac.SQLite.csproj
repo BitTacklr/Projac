@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <TargetFrameworks>netstandard2.0;net46;net452</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(OS)' == 'Unix'">
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
   <PropertyGroup>
     <AssemblyName>Projac.SQLite</AssemblyName>
     <AssemblyTitle>Projac.SQLite</AssemblyTitle>
-    <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard2.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net46;net452</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>Projac.SQLite</RootNamespace>
     <DebugSymbols>true</DebugSymbols>

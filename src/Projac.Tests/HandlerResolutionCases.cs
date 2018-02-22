@@ -214,7 +214,12 @@ namespace Projac.Tests
 
         private static ProjectionHandler<object> HandlerFor<TMessage>()
         {
-            return new ProjectionHandler<object>(typeof(TMessage), (_, __, ___) => Task.FromResult<object>(null));
+            return new ProjectionHandler<object>(typeof(TMessage), (_, __, ___) => Task.CompletedTask);
+        }
+
+        private static ProjectionHandler<object, TMetadata> HandlerFor<TMessage, TMetadata>()
+        {
+            return new ProjectionHandler<object, TMetadata>(typeof(TMessage), (_, __, ___, ____) => Task.CompletedTask);
         }
 
         private interface IMessage { }

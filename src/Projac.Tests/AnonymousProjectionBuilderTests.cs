@@ -326,7 +326,7 @@ namespace Projac.Tests
 
         private static Task TaskFactory()
         {
-            return Task.FromResult<object>(null);
+            return Task.CompletedTask;
         }
     }
 }

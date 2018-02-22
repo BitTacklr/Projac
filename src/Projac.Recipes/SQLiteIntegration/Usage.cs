@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET452 || NET46
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
@@ -193,3 +194,4 @@ namespace Recipes.SQLiteIntegration
         }
     }
 }
+#endif

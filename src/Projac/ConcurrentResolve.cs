@@ -42,5 +42,40 @@ namespace Projac
                 return result;
             };
         }
+
+        /// <summary>
+        /// Resolves the <see cref="ProjectionHandler{TConnection, TMetadata}">handlers</see> that match the type of the message exactly.
+        /// </summary>
+        /// <param name="handlers">The set of resolvable handlers.</param>
+        /// <returns>A <see cref="ProjectionHandlerResolver{TConnection, TMetadata}">resolver</see>.</returns>
+        public static ProjectionHandlerResolver<TConnection, TMetadata> WhenEqualToHandlerMessageType<TConnection, TMetadata>(ProjectionHandler<TConnection, TMetadata>[] handlers)
+        {
+            return Resolve.WhenEqualToHandlerMessageType<TConnection, TMetadata>(handlers);
+        }
+
+        /// <summary>
+        /// Resolves the <see cref="ProjectionHandler{TConnection, TMetadata}">handlers</see> to which the message instance is assignable.
+        /// </summary>
+        /// <param name="handlers">The set of resolvable handlers.</param>
+        /// <returns>A <see cref="ProjectionHandlerResolver{TConnection, TMetadata}">resolver</see>.</returns>
+        public static ProjectionHandlerResolver<TConnection, TMetadata> WhenAssignableToHandlerMessageType<TConnection, TMetadata>(ProjectionHandler<TConnection, TMetadata>[] handlers)
+        {
+            if (handlers == null)
+                throw new ArgumentNullException("handlers");
+            var cache = new ConcurrentDictionary<Type, ProjectionHandler<TConnection, TMetadata>[]>();
+            return message =>
+            {
+                if (message == null)
+                    throw new ArgumentNullException("message");
+                ProjectionHandler<TConnection, TMetadata>[] result;
+                if (!cache.TryGetValue(message.GetType(), out result))
+                {
+                    result = cache.GetOrAdd(message.GetType(), 
+                        Array.FindAll(handlers, 
+                            handler => handler.Message.IsInstanceOfType(message)));
+                }
+                return result;
+            };
+        }
     }
 }

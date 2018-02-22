@@ -6,13 +6,13 @@ using NUnit.Framework;
 namespace Projac.Tests
 {
     [TestFixture]
-    public class ProjectionHandlerTests
+    public class ProjectionHandlerWithMetadataTests
     {
         [Test]
         public void MessageCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new ProjectionHandler<object>(null, (_, __, ___) => Task.CompletedTask)
+                () => new ProjectionHandler<object, object>(null, (_, __, ___, ____) => Task.CompletedTask)
                 );
         }
 
@@ -28,9 +28,9 @@ namespace Projac.Tests
         public void ParametersArePreservedAsProperties()
         {
             var message = typeof(object);
-            Func<object, object, CancellationToken, Task> handler = (_, __, ___) => Task.CompletedTask;
+            Func<object, object, object, CancellationToken, Task> handler = (_, __, ___, ____) => Task.CompletedTask;
 
-            var sut = new ProjectionHandler<object>(message, handler);
+            var sut = new ProjectionHandler<object, object>(message, handler);
 
             Assert.That(sut.Message, Is.EqualTo(message));
             Assert.That(sut.Handler, Is.EqualTo(handler));

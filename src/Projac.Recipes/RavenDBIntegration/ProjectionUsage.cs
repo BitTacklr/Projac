@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET452 || NET46
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -62,3 +63,4 @@ namespace Recipes.RavenDBIntegration
         }
     }
 }
+#endif

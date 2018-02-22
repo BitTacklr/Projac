@@ -8,25 +8,25 @@ using NUnit.Framework;
 namespace Projac.Tests
 {
     [TestFixture]
-    public class ProjectionHandlerEnumeratorTests
+    public class ProjectionHandlerEnumeratorWithMetadataTests
     {
         [Test]
         public void HandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new ProjectionHandlerEnumerator<object>(null));
+                () => new ProjectionHandlerEnumerator<object, object>(null));
         }
 
         [Test]
         public void DisposeDoesNotThrow()
         {
             Assert.DoesNotThrow(() =>
-                new ProjectionHandlerEnumerator<object>(new ProjectionHandler<object>[0]));
+                new ProjectionHandlerEnumerator<object, object>(new ProjectionHandler<object, object>[0]));
         }
 
         [TestCaseSource("MoveNextCases")]
         public void MoveNextReturnsExpectedResult(
-            ProjectionHandlerEnumerator<object> sut, bool expected)
+            ProjectionHandlerEnumerator<object, object> sut, bool expected)
         {
             var result = sut.MoveNext();
             Assert.That(result, Is.EqualTo(expected));
@@ -35,12 +35,12 @@ namespace Projac.Tests
         private static IEnumerable<TestCaseData> MoveNextCases()
         {
             //No handlers
-            var enumerator1 = new ProjectionHandlerEnumerator<object>(new ProjectionHandler<object>[0]);
+            var enumerator1 = new ProjectionHandlerEnumerator<object, object>(new ProjectionHandler<object, object>[0]);
             yield return new TestCaseData(enumerator1, false);
             yield return new TestCaseData(enumerator1, false); //idempotency check
 
             //1 handler
-            var enumerator2 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator2 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory())
             });
@@ -49,7 +49,7 @@ namespace Projac.Tests
             yield return new TestCaseData(enumerator2, false); //idempotency check
 
             //2 handlers
-            var enumerator3 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator3 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory()),
                 HandlerFactory(TaskFactory())
@@ -62,7 +62,7 @@ namespace Projac.Tests
 
         [TestCaseSource("MoveNextAfterResetCases")]
         public void MoveNextAfterResetReturnsExpectedResult(
-            ProjectionHandlerEnumerator<object> sut, bool expected)
+            ProjectionHandlerEnumerator<object, object> sut, bool expected)
         {
             sut.Reset();
 
@@ -74,12 +74,12 @@ namespace Projac.Tests
         private static IEnumerable<TestCaseData> MoveNextAfterResetCases()
         {
             //No handlers
-            var enumerator1 = new ProjectionHandlerEnumerator<object>(new ProjectionHandler<object>[0]);
+            var enumerator1 = new ProjectionHandlerEnumerator<object, object>(new ProjectionHandler<object, object>[0]);
             yield return new TestCaseData(enumerator1, false);
             yield return new TestCaseData(enumerator1, false);
 
             //1 handler
-            var enumerator2 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator2 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory())
             });
@@ -87,7 +87,7 @@ namespace Projac.Tests
             yield return new TestCaseData(enumerator2, true);
 
             //2 handlers
-            var enumerator3 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator3 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory()),
                 HandlerFactory(TaskFactory())
@@ -97,7 +97,7 @@ namespace Projac.Tests
         }
 
         [TestCaseSource("ResetCases")]
-        public void ResetDoesNotThrow(ProjectionHandlerEnumerator<object> sut)
+        public void ResetDoesNotThrow(ProjectionHandlerEnumerator<object, object> sut)
         {
             Assert.DoesNotThrow(sut.Reset);
         }
@@ -105,18 +105,18 @@ namespace Projac.Tests
         private static IEnumerable<TestCaseData> ResetCases()
         {
             //No handlers
-            var enumerator1 = new ProjectionHandlerEnumerator<object>(new ProjectionHandler<object>[0]);
+            var enumerator1 = new ProjectionHandlerEnumerator<object, object>(new ProjectionHandler<object, object>[0]);
             yield return new TestCaseData(enumerator1);
 
             //1 handler
-            var enumerator2 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator2 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory())
             });
             yield return new TestCaseData(enumerator2);
 
             //2 handlers
-            var enumerator3 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator3 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory()),
                 HandlerFactory(TaskFactory())
@@ -126,7 +126,7 @@ namespace Projac.Tests
 
         [TestCaseSource("CurrentNotStartedCases")]
         public void CurrentReturnsExpectedResultWhenNotStarted(
-            ProjectionHandlerEnumerator<object> sut)
+            ProjectionHandlerEnumerator<object, object> sut)
         {
             Assert.Throws<InvalidOperationException>(
                 () => { var _ = sut.Current; });
@@ -143,18 +143,18 @@ namespace Projac.Tests
         private static IEnumerable<TestCaseData> CurrentNotStartedCases()
         {
             //No handlers
-            var enumerator1 = new ProjectionHandlerEnumerator<object>(new ProjectionHandler<object>[0]);
+            var enumerator1 = new ProjectionHandlerEnumerator<object, object>(new ProjectionHandler<object, object>[0]);
             yield return new TestCaseData(enumerator1);
 
             //1 handler
-            var enumerator2 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator2 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory())
             });
             yield return new TestCaseData(enumerator2);
 
             //2 handlers
-            var enumerator3 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator3 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory()),
                 HandlerFactory(TaskFactory())
@@ -164,7 +164,7 @@ namespace Projac.Tests
 
         [TestCaseSource("CurrentCompletedCases")]
         public void CurrentReturnsExpectedResultWhenCompleted(
-            ProjectionHandlerEnumerator<object> sut)
+            ProjectionHandlerEnumerator<object, object> sut)
         {
             Assert.Throws<InvalidOperationException>(
                 () => { var _ = sut.Current; });
@@ -181,12 +181,12 @@ namespace Projac.Tests
         private static IEnumerable<TestCaseData> CurrentCompletedCases()
         {
             //No handlers
-            var enumerator1 = new ProjectionHandlerEnumerator<object>(new ProjectionHandler<object>[0]);
+            var enumerator1 = new ProjectionHandlerEnumerator<object, object>(new ProjectionHandler<object, object>[0]);
             while (enumerator1.MoveNext()) { }
             yield return new TestCaseData(enumerator1);
 
             //1 handler
-            var enumerator2 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator2 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory())
             });
@@ -194,7 +194,7 @@ namespace Projac.Tests
             yield return new TestCaseData(enumerator2);
 
             //2 handlers
-            var enumerator3 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator3 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(TaskFactory()),
                 HandlerFactory(TaskFactory())
@@ -205,11 +205,11 @@ namespace Projac.Tests
 
         [TestCaseSource("CurrentStartedCases")]
         public void CurrentReturnsExpectedResultWhenStarted(
-            ProjectionHandlerEnumerator<object> sut, Task expected)
+            ProjectionHandlerEnumerator<object, object> sut, Task expected)
         {
             sut.MoveNext();
 
-            var result = sut.Current.Handler(null, null, CancellationToken.None);
+            var result = sut.Current.Handler(null, null, null, CancellationToken.None);
 
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -220,7 +220,7 @@ namespace Projac.Tests
         {
             sut.MoveNext();
 
-            var result = ((ProjectionHandler<object>)sut.Current).Handler(null, null, CancellationToken.None);
+            var result = ((ProjectionHandler<object, object>)sut.Current).Handler(null, null, null, CancellationToken.None);
 
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -231,7 +231,7 @@ namespace Projac.Tests
 
             //1 handler
             var task1 = TaskFactory();
-            var enumerator2 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator2 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(task1)
             });
@@ -240,7 +240,7 @@ namespace Projac.Tests
             //2 handlers
             var task2 = TaskFactory();
             var task3 = TaskFactory();
-            var enumerator3 = new ProjectionHandlerEnumerator<object>(new[]
+            var enumerator3 = new ProjectionHandlerEnumerator<object, object>(new[]
             {
                 HandlerFactory(task2),
                 HandlerFactory(task3)
@@ -249,11 +249,11 @@ namespace Projac.Tests
             yield return new TestCaseData(enumerator3, task3);
         }
 
-        private static ProjectionHandler<object> HandlerFactory(Task task)
+        private static ProjectionHandler<object, object> HandlerFactory(Task task)
         {
-            return new ProjectionHandler<object>(
+            return new ProjectionHandler<object, object>(
                 typeof(object),
-                (_, __, ___) => task);
+                (_, __, ___, ____) => task);
         }
 
         private static Task TaskFactory()

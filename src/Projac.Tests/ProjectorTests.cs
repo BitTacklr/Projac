@@ -205,7 +205,7 @@ namespace Projac.Tests
         public void ProjectAsyncMessageSecondHandlerFailureCausesExpectedResult()
         {
             Func<object, object, CancellationToken, Task> handler1 =
-                (connection, message, token) => Task.FromResult<object>(null);
+                (connection, message, token) => Task.CompletedTask;
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
@@ -229,7 +229,7 @@ namespace Projac.Tests
         public void ProjectAsyncMessageSecondHandlerCancellationCausesExpectedResult()
         {
             Func<object, object, CancellationToken, Task> handler1 =
-                (connection, message, token) => Task.FromResult<object>(null);
+                (connection, message, token) => Task.CompletedTask;
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
@@ -271,7 +271,7 @@ namespace Projac.Tests
         public void ProjectAsyncTokenMessageSecondHandlerFailureCausesExpectedResult()
         {
             Func<object, object, CancellationToken, Task> handler1 =
-                (connection, message, token) => Task.FromResult<object>(null);
+                (connection, message, token) => Task.CompletedTask;
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
@@ -295,7 +295,7 @@ namespace Projac.Tests
         public void ProjectAsyncTokenMessageSecondHandlerCancellationCausesExpectedResult()
         {
             Func<object, object, CancellationToken, Task> handler1 =
-                (connection, message, token) => Task.FromResult<object>(null);
+                (connection, message, token) => Task.CompletedTask;
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
@@ -338,7 +338,7 @@ namespace Projac.Tests
         public void ProjectAsyncMessagesSecondHandlerFailureCausesExpectedResult()
         {
             Func<object, object, CancellationToken, Task> handler1 =
-                (connection, message, token) => Task.FromResult<object>(null);
+                (connection, message, token) => Task.CompletedTask;
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
@@ -362,7 +362,7 @@ namespace Projac.Tests
         public void ProjectAsyncMessagesSecondHandlerCancellationCausesExpectedResult()
         {
             Func<object, object, CancellationToken, Task> handler1 =
-                (connection, message, token) => Task.FromResult<object>(null);
+                (connection, message, token) => Task.CompletedTask;
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
@@ -404,7 +404,7 @@ namespace Projac.Tests
         public void ProjectAsyncTokenMessagesSecondHandlerFailureCausesExpectedResult()
         {
             Func<object, object, CancellationToken, Task> handler1 =
-                (connection, message, token) => Task.FromResult<object>(null);
+                (connection, message, token) => Task.CompletedTask;
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
@@ -428,7 +428,7 @@ namespace Projac.Tests
         public void ProjectAsyncTokenMessagesSecondHandlerCancellationCausesExpectedResult()
         {
             Func<object, object, CancellationToken, Task> handler1 =
-                (connection, message, token) => Task.FromResult<object>(null);
+                (connection, message, token) => Task.CompletedTask;
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
@@ -480,12 +480,12 @@ namespace Projac.Tests
             var tcs = new CancellationTokenSource();
 
             Func<object, object, CancellationToken, Task> handler1 =
-                (connection, message, token) => Task.FromResult<object>(null);
+                (connection, message, token) => Task.CompletedTask;
             Func<object, object, CancellationToken, Task> handler2 =
                 (connection, message, token) =>
                 {
                     tcs.Cancel();
-                    return Task.FromResult<object>(null);
+                    return Task.CompletedTask;
                 };
             Func<object, object, CancellationToken, Task> handler3 =
                 (connection, message, token) =>

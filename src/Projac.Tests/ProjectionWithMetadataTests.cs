@@ -7,16 +7,16 @@ using NUnit.Framework;
 
 namespace Projac.Tests
 {
-    namespace ProjectionTests
+    namespace ProjectionWithMetadataTests
     {
         [TestFixture]
         public class AnyInstanceTests
         {
-            class Any : Projection<object>
+            class Any : Projection<object, object>
             {
             }
 
-            private Projection<object> _sut;
+            private Projection<object, object> _sut;
 
             [SetUp]
             public void SetUp()
@@ -27,18 +27,18 @@ namespace Projac.Tests
             [Test]
             public void IsEnumerableOfProjectionHandler()
             {
-                Assert.That(_sut, Is.AssignableTo<IEnumerable<ProjectionHandler<object>>>());
+                Assert.That(_sut, Is.AssignableTo<IEnumerable<ProjectionHandler<object, object>>>());
             }
         }
 
         [TestFixture]
         public class InstanceWithoutHandlersTests
         {
-            class WithoutHandlers : Projection<object>
+            class WithoutHandlers : Projection<object, object>
             {
             }
 
-            private Projection<object> _sut;
+            private Projection<object, object> _sut;
 
             [SetUp]
             public void SetUp()
@@ -61,7 +61,7 @@ namespace Projac.Tests
             [Test]
             public void ImplicitConversionToProjectionHandlerArray()
             {
-                ProjectionHandler<object>[] result = _sut;
+                ProjectionHandler<object, object>[] result = _sut;
 
                 Assert.That(result, Is.Empty);
             }
@@ -69,7 +69,7 @@ namespace Projac.Tests
             [Test]
             public void ExplicitConversionToProjectionHandlerArray()
             {
-                var result = (ProjectionHandler<object>[])_sut;
+                var result = (ProjectionHandler<object, object>[])_sut;
 
                 Assert.That(result, Is.Empty);
             }
@@ -78,28 +78,28 @@ namespace Projac.Tests
         [TestFixture]
         public class InstanceWithHandlersTests
         {
-            class WithHandlers : Projection<object>
+            class WithHandlers : Projection<object, object>
             {
-                private readonly Signal _signalHandleWithoutCancellation;
-                private readonly Signal _signalHandleWithCancellation;
-                private readonly Signal _signalHandleSync;
-                private readonly Signal[] _signals;
+                private readonly Signal<object> _signalHandleWithoutCancellation;
+                private readonly Signal<object> _signalHandleWithCancellation;
+                private readonly Signal<object> _signalHandleSync;
+                private readonly Signal<object>[] _signals;
 
                 public WithHandlers()
                 {
-                    _signalHandleWithoutCancellation = new Signal();
-                    _signalHandleWithCancellation = new Signal();
-                    _signalHandleSync = new Signal();
+                    _signalHandleWithoutCancellation = new Signal<object>();
+                    _signalHandleWithCancellation = new Signal<object>();
+                    _signalHandleSync = new Signal<object>();
                     _signals = new []
                     {
                         _signalHandleWithoutCancellation, _signalHandleWithCancellation, _signalHandleSync
                     };
-                    Handle<object>((_, __) => { _signalHandleWithoutCancellation.Set(); return TaskFactory(); });
-                    Handle<object>((_, __, ___) => { _signalHandleWithCancellation.Set(); return TaskFactory(); });
-                    Handle<object>((_, __) => { _signalHandleSync.Set(); });
+                    Handle<object>((_, __, metadata) => { _signalHandleWithoutCancellation.Set(metadata); return TaskFactory(); });
+                    Handle<object>((_, __, metadata, ____) => { _signalHandleWithCancellation.Set(metadata); return TaskFactory(); });
+                    Handle<object>((_, __, metadata) => { _signalHandleSync.Set(metadata); });
                 }
 
-                public Signal[] Signals
+                public Signal<object>[] Signals
                 {
                     get { return _signals; }
                 }
@@ -121,49 +121,53 @@ namespace Projac.Tests
             [Test]
             public void GetEnumeratorReturnsExpectedInstance()
             {
-                IEnumerable<ProjectionHandler<object>> result = _sut;
+                IEnumerable<ProjectionHandler<object, object>> result = _sut;
+                var metadata = new object();
 
                 foreach (var _ in result)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(null, null, metadata, CancellationToken.None);
                 }
-                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(_sut.Signals, Is.All.Matches<Signal<object>>(signal => signal.IsSet && signal.Metadata == metadata));
             }
 
             [Test]
             public void HandlersReturnsExpectedResult()
             {
                 var result = _sut.Handlers;
+                var metadata = new object();
 
                 foreach (var _ in result)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(null, null, metadata, CancellationToken.None);
                 }
-                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(_sut.Signals, Is.All.Matches<Signal<object>>(signal => signal.IsSet && signal.Metadata == metadata));
             }
 
             [Test]
             public void ImplicitConversionToProjectionHandlerArray()
             {
-                ProjectionHandler<object>[] result = _sut;
+                ProjectionHandler<object, object>[] result = _sut;
+                var metadata = new object();                
 
                 foreach (var _ in result)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(null, null, metadata, CancellationToken.None);
                 }
-                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(_sut.Signals, Is.All.Matches<Signal<object>>(signal => signal.IsSet && signal.Metadata == metadata));
             }
 
             [Test]
             public void ExplicitConversionToProjectionHandlerArray()
             {
-                var result = (ProjectionHandler<object>[])_sut;
+                var result = (ProjectionHandler<object, object>[])_sut;
+                var metadata = new object();                
 
                 foreach (var _ in result)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(null, null, metadata, CancellationToken.None);
                 }
-                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(_sut.Signals, Is.All.Matches<Signal<object>>(signal => signal.IsSet && signal.Metadata == metadata));
             }
         }
 
@@ -186,7 +190,7 @@ namespace Projac.Tests
                 var sut = new RegisterHandlers(handler);
 
                 Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
+                    sut.Handlers.Select(_ => _.Handler(null, null, null, CancellationToken.None)),
                     Is.EquivalentTo(new[] { task }));
             }
 
@@ -194,7 +198,7 @@ namespace Projac.Tests
             public void SuccessiveHandleHasExpectedResult()
             {
                 var tasks = new List<Task>();
-                var handlers = new List<Func<object, object, CancellationToken, Task>>();
+                var handlers = new List<Func<object, object, object, CancellationToken, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
                     tasks.Add(TaskFactory());
@@ -204,7 +208,7 @@ namespace Projac.Tests
                 var sut = new RegisterHandlers(handlers.ToArray());
 
                 Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
+                    sut.Handlers.Select(_ => _.Handler(null, null, null, CancellationToken.None)),
                     Is.EquivalentTo(tasks));
             }
 
@@ -212,7 +216,7 @@ namespace Projac.Tests
             public void SuccessiveHandleRetainsOrder()
             {
                 var tasks = new List<Task>();
-                var handlers = new List<Func<object, object, CancellationToken, Task>>();
+                var handlers = new List<Func<object, object, object, CancellationToken, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
                     tasks.Add(TaskFactory());
@@ -224,15 +228,15 @@ namespace Projac.Tests
                 var sut = new RegisterHandlers(handlers.ToArray());
 
                 Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
+                    sut.Handlers.Select(_ => _.Handler(null, null, null, CancellationToken.None)),
                     Is.EquivalentTo(tasks));
             }
 
             private static readonly Random Random = new Random();
 
-            private static Func<object, object, CancellationToken, Task> HandlerFactory(Task task)
+            private static Func<object, object, object, CancellationToken, Task> HandlerFactory(Task task)
             {
-                return (_, __, ___) => task;
+                return (_, __, ___, ____) => task;
             }
 
             private static Task TaskFactory()
@@ -240,17 +244,17 @@ namespace Projac.Tests
                 return Task.CompletedTask;
             }
 
-            private class RegisterNullHandler : Projection<object>
+            private class RegisterNullHandler : Projection<object, object>
             {
                 public RegisterNullHandler()
                 {
-                    Handle((Func<object, object, CancellationToken, Task>)null);
+                    Handle((Func<object, object, object, CancellationToken, Task>)null);
                 }
             }
 
-            private class RegisterHandlers : Projection<object>
+            private class RegisterHandlers : Projection<object, object>
             {
-                public RegisterHandlers(params Func<object, object, CancellationToken, Task>[] handlers)
+                public RegisterHandlers(params Func<object, object, object, CancellationToken, Task>[] handlers)
                 {
                     foreach (var handler in handlers)
                         Handle(handler);
@@ -277,7 +281,7 @@ namespace Projac.Tests
                 var sut = new RegisterHandlers(handler);
 
                 Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
+                    sut.Handlers.Select(_ => _.Handler(null, null, null, CancellationToken.None)),
                     Is.EquivalentTo(new[] { task }));
             }
 
@@ -285,7 +289,7 @@ namespace Projac.Tests
             public void SuccessiveHandleHasExpectedResult()
             {
                 var tasks = new List<Task>();
-                var handlers = new List<Func<object, object, Task>>();
+                var handlers = new List<Func<object, object, object, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
                     tasks.Add(TaskFactory());
@@ -295,7 +299,7 @@ namespace Projac.Tests
                 var sut = new RegisterHandlers(handlers.ToArray());
 
                 Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
+                    sut.Handlers.Select(_ => _.Handler(null, null, null, CancellationToken.None)),
                     Is.EquivalentTo(tasks));
             }
 
@@ -303,7 +307,7 @@ namespace Projac.Tests
             public void SuccessiveHandleRetainsOrder()
             {
                 var tasks = new List<Task>();
-                var handlers = new List<Func<object, object, Task>>();
+                var handlers = new List<Func<object, object, object, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
                     tasks.Add(TaskFactory());
@@ -315,15 +319,15 @@ namespace Projac.Tests
                 var sut = new RegisterHandlers(handlers.ToArray());
 
                 Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
+                    sut.Handlers.Select(_ => _.Handler(null, null, null, CancellationToken.None)),
                     Is.EquivalentTo(tasks));
             }
 
             private static readonly Random Random = new Random();
 
-            private static Func<object, object, Task> HandlerFactory(Task task)
+            private static Func<object, object, object, Task> HandlerFactory(Task task)
             {
-                return (_, __) => task;
+                return (_, __, ___) => task;
             }
 
             private static Task TaskFactory()
@@ -331,17 +335,17 @@ namespace Projac.Tests
                 return Task.CompletedTask;
             }
 
-            private class RegisterNullHandler : Projection<object>
+            private class RegisterNullHandler : Projection<object, object>
             {
                 public RegisterNullHandler()
                 {
-                    Handle((Func<object, object, Task>)null);
+                    Handle((Func<object, object, object, Task>)null);
                 }
             }
 
-            private class RegisterHandlers : Projection<object>
+            private class RegisterHandlers : Projection<object, object>
             {
-                public RegisterHandlers(params Func<object, object, Task>[] handlers)
+                public RegisterHandlers(params Func<object, object, object, Task>[] handlers)
                 {
                     foreach (var handler in handlers)
                         Handle(handler);
@@ -362,46 +366,50 @@ namespace Projac.Tests
             [Test]
             public void HandleSyncHasExpectedResult()
             {
-                var signal = new Signal();
+                var signal = new Signal<object>();
                 var handler = HandlerFactory(signal);
+                var metadata = new object();
                 var sut = new RegisterHandlers(handler);
 
                 foreach (var _ in sut.Handlers)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(null, null, metadata, CancellationToken.None);
                 }
 
                 Assert.That(signal.IsSet, Is.True);
+                Assert.That(signal.Metadata, Is.EqualTo(metadata));
             }
 
             [Test]
             public void SuccessiveHandleHasExpectedResult()
             {
-                var signals = new List<Signal>();
-                var handlers = new List<Action<object, object>>();
+                var signals = new List<Signal<object>>();
+                var metadata = new object();
+                var handlers = new List<Action<object, object, object>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    signals.Add(new Signal());
+                    signals.Add(new Signal<object>());
                     handlers.Add(HandlerFactory(signals[signals.Count - 1]));
                 }
                 var sut = new RegisterHandlers(handlers.ToArray());
 
                 foreach (var _ in sut.Handlers)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(null, null, metadata, CancellationToken.None);
                 }
 
-                Assert.That(signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(signals, Is.All.Matches<Signal<object>>(signal => signal.IsSet && signal.Metadata == metadata));
             }
 
             [Test]
             public void SuccessiveHandleRetainsOrder()
             {
-                var signals = new List<Signal>();
-                var handlers = new List<Action<object, object>>();
+                var signals = new List<Signal<object>>();
+                var metadata = new object();
+                var handlers = new List<Action<object, object, object>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    signals.Add(new Signal());
+                    signals.Add(new Signal<object>());
                     handlers.Add(HandlerFactory(signals[signals.Count - 1]));
                 }
                 signals.Reverse();
@@ -411,30 +419,30 @@ namespace Projac.Tests
 
                 foreach (var _ in sut.Handlers)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(null, null, metadata, CancellationToken.None);
                 }
 
-                Assert.That(signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(signals, Is.All.Matches<Signal<object>>(signal => signal.IsSet && signal.Metadata == metadata));
             }
 
             private static readonly Random Random = new Random();
 
-            private static Action<object, object> HandlerFactory(Signal signal)
+            private static Action<object, object, object> HandlerFactory(Signal<object> signal)
             {
-                return (_, __) => { signal.Set(); };
+                return (_, __, metadata) => { signal.Set(metadata); };
             }
 
-            private class RegisterNullHandler : Projection<object>
+            private class RegisterNullHandler : Projection<object, object>
             {
                 public RegisterNullHandler()
                 {
-                    Handle((Action<object, object>)null);
+                    Handle((Action<object, object, object>)null);
                 }
             }
 
-            private class RegisterHandlers : Projection<object>
+            private class RegisterHandlers : Projection<object, object>
             {
-                public RegisterHandlers(params Action<object, object>[] handlers)
+                public RegisterHandlers(params Action<object, object, object>[] handlers)
                 {
                     foreach (var handler in handlers)
                         Handle(handler);
