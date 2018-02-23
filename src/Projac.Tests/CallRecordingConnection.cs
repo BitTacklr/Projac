@@ -15,7 +15,7 @@ namespace Projac.Tests
 
         public void RecordCall(int handler, object message, CancellationToken token)
         {
-            _calls.Add(new Tuple<int, object, CancellationToken>(handler, message, CancellationToken.None));
+            _calls.Add(new Tuple<int, object, CancellationToken>(handler, message, token));
         }
 
         public Tuple<int, object, CancellationToken>[] RecordedCalls

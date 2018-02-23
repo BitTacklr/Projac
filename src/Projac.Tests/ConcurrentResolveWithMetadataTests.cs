@@ -1,32 +1,32 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 
 namespace Projac.Tests
 {
     [TestFixture]
-    public class ResolveTests
+    public class ConcurrentResolveWithMetadataTests
     {
         [Test]
         public void WhenEqualToHandlerMessageTypeHandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Resolve.WhenEqualToHandlerMessageType<object>(null));
+                ConcurrentResolve.WhenEqualToHandlerMessageType<object, object>(null));
         }
 
         [Test]
         public void WhenEqualToHandlerMessageTypeResolverThrowsWhenMessageIsNull()
         {
-            var sut = Resolve.WhenEqualToHandlerMessageType(new ProjectionHandler<object>[0]);
+            var sut = ConcurrentResolve.WhenEqualToHandlerMessageType(new ProjectionHandler<object, object>[0]);
             Assert.Throws<ArgumentNullException>(() => sut(null));
         }
 
-        [TestCaseSource(typeof(HandlerResolutionCases), nameof(HandlerResolutionCases.WhenEqualToHandlerMessageTypeCases))]
+        [TestCaseSource(typeof(HandlerWithMetadataResolutionCases), nameof(HandlerWithMetadataResolutionCases.WhenEqualToHandlerMessageTypeCases))]
         public void WhenEqualToHandlerMessageTypeResolverReturnsExpectedResult(
-            ProjectionHandler<object>[] resolvable,
+            ProjectionHandler<object, object>[] resolvable,
             object message,
-            ProjectionHandler<object>[] resolved)
+            ProjectionHandler<object, object>[] resolved)
         {
-            var sut = Resolve.WhenEqualToHandlerMessageType(resolvable);
+            var sut = ConcurrentResolve.WhenEqualToHandlerMessageType(resolvable);
             var result = sut(message);
             Assert.That(result, Is.EquivalentTo(resolved));
         }
@@ -35,23 +35,23 @@ namespace Projac.Tests
         public void WhenAssignableToHandlerMessageTypeHandlersCanNotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                Resolve.WhenAssignableToHandlerMessageType<object>(null));
+                ConcurrentResolve.WhenAssignableToHandlerMessageType<object, object>(null));
         }
 
         [Test]
         public void WhenAssignableToHandlerMessageTypeResolverThrowsWhenMessageIsNull()
         {
-            var sut = Resolve.WhenAssignableToHandlerMessageType(new ProjectionHandler<object>[0]);
+            var sut = ConcurrentResolve.WhenAssignableToHandlerMessageType(new ProjectionHandler<object, object>[0]);
             Assert.Throws<ArgumentNullException>(() => sut(null));
         }
 
-        [TestCaseSource(typeof(HandlerResolutionCases), nameof(HandlerResolutionCases.WhenAssignableToHandlerMessageTypeCases))]
+        [TestCaseSource(typeof(HandlerWithMetadataResolutionCases), nameof(HandlerWithMetadataResolutionCases.WhenAssignableToHandlerMessageTypeCases))]
         public void WhenAssignableToHandlerMessageTypeResolverReturnsExpectedResult(
-            ProjectionHandler<object>[] resolvable,
+            ProjectionHandler<object, object>[] resolvable,
             object message,
-            ProjectionHandler<object>[] resolved)
+            ProjectionHandler<object, object>[] resolved)
         {
-            var sut = Resolve.WhenAssignableToHandlerMessageType(resolvable);
+            var sut = ConcurrentResolve.WhenAssignableToHandlerMessageType(resolvable);
             var result = sut(message);
             Assert.That(result, Is.EquivalentTo(resolved));
         }

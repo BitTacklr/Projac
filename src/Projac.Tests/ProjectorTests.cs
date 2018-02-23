@@ -73,7 +73,7 @@ namespace Projac.Tests
                 () => sut.ProjectAsync(new object(), (IEnumerable<object>) null, CancellationToken.None));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageWithoutTokenCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessageWithoutTokenCases))]
         public async Task ProjectAsyncMessageCausesExpectedCalls(
             ProjectionHandlerResolver<CallRecordingConnection> resolver,
             object message,
@@ -87,7 +87,7 @@ namespace Projac.Tests
             Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageWithTokenCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessageWithTokenCases))]
         public async Task ProjectAsyncTokenMessageCausesExpectedCalls(
             ProjectionHandlerResolver<CallRecordingConnection> resolver,
             object message,
@@ -102,7 +102,7 @@ namespace Projac.Tests
             Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesWithoutTokenCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessagesWithoutTokenCases))]
         public async Task ProjectAsyncMessagesCausesExpectedCalls(
             ProjectionHandlerResolver<CallRecordingConnection> resolver,
             object[] messages,
@@ -116,7 +116,7 @@ namespace Projac.Tests
             Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesWithTokenCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessagesWithTokenCases))]
         public async Task ProjectAsyncTokenMessagesCausesExpectedCalls(
             ProjectionHandlerResolver<CallRecordingConnection> resolver,
             object[] messages,

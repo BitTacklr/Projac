@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Projac.Tests
 {
-    public class HandlerResolutionCases
+    public class HandlerWithMetadataResolutionCases
     {
         public static IEnumerable<TestCaseData> WhenEqualToHandlerMessageTypeCases()
         {
@@ -38,14 +38,14 @@ namespace Projac.Tests
             yield return new TestCaseData(
                 new[] { handler10 },
                 new MessageEnvelope<Message1>(),
-                new ProjectionHandler<object>[0]).SetDescription("Envelope with derived type resolution");
+                new ProjectionHandler<object, object>[0]).SetDescription("Envelope with derived type resolution");
 
             //No match resolution
             var handler11 = HandlerFor<OtherMessage>();
             yield return new TestCaseData(
                 new[] { handler11 },
                 new Message1(),
-                new ProjectionHandler<object>[0]).SetDescription("No match resolution");
+                new ProjectionHandler<object, object>[0]).SetDescription("No match resolution");
 
             // * Handler order */
 
@@ -180,21 +180,21 @@ namespace Projac.Tests
             yield return new TestCaseData(
                 new[] { handler15 },
                 new MessageEnvelope<Int32>(),
-                new ProjectionHandler<object>[0]).SetDescription("Envelope with value type's interface resolution");
+                new ProjectionHandler<object, object>[0]).SetDescription("Envelope with value type's interface resolution");
 
             //Envelope and message interface type resolution
             var handler30 = HandlerFor<Envelope<OtherMessage>>();
             yield return new TestCaseData(
                 new[] { handler30 },
                 new MessageEnvelope<Message1>(),
-                new ProjectionHandler<object>[0]).SetDescription("Envelope and message interface type resolution");
+                new ProjectionHandler<object, object>[0]).SetDescription("Envelope and message interface type resolution");
 
             //Concrete envelope with message base type resolution
             var handler31 = HandlerFor<MessageEnvelope<IMessage>>();
             yield return new TestCaseData(
                 new[] { handler31 },
                 new MessageEnvelope<Message1>(),
-                new ProjectionHandler<object>[0]).SetDescription("Concrete envelope with message base type resolution");
+                new ProjectionHandler<object, object>[0]).SetDescription("Concrete envelope with message base type resolution");
 
             // * Handler order */
 
@@ -212,9 +212,9 @@ namespace Projac.Tests
 
         }
 
-        private static ProjectionHandler<object> HandlerFor<TMessage>()
+        private static ProjectionHandler<object, object> HandlerFor<TMessage>()
         {
-            return new ProjectionHandler<object>(typeof(TMessage), (_, __, ___) => Task.CompletedTask);
+            return new ProjectionHandler<object, object>(typeof(TMessage), (_, __, ___, ____) => Task.CompletedTask);
         }
 
         private interface IMessage { }

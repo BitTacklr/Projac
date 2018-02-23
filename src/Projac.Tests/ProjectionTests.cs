@@ -80,42 +80,46 @@ namespace Projac.Tests
         {
             class WithHandlers : Projection<object>
             {
-                private readonly Signal _signalHandleWithoutCancellation;
-                private readonly Signal _signalHandleWithCancellation;
-                private readonly Signal _signalHandleSync;
-                private readonly Signal[] _signals;
-
                 public WithHandlers()
                 {
-                    _signalHandleWithoutCancellation = new Signal();
-                    _signalHandleWithCancellation = new Signal();
-                    _signalHandleSync = new Signal();
-                    _signals = new []
+                    HandleWithoutCancellation = new MethodCallSink();
+                    HandleWithCancellation = new MethodCallSink();
+                    HandleSync = new MethodCallSink();
+                    Handle((object connection, object message) => 
                     {
-                        _signalHandleWithoutCancellation, _signalHandleWithCancellation, _signalHandleSync
-                    };
-                    Handle<object>((_, __) => { _signalHandleWithoutCancellation.Set(); return TaskFactory(); });
-                    Handle<object>((_, __, ___) => { _signalHandleWithCancellation.Set(); return TaskFactory(); });
-                    Handle<object>((_, __) => { _signalHandleSync.Set(); });
+                        HandleWithoutCancellation.Capture(connection, message);
+                        return Task.CompletedTask;
+                    });
+                    Handle((object connection, object message, CancellationToken token) => 
+                    {
+                        HandleWithCancellation.Capture(connection, message, token);
+                        return Task.CompletedTask;
+                    });
+                    Handle((object connection,object  message) =>
+                    {
+                        HandleSync.Capture(connection, message);
+                    });
                 }
 
-                public Signal[] Signals
-                {
-                    get { return _signals; }
-                }
+                public MethodCallSink HandleWithoutCancellation { get; private set; }
 
-                private static Task TaskFactory()
-                {
-                    return Task.CompletedTask;
-                }
+                public MethodCallSink HandleWithCancellation { get; private set; }
+
+                public MethodCallSink HandleSync { get; private set; }
             }
 
             private WithHandlers _sut;
+            private object _connection;
+            private object _message;
+            private CancellationToken _token;
 
             [SetUp]
             public void SetUp()
             {
                 _sut = new WithHandlers();
+                _connection = new object();
+                _message = new object();
+                _token = new CancellationToken();
             }
 
             [Test]
@@ -125,9 +129,11 @@ namespace Projac.Tests
 
                 foreach (var _ in result)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(_connection, _message, _token);
                 }
-                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(_sut.HandleSync.Matches(_connection, _message), Is.True);
+                Assert.That(_sut.HandleWithCancellation.Matches(_connection, _message, _token), Is.True);
+                Assert.That(_sut.HandleWithoutCancellation.Matches(_connection, _message), Is.True);
             }
 
             [Test]
@@ -137,9 +143,11 @@ namespace Projac.Tests
 
                 foreach (var _ in result)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(_connection, _message, _token);
                 }
-                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(_sut.HandleSync.Matches(_connection, _message), Is.True);
+                Assert.That(_sut.HandleWithCancellation.Matches(_connection, _message, _token), Is.True);
+                Assert.That(_sut.HandleWithoutCancellation.Matches(_connection, _message), Is.True);
             }
 
             [Test]
@@ -149,9 +157,11 @@ namespace Projac.Tests
 
                 foreach (var _ in result)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(_connection, _message, _token);
                 }
-                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(_sut.HandleSync.Matches(_connection, _message), Is.True);
+                Assert.That(_sut.HandleWithCancellation.Matches(_connection, _message, _token), Is.True);
+                Assert.That(_sut.HandleWithoutCancellation.Matches(_connection, _message), Is.True);
             }
 
             [Test]
@@ -161,15 +171,29 @@ namespace Projac.Tests
 
                 foreach (var _ in result)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(_connection, _message, _token);
                 }
-                Assert.That(_sut.Signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(_sut.HandleSync.Matches(_connection, _message), Is.True);
+                Assert.That(_sut.HandleWithCancellation.Matches(_connection, _message, _token), Is.True);
+                Assert.That(_sut.HandleWithoutCancellation.Matches(_connection, _message), Is.True);
             }
         }
 
         [TestFixture]
         public class HandleWithCancellationHandlerTests
         {
+            private object _connection;
+            private object _message;
+            private CancellationToken _token;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _connection = new object();
+                _message = new object();
+                _token = new CancellationToken();
+            }
+
             [Test]
             public void HandleHandlerCanNotBeNull()
             {
@@ -180,64 +204,75 @@ namespace Projac.Tests
             [Test]
             public void HandleHasExpectedResult()
             {
-                var task = TaskFactory();
-                var handler = HandlerFactory(task);
+                var task = TaskFactory(new object());
+                var sink = new MethodCallSink();
+                var handler = HandlerFactory(sink, task);
 
                 var sut = new RegisterHandlers(handler);
 
-                Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EquivalentTo(new[] { task }));
+                var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                Assert.That(sink.Matches(_connection, _message, _token), Is.True);
+                Assert.That(result, Is.EquivalentTo(new[] { task }));
             }
 
             [Test]
             public void SuccessiveHandleHasExpectedResult()
             {
                 var tasks = new List<Task>();
+                var sinks = new List<MethodCallSink>();
                 var handlers = new List<Func<object, object, CancellationToken, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    tasks.Add(TaskFactory());
-                    handlers.Add(HandlerFactory(tasks[tasks.Count - 1]));
+                    tasks.Add(TaskFactory(new object()));
+                    sinks.Add(new MethodCallSink());
+                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1], tasks[tasks.Count - 1]));
                 }
 
                 var sut = new RegisterHandlers(handlers.ToArray());
 
-                Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EquivalentTo(tasks));
+                var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+
+                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message, _token)));
+                Assert.That(result, Is.EquivalentTo(tasks));
             }
 
             [Test]
             public void SuccessiveHandleRetainsOrder()
             {
                 var tasks = new List<Task>();
+                var sinks = new List<MethodCallSink>();
                 var handlers = new List<Func<object, object, CancellationToken, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    tasks.Add(TaskFactory());
-                    handlers.Add(HandlerFactory(tasks[tasks.Count - 1]));
+                    tasks.Add(TaskFactory(new object()));
+                    sinks.Add(new MethodCallSink());
+                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1], tasks[tasks.Count - 1]));
                 }
                 tasks.Reverse();
                 handlers.Reverse();
 
                 var sut = new RegisterHandlers(handlers.ToArray());
 
-                Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EquivalentTo(tasks));
+                var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                
+                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message, _token)));
+                Assert.That(result, Is.EquivalentTo(tasks));
             }
 
             private static readonly Random Random = new Random();
 
-            private static Func<object, object, CancellationToken, Task> HandlerFactory(Task task)
+            private static Func<object, object, CancellationToken, Task> HandlerFactory(MethodCallSink sink, Task task)
             {
-                return (_, __, ___) => task;
+                return (connection, message, token) => 
+                {
+                    sink.Capture(connection, message, token);
+                    return task;
+                };
             }
 
-            private static Task TaskFactory()
+            private static Task TaskFactory(object result)
             {
-                return Task.CompletedTask;
+                return Task.FromResult<object>(result);
             }
 
             private class RegisterNullHandler : Projection<object>
@@ -261,6 +296,18 @@ namespace Projac.Tests
         [TestFixture]
         public class HandleWithoutCancellationHandlerTests
         {
+            private object _connection;
+            private object _message;
+            private CancellationToken _token;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _connection = new object();
+                _message = new object();
+                _token = new CancellationToken();
+            }
+
             [Test]
             public void HandleHandlerCanNotBeNull()
             {
@@ -271,64 +318,75 @@ namespace Projac.Tests
             [Test]
             public void HandleHasExpectedResult()
             {
-                var task = TaskFactory();
-                var handler = HandlerFactory(task);
+                var task = TaskFactory(new object());
+                var sink = new MethodCallSink();
+                var handler = HandlerFactory(sink, task);
 
                 var sut = new RegisterHandlers(handler);
 
-                Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EquivalentTo(new[] { task }));
+                var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                Assert.That(sink.Matches(_connection, _message), Is.True);
+                Assert.That(result, Is.EquivalentTo(new[] { task }));
             }
 
             [Test]
             public void SuccessiveHandleHasExpectedResult()
             {
                 var tasks = new List<Task>();
+                var sinks = new List<MethodCallSink>();
                 var handlers = new List<Func<object, object, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    tasks.Add(TaskFactory());
-                    handlers.Add(HandlerFactory(tasks[tasks.Count - 1]));
+                    tasks.Add(TaskFactory(new object()));
+                    sinks.Add(new MethodCallSink());
+                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1], tasks[tasks.Count - 1]));
                 }
 
                 var sut = new RegisterHandlers(handlers.ToArray());
 
-                Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EquivalentTo(tasks));
+                var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                
+                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message)));
+                Assert.That(result, Is.EquivalentTo(tasks));
             }
 
             [Test]
             public void SuccessiveHandleRetainsOrder()
             {
                 var tasks = new List<Task>();
+                var sinks = new List<MethodCallSink>();
                 var handlers = new List<Func<object, object, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    tasks.Add(TaskFactory());
-                    handlers.Add(HandlerFactory(tasks[tasks.Count - 1]));
+                    tasks.Add(TaskFactory(new object()));
+                    sinks.Add(new MethodCallSink());
+                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1], tasks[tasks.Count - 1]));
                 }
                 tasks.Reverse();
                 handlers.Reverse();
 
                 var sut = new RegisterHandlers(handlers.ToArray());
 
-                Assert.That(
-                    sut.Handlers.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EquivalentTo(tasks));
+                var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                
+                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message)));
+                Assert.That(result, Is.EquivalentTo(tasks));
             }
 
             private static readonly Random Random = new Random();
 
-            private static Func<object, object, Task> HandlerFactory(Task task)
+            private static Func<object, object, Task> HandlerFactory(MethodCallSink sink, Task task)
             {
-                return (_, __) => task;
+                return (connection, message) => 
+                {
+                    sink.Capture(connection, message);
+                    return task;
+                };
             }
 
-            private static Task TaskFactory()
+            private static Task TaskFactory(object result)
             {
-                return Task.CompletedTask;
+                return Task.FromResult<object>(result);
             }
 
             private class RegisterNullHandler : Projection<object>
@@ -352,6 +410,18 @@ namespace Projac.Tests
         [TestFixture]
         public class HandleSyncHandlerTests
         {
+            private object _connection;
+            private object _message;
+            private CancellationToken _token;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _connection = new object();
+                _message = new object();
+                _token = new CancellationToken();
+            }
+
             [Test]
             public void HandleSyncHandlerCanNotBeNull()
             {
@@ -362,66 +432,66 @@ namespace Projac.Tests
             [Test]
             public void HandleSyncHasExpectedResult()
             {
-                var signal = new Signal();
-                var handler = HandlerFactory(signal);
+                var sink = new MethodCallSink();
+                var handler = HandlerFactory(sink);
                 var sut = new RegisterHandlers(handler);
 
                 foreach (var _ in sut.Handlers)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(_connection, _message, _token);
                 }
 
-                Assert.That(signal.IsSet, Is.True);
+                Assert.That(sink.Matches(_connection, _message), Is.True);
             }
 
             [Test]
             public void SuccessiveHandleHasExpectedResult()
             {
-                var signals = new List<Signal>();
+                var sinks = new List<MethodCallSink>();
                 var handlers = new List<Action<object, object>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    signals.Add(new Signal());
-                    handlers.Add(HandlerFactory(signals[signals.Count - 1]));
+                    sinks.Add(new MethodCallSink());
+                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1]));
                 }
                 var sut = new RegisterHandlers(handlers.ToArray());
 
                 foreach (var _ in sut.Handlers)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(_connection, _message, _token);
                 }
 
-                Assert.That(signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message)));
             }
 
             [Test]
             public void SuccessiveHandleRetainsOrder()
             {
-                var signals = new List<Signal>();
+                var sinks = new List<MethodCallSink>();
                 var handlers = new List<Action<object, object>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    signals.Add(new Signal());
-                    handlers.Add(HandlerFactory(signals[signals.Count - 1]));
+                    sinks.Add(new MethodCallSink());
+                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1]));
                 }
-                signals.Reverse();
+                sinks.Reverse();
                 handlers.Reverse();
 
                 var sut = new RegisterHandlers(handlers.ToArray());
 
                 foreach (var _ in sut.Handlers)
                 {
-                    _.Handler(null, null, CancellationToken.None);
+                    _.Handler(_connection, _message, _token);
                 }
 
-                Assert.That(signals, Is.All.Matches<Signal>(signal => signal.IsSet));
+                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message)));
             }
 
             private static readonly Random Random = new Random();
 
-            private static Action<object, object> HandlerFactory(Signal signal)
+            private static Action<object, object> HandlerFactory(MethodCallSink sink)
             {
-                return (_, __) => { signal.Set(); };
+                return (connection, message) => { sink.Capture(connection, message); };
             }
 
             private class RegisterNullHandler : Projection<object>
