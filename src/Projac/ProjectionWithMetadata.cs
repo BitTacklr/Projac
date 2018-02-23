@@ -14,7 +14,7 @@ namespace Projac
         private readonly List<ProjectionHandler<TConnection, TMetadata>> _handlers;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Projection{TConnection}" /> class.
+        ///     Initializes a new instance of the <see cref="Projection{TConnection,TMetadata}" /> class.
         /// </summary>
         protected Projection()
         {
@@ -79,7 +79,7 @@ namespace Projac
         public ProjectionHandler<TConnection, TMetadata>[] Handlers => _handlers.ToArray();
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="Projection{TConnection}"/> to <see><cref>ProjectionHandler{TConnection}</cref></see>.
+        /// Performs an implicit conversion from <see cref="Projection{TConnection,TMetadata}"/> to <see><cref>ProjectionHandler{TConnection,TMetadata}</cref></see>.
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <returns>
@@ -94,7 +94,7 @@ namespace Projac
         /// Returns an enumerator that iterates through a copy of the handlers.
         /// </summary>
         /// <returns>
-        /// An <see cref="ProjectionHandlerEnumerator{TConnection}" /> that can be used to iterate through a copy of the handlers.
+        /// An <see cref="ProjectionHandlerEnumerator{TConnection,TMetadata}" /> that can be used to iterate through a copy of the handlers.
         /// </returns>
         public ProjectionHandlerEnumerator<TConnection, TMetadata> GetEnumerator()
         {
@@ -105,7 +105,7 @@ namespace Projac
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
-        /// An <see cref="ProjectionHandlerEnumerator{TConnection}" /> that can be used to iterate through the collection.
+        /// An <see cref="ProjectionHandlerEnumerator{TConnection,TMetadata}" /> that can be used to iterate through the collection.
         /// </returns>
         IEnumerator<ProjectionHandler<TConnection, TMetadata>> IEnumerable<ProjectionHandler<TConnection, TMetadata>>.GetEnumerator()
         {
