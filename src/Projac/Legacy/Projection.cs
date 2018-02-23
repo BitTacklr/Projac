@@ -20,7 +20,7 @@ namespace Projac
         [Obsolete("Please use the Handle method instead. This method will be removed in a future release.")]
         protected void When<TMessage>(Func<TConnection, TMessage, Task> handler)
         {
-            Handle<TMessage>(handler);
+            Handle(handler);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Projac
         [Obsolete("Please use the Handle method instead. This method will be removed in a future release.")]
         protected void When<TMessage>(Action<TConnection, TMessage> handler)
         {
-            Handle<TMessage>(handler);
+            Handle(handler);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Projac
         [Obsolete("Please use the Handle method instead. This method will be removed in a future release.")]
         protected void When<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
         {
-            Handle<TMessage>(handler);
+            Handle(handler);
         }
     }
 }

@@ -76,10 +76,7 @@ namespace Projac
         /// <value>
         ///     The projection handlers associated with this specification.
         /// </value>
-        public ProjectionHandler<TConnection>[] Handlers
-        {
-            get { return _handlers.ToArray(); }
-        }
+        public ProjectionHandler<TConnection>[] Handlers => _handlers.ToArray();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Projection{TConnection}"/> to <see><cref>ProjectionHandler{TConnection}</cref></see>.

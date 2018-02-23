@@ -20,13 +20,12 @@ namespace Projac
                 throw new ArgumentNullException(nameof(handlers));
             var cache = handlers.
                 GroupBy(handler => handler.Message).
-                ToDictionary(@group => @group.Key, @group => @group.ToArray());
+                ToDictionary(group => group.Key, group => group.ToArray());
             return message =>
             {
                 if(message == null)
                     throw new ArgumentNullException(nameof(message));
-                ProjectionHandler<TConnection>[] result;
-                return cache.TryGetValue(message.GetType(), out result) ? 
+                return cache.TryGetValue(message.GetType(), out var result) ? 
                     result :
                     new ProjectionHandler<TConnection>[0];
             };
@@ -46,8 +45,7 @@ namespace Projac
             {
                 if (message == null)
                     throw new ArgumentNullException(nameof(message));
-                ProjectionHandler<TConnection>[] result;
-                if (!cache.TryGetValue(message.GetType(), out result))
+                if (!cache.TryGetValue(message.GetType(), out var result))
                 {
                     result = Array.FindAll(handlers, 
                         handler => handler.Message.IsInstanceOfType(message));
@@ -73,8 +71,7 @@ namespace Projac
             {
                 if(message == null)
                     throw new ArgumentNullException(nameof(message));
-                ProjectionHandler<TConnection, TMetadata>[] result;
-                return cache.TryGetValue(message.GetType(), out result) ? 
+                return cache.TryGetValue(message.GetType(), out var result) ? 
                     result :
                     new ProjectionHandler<TConnection, TMetadata>[0];
             };
@@ -94,8 +91,7 @@ namespace Projac
             {
                 if (message == null)
                     throw new ArgumentNullException(nameof(message));
-                ProjectionHandler<TConnection, TMetadata>[] result;
-                if (!cache.TryGetValue(message.GetType(), out result))
+                if (!cache.TryGetValue(message.GetType(), out var result))
                 {
                     result = Array.FindAll(handlers, 
                         handler => handler.Message.IsInstanceOfType(message));

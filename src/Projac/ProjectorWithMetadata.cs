@@ -21,10 +21,7 @@ namespace Projac
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="resolver"/> is <c>null</c>.</exception>
         public Projector(ProjectionHandlerResolver<TConnection, TMetadata> resolver)
         {
-            if (resolver == null) 
-                throw new ArgumentNullException(nameof(resolver));
-
-            _resolver = resolver;
+            _resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
         }
 
         /// <summary>

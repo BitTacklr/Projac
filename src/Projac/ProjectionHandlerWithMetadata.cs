@@ -9,9 +9,6 @@ namespace Projac
     /// </summary>
     public class ProjectionHandler<TConnection, TMetadata>
     {
-        private readonly Type _message;
-        private readonly Func<TConnection, object, TMetadata, CancellationToken, Task> _handler;
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectionHandler{TConnection}" /> class.
         /// </summary>
@@ -23,26 +20,18 @@ namespace Projac
         /// </exception>
         public ProjectionHandler(Type message, Func<TConnection, object, TMetadata, CancellationToken, Task> handler)
         {
-            if (message == null) throw new ArgumentNullException(nameof(message));
-            if (handler == null) throw new ArgumentNullException(nameof(handler));
-            _message = message;
-            _handler = handler;
+            Message = message ?? throw new ArgumentNullException(nameof(message));
+            Handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
         /// <summary>
         ///     The type of message to handle.
         /// </summary>
-        public Type Message
-        {
-            get { return _message; }
-        }
+        public Type Message { get; }
 
         /// <summary>
         ///     The function that handles the message.
         /// </summary>
-        public Func<TConnection, object, TMetadata, CancellationToken, Task> Handler
-        {
-            get { return _handler; }
-        }
+        public Func<TConnection, object, TMetadata, CancellationToken, Task> Handler { get; }
     }
 }

@@ -9,8 +9,6 @@ namespace Projac
     /// </summary>
     public class AnonymousProjection<TConnection> : IEnumerable<ProjectionHandler<TConnection>>
     {
-        private readonly ProjectionHandler<TConnection>[] _handlers;
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="AnonymousProjection{TConnection}" /> class.
         /// </summary>
@@ -20,10 +18,7 @@ namespace Projac
         /// </exception>
         public AnonymousProjection(ProjectionHandler<TConnection>[] handlers)
         {
-            if (handlers == null) 
-                throw new ArgumentNullException(nameof(handlers));
-
-            _handlers = handlers;
+            Handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
         }
 
         /// <summary>
@@ -32,10 +27,7 @@ namespace Projac
         /// <value>
         ///     The projection handlers associated with this specification.
         /// </value>
-        public ProjectionHandler<TConnection>[] Handlers
-        {
-            get { return _handlers; }
-        }
+        public ProjectionHandler<TConnection>[] Handlers { get; }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="AnonymousProjection{TConnection}"/> to <see><cref>ProjectionHandler{TConnection}</cref></see>.

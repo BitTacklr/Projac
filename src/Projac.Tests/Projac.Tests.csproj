@@ -42,7 +42,7 @@
   <ItemGroup>
     <ProjectReference Include="../Projac/Projac.csproj" />
   </ItemGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' ">
@@ -54,8 +54,11 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <!-- <PackageReference Include="Mono.Cecil" Version="0.10.0-beta7" /> -->
     <PackageReference Include="NUnit" Version="3.9.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />    
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="PublicApiGenerator" Version="6.5.0" />
+    <!-- <PackageReference Include="System.CodeDom" Version="4.4.0" />  -->
   </ItemGroup>
 </Project>

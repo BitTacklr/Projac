@@ -19,8 +19,7 @@ namespace Projac
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="handlers"/> are <c>null</c>.</exception>
         public ProjectionHandlerEnumerator(ProjectionHandler<TConnection, TMetadata>[] handlers)
         {
-            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
-            _handlers = handlers;
+            _handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
             _index = -1;
         }
 
@@ -68,10 +67,7 @@ namespace Projac
         /// <summary>
         /// Gets the element in the collection at the current position of the enumerator.
         /// </summary>
-        object IEnumerator.Current
-        {
-            get { return Current; }
-        }
+        object IEnumerator.Current => Current;
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

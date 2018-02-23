@@ -9,7 +9,7 @@ namespace Projac
     /// <summary>
     ///     Represent a projection.
     /// </summary>
-    public abstract partial class Projection<TConnection, TMetadata> : IEnumerable<ProjectionHandler<TConnection, TMetadata>>
+    public abstract class Projection<TConnection, TMetadata> : IEnumerable<ProjectionHandler<TConnection, TMetadata>>
     {
         private readonly List<ProjectionHandler<TConnection, TMetadata>> _handlers;
 
@@ -76,10 +76,7 @@ namespace Projac
         /// <value>
         ///     The projection handlers associated with this specification.
         /// </value>
-        public ProjectionHandler<TConnection, TMetadata>[] Handlers
-        {
-            get { return _handlers.ToArray(); }
-        }
+        public ProjectionHandler<TConnection, TMetadata>[] Handlers => _handlers.ToArray();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Projection{TConnection}"/> to <see><cref>ProjectionHandler{TConnection}</cref></see>.

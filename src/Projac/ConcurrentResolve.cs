@@ -50,7 +50,7 @@ namespace Projac
         /// <returns>A <see cref="ProjectionHandlerResolver{TConnection, TMetadata}">resolver</see>.</returns>
         public static ProjectionHandlerResolver<TConnection, TMetadata> WhenEqualToHandlerMessageType<TConnection, TMetadata>(ProjectionHandler<TConnection, TMetadata>[] handlers)
         {
-            return Resolve.WhenEqualToHandlerMessageType<TConnection, TMetadata>(handlers);
+            return Resolve.WhenEqualToHandlerMessageType(handlers);
         }
 
         /// <summary>

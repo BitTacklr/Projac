@@ -26,8 +26,7 @@ namespace Projac
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="handlers"/> is <c>null</c>.</exception>
         public AnonymousProjectionBuilder(ProjectionHandler<TConnection>[] handlers)
         {
-            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
-            _handlers = handlers;
+            _handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
         }
 
         /// <summary>

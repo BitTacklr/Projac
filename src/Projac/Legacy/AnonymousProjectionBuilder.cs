@@ -17,7 +17,7 @@ namespace Projac
         [Obsolete("Please use the Handle method instead. This method will be removed in a future release.")]
         public AnonymousProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, Task> handler)
         {
-            return Handle<TMessage>(handler);
+            return Handle(handler);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Projac
         [Obsolete("Please use the Handle method instead. This method will be removed in a future release.")]
         public AnonymousProjectionBuilder<TConnection> When<TMessage>(Action<TConnection, TMessage> handler)
         {
-            return Handle<TMessage>(handler);
+            return Handle(handler);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Projac
         [Obsolete("Please use the Handle method instead. This method will be removed in a future release.")]
         public AnonymousProjectionBuilder<TConnection> When<TMessage>(Func<TConnection, TMessage, CancellationToken, Task> handler)
         {
-            return Handle<TMessage>(handler);
+            return Handle(handler);
         }
     }
 }
