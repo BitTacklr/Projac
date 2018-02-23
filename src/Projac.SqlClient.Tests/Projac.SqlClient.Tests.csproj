@@ -42,8 +42,8 @@
     <NoWarn>CS0618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Projac.Sql\Projac.Sql.csproj" />
-    <ProjectReference Include="..\Projac.SqlClient\Projac.SqlClient.csproj" />
+    <ProjectReference Include="../Projac.Sql/Projac.Sql.csproj" />
+    <ProjectReference Include="../Projac.SqlClient/Projac.SqlClient.csproj" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
     <DebugType>portable</DebugType>

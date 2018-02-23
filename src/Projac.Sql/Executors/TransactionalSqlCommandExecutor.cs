@@ -34,7 +34,7 @@ namespace Projac.Sql.Executors
             IsolationLevel isolationLevel,
             int commandTimeout = 30)
         {
-            if (settings == null) throw new ArgumentNullException("settings");
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
             _dbProviderFactory = DbProviderFactories.GetFactory(settings.ProviderName);
             _connectionString = settings.ConnectionString;
             _isolationLevel = isolationLevel;
@@ -55,8 +55,8 @@ namespace Projac.Sql.Executors
             IsolationLevel isolationLevel,
             int commandTimeout = 30)
         {
-            if (dbProviderFactory == null) throw new ArgumentNullException("dbProviderFactory");
-            if (connectionString == null) throw new ArgumentNullException("connectionString");
+            if (dbProviderFactory == null) throw new ArgumentNullException(nameof(dbProviderFactory));
+            if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
             _dbProviderFactory = dbProviderFactory;
             _connectionString = connectionString;
             _isolationLevel = isolationLevel;
@@ -72,7 +72,7 @@ namespace Projac.Sql.Executors
         public void ExecuteNonQuery(SqlNonQueryCommand command)
         {
             if (command == null) 
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbConnection = _dbProviderFactory.CreateConnection())
             {
@@ -112,7 +112,7 @@ namespace Projac.Sql.Executors
         public int ExecuteNonQuery(IEnumerable<SqlNonQueryCommand> commands)
         {
             if (commands == null) 
-                throw new ArgumentNullException("commands");
+                throw new ArgumentNullException(nameof(commands));
 
             using (var dbConnection = _dbProviderFactory.CreateConnection())
             {
@@ -177,7 +177,7 @@ namespace Projac.Sql.Executors
         public async Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
         {
             if (commands == null) 
-                throw new ArgumentNullException("commands");
+                throw new ArgumentNullException(nameof(commands));
 
             using (var dbConnection = _dbProviderFactory.CreateConnection())
             {
@@ -242,7 +242,7 @@ namespace Projac.Sql.Executors
         public async Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
         {
             if (command == null)
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbConnection = _dbProviderFactory.CreateConnection())
             {

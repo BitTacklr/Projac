@@ -21,7 +21,7 @@ namespace Projac
         public Projector(ProjectionHandlerResolver<TConnection> resolver)
         {
             if (resolver == null) 
-                throw new ArgumentNullException("resolver");
+                throw new ArgumentNullException(nameof(resolver));
 
             _resolver = resolver;
         }
@@ -52,7 +52,7 @@ namespace Projac
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="connection"/> or <paramref name="message"/> is <c>null</c>.</exception>
         public Task ProjectAsync(TConnection connection, object message, CancellationToken cancellationToken)
         {
-            if (message == null) throw new ArgumentNullException("message");
+            if (message == null) throw new ArgumentNullException(nameof(message));
 
             return 
                 (
@@ -87,7 +87,7 @@ namespace Projac
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="connection"/> or <paramref name="messages"/> is <c>null</c>.</exception>
         public Task ProjectAsync(TConnection connection, IEnumerable<object> messages, CancellationToken cancellationToken)
         {
-            if (messages == null) throw new ArgumentNullException("messages");
+            if (messages == null) throw new ArgumentNullException(nameof(messages));
 
             return
                 (

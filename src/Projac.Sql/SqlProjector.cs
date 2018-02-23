@@ -21,8 +21,8 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="resolver"/> or <paramref name="executor"/> is <c>null</c>.</exception>
         public SqlProjector(SqlProjectionHandlerResolver resolver, ISqlNonQueryCommandExecutor executor)
         {
-            if (resolver == null) throw new ArgumentNullException("resolver");
-            if (executor == null) throw new ArgumentNullException("executor");
+            if (resolver == null) throw new ArgumentNullException(nameof(resolver));
+            if (executor == null) throw new ArgumentNullException(nameof(executor));
 
             _resolver = resolver;
             _executor = executor;
@@ -36,7 +36,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="message"/> is <c>null</c>.</exception>
         public int Project(object message)
         {
-            if (message == null) throw new ArgumentNullException("message");
+            if (message == null) throw new ArgumentNullException(nameof(message));
 
             return _executor.
                 ExecuteNonQuery(
@@ -54,7 +54,7 @@ namespace Projac.Sql
         public int Project(IEnumerable<object> messages)
         {
             if (messages == null) 
-                throw new ArgumentNullException("messages");
+                throw new ArgumentNullException(nameof(messages));
 
             return _executor.
                 ExecuteNonQuery(

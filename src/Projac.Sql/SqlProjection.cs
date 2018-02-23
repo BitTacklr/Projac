@@ -27,7 +27,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         protected void Handle<TMessage>(Func<TMessage, SqlNonQueryCommand> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             _handlers.Add(new SqlProjectionHandler(typeof (TMessage), message => new[] {handler((TMessage) message)}));
         }
 
@@ -39,7 +39,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         protected void Handle<TMessage>(Func<TMessage, SqlNonQueryCommand[]> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             _handlers.Add(new SqlProjectionHandler(typeof (TMessage), message => handler((TMessage) message)));
         }
 
@@ -51,7 +51,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         protected void Handle<TMessage>(Func<TMessage, IEnumerable<SqlNonQueryCommand>> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             _handlers.Add(new SqlProjectionHandler(typeof(TMessage), message => handler((TMessage)message)));
         }
 

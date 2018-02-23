@@ -23,8 +23,8 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="resolver"/> or <paramref name="executor"/> is <c>null</c>.</exception>
         public AsyncSqlProjector(SqlProjectionHandlerResolver resolver, IAsyncSqlNonQueryCommandExecutor executor)
         {
-            if (resolver == null) throw new ArgumentNullException("resolver");
-            if (executor == null) throw new ArgumentNullException("executor");
+            if (resolver == null) throw new ArgumentNullException(nameof(resolver));
+            if (executor == null) throw new ArgumentNullException(nameof(executor));
 
             _resolver = resolver;
             _executor = executor;
@@ -56,7 +56,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="message"/> is <c>null</c>.</exception>
         public Task<int> ProjectAsync(object message, CancellationToken cancellationToken)
         {
-            if (message == null) throw new ArgumentNullException("message");
+            if (message == null) throw new ArgumentNullException(nameof(message));
 
             return _executor.
                 ExecuteNonQueryAsync(
@@ -92,7 +92,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="messages"/> are <c>null</c>.</exception>
         public Task<int> ProjectAsync(IEnumerable<object> messages, CancellationToken cancellationToken)
         {
-            if (messages == null) throw new ArgumentNullException("messages");
+            if (messages == null) throw new ArgumentNullException(nameof(messages));
 
             return _executor.
                 ExecuteNonQueryAsync(

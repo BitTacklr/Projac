@@ -23,7 +23,7 @@ namespace Projac.SqlClient
         public TSqlCharValue(string value, TSqlCharSize size)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             _value = value;
             _size = size;
         }

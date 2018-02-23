@@ -7,14 +7,14 @@ namespace Projac.SQLite.Tests
 {
     public partial class SQLiteSyntaxTests
     {
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "NonQueryStatementCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.NonQueryStatementCases))]
         public void NonQueryStatementReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SQLiteParameterEqualityComparer()));
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "NonQueryStatementIfCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.NonQueryStatementIfCases))]
         public void NonQueryStatementIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -26,7 +26,7 @@ namespace Projac.SQLite.Tests
             }
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "NonQueryStatementUnlessCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.NonQueryStatementUnlessCases))]
         public void NonQueryStatementUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -38,14 +38,14 @@ namespace Projac.SQLite.Tests
             }
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "NonQueryStatementFormatCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.NonQueryStatementFormatCases))]
         public void NonQueryStatementFormatReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SQLiteParameterEqualityComparer()));
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "NonQueryStatementFormatIfCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.NonQueryStatementFormatIfCases))]
         public void NonQueryStatementFormatIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -57,7 +57,7 @@ namespace Projac.SQLite.Tests
             }
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "NonQueryStatementFormatUnlessCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.NonQueryStatementFormatUnlessCases))]
         public void NonQueryStatementFormatUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();

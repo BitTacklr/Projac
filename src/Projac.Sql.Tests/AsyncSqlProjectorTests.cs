@@ -52,7 +52,7 @@ namespace Projac.Sql.Tests
             Assert.Throws<ArgumentNullException>(() => sut.ProjectAsync((IEnumerable<object>)null, CancellationToken.None));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessageCases))]
         public async Task ProjectAsyncMessageCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object message,
@@ -67,7 +67,7 @@ namespace Projac.Sql.Tests
             Assert.That(mock.Commands, Is.EquivalentTo(commands));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessagesCases))]
         public async Task ProjectAsyncMessagesCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object[] messages,
@@ -82,7 +82,7 @@ namespace Projac.Sql.Tests
             Assert.That(mock.Commands, Is.EquivalentTo(commands));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessageCases))]
         public async Task ProjectAsyncMessageTokenCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object message,
@@ -97,7 +97,7 @@ namespace Projac.Sql.Tests
             Assert.That(mock.Commands, Is.EquivalentTo(commands));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessagesCases))]
         public async Task ProjectAsyncMessagesTokenCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object[] messages,

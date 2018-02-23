@@ -26,7 +26,7 @@ namespace Projac
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="handlers"/> is <c>null</c>.</exception>
         public AnonymousProjectionBuilder(ProjectionHandler<TConnection, TMetadata>[] handlers)
         {
-            if (handlers == null) throw new ArgumentNullException("handlers");
+            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
             _handlers = handlers;
         }
 
@@ -39,7 +39,7 @@ namespace Projac
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         public AnonymousProjectionBuilder<TConnection, TMetadata> Handle<TMessage>(Func<TConnection, TMessage, TMetadata, Task> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             return new AnonymousProjectionBuilder<TConnection, TMetadata>(
                 _handlers.Concat(
                     new[]
@@ -61,7 +61,7 @@ namespace Projac
         public AnonymousProjectionBuilder<TConnection, TMetadata> Handle<TMessage>(Action<TConnection, TMessage, TMetadata> handler)
         {
             if (handler == null)
-                throw new ArgumentNullException("handler");
+                throw new ArgumentNullException(nameof(handler));
 
             return new AnonymousProjectionBuilder<TConnection, TMetadata>(
                 _handlers.Concat(
@@ -87,7 +87,7 @@ namespace Projac
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         public AnonymousProjectionBuilder<TConnection, TMetadata> Handle<TMessage>(Func<TConnection, TMessage, TMetadata, CancellationToken, Task> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             return new AnonymousProjectionBuilder<TConnection, TMetadata>(
                 _handlers.Concat(
                     new[]

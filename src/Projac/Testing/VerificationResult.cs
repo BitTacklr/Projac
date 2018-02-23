@@ -39,7 +39,7 @@ namespace Projac.Testing
         public static VerificationResult Pass(string message = "")
         {
             if (message == null) 
-                throw new ArgumentNullException("message");
+                throw new ArgumentNullException(nameof(message));
 
             return new VerificationResult(VerificationResultState.Passed, message);
         }
@@ -52,7 +52,7 @@ namespace Projac.Testing
         public static VerificationResult Fail(string message = "")
         {
             if (message == null) 
-                throw new ArgumentNullException("message");
+                throw new ArgumentNullException(nameof(message));
             
             return new VerificationResult(VerificationResultState.Failed, message);
         }

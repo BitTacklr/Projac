@@ -113,7 +113,7 @@ namespace Recipes.SQLiteIntegration
             public SQLiteExecutor(Func<SQLiteConnection> connectionFactory, int commandTimeout = 30)
             {
                 if (connectionFactory == null)
-                    throw new ArgumentNullException("connectionFactory");
+                    throw new ArgumentNullException(nameof(connectionFactory));
                 _connectionFactory = connectionFactory;
                 _commandTimeout = commandTimeout;
             }
@@ -121,14 +121,14 @@ namespace Recipes.SQLiteIntegration
             public Task ExecuteNonQueryAsync(SqlNonQueryCommand command)
             {
                 if (command == null)
-                    throw new ArgumentNullException("command");
+                    throw new ArgumentNullException(nameof(command));
                 return ExecuteNonQueryAsync(command, CancellationToken.None);
             }
 
             public async Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
             {
                 if (command == null)
-                    throw new ArgumentNullException("command");
+                    throw new ArgumentNullException(nameof(command));
 
                 using (var dbConnection = _connectionFactory())
                 {
@@ -155,14 +155,14 @@ namespace Recipes.SQLiteIntegration
             public Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands)
             {
                 if (commands == null)
-                    throw new ArgumentNullException("commands");
+                    throw new ArgumentNullException(nameof(commands));
                 return ExecuteNonQueryAsync(commands, CancellationToken.None);
             }
 
             public async Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
             {
                 if (commands == null)
-                    throw new ArgumentNullException("commands");
+                    throw new ArgumentNullException(nameof(commands));
                 using (var dbConnection = _connectionFactory())
                 {
                     await dbConnection.OpenAsync(cancellationToken);

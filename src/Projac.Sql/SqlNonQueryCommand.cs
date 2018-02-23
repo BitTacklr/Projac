@@ -26,9 +26,9 @@ namespace Projac.Sql
         public SqlNonQueryCommand(string text, DbParameter[] parameters, CommandType type)
         {
             if (text == null)
-                throw new ArgumentNullException("text");
+                throw new ArgumentNullException(nameof(text));
             if (parameters == null)
-                throw new ArgumentNullException("parameters");
+                throw new ArgumentNullException(nameof(parameters));
             if (!Enum.IsDefined(typeof (CommandType), type))
                 throw new ArgumentException(string.Format("The command type value {0} is not supported.", type), "type");
             _text = text;

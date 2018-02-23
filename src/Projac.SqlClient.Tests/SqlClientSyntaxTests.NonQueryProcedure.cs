@@ -6,14 +6,14 @@ namespace Projac.Sql.Tests.SqlClient
 {
     public partial class SqlClientSyntaxTests
     {
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "NonQueryProcedureCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.NonQueryProcedureCases))]
         public void NonQueryProcedureReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "NonQueryProcedureIfCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.NonQueryProcedureIfCases))]
         public void NonQueryProcedureIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -25,7 +25,7 @@ namespace Projac.Sql.Tests.SqlClient
             }
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "NonQueryProcedureUnlessCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.NonQueryProcedureUnlessCases))]
         public void NonQueryProcedureUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -37,14 +37,14 @@ namespace Projac.Sql.Tests.SqlClient
             }
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "NonQueryProcedureFormatCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.NonQueryProcedureFormatCases))]
         public void NonQueryProcedureFormatReturnsExpectedInstance(SqlNonQueryCommand actual, SqlNonQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "NonQueryProcedureFormatIfCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.NonQueryProcedureFormatIfCases))]
         public void NonQueryProcedureFormatIfReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -56,7 +56,7 @@ namespace Projac.Sql.Tests.SqlClient
             }
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "NonQueryProcedureFormatUnlessCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.NonQueryProcedureFormatUnlessCases))]
         public void NonQueryProcedureFormatUnlessReturnsExpectedInstance(IEnumerable<SqlNonQueryCommand> actual, SqlNonQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();

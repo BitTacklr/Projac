@@ -18,7 +18,7 @@ namespace Projac.Sql
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="handlers"/> are <c>null</c>.</exception>
         public AnonymousSqlProjection(SqlProjectionHandler[] handlers)
         {
-            if (handlers == null) throw new ArgumentNullException("handlers");
+            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
             _handlers = handlers;
         }
 

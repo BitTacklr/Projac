@@ -10,7 +10,7 @@ namespace Projac.Sql.Tests.Executors
 
         public TestDbTransaction(TestDbConnection connection)
         {
-            if (connection == null) throw new ArgumentNullException("connection");
+            if (connection == null) throw new ArgumentNullException(nameof(connection));
             _connection = connection;
         }
 

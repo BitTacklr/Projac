@@ -23,7 +23,7 @@ namespace Projac.Testing
         public ProjectionScenario(ProjectionHandlerResolver<TConnection> resolver)
         {
             if (resolver == null) 
-                throw new ArgumentNullException("resolver");
+                throw new ArgumentNullException(nameof(resolver));
             _resolver = resolver;
             _messages = new object[0];
         }
@@ -42,7 +42,7 @@ namespace Projac.Testing
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="messages"/> is <c>null</c>.</exception>
         public ProjectionScenario<TConnection> Given(params object[] messages)
         {
-            if (messages == null) throw new ArgumentNullException("messages");
+            if (messages == null) throw new ArgumentNullException(nameof(messages));
             return new ProjectionScenario<TConnection>(
                 _resolver,
                 _messages.Concat(messages).ToArray());
@@ -71,7 +71,7 @@ namespace Projac.Testing
         public ProjectionTestSpecification<TConnection> Verify(Func<TConnection, Task<VerificationResult>> verification)
         {
             if (verification == null) 
-                throw new ArgumentNullException("verification");
+                throw new ArgumentNullException(nameof(verification));
             return new ProjectionTestSpecification<TConnection>(
                 _resolver,
                 _messages,
@@ -87,7 +87,7 @@ namespace Projac.Testing
         public ProjectionTestSpecification<TConnection> Verify(Func<TConnection, CancellationToken, Task<VerificationResult>> verification)
         {
             if (verification == null) 
-                throw new ArgumentNullException("verification");
+                throw new ArgumentNullException(nameof(verification));
             return new ProjectionTestSpecification<TConnection>(
                 _resolver,
                 _messages,

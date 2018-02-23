@@ -81,7 +81,7 @@ namespace Recipes.RavenDBIntegration
         public static ProjectionScenario<IAsyncDocumentSession> For(
             ProjectionHandler<IAsyncDocumentSession>[] handlers)
         {
-            if (handlers == null) throw new ArgumentNullException("handlers");
+            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
             return new ProjectionScenario<IAsyncDocumentSession>(
                 ConcurrentResolve.WhenEqualToHandlerMessageType(handlers));
         }
@@ -115,7 +115,7 @@ namespace Recipes.RavenDBIntegration
         public static Task Expect(this ProjectionScenario<IAsyncDocumentSession> scenario, params object[] documents)
         {
             if (documents == null) 
-                throw new ArgumentNullException("documents");
+                throw new ArgumentNullException(nameof(documents));
 
             if (documents.Length == 0)
             {
@@ -176,7 +176,7 @@ namespace Recipes.RavenDBIntegration
 
         public static async Task Assert(this ProjectionTestSpecification<IAsyncDocumentSession> specification)
         {
-            if (specification == null) throw new ArgumentNullException("specification");
+            if (specification == null) throw new ArgumentNullException(nameof(specification));
             using (var store = new EmbeddableDocumentStore
             {
                 RunInMemory = true,

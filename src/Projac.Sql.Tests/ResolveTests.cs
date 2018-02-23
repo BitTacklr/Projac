@@ -20,7 +20,7 @@ namespace Projac.Sql.Tests
             Assert.Throws<ArgumentNullException>(() => sut(null));
         }
 
-        [TestCaseSource(typeof(HandlerResolutionCases), "WhenEqualToHandlerMessageTypeCases")]
+        [TestCaseSource(typeof(HandlerResolutionCases), nameof(HandlerResolutionCases.WhenEqualToHandlerMessageTypeCases))]
         public void WhenEqualToHandlerMessageTypeResolverReturnsExpectedResult(
             SqlProjectionHandler[] resolvable,
             object message,
@@ -45,7 +45,7 @@ namespace Projac.Sql.Tests
             Assert.Throws<ArgumentNullException>(() => sut(null));
         }
 
-        [TestCaseSource(typeof(HandlerResolutionCases), "WhenAssignableToHandlerMessageTypeCases")]
+        [TestCaseSource(typeof(HandlerResolutionCases), nameof(HandlerResolutionCases.WhenAssignableToHandlerMessageTypeCases))]
         public void WhenAssignableToHandlerMessageTypeResolverReturnsExpectedResult(
             SqlProjectionHandler[] resolvable,
             object message,

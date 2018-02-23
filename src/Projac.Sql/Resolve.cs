@@ -17,14 +17,14 @@ namespace Projac.Sql
         public static SqlProjectionHandlerResolver WhenEqualToHandlerMessageType(SqlProjectionHandler[] handlers)
         {
             if (handlers == null) 
-                throw new ArgumentNullException("handlers");
+                throw new ArgumentNullException(nameof(handlers));
             var cache = handlers.
                 GroupBy(handler => handler.Message).
                 ToDictionary(@group => @group.Key, @group => @group.ToArray());
             return message =>
             {
                 if(message == null)
-                    throw new ArgumentNullException("message");
+                    throw new ArgumentNullException(nameof(message));
                 SqlProjectionHandler[] result;
                 return cache.TryGetValue(message.GetType(), out result) ? 
                     result : 
@@ -40,12 +40,12 @@ namespace Projac.Sql
         public static SqlProjectionHandlerResolver WhenAssignableToHandlerMessageType(SqlProjectionHandler[] handlers)
         {
             if (handlers == null)
-                throw new ArgumentNullException("handlers");
+                throw new ArgumentNullException(nameof(handlers));
             var cache = new Dictionary<Type, SqlProjectionHandler[]>();
             return message =>
             {
                 if (message == null)
-                    throw new ArgumentNullException("message");
+                    throw new ArgumentNullException(nameof(message));
                 SqlProjectionHandler[] result;
                 if (!cache.TryGetValue(message.GetType(), out result))
                 {

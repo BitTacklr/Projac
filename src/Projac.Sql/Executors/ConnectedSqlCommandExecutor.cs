@@ -29,7 +29,7 @@ namespace Projac.Sql.Executors
         public ConnectedSqlCommandExecutor(DbConnection dbConnection, int commandTimeout = 30)
         {
             if (dbConnection == null)
-                throw new ArgumentNullException("dbConnection");
+                throw new ArgumentNullException(nameof(dbConnection));
             if (dbConnection.State != ConnectionState.Open)
                 throw new ArgumentException(
                     "The connection must be in the 'Open' state. Please make sure you've opened the connection beforehand.",
@@ -47,7 +47,7 @@ namespace Projac.Sql.Executors
         public void ExecuteNonQuery(SqlNonQueryCommand command)
         {
             if (command == null) 
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbCommand = _dbConnection.CreateCommand())
             {
@@ -69,7 +69,7 @@ namespace Projac.Sql.Executors
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="commands" /> are <c>null</c>.</exception>
         public int ExecuteNonQuery(IEnumerable<SqlNonQueryCommand> commands)
         {
-            if (commands == null) throw new ArgumentNullException("commands");
+            if (commands == null) throw new ArgumentNullException(nameof(commands));
 
             using (var dbCommand = _dbConnection.CreateCommand())
             {
@@ -117,7 +117,7 @@ namespace Projac.Sql.Executors
         public async Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
         {
             if (command == null)
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbCommand = _dbConnection.CreateCommand())
             {
@@ -158,7 +158,7 @@ namespace Projac.Sql.Executors
         public async Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
         {
             if (commands == null) 
-                throw new ArgumentNullException("commands");
+                throw new ArgumentNullException(nameof(commands));
 
             var count = 0;
             using (var dbCommand = _dbConnection.CreateCommand())
@@ -188,7 +188,7 @@ namespace Projac.Sql.Executors
         public DbDataReader ExecuteReader(SqlQueryCommand command)
         {
             if (command == null) 
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbCommand = _dbConnection.CreateCommand())
             {
@@ -211,7 +211,7 @@ namespace Projac.Sql.Executors
         public object ExecuteScalar(SqlQueryCommand command)
         {
             if (command == null)
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbCommand = _dbConnection.CreateCommand())
             {
@@ -250,7 +250,7 @@ namespace Projac.Sql.Executors
         public Task<object> ExecuteScalarAsync(SqlQueryCommand command, CancellationToken cancellationToken)
         {
             if (command == null)
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbCommand = _dbConnection.CreateCommand())
             {
@@ -289,7 +289,7 @@ namespace Projac.Sql.Executors
         public Task<DbDataReader> ExecuteReaderAsync(SqlQueryCommand command, CancellationToken cancellationToken)
         {
             if (command == null) 
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbCommand = _dbConnection.CreateCommand())
             {

@@ -25,7 +25,7 @@ namespace Projac.Sql
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="handlers"/> is <c>null</c>.</exception>
         public AnonymousSqlProjectionBuilder(SqlProjectionHandler[] handlers)
         {
-            if (handlers == null) throw new ArgumentNullException("handlers");
+            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
             _handlers = handlers;
         }
 
@@ -38,7 +38,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         public AnonymousSqlProjectionBuilder Handle<TMessage>(Func<TMessage, SqlNonQueryCommand> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             return new AnonymousSqlProjectionBuilder(
                 _handlers.Concat(
                     new[]
@@ -61,7 +61,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         public AnonymousSqlProjectionBuilder Handle<TMessage>(Func<TMessage, SqlNonQueryCommand[]> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             return new AnonymousSqlProjectionBuilder(
                 _handlers.Concat(
                     new[]
@@ -84,7 +84,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         public AnonymousSqlProjectionBuilder Handle<TMessage>(Func<TMessage, IEnumerable<SqlNonQueryCommand>> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             return new AnonymousSqlProjectionBuilder(
                 _handlers.Concat(
                     new[]

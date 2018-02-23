@@ -22,8 +22,8 @@ namespace Projac.Sql
         /// </exception>
         public SqlProjectionHandler(Type message, Func<object, IEnumerable<SqlNonQueryCommand>> handler)
         {
-            if (message == null) throw new ArgumentNullException("message");
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (message == null) throw new ArgumentNullException(nameof(message));
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             _message = message;
             _handler = handler;
         }

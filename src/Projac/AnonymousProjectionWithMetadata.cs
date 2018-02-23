@@ -21,7 +21,7 @@ namespace Projac
         public AnonymousProjection(ProjectionHandler<TConnection, TMetadata>[] handlers)
         {
             if (handlers == null) 
-                throw new ArgumentNullException("handlers");
+                throw new ArgumentNullException(nameof(handlers));
 
             _handlers = handlers;
         }

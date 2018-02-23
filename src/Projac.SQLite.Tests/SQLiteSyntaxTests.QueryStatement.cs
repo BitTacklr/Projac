@@ -7,14 +7,14 @@ namespace Projac.SQLite.Tests
 {
     public partial class SQLiteSyntaxTests
     {
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "QueryStatementCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.QueryStatementCases))]
         public void QueryStatementReturnsExpectedInstance(SqlQueryCommand actual, SqlQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SQLiteParameterEqualityComparer()));
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "QueryStatementIfCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.QueryStatementIfCases))]
         public void QueryStatementIfReturnsExpectedInstance(IEnumerable<SqlQueryCommand> actual, SqlQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -26,7 +26,7 @@ namespace Projac.SQLite.Tests
             }
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "QueryStatementUnlessCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.QueryStatementUnlessCases))]
         public void QueryStatementUnlessReturnsExpectedInstance(IEnumerable<SqlQueryCommand> actual, SqlQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -38,14 +38,14 @@ namespace Projac.SQLite.Tests
             }
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "QueryStatementFormatCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.QueryStatementFormatCases))]
         public void QueryStatementFormatReturnsExpectedInstance(SqlQueryCommand actual, SqlQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SQLiteParameterEqualityComparer()));
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "QueryStatementFormatIfCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.QueryStatementFormatIfCases))]
         public void QueryStatementFormatIfReturnsExpectedInstance(IEnumerable<SqlQueryCommand> actual, SqlQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -57,7 +57,7 @@ namespace Projac.SQLite.Tests
             }
         }
 
-        [TestCaseSource(typeof(SQLiteSyntaxTestCases), "QueryStatementFormatUnlessCases")]
+        [TestCaseSource(typeof(SQLiteSyntaxTestCases), nameof(SQLiteSyntaxTestCases.QueryStatementFormatUnlessCases))]
         public void QueryStatementFormatUnlessReturnsExpectedInstance(IEnumerable<SqlQueryCommand> actual, SqlQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();

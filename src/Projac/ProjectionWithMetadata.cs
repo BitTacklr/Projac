@@ -29,7 +29,7 @@ namespace Projac
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         protected void Handle<TMessage>(Func<TConnection, TMessage, TMetadata, Task> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             _handlers.Add(
                 new ProjectionHandler<TConnection, TMetadata>(
                     typeof(TMessage),
@@ -44,7 +44,7 @@ namespace Projac
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         protected void Handle<TMessage>(Action<TConnection, TMessage, TMetadata> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             _handlers.Add(
                 new ProjectionHandler<TConnection, TMetadata>(
                     typeof(TMessage),
@@ -63,7 +63,7 @@ namespace Projac
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="handler" /> is <c>null</c>.</exception>
         protected void Handle<TMessage>(Func<TConnection, TMessage, TMetadata, CancellationToken, Task> handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             _handlers.Add(
                 new ProjectionHandler<TConnection, TMetadata>(
                     typeof(TMessage),

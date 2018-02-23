@@ -116,7 +116,7 @@ namespace Recipes.MemoryCacheIntegration
         public static async Task Assert(this ProjectionTestSpecification<MemoryCache> specification)
         {
             if (specification == null)
-                throw new ArgumentNullException("specification");
+                throw new ArgumentNullException(nameof(specification));
             using (var cache = new MemoryCache(new Random().Next().ToString()))
             {
                 await new Projector<MemoryCache>(specification.Resolver).
@@ -132,7 +132,7 @@ namespace Recipes.MemoryCacheIntegration
         public static Task Expect(this ProjectionScenario<MemoryCache> scenario, params CacheItem[] items)
         {
             if (items == null)
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
 
             if (items.Length == 0)
             {

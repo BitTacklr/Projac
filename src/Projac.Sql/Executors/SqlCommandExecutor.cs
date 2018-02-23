@@ -32,7 +32,7 @@ namespace Projac.Sql.Executors
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="settings" /> is <c>null</c>.</exception>
         public SqlCommandExecutor(ConnectionStringSettings settings, int commandTimeout = 30)
         {
-            if (settings == null) throw new ArgumentNullException("settings");
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
             _dbProviderFactory = DbProviderFactories.GetFactory(settings.ProviderName);
             _connectionString = settings.ConnectionString;
             _commandTimeout = commandTimeout;
@@ -48,8 +48,8 @@ namespace Projac.Sql.Executors
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="dbProviderFactory" /> or <paramref name="connectionString" /> is <c>null</c>.</exception>
         public SqlCommandExecutor(DbProviderFactory dbProviderFactory, string connectionString, int commandTimeout = 30)
         {
-            if (dbProviderFactory == null) throw new ArgumentNullException("dbProviderFactory");
-            if (connectionString == null) throw new ArgumentNullException("connectionString");
+            if (dbProviderFactory == null) throw new ArgumentNullException(nameof(dbProviderFactory));
+            if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
             _dbProviderFactory = dbProviderFactory;
             _connectionString = connectionString;
             _commandTimeout = commandTimeout;
@@ -64,7 +64,7 @@ namespace Projac.Sql.Executors
         public void ExecuteNonQuery(SqlNonQueryCommand command)
         {
             if (command == null) 
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbConnection = _dbProviderFactory.CreateConnection())
             {
@@ -99,7 +99,7 @@ namespace Projac.Sql.Executors
         public int ExecuteNonQuery(IEnumerable<SqlNonQueryCommand> commands)
         {
             if (commands == null) 
-                throw new ArgumentNullException("commands");
+                throw new ArgumentNullException(nameof(commands));
 
             using (var dbConnection = _dbProviderFactory.CreateConnection())
             {
@@ -158,7 +158,7 @@ namespace Projac.Sql.Executors
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="commands" /> are <c>null</c>.</exception>
         public async Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
         {
-            if (commands == null) throw new ArgumentNullException("commands");
+            if (commands == null) throw new ArgumentNullException(nameof(commands));
             using (var dbConnection = _dbProviderFactory.CreateConnection())
             {
                 dbConnection.ConnectionString = _connectionString;
@@ -197,7 +197,7 @@ namespace Projac.Sql.Executors
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="command" /> is <c>null</c>.</exception>
         public DbDataReader ExecuteReader(SqlQueryCommand command)
         {
-            if (command == null) throw new ArgumentNullException("command");
+            if (command == null) throw new ArgumentNullException(nameof(command));
 
             var dbConnection = _dbProviderFactory.CreateConnection();
             dbConnection.ConnectionString = _connectionString;
@@ -231,7 +231,7 @@ namespace Projac.Sql.Executors
         public object ExecuteScalar(SqlQueryCommand command)
         {
             if (command == null)
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             var dbConnection = _dbProviderFactory.CreateConnection();
             dbConnection.ConnectionString = _connectionString;
@@ -281,7 +281,7 @@ namespace Projac.Sql.Executors
         public async Task<object> ExecuteScalarAsync(SqlQueryCommand command, CancellationToken cancellationToken)
         {
             if (command == null)
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbConnection = _dbProviderFactory.CreateConnection())
             {
@@ -331,7 +331,7 @@ namespace Projac.Sql.Executors
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="command" /> is <c>null</c>.</exception>
         public async Task<DbDataReader> ExecuteReaderAsync(SqlQueryCommand command, CancellationToken cancellationToken)
         {
-            if (command == null) throw new ArgumentNullException("command");
+            if (command == null) throw new ArgumentNullException(nameof(command));
 
             var dbConnection = _dbProviderFactory.CreateConnection();
             dbConnection.ConnectionString = _connectionString;
@@ -383,7 +383,7 @@ namespace Projac.Sql.Executors
         public async Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
         {
             if (command == null)
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbConnection = _dbProviderFactory.CreateConnection())
             {

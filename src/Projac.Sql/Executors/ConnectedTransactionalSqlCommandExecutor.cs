@@ -24,7 +24,7 @@ namespace Projac.Sql.Executors
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="dbTransaction" /> is <c>null</c>.</exception>
         public ConnectedTransactionalSqlCommandExecutor(DbTransaction dbTransaction, int commandTimeout = 30)
         {
-            if (dbTransaction == null) throw new ArgumentNullException("dbTransaction");
+            if (dbTransaction == null) throw new ArgumentNullException(nameof(dbTransaction));
             _dbTransaction = dbTransaction;
             _commandTimeout = commandTimeout;
         }
@@ -38,7 +38,7 @@ namespace Projac.Sql.Executors
         public void ExecuteNonQuery(SqlNonQueryCommand command)
         {
             if (command == null) 
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbCommand = _dbTransaction.Connection.CreateCommand())
             {
@@ -63,7 +63,7 @@ namespace Projac.Sql.Executors
         public int ExecuteNonQuery(IEnumerable<SqlNonQueryCommand> commands)
         {
             if (commands == null) 
-                throw new ArgumentNullException("commands");
+                throw new ArgumentNullException(nameof(commands));
 
             var count = 0;
             using (var dbCommand = _dbTransaction.Connection.CreateCommand())
@@ -112,7 +112,7 @@ namespace Projac.Sql.Executors
         public async Task<int> ExecuteNonQueryAsync(IEnumerable<SqlNonQueryCommand> commands, CancellationToken cancellationToken)
         {
             if (commands == null) 
-                throw new ArgumentNullException("commands");
+                throw new ArgumentNullException(nameof(commands));
 
             var count = 0;
             using (var dbCommand = _dbTransaction.Connection.CreateCommand())
@@ -161,7 +161,7 @@ namespace Projac.Sql.Executors
         public async Task ExecuteNonQueryAsync(SqlNonQueryCommand command, CancellationToken cancellationToken)
         {
             if (command == null)
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
 
             using (var dbCommand = _dbTransaction.Connection.CreateCommand())
             {

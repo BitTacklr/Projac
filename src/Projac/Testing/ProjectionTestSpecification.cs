@@ -29,9 +29,9 @@ namespace Projac.Testing
         /// </exception>
         public ProjectionTestSpecification(ProjectionHandlerResolver<TConnection> resolver, object[] messages, Func<TConnection, CancellationToken, Task<VerificationResult>> verification)
         {
-            if (resolver == null) throw new ArgumentNullException("resolver");
-            if (messages == null) throw new ArgumentNullException("messages");
-            if (verification == null) throw new ArgumentNullException("verification");
+            if (resolver == null) throw new ArgumentNullException(nameof(resolver));
+            if (messages == null) throw new ArgumentNullException(nameof(messages));
+            if (verification == null) throw new ArgumentNullException(nameof(verification));
             _resolver = resolver;
             _messages = messages;
             _verification = verification;

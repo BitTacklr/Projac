@@ -18,7 +18,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
         public SqlNonQueryCommandComposer(SqlNonQueryCommand[] commands)
         {
-            if (commands == null) throw new ArgumentNullException("commands");
+            if (commands == null) throw new ArgumentNullException(nameof(commands));
             _commands = commands;
         }
 
@@ -30,7 +30,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
         public SqlNonQueryCommandComposer Compose(params SqlNonQueryCommand[] commands)
         {
-            if (commands == null) throw new ArgumentNullException("commands");
+            if (commands == null) throw new ArgumentNullException(nameof(commands));
             return new SqlNonQueryCommandComposer(_commands.Concat(commands).ToArray());
         }
 
@@ -70,7 +70,7 @@ namespace Projac.Sql
         /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="commands" /> are <c>null</c>.</exception>
         public SqlNonQueryCommandComposer Compose(IEnumerable<SqlNonQueryCommand> commands)
         {
-            if (commands == null) throw new ArgumentNullException("commands");
+            if (commands == null) throw new ArgumentNullException(nameof(commands));
             return new SqlNonQueryCommandComposer(_commands.Concat(commands).ToArray());
         }
 

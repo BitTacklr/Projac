@@ -6,14 +6,14 @@ namespace Projac.Sql.Tests.SqlClient
 {
     public partial class SqlClientSyntaxTests
     {
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "QueryStatementCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.QueryStatementCases))]
         public void QueryStatementReturnsExpectedInstance(SqlQueryCommand actual, SqlQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "QueryStatementIfCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.QueryStatementIfCases))]
         public void QueryStatementIfReturnsExpectedInstance(IEnumerable<SqlQueryCommand> actual, SqlQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -25,7 +25,7 @@ namespace Projac.Sql.Tests.SqlClient
             }
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "QueryStatementUnlessCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.QueryStatementUnlessCases))]
         public void QueryStatementUnlessReturnsExpectedInstance(IEnumerable<SqlQueryCommand> actual, SqlQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -37,14 +37,14 @@ namespace Projac.Sql.Tests.SqlClient
             }
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "QueryStatementFormatCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.QueryStatementFormatCases))]
         public void QueryStatementFormatReturnsExpectedInstance(SqlQueryCommand actual, SqlQueryCommand expected)
         {
             Assert.That(actual.Text, Is.EqualTo(expected.Text));
             Assert.That(actual.Parameters, Is.EquivalentTo(expected.Parameters).Using(new SqlParameterEqualityComparer()));
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "QueryStatementFormatIfCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.QueryStatementFormatIfCases))]
         public void QueryStatementFormatIfReturnsExpectedInstance(IEnumerable<SqlQueryCommand> actual, SqlQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();
@@ -56,7 +56,7 @@ namespace Projac.Sql.Tests.SqlClient
             }
         }
 
-        [TestCaseSource(typeof(SqlClientSyntaxTestCases), "QueryStatementFormatUnlessCases")]
+        [TestCaseSource(typeof(SqlClientSyntaxTestCases), nameof(SqlClientSyntaxTestCases.QueryStatementFormatUnlessCases))]
         public void QueryStatementFormatUnlessReturnsExpectedInstance(IEnumerable<SqlQueryCommand> actual, SqlQueryCommand[] expected)
         {
             var actualArray = actual.ToArray();

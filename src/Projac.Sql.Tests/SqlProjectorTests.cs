@@ -36,7 +36,7 @@ namespace Projac.Sql.Tests
             Assert.Throws<ArgumentNullException>(() => sut.Project((IEnumerable<object>)null));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessageCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessageCases))]
         public void ProjectMessageCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object message,
@@ -51,7 +51,7 @@ namespace Projac.Sql.Tests
             Assert.That(mock.Commands, Is.EquivalentTo(commands));
         }
 
-        [TestCaseSource(typeof(ProjectorProjectCases), "ProjectMessagesCases")]
+        [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessagesCases))]
         public void ProjectMessagesCausesExecutorToBeCalledWithExpectedCommands(
             SqlProjectionHandlerResolver resolver,
             object[] messages,

@@ -26,12 +26,12 @@ namespace Projac.Sql
         public static SqlProjectionHandlerResolver WhenAssignableToHandlerMessageType(SqlProjectionHandler[] handlers)
         {
             if (handlers == null)
-                throw new ArgumentNullException("handlers");
+                throw new ArgumentNullException(nameof(handlers));
             var cache = new ConcurrentDictionary<Type, SqlProjectionHandler[]>();
             return message =>
             {
                 if (message == null)
-                    throw new ArgumentNullException("message");
+                    throw new ArgumentNullException(nameof(message));
                 SqlProjectionHandler[] result;
                 if (!cache.TryGetValue(message.GetType(), out result))
                 {
