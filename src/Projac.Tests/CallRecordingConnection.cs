@@ -22,14 +22,6 @@ namespace Projac.Tests
             _calls.Add(new RecordedCall(arguments));
         }
 
-        public Tuple<int, object, CancellationToken>[] ObsoleteRecordedCalls
-        {
-            get
-            {
-                return null; 
-            }
-        }
-
         public IReadOnlyCollection<RecordedCall> RecordedCalls => _calls;
     }
 }

@@ -89,12 +89,12 @@ namespace Projac.Tests
 
         [TestCaseSource(typeof(ProjectorWithMetadataProjectCases), nameof(ProjectorWithMetadataProjectCases.ProjectMessageWithoutTokenCases))]
         public async Task ProjectAsyncMessageCausesExpectedCalls(
-            ProjectionHandlerResolver<CallRecordingConnectionWithMetadata, object> resolver,
+            ProjectionHandlerResolver<CallRecordingConnection, object> resolver,
             object message,
             object metadata,
-            Tuple<int, object, object, CancellationToken>[] expectedCalls)
+            IReadOnlyCollection<RecordedCall> expectedCalls)
         {
-            var connection = new CallRecordingConnectionWithMetadata();
+            var connection = new CallRecordingConnection();
             var sut = SutFactory(resolver);
 
             await sut.ProjectAsync(connection, message, metadata);
@@ -104,13 +104,13 @@ namespace Projac.Tests
 
         [TestCaseSource(typeof(ProjectorWithMetadataProjectCases), nameof(ProjectorWithMetadataProjectCases.ProjectMessageWithTokenCases))]
         public async Task ProjectAsyncTokenMessageCausesExpectedCalls(
-            ProjectionHandlerResolver<CallRecordingConnectionWithMetadata, object> resolver,
+            ProjectionHandlerResolver<CallRecordingConnection, object> resolver,
             object message,
             object metadata,
             CancellationToken token,
-            Tuple<int, object, object, CancellationToken>[] expectedCalls)
+            IReadOnlyCollection<RecordedCall> expectedCalls)
         {
-            var connection = new CallRecordingConnectionWithMetadata();
+            var connection = new CallRecordingConnection();
             var sut = SutFactory(resolver);
 
             await sut.ProjectAsync(connection, message, metadata, token);
@@ -120,11 +120,11 @@ namespace Projac.Tests
 
         [TestCaseSource(typeof(ProjectorWithMetadataProjectCases), nameof(ProjectorWithMetadataProjectCases.ProjectMessagesWithoutTokenCases))]
         public async Task ProjectAsyncMessagesCausesExpectedCalls(
-            ProjectionHandlerResolver<CallRecordingConnectionWithMetadata, object> resolver,
+            ProjectionHandlerResolver<CallRecordingConnection, object> resolver,
             (object, object)[] messages,
-            Tuple<int, object, object, CancellationToken>[] expectedCalls)
+            IReadOnlyCollection<RecordedCall> expectedCalls)
         {
-            var connection = new CallRecordingConnectionWithMetadata();
+            var connection = new CallRecordingConnection();
             var sut = SutFactory(resolver);
 
             await sut.ProjectAsync(connection, messages);
@@ -134,12 +134,12 @@ namespace Projac.Tests
 
         [TestCaseSource(typeof(ProjectorWithMetadataProjectCases), nameof(ProjectorWithMetadataProjectCases.ProjectMessagesWithTokenCases))]
         public async Task ProjectAsyncTokenMessagesCausesExpectedCalls(
-            ProjectionHandlerResolver<CallRecordingConnectionWithMetadata, object> resolver,
+            ProjectionHandlerResolver<CallRecordingConnection, object> resolver,
             (object, object)[] messages,
             CancellationToken token,
-            Tuple<int, object, object, CancellationToken>[] expectedCalls)
+            IReadOnlyCollection<RecordedCall> expectedCalls)
         {
-            var connection = new CallRecordingConnectionWithMetadata();
+            var connection = new CallRecordingConnection();
             var sut = SutFactory(resolver);
 
             await sut.ProjectAsync(connection, messages, token);
