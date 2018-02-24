@@ -77,14 +77,14 @@ namespace Projac.Tests
         public async Task ProjectAsyncMessageCausesExpectedCalls(
             ProjectionHandlerResolver<CallRecordingConnection> resolver,
             object message,
-            Tuple<int, object, CancellationToken>[] expectedCalls)
+            IReadOnlyCollection<RecordedCall> expectedCalls)
         {
             var connection = new CallRecordingConnection();
             var sut = SutFactory(resolver);
 
             await sut.ProjectAsync(connection, message);
 
-            Assert.That(connection.ObsoleteRecordedCalls, Is.EquivalentTo(expectedCalls));
+            Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessageWithTokenCases))]
@@ -92,28 +92,28 @@ namespace Projac.Tests
             ProjectionHandlerResolver<CallRecordingConnection> resolver,
             object message,
             CancellationToken token,
-            Tuple<int, object, CancellationToken>[] expectedCalls)
+            IReadOnlyCollection<RecordedCall> expectedCalls)
         {
             var connection = new CallRecordingConnection();
             var sut = SutFactory(resolver);
 
             await sut.ProjectAsync(connection, message, token);
 
-            Assert.That(connection.ObsoleteRecordedCalls, Is.EquivalentTo(expectedCalls));
+            Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessagesWithoutTokenCases))]
         public async Task ProjectAsyncMessagesCausesExpectedCalls(
             ProjectionHandlerResolver<CallRecordingConnection> resolver,
             object[] messages,
-            Tuple<int, object, CancellationToken>[] expectedCalls)
+            IReadOnlyCollection<RecordedCall> expectedCalls)
         {
             var connection = new CallRecordingConnection();
             var sut = SutFactory(resolver);
 
             await sut.ProjectAsync(connection, messages);
 
-            Assert.That(connection.ObsoleteRecordedCalls, Is.EquivalentTo(expectedCalls));
+            Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessagesWithTokenCases))]
@@ -121,14 +121,14 @@ namespace Projac.Tests
             ProjectionHandlerResolver<CallRecordingConnection> resolver,
             object[] messages,
             CancellationToken token,
-            Tuple<int, object, CancellationToken>[] expectedCalls)
+            IReadOnlyCollection<RecordedCall> expectedCalls)
         {
             var connection = new CallRecordingConnection();
             var sut = SutFactory(resolver);
 
             await sut.ProjectAsync(connection, messages, token);
 
-            Assert.That(connection.ObsoleteRecordedCalls, Is.EquivalentTo(expectedCalls));
+            Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
         [Test]

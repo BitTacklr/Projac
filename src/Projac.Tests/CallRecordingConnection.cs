@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Projac.Tests
 {
     public class CallRecordingConnection
     {
-        private readonly List<Tuple<int, object, CancellationToken>> _obsoleteCalls;
-        private readonly List<object[]> _calls;
+        private readonly List<RecordedCall> _calls;
 
         public CallRecordingConnection()
         {
-            _obsoleteCalls = new List<Tuple<int, object, CancellationToken>>();
-            _calls = new List<object[]>();
-        }
-
-        public void RecordCall(int handler, object message, CancellationToken token)
-        {
-            _obsoleteCalls.Add(new Tuple<int, object, CancellationToken>(handler, message, token));
+            _calls = new List<RecordedCall>();
         }
 
         public void RecordCall(params object[] arguments)
@@ -25,17 +19,17 @@ namespace Projac.Tests
             if (arguments == null)
                 throw new ArgumentNullException(nameof(arguments));
 
-            _calls.Add(arguments);
+            _calls.Add(new RecordedCall(arguments));
         }
 
         public Tuple<int, object, CancellationToken>[] ObsoleteRecordedCalls
         {
             get
             {
-                return _obsoleteCalls.ToArray(); 
+                return null; 
             }
         }
 
-        public IReadOnlyCollection<object[]> RecordedCalls => _calls;
+        public IReadOnlyCollection<RecordedCall> RecordedCalls => _calls;
     }
 }

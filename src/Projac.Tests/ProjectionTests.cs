@@ -124,10 +124,10 @@ namespace Projac.Tests
                 }
                 Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new []
                 {
-                    new object[] { _message },
-                    new object[] { _message, _token },
-                    new object[] { _message }
-                }).Using(new RecordedCallEqualityComparer()));
+                    new RecordedCall(_message),
+                    new RecordedCall(_message, _token),
+                    new RecordedCall(_message)
+                }));
             }
 
             [Test]
@@ -141,10 +141,10 @@ namespace Projac.Tests
                 }
                 Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new []
                 {
-                    new object[] { _message },
-                    new object[] { _message, _token },
-                    new object[] { _message }
-                }).Using(new RecordedCallEqualityComparer()));
+                    new RecordedCall(_message),
+                    new RecordedCall(_message, _token),
+                    new RecordedCall(_message)
+                }));
             }
 
             [Test]
@@ -158,10 +158,10 @@ namespace Projac.Tests
                 }
                 Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new []
                 {
-                    new object[] { _message },
-                    new object[] { _message, _token },
-                    new object[] { _message }
-                }).Using(new RecordedCallEqualityComparer()));
+                    new RecordedCall(_message),
+                    new RecordedCall(_message, _token),
+                    new RecordedCall(_message)
+                }));
             }
 
             [Test]
@@ -175,10 +175,10 @@ namespace Projac.Tests
                 }
                 Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new []
                 {
-                    new object[] { _message },
-                    new object[] { _message, _token },
-                    new object[] { _message }
-                }).Using(new RecordedCallEqualityComparer()));
+                    new RecordedCall(_message),
+                    new RecordedCall(_message, _token),
+                    new RecordedCall(_message)
+                }));
             }
         }
 
@@ -215,7 +215,7 @@ namespace Projac.Tests
                 var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
                 Assert.That(
                     _connection.RecordedCalls, 
-                    Is.All.EqualTo(new object[] { _message, _token }).Using(new RecordedCallEqualityComparer()));
+                    Is.All.EqualTo(new RecordedCall(_message, _token)));
                 Assert.That(result, Is.EquivalentTo(new[] { task }));
             }
 
@@ -236,7 +236,7 @@ namespace Projac.Tests
 
                 Assert.That(
                     _connection.RecordedCalls, 
-                    Is.All.EqualTo(new object[] { _message, _token }).Using(new RecordedCallEqualityComparer()));
+                    Is.All.EqualTo(new RecordedCall(_message, _token)));
                 Assert.That(result, Is.EquivalentTo(tasks));
             }
 
@@ -259,7 +259,7 @@ namespace Projac.Tests
                 
                 Assert.That(
                     _connection.RecordedCalls, 
-                    Is.All.EqualTo(new object[] { _message, _token }).Using(new RecordedCallEqualityComparer()));
+                    Is.All.EqualTo(new RecordedCall(_message, _token)));
                 Assert.That(result, Is.EquivalentTo(tasks));
             }
 
@@ -330,7 +330,7 @@ namespace Projac.Tests
                 var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
                 Assert.That(
                     _connection.RecordedCalls, 
-                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
+                    Is.All.EqualTo(new RecordedCall(_message)));
                 Assert.That(result, Is.EquivalentTo(new[] { task }));
             }
 
@@ -351,7 +351,7 @@ namespace Projac.Tests
                 
                 Assert.That(
                     _connection.RecordedCalls, 
-                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
+                    Is.All.EqualTo(new RecordedCall(_message)));
                 Assert.That(result, Is.EquivalentTo(tasks));
             }
 
@@ -374,7 +374,7 @@ namespace Projac.Tests
                 
                 Assert.That(
                     _connection.RecordedCalls, 
-                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
+                    Is.All.EqualTo(new RecordedCall(_message)));
                 Assert.That(result, Is.EquivalentTo(tasks));
             }
 
@@ -447,7 +447,7 @@ namespace Projac.Tests
 
                 Assert.That(
                     _connection.RecordedCalls, 
-                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
+                    Is.All.EqualTo(new RecordedCall(_message)));
             }
 
             [Test]
@@ -467,7 +467,7 @@ namespace Projac.Tests
 
                 Assert.That(
                     _connection.RecordedCalls, 
-                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
+                    Is.All.EqualTo(new RecordedCall(_message)));
             }
 
             [Test]
@@ -489,7 +489,7 @@ namespace Projac.Tests
 
                 Assert.That(
                     _connection.RecordedCalls, 
-                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
+                    Is.All.EqualTo(new RecordedCall(_message)));
             }
 
             private static readonly Random Random = new Random();

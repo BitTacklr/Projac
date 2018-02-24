@@ -12,20 +12,20 @@ namespace Projac.Tests
         [TestFixture]
         public class AnyInstanceTests
         {
-            class Any : AnonymousProjection<object>
+            class Any : AnonymousProjection<CallRecordingConnection>
             {
-                public Any(ProjectionHandler<object>[] handlers)
+                public Any(ProjectionHandler<CallRecordingConnection>[] handlers)
                     : base(handlers)
                 {
                 }
             }
 
-            private AnonymousProjection<object> _sut;
+            private AnonymousProjection<CallRecordingConnection> _sut;
 
             [SetUp]
             public void SetUp()
             {
-                _sut = new Any(new ProjectionHandler<object>[0]);
+                _sut = new Any(new ProjectionHandler<CallRecordingConnection>[0]);
             }
 
             [Test]
@@ -38,22 +38,22 @@ namespace Projac.Tests
             [Test]
             public void IsEnumerableOfProjectionHandler()
             {
-                Assert.That(_sut, Is.AssignableTo<IEnumerable<ProjectionHandler<object>>>());
+                Assert.That(_sut, Is.AssignableTo<IEnumerable<ProjectionHandler<CallRecordingConnection>>>());
             }
         }
 
         [TestFixture]
         public class InstanceWithoutHandlersTests
         {
-            class WithoutHandlers : AnonymousProjection<object>
+            class WithoutHandlers : AnonymousProjection<CallRecordingConnection>
             {
                 public WithoutHandlers()
-                    : base(new ProjectionHandler<object>[0])
+                    : base(new ProjectionHandler<CallRecordingConnection>[0])
                 {
                 }
             }
 
-            private AnonymousProjection<object> _sut;
+            private AnonymousProjection<CallRecordingConnection> _sut;
 
             [SetUp]
             public void SetUp()
@@ -76,7 +76,7 @@ namespace Projac.Tests
             [Test]
             public void ImplicitConversionToProjectionHandlerArray()
             {
-                ProjectionHandler<object>[] result = _sut;
+                ProjectionHandler<CallRecordingConnection>[] result = _sut;
 
                 Assert.That(result, Is.Empty);
             }
@@ -84,59 +84,58 @@ namespace Projac.Tests
             [Test]
             public void ExplicitConversionToProjectionHandlerArray()
             {
-                var result = (ProjectionHandler<object>[])_sut;
+                var result = (ProjectionHandler<CallRecordingConnection>[])_sut;
 
                 Assert.That(result, Is.Empty);
             }
         }
 
-        [TestFixture]
+         [TestFixture]
         public class InstanceWithHandlersTests
         {
-            class WithHandlers : AnonymousProjection<object>
+            class WithHandlers : AnonymousProjection<CallRecordingConnection>
             {
-                public WithHandlers(ProjectionHandler<object>[] handlers)
-                    : base(handlers)
+                public WithHandlers(Task[] tasks) : base(new [] 
                 {
-                }
+                    new ProjectionHandler<CallRecordingConnection>(typeof(object), (CallRecordingConnection connection, object message, CancellationToken token) => 
+                    {
+                        connection.RecordCall(1, message, token);
+                        return tasks[0];
+                    }),
+                    new ProjectionHandler<CallRecordingConnection>(typeof(object), (CallRecordingConnection connection, object message, CancellationToken token) => 
+                    {
+                        connection.RecordCall(2, message, token);
+                        return tasks[1];
+                    })
+                }) {}
             }
 
-            private static Task TaskFactory()
-            {
-                return Task.CompletedTask;
-            }
-
-            private static ProjectionHandler<object> HandlerFactory(Task task)
-            {
-                return new ProjectionHandler<object>(typeof(object), (_, __, ___) => task);
-            }
-
-            private WithHandlers _sut;
+            private AnonymousProjection<CallRecordingConnection> _sut;
+            private CallRecordingConnection _connection;
+            private object _message;
+            private CancellationToken _token;
             private Task _task1;
             private Task _task2;
-            private Task[] _result;
 
             [SetUp]
             public void SetUp()
             {
-                _task1 = TaskFactory();
-                _task2 = TaskFactory();
-                _result = new [] {_task1, _task2};
-
-                _sut = new WithHandlers(new[]
-                {
-                    HandlerFactory(_task1),
-                    HandlerFactory(_task2),
-                });
+                _task1 = Task.FromResult<object>(new object());
+                _task2 = Task.FromResult<object>(new object());
+                _sut = new WithHandlers(new [] { _task1, _task2 });
+                _connection = new CallRecordingConnection();
+                _message = new object();
+                _token = new CancellationToken();
             }
 
             [Test]
             public void GetEnumeratorReturnsExpectedInstance()
             {
-                IEnumerable<ProjectionHandler<object>> result = _sut;
+                IEnumerable<ProjectionHandler<CallRecordingConnection>> result = _sut;
 
-                Assert.That(result.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EqualTo(_result));
+                var tasks = result.Select(_ => _.Handler(_connection, _message, _token));
+                Assert.That(_connection.RecordedCalls, Is.All.EqualTo(new RecordedCall(_message, _token)));
+                Assert.That(tasks, Is.EquivalentTo(new Task[] { _task1, _task2 }));
             }
 
             [Test]
@@ -144,26 +143,29 @@ namespace Projac.Tests
             {
                 var result = _sut.Handlers;
 
-                Assert.That(result.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EqualTo(_result));
+                var tasks = result.Select(_ => _.Handler(_connection, _message, _token));
+                Assert.That(_connection.RecordedCalls, Is.All.EqualTo(new RecordedCall(_message, _token)));
+                Assert.That(tasks, Is.EquivalentTo(new Task[] { _task1, _task2 }));
             }
 
             [Test]
             public void ImplicitConversionToProjectionHandlerArray()
             {
-                ProjectionHandler<object>[] result = _sut;
+                ProjectionHandler<CallRecordingConnection>[] result = _sut;
 
-                Assert.That(result.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EqualTo(_result));
+                var tasks = result.Select(_ => _.Handler(_connection, _message, _token));
+                Assert.That(_connection.RecordedCalls, Is.All.EqualTo(new RecordedCall(_message, _token)));
+                Assert.That(tasks, Is.EquivalentTo(new Task[] { _task1, _task2 }));
             }
 
             [Test]
             public void ExplicitConversionToProjectionHandlerArray()
             {
-                var result = (ProjectionHandler<object>[])_sut;
+                var result = (ProjectionHandler<CallRecordingConnection>[])_sut;
 
-                Assert.That(result.Select(_ => _.Handler(null, null, CancellationToken.None)),
-                    Is.EqualTo(_result));
+                var tasks = result.Select(_ => _.Handler(_connection, _message, _token));
+                Assert.That(_connection.RecordedCalls, Is.All.EqualTo(new RecordedCall(_message, _token)));
+                Assert.That(tasks, Is.EquivalentTo(new Task[] { _task1, _task2 }));
             }
         }
     }

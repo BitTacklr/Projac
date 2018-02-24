@@ -26,10 +26,10 @@ namespace Projac.Tests
                 resolver1,
                 message1,
                 token1,
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(1, message1, token1)
-                });
+                    new RecordedCall(1, message1, token1)
+                }).SetDescription("Case match");
             //Mismatch
             var token2 = new CancellationToken();
             var message2 = new object();
@@ -38,7 +38,7 @@ namespace Projac.Tests
                 resolver2,
                 message2,
                 token2,
-                new Tuple<int, object, CancellationToken>[0]);
+                Array.Empty<RecordedCall>()).SetDescription("Case mismatch");
             //Multimatch
             var token3 = new CancellationToken();
             var message3 = new object();
@@ -61,11 +61,11 @@ namespace Projac.Tests
                 resolver3,
                 message3,
                 token3,
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(3, message3, token3), 
-                    new Tuple<int, object, CancellationToken>(4, message3, token3)
-                });
+                    new RecordedCall(3, message3, token3), 
+                    new RecordedCall(4, message3, token3)
+                }).SetDescription("Case multimatch");;
         }
 
         public static IEnumerable<TestCaseData> ProjectMessageWithoutTokenCases()
@@ -84,9 +84,9 @@ namespace Projac.Tests
             yield return new TestCaseData(
                 resolver1,
                 message1,
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(1, message1, CancellationToken.None), 
+                    new RecordedCall(1, message1, CancellationToken.None), 
                 });
             //Mismatch
             var message2 = new object();
@@ -94,7 +94,7 @@ namespace Projac.Tests
             yield return new TestCaseData(
                 resolver2,
                 message2,
-                new Tuple<int, object, CancellationToken>[0]);
+                Array.Empty<RecordedCall>());
             //Multimatch
             var message3 = new object();
             var handler3 = new ProjectionHandler<CallRecordingConnection>(
@@ -115,10 +115,10 @@ namespace Projac.Tests
             yield return new TestCaseData(
                 resolver3,
                 message3,
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(3, message3, CancellationToken.None), 
-                    new Tuple<int, object, CancellationToken>(4, message3, CancellationToken.None)
+                    new RecordedCall(3, message3, CancellationToken.None), 
+                    new RecordedCall(4, message3, CancellationToken.None)
                 });
         }
 
@@ -141,7 +141,7 @@ namespace Projac.Tests
                 token1,
                 new[]
                 {
-                    new Tuple<int, object, CancellationToken>(1, "123", token1)
+                    new RecordedCall(1, "123", token1)
                 });
             //Mismatch
             var token2 = new CancellationToken();
@@ -150,7 +150,7 @@ namespace Projac.Tests
                 resolver2,
                 new object[] { new object(), 123 },
                 token2,
-                new Tuple<int, object, CancellationToken>[0]);
+                Array.Empty<RecordedCall>());
             //Multimatch
             var token3 = new CancellationToken();
             var message3 = new object();
@@ -172,14 +172,14 @@ namespace Projac.Tests
             var resolver3 = Resolve.WhenEqualToHandlerMessageType(new[] { handler3, handler4 });
             yield return new TestCaseData(
                 resolver3,
-                new object[] {message3, message4},
+                new object[] { message3, message4},
                 token3,
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(1, message3, token3),
-                    new Tuple<int, object, CancellationToken>(2, message3, token3),
-                    new Tuple<int, object, CancellationToken>(1, message4, token3),
-                    new Tuple<int, object, CancellationToken>(2, message4, token3)
+                    new RecordedCall(1, message3, token3),
+                    new RecordedCall(2, message3, token3),
+                    new RecordedCall(1, message4, token3),
+                    new RecordedCall(2, message4, token3)
                 });
             //Multitype Match
             var token4 = new CancellationToken();
@@ -202,10 +202,10 @@ namespace Projac.Tests
                 resolver4,
                 new object[] { "123", 123 },
                 token4,
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(1, "123", token4),
-                    new Tuple<int, object, CancellationToken>(2, 123, token4)
+                    new RecordedCall(1, "123", token4),
+                    new RecordedCall(2, 123, token4)
                 });
             //Match
             var token5 = new CancellationToken();
@@ -230,10 +230,10 @@ namespace Projac.Tests
                 resolver5,
                 new object[] { message5 },
                 token5,
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(1, message5, token5),
-                    new Tuple<int, object, CancellationToken>(2, message5, token5)
+                    new RecordedCall(1, message5, token5),
+                    new RecordedCall(2, message5, token5)
                 });
         }
 
@@ -252,16 +252,16 @@ namespace Projac.Tests
             yield return new TestCaseData(
                 resolver1,
                 new object[] { "123", 123 },
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(1, "123", CancellationToken.None)
+                    new RecordedCall(1, "123", CancellationToken.None)
                 });
             //Mismatch
             var resolver2 = Resolve.WhenEqualToHandlerMessageType(new ProjectionHandler<CallRecordingConnection>[0]);
             yield return new TestCaseData(
                 resolver2,
                 new object[] { new object(), 123 },
-                new Tuple<int, object, CancellationToken>[0]);
+                Array.Empty<RecordedCall>());
             //Multimatch
             var message3 = new object();
             var message4 = new object();
@@ -283,12 +283,12 @@ namespace Projac.Tests
             yield return new TestCaseData(
                 resolver3,
                 new object[] { message3, message4 },
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(1, message3, CancellationToken.None),
-                    new Tuple<int, object, CancellationToken>(2, message3, CancellationToken.None),
-                    new Tuple<int, object, CancellationToken>(1, message4, CancellationToken.None),
-                    new Tuple<int, object, CancellationToken>(2, message4, CancellationToken.None)
+                    new RecordedCall(1, message3, CancellationToken.None),
+                    new RecordedCall(2, message3, CancellationToken.None),
+                    new RecordedCall(1, message4, CancellationToken.None),
+                    new RecordedCall(2, message4, CancellationToken.None)
                 });
             //Multitype Match
             var handler5 = new ProjectionHandler<CallRecordingConnection>(
@@ -309,10 +309,10 @@ namespace Projac.Tests
             yield return new TestCaseData(
                 resolver4,
                 new object[] { "123", 123 },
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(1, "123", CancellationToken.None),
-                    new Tuple<int, object, CancellationToken>(2, 123, CancellationToken.None)
+                    new RecordedCall(1, "123", CancellationToken.None),
+                    new RecordedCall(2, 123, CancellationToken.None)
                 });
             //Match
             var message5 = new object();
@@ -335,10 +335,10 @@ namespace Projac.Tests
             yield return new TestCaseData(
                 resolver5,
                 new object[] { message5 },
-                new[]
+                new []
                 {
-                    new Tuple<int, object, CancellationToken>(1, message5, CancellationToken.None),
-                    new Tuple<int, object, CancellationToken>(2, message5, CancellationToken.None)
+                    new RecordedCall(1, message5, CancellationToken.None),
+                    new RecordedCall(2, message5, CancellationToken.None)
                 });
         }
 

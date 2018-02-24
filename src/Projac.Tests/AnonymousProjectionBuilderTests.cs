@@ -136,10 +136,9 @@ namespace Projac.Tests
                         var msg = new object();
                         var recorder = new CallRecordingConnection();
                         _.Handler(recorder, msg, CancellationToken.None).Wait();
-                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
+                        return recorder.RecordedCalls.SequenceEqual(new[]
                         {
-                            new Tuple<int, object, CancellationToken>(
-                                1, msg, CancellationToken.None)
+                            new RecordedCall(1, msg, CancellationToken.None)
                         });
                     } 
                     return false;
@@ -166,10 +165,9 @@ namespace Projac.Tests
                         var msg = new object();
                         var recorder = new CallRecordingConnection();
                         _.Handler(recorder, msg, CancellationToken.None).Wait();
-                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
+                        return recorder.RecordedCalls.SequenceEqual(new[]
                         {
-                            new Tuple<int, object, CancellationToken>(
-                                1, msg, CancellationToken.None)
+                            new RecordedCall(1, msg, CancellationToken.None)
                         });
                     }
                     return false;
@@ -198,10 +196,9 @@ namespace Projac.Tests
                         var recorder = new CallRecordingConnection();
                         var token = new CancellationToken();
                         _.Handler(recorder, msg, token).Wait();
-                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
+                        return recorder.RecordedCalls.SequenceEqual(new[]
                         {
-                            new Tuple<int, object, CancellationToken>(
-                                1, msg, token)
+                            new RecordedCall(1, msg, token)
                         });
                     }
                     return false;
@@ -237,10 +234,9 @@ namespace Projac.Tests
                         var recorder = new CallRecordingConnection();
                         var token = new CancellationToken();
                         _.Handler(recorder, msg, token).Wait();
-                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
+                        return recorder.RecordedCalls.SequenceEqual(new[]
                         {
-                            new Tuple<int, object, CancellationToken>(
-                                1, msg, token)
+                            new RecordedCall(1, msg, token)
                         });
                     }
                     return false;
@@ -275,10 +271,9 @@ namespace Projac.Tests
                         var recorder = new CallRecordingConnection();
                         var token = new CancellationToken();
                         _.Handler(recorder, msg, token).Wait();
-                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
+                        return recorder.RecordedCalls.SequenceEqual(new[]
                         {
-                            new Tuple<int, object, CancellationToken>(
-                                1, msg, token)
+                            new RecordedCall(1, msg, token)
                         });
                     }
                     return false;
@@ -313,10 +308,9 @@ namespace Projac.Tests
                         var msg = new object();
                         var recorder = new CallRecordingConnection();
                         _.Handler(recorder, msg, CancellationToken.None).Wait();
-                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
+                        return recorder.RecordedCalls.SequenceEqual(new[]
                         {
-                            new Tuple<int, object, CancellationToken>(
-                                1, msg, CancellationToken.None)
+                            new RecordedCall(1, msg, CancellationToken.None)
                         });
                     }
                     return false;
