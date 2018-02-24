@@ -5,7 +5,7 @@ using PublicApiGenerator;
 
 namespace Projac.Tests
 {
-    [TestFixture]
+    [TestFixture, Ignore("Problem with loading Mono.Cecil when run via NUnit.")]
     public class Api
     {
         [Test]

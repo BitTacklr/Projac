@@ -136,7 +136,7 @@ namespace Projac.Tests
                         var msg = new object();
                         var recorder = new CallRecordingConnection();
                         _.Handler(recorder, msg, CancellationToken.None).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
+                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
                         {
                             new Tuple<int, object, CancellationToken>(
                                 1, msg, CancellationToken.None)
@@ -166,7 +166,7 @@ namespace Projac.Tests
                         var msg = new object();
                         var recorder = new CallRecordingConnection();
                         _.Handler(recorder, msg, CancellationToken.None).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
+                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
                         {
                             new Tuple<int, object, CancellationToken>(
                                 1, msg, CancellationToken.None)
@@ -198,7 +198,7 @@ namespace Projac.Tests
                         var recorder = new CallRecordingConnection();
                         var token = new CancellationToken();
                         _.Handler(recorder, msg, token).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
+                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
                         {
                             new Tuple<int, object, CancellationToken>(
                                 1, msg, token)
@@ -237,7 +237,7 @@ namespace Projac.Tests
                         var recorder = new CallRecordingConnection();
                         var token = new CancellationToken();
                         _.Handler(recorder, msg, token).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
+                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
                         {
                             new Tuple<int, object, CancellationToken>(
                                 1, msg, token)
@@ -275,7 +275,7 @@ namespace Projac.Tests
                         var recorder = new CallRecordingConnection();
                         var token = new CancellationToken();
                         _.Handler(recorder, msg, token).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
+                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
                         {
                             new Tuple<int, object, CancellationToken>(
                                 1, msg, token)
@@ -313,7 +313,7 @@ namespace Projac.Tests
                         var msg = new object();
                         var recorder = new CallRecordingConnection();
                         _.Handler(recorder, msg, CancellationToken.None).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
+                        return recorder.ObsoleteRecordedCalls.SequenceEqual(new[]
                         {
                             new Tuple<int, object, CancellationToken>(
                                 1, msg, CancellationToken.None)

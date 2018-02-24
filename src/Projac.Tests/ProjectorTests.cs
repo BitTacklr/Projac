@@ -84,7 +84,7 @@ namespace Projac.Tests
 
             await sut.ProjectAsync(connection, message);
 
-            Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
+            Assert.That(connection.ObsoleteRecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessageWithTokenCases))]
@@ -99,7 +99,7 @@ namespace Projac.Tests
 
             await sut.ProjectAsync(connection, message, token);
 
-            Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
+            Assert.That(connection.ObsoleteRecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessagesWithoutTokenCases))]
@@ -113,7 +113,7 @@ namespace Projac.Tests
 
             await sut.ProjectAsync(connection, messages);
 
-            Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
+            Assert.That(connection.ObsoleteRecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
         [TestCaseSource(typeof(ProjectorProjectCases), nameof(ProjectorProjectCases.ProjectMessagesWithTokenCases))]
@@ -128,7 +128,7 @@ namespace Projac.Tests
 
             await sut.ProjectAsync(connection, messages, token);
 
-            Assert.That(connection.RecordedCalls, Is.EquivalentTo(expectedCalls));
+            Assert.That(connection.ObsoleteRecordedCalls, Is.EquivalentTo(expectedCalls));
         }
 
         [Test]

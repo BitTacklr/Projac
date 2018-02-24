@@ -6,24 +6,36 @@ namespace Projac.Tests
 {
     public class CallRecordingConnection
     {
-        private readonly List<Tuple<int, object, CancellationToken>> _calls;
+        private readonly List<Tuple<int, object, CancellationToken>> _obsoleteCalls;
+        private readonly List<object[]> _calls;
 
         public CallRecordingConnection()
         {
-            _calls = new List<Tuple<int, object, CancellationToken>>();
+            _obsoleteCalls = new List<Tuple<int, object, CancellationToken>>();
+            _calls = new List<object[]>();
         }
 
         public void RecordCall(int handler, object message, CancellationToken token)
         {
-            _calls.Add(new Tuple<int, object, CancellationToken>(handler, message, token));
+            _obsoleteCalls.Add(new Tuple<int, object, CancellationToken>(handler, message, token));
         }
 
-        public Tuple<int, object, CancellationToken>[] RecordedCalls
+        public void RecordCall(params object[] arguments)
+        {
+            if (arguments == null)
+                throw new ArgumentNullException(nameof(arguments));
+
+            _calls.Add(arguments);
+        }
+
+        public Tuple<int, object, CancellationToken>[] ObsoleteRecordedCalls
         {
             get
             {
-                return _calls.ToArray(); 
+                return _obsoleteCalls.ToArray(); 
             }
         }
+
+        public IReadOnlyCollection<object[]> RecordedCalls => _calls;
     }
 }

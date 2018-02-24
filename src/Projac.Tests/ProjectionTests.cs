@@ -12,11 +12,11 @@ namespace Projac.Tests
         [TestFixture]
         public class AnyInstanceTests
         {
-            class Any : Projection<object>
+            class Any : Projection<CallRecordingConnection>
             {
             }
 
-            private Projection<object> _sut;
+            private Projection<CallRecordingConnection> _sut;
 
             [SetUp]
             public void SetUp()
@@ -27,18 +27,18 @@ namespace Projac.Tests
             [Test]
             public void IsEnumerableOfProjectionHandler()
             {
-                Assert.That(_sut, Is.AssignableTo<IEnumerable<ProjectionHandler<object>>>());
+                Assert.That(_sut, Is.AssignableTo<IEnumerable<ProjectionHandler<CallRecordingConnection>>>());
             }
         }
 
         [TestFixture]
         public class InstanceWithoutHandlersTests
         {
-            class WithoutHandlers : Projection<object>
+            class WithoutHandlers : Projection<CallRecordingConnection>
             {
             }
 
-            private Projection<object> _sut;
+            private Projection<CallRecordingConnection> _sut;
 
             [SetUp]
             public void SetUp()
@@ -61,7 +61,7 @@ namespace Projac.Tests
             [Test]
             public void ImplicitConversionToProjectionHandlerArray()
             {
-                ProjectionHandler<object>[] result = _sut;
+                ProjectionHandler<CallRecordingConnection>[] result = _sut;
 
                 Assert.That(result, Is.Empty);
             }
@@ -69,7 +69,7 @@ namespace Projac.Tests
             [Test]
             public void ExplicitConversionToProjectionHandlerArray()
             {
-                var result = (ProjectionHandler<object>[])_sut;
+                var result = (ProjectionHandler<CallRecordingConnection>[])_sut;
 
                 Assert.That(result, Is.Empty);
             }
@@ -78,38 +78,29 @@ namespace Projac.Tests
         [TestFixture]
         public class InstanceWithHandlersTests
         {
-            class WithHandlers : Projection<object>
+            class WithHandlers : Projection<CallRecordingConnection>
             {
                 public WithHandlers()
                 {
-                    HandleWithoutCancellation = new MethodCallSink();
-                    HandleWithCancellation = new MethodCallSink();
-                    HandleSync = new MethodCallSink();
-                    Handle((object connection, object message) => 
+                    Handle((CallRecordingConnection connection, object message) => 
                     {
-                        HandleWithoutCancellation.Capture(connection, message);
+                        connection.RecordCall(message);
                         return Task.CompletedTask;
                     });
-                    Handle((object connection, object message, CancellationToken token) => 
+                    Handle((CallRecordingConnection connection, object message, CancellationToken token) => 
                     {
-                        HandleWithCancellation.Capture(connection, message, token);
+                        connection.RecordCall(message, token);
                         return Task.CompletedTask;
                     });
-                    Handle((object connection,object  message) =>
+                    Handle((CallRecordingConnection connection,object  message) =>
                     {
-                        HandleSync.Capture(connection, message);
+                        connection.RecordCall(message);
                     });
                 }
-
-                public MethodCallSink HandleWithoutCancellation { get; private set; }
-
-                public MethodCallSink HandleWithCancellation { get; private set; }
-
-                public MethodCallSink HandleSync { get; private set; }
             }
 
             private WithHandlers _sut;
-            private object _connection;
+            private CallRecordingConnection _connection;
             private object _message;
             private CancellationToken _token;
 
@@ -117,7 +108,7 @@ namespace Projac.Tests
             public void SetUp()
             {
                 _sut = new WithHandlers();
-                _connection = new object();
+                _connection = new CallRecordingConnection();
                 _message = new object();
                 _token = new CancellationToken();
             }
@@ -125,15 +116,18 @@ namespace Projac.Tests
             [Test]
             public void GetEnumeratorReturnsExpectedInstance()
             {
-                IEnumerable<ProjectionHandler<object>> result = _sut;
+                IEnumerable<ProjectionHandler<CallRecordingConnection>> result = _sut;
 
                 foreach (var _ in result)
                 {
                     _.Handler(_connection, _message, _token);
                 }
-                Assert.That(_sut.HandleSync.Matches(_connection, _message), Is.True);
-                Assert.That(_sut.HandleWithCancellation.Matches(_connection, _message, _token), Is.True);
-                Assert.That(_sut.HandleWithoutCancellation.Matches(_connection, _message), Is.True);
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new []
+                {
+                    new object[] { _message },
+                    new object[] { _message, _token },
+                    new object[] { _message }
+                }).Using(new RecordedCallEqualityComparer()));
             }
 
             [Test]
@@ -145,51 +139,60 @@ namespace Projac.Tests
                 {
                     _.Handler(_connection, _message, _token);
                 }
-                Assert.That(_sut.HandleSync.Matches(_connection, _message), Is.True);
-                Assert.That(_sut.HandleWithCancellation.Matches(_connection, _message, _token), Is.True);
-                Assert.That(_sut.HandleWithoutCancellation.Matches(_connection, _message), Is.True);
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new []
+                {
+                    new object[] { _message },
+                    new object[] { _message, _token },
+                    new object[] { _message }
+                }).Using(new RecordedCallEqualityComparer()));
             }
 
             [Test]
             public void ImplicitConversionToProjectionHandlerArray()
             {
-                ProjectionHandler<object>[] result = _sut;
+                ProjectionHandler<CallRecordingConnection>[] result = _sut;
 
                 foreach (var _ in result)
                 {
                     _.Handler(_connection, _message, _token);
                 }
-                Assert.That(_sut.HandleSync.Matches(_connection, _message), Is.True);
-                Assert.That(_sut.HandleWithCancellation.Matches(_connection, _message, _token), Is.True);
-                Assert.That(_sut.HandleWithoutCancellation.Matches(_connection, _message), Is.True);
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new []
+                {
+                    new object[] { _message },
+                    new object[] { _message, _token },
+                    new object[] { _message }
+                }).Using(new RecordedCallEqualityComparer()));
             }
 
             [Test]
             public void ExplicitConversionToProjectionHandlerArray()
             {
-                var result = (ProjectionHandler<object>[])_sut;
+                var result = (ProjectionHandler<CallRecordingConnection>[])_sut;
 
                 foreach (var _ in result)
                 {
                     _.Handler(_connection, _message, _token);
                 }
-                Assert.That(_sut.HandleSync.Matches(_connection, _message), Is.True);
-                Assert.That(_sut.HandleWithCancellation.Matches(_connection, _message, _token), Is.True);
-                Assert.That(_sut.HandleWithoutCancellation.Matches(_connection, _message), Is.True);
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new []
+                {
+                    new object[] { _message },
+                    new object[] { _message, _token },
+                    new object[] { _message }
+                }).Using(new RecordedCallEqualityComparer()));
             }
         }
 
         [TestFixture]
         public class HandleWithCancellationHandlerTests
         {
-            private object _connection;
+            private CallRecordingConnection _connection;
             private object _message;
             private CancellationToken _token;
 
             [SetUp]
             public void SetUp()
             {
-                _connection = new object();
+                _connection = new CallRecordingConnection();
                 _message = new object();
                 _token = new CancellationToken();
             }
@@ -205,13 +208,14 @@ namespace Projac.Tests
             public void HandleHasExpectedResult()
             {
                 var task = TaskFactory(new object());
-                var sink = new MethodCallSink();
-                var handler = HandlerFactory(sink, task);
+                var handler = HandlerFactory(task);
 
                 var sut = new RegisterHandlers(handler);
 
                 var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
-                Assert.That(sink.Matches(_connection, _message, _token), Is.True);
+                Assert.That(
+                    _connection.RecordedCalls, 
+                    Is.All.EqualTo(new object[] { _message, _token }).Using(new RecordedCallEqualityComparer()));
                 Assert.That(result, Is.EquivalentTo(new[] { task }));
             }
 
@@ -219,20 +223,20 @@ namespace Projac.Tests
             public void SuccessiveHandleHasExpectedResult()
             {
                 var tasks = new List<Task>();
-                var sinks = new List<MethodCallSink>();
-                var handlers = new List<Func<object, object, CancellationToken, Task>>();
+                var handlers = new List<Func<CallRecordingConnection, object, CancellationToken, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
                     tasks.Add(TaskFactory(new object()));
-                    sinks.Add(new MethodCallSink());
-                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1], tasks[tasks.Count - 1]));
+                    handlers.Add(HandlerFactory(tasks[tasks.Count - 1]));
                 }
 
                 var sut = new RegisterHandlers(handlers.ToArray());
 
                 var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
 
-                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message, _token)));
+                Assert.That(
+                    _connection.RecordedCalls, 
+                    Is.All.EqualTo(new object[] { _message, _token }).Using(new RecordedCallEqualityComparer()));
                 Assert.That(result, Is.EquivalentTo(tasks));
             }
 
@@ -240,13 +244,11 @@ namespace Projac.Tests
             public void SuccessiveHandleRetainsOrder()
             {
                 var tasks = new List<Task>();
-                var sinks = new List<MethodCallSink>();
-                var handlers = new List<Func<object, object, CancellationToken, Task>>();
+                var handlers = new List<Func<CallRecordingConnection, object, CancellationToken, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
                     tasks.Add(TaskFactory(new object()));
-                    sinks.Add(new MethodCallSink());
-                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1], tasks[tasks.Count - 1]));
+                    handlers.Add(HandlerFactory(tasks[tasks.Count - 1]));
                 }
                 tasks.Reverse();
                 handlers.Reverse();
@@ -255,17 +257,19 @@ namespace Projac.Tests
 
                 var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
                 
-                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message, _token)));
+                Assert.That(
+                    _connection.RecordedCalls, 
+                    Is.All.EqualTo(new object[] { _message, _token }).Using(new RecordedCallEqualityComparer()));
                 Assert.That(result, Is.EquivalentTo(tasks));
             }
 
             private static readonly Random Random = new Random();
 
-            private static Func<object, object, CancellationToken, Task> HandlerFactory(MethodCallSink sink, Task task)
+            private static Func<CallRecordingConnection, object, CancellationToken, Task> HandlerFactory(Task task)
             {
                 return (connection, message, token) => 
                 {
-                    sink.Capture(connection, message, token);
+                    connection.RecordCall(message, token);
                     return task;
                 };
             }
@@ -275,17 +279,17 @@ namespace Projac.Tests
                 return Task.FromResult<object>(result);
             }
 
-            private class RegisterNullHandler : Projection<object>
+            private class RegisterNullHandler : Projection<CallRecordingConnection>
             {
                 public RegisterNullHandler()
                 {
-                    Handle((Func<object, object, CancellationToken, Task>)null);
+                    Handle((Func<CallRecordingConnection, object, CancellationToken, Task>)null);
                 }
             }
 
-            private class RegisterHandlers : Projection<object>
+            private class RegisterHandlers : Projection<CallRecordingConnection>
             {
-                public RegisterHandlers(params Func<object, object, CancellationToken, Task>[] handlers)
+                public RegisterHandlers(params Func<CallRecordingConnection, object, CancellationToken, Task>[] handlers)
                 {
                     foreach (var handler in handlers)
                         Handle(handler);
@@ -296,14 +300,14 @@ namespace Projac.Tests
         [TestFixture]
         public class HandleWithoutCancellationHandlerTests
         {
-            private object _connection;
+            private CallRecordingConnection _connection;
             private object _message;
             private CancellationToken _token;
 
             [SetUp]
             public void SetUp()
             {
-                _connection = new object();
+                _connection = new CallRecordingConnection();
                 _message = new object();
                 _token = new CancellationToken();
             }
@@ -319,13 +323,14 @@ namespace Projac.Tests
             public void HandleHasExpectedResult()
             {
                 var task = TaskFactory(new object());
-                var sink = new MethodCallSink();
-                var handler = HandlerFactory(sink, task);
+                var handler = HandlerFactory(task);
 
                 var sut = new RegisterHandlers(handler);
 
                 var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
-                Assert.That(sink.Matches(_connection, _message), Is.True);
+                Assert.That(
+                    _connection.RecordedCalls, 
+                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
                 Assert.That(result, Is.EquivalentTo(new[] { task }));
             }
 
@@ -333,20 +338,20 @@ namespace Projac.Tests
             public void SuccessiveHandleHasExpectedResult()
             {
                 var tasks = new List<Task>();
-                var sinks = new List<MethodCallSink>();
-                var handlers = new List<Func<object, object, Task>>();
+                var handlers = new List<Func<CallRecordingConnection, object, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
                     tasks.Add(TaskFactory(new object()));
-                    sinks.Add(new MethodCallSink());
-                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1], tasks[tasks.Count - 1]));
+                    handlers.Add(HandlerFactory(tasks[tasks.Count - 1]));
                 }
 
                 var sut = new RegisterHandlers(handlers.ToArray());
 
                 var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
                 
-                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message)));
+                Assert.That(
+                    _connection.RecordedCalls, 
+                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
                 Assert.That(result, Is.EquivalentTo(tasks));
             }
 
@@ -354,13 +359,11 @@ namespace Projac.Tests
             public void SuccessiveHandleRetainsOrder()
             {
                 var tasks = new List<Task>();
-                var sinks = new List<MethodCallSink>();
-                var handlers = new List<Func<object, object, Task>>();
+                var handlers = new List<Func<CallRecordingConnection, object, Task>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
                     tasks.Add(TaskFactory(new object()));
-                    sinks.Add(new MethodCallSink());
-                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1], tasks[tasks.Count - 1]));
+                    handlers.Add(HandlerFactory(tasks[tasks.Count - 1]));
                 }
                 tasks.Reverse();
                 handlers.Reverse();
@@ -369,17 +372,19 @@ namespace Projac.Tests
 
                 var result = sut.Handlers.Select(_ => _.Handler(_connection, _message, _token)).ToArray();
                 
-                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message)));
+                Assert.That(
+                    _connection.RecordedCalls, 
+                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
                 Assert.That(result, Is.EquivalentTo(tasks));
             }
 
             private static readonly Random Random = new Random();
 
-            private static Func<object, object, Task> HandlerFactory(MethodCallSink sink, Task task)
+            private static Func<CallRecordingConnection, object, Task> HandlerFactory(Task task)
             {
                 return (connection, message) => 
                 {
-                    sink.Capture(connection, message);
+                    connection.RecordCall(message);
                     return task;
                 };
             }
@@ -389,17 +394,17 @@ namespace Projac.Tests
                 return Task.FromResult<object>(result);
             }
 
-            private class RegisterNullHandler : Projection<object>
+            private class RegisterNullHandler : Projection<CallRecordingConnection>
             {
                 public RegisterNullHandler()
                 {
-                    Handle((Func<object, object, Task>)null);
+                    Handle((Func<CallRecordingConnection, object, Task>)null);
                 }
             }
 
-            private class RegisterHandlers : Projection<object>
+            private class RegisterHandlers : Projection<CallRecordingConnection>
             {
-                public RegisterHandlers(params Func<object, object, Task>[] handlers)
+                public RegisterHandlers(params Func<CallRecordingConnection, object, Task>[] handlers)
                 {
                     foreach (var handler in handlers)
                         Handle(handler);
@@ -410,14 +415,14 @@ namespace Projac.Tests
         [TestFixture]
         public class HandleSyncHandlerTests
         {
-            private object _connection;
+            private CallRecordingConnection _connection;
             private object _message;
             private CancellationToken _token;
 
             [SetUp]
             public void SetUp()
             {
-                _connection = new object();
+                _connection = new CallRecordingConnection();
                 _message = new object();
                 _token = new CancellationToken();
             }
@@ -432,8 +437,7 @@ namespace Projac.Tests
             [Test]
             public void HandleSyncHasExpectedResult()
             {
-                var sink = new MethodCallSink();
-                var handler = HandlerFactory(sink);
+                var handler = HandlerFactory();
                 var sut = new RegisterHandlers(handler);
 
                 foreach (var _ in sut.Handlers)
@@ -441,18 +445,18 @@ namespace Projac.Tests
                     _.Handler(_connection, _message, _token);
                 }
 
-                Assert.That(sink.Matches(_connection, _message), Is.True);
+                Assert.That(
+                    _connection.RecordedCalls, 
+                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
             }
 
             [Test]
             public void SuccessiveHandleHasExpectedResult()
             {
-                var sinks = new List<MethodCallSink>();
-                var handlers = new List<Action<object, object>>();
+                var handlers = new List<Action<CallRecordingConnection, object>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    sinks.Add(new MethodCallSink());
-                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1]));
+                    handlers.Add(HandlerFactory());
                 }
                 var sut = new RegisterHandlers(handlers.ToArray());
 
@@ -461,20 +465,19 @@ namespace Projac.Tests
                     _.Handler(_connection, _message, _token);
                 }
 
-                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message)));
+                Assert.That(
+                    _connection.RecordedCalls, 
+                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
             }
 
             [Test]
             public void SuccessiveHandleRetainsOrder()
             {
-                var sinks = new List<MethodCallSink>();
-                var handlers = new List<Action<object, object>>();
+                var handlers = new List<Action<CallRecordingConnection, object>>();
                 for (var index = 0; index < Random.Next(2, 100); index++)
                 {
-                    sinks.Add(new MethodCallSink());
-                    handlers.Add(HandlerFactory(sinks[sinks.Count - 1]));
+                    handlers.Add(HandlerFactory());
                 }
-                sinks.Reverse();
                 handlers.Reverse();
 
                 var sut = new RegisterHandlers(handlers.ToArray());
@@ -484,27 +487,29 @@ namespace Projac.Tests
                     _.Handler(_connection, _message, _token);
                 }
 
-                Assert.That(sinks, Is.All.Matches<MethodCallSink>(sink => sink.Matches(_connection, _message)));
+                Assert.That(
+                    _connection.RecordedCalls, 
+                    Is.All.EqualTo(new object[] { _message }).Using(new RecordedCallEqualityComparer()));
             }
 
             private static readonly Random Random = new Random();
 
-            private static Action<object, object> HandlerFactory(MethodCallSink sink)
+            private static Action<CallRecordingConnection, object> HandlerFactory()
             {
-                return (connection, message) => { sink.Capture(connection, message); };
+                return (connection, message) => { connection.RecordCall(message); };
             }
 
-            private class RegisterNullHandler : Projection<object>
+            private class RegisterNullHandler : Projection<CallRecordingConnection>
             {
                 public RegisterNullHandler()
                 {
-                    Handle((Action<object, object>)null);
+                    Handle((Action<CallRecordingConnection, object>)null);
                 }
             }
 
-            private class RegisterHandlers : Projection<object>
+            private class RegisterHandlers : Projection<CallRecordingConnection>
             {
-                public RegisterHandlers(params Action<object, object>[] handlers)
+                public RegisterHandlers(params Action<CallRecordingConnection, object>[] handlers)
                 {
                     foreach (var handler in handlers)
                         Handle(handler);
