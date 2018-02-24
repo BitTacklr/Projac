@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,321 +7,325 @@ using NUnit.Framework;
 
 namespace Projac.Tests
 {
-    [TestFixture]
-    public class AnonymousProjectionBuilderTests
+    namespace AnonymousProjectionBuilderTests
     {
-        private AnonymousProjectionBuilder<CallRecordingConnection> _sut;
-
-        [SetUp]
-        public void SetUp()
+        [TestFixture]
+        public class InstanceWithoutHandlersTests
         {
-            _sut = new AnonymousProjectionBuilder<CallRecordingConnection>();
-        }
+            private AnonymousProjectionBuilder<CallRecordingConnection> _sut;
+            private CallRecordingConnection _connection;
+            private object _message;
+            private CancellationToken _token;
 
-        [Test]
-        public void HandlersCanNotBeNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new AnonymousProjectionBuilder<object>(null));
-        }
-
-        [Test]
-        public void HandlersAreCopiedOnConstruction()
-        {
-            var handler1 = new ProjectionHandler<object>(
-                typeof (object),
-                (_, __, ___) => TaskFactory());
-            var handler2 = new ProjectionHandler<object>(
-                typeof (object),
-                (_, __, ___) => TaskFactory());
-            var sut = new AnonymousProjectionBuilder<object>(new[]
+            [SetUp]
+            public void SetUp()
             {
-                handler1, 
-                handler2
-            });
+                _sut = new AnonymousProjectionBuilder<CallRecordingConnection>();
+                _connection = new CallRecordingConnection();
+                _message = new object();
+                _token = new CancellationToken();
+            }
 
-            var result = sut.Build();
-
-            Assert.That(result, Is.EquivalentTo(new[]
+            [Test]
+            public void BuildReturnsExpectedResult()
             {
-                handler1, handler2
-            }));
+                var result = _sut.Build();
+                Assert.That(result, Is.InstanceOf<AnonymousProjection<CallRecordingConnection>>());
+                Assert.That(result.Handlers, Is.Empty);
+            }
 
-        }
+            [Test]
+            public void HandleWithCancellationTokenHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => _sut.Handle((Func<CallRecordingConnection, object, CancellationToken, Task>)null));
+            }
 
-        [Test]
-        public void EmptyInstanceBuildReturnsExpectedResult()
-        {
-            var result = new AnonymousProjectionBuilder<object>().Build();
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public void InitialInstanceBuildReturnsExpectedResult()
-        {
-            var sut = new AnonymousProjectionBuilder<object>();
-
-            var result = sut.Build();
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public void HandleHandlerWithoutTokenCanNotBeNull()
-        {
-            var sut = new AnonymousProjectionBuilder<object>();
-            Assert.Throws<ArgumentNullException>(() => sut.Handle((Func<object, object, Task>)null));
-        }
-
-        [Test]
-        public void HandleHandlerWithTokenCanNotBeNull()
-        {
-            var sut = new AnonymousProjectionBuilder<object>();
-            Assert.Throws<ArgumentNullException>(() => sut.Handle((Func<object, object, CancellationToken, Task>)null));
-        }
-
-        [Test]
-        public void HandleSyncHandlerCanNotBeNull()
-        {
-            var sut = new AnonymousProjectionBuilder<object>();
-            Assert.Throws<ArgumentNullException>(() => sut.Handle((Action<object, object>)null));
-        }
-
-        [Test]
-        public void HandleHandlerWithoutTokenReturnsExpectedResult()
-        {
-            var sut = new AnonymousProjectionBuilder<object>();
-
-            var result = sut.Handle<object>((_, __) => TaskFactory());
-
-            Assert.That(result, Is.InstanceOf<AnonymousProjectionBuilder<object>>());
-        }
-
-        [Test]
-        public void HandleHandlerWithTokenReturnsExpectedResult()
-        {
-            var sut = new AnonymousProjectionBuilder<object>();
-
-            var result = sut.Handle<object>((_, __, ___) => TaskFactory());
-
-            Assert.That(result, Is.InstanceOf<AnonymousProjectionBuilder<object>>());
-        }
-
-        [Test]
-        public void HandleSyncHandlerReturnsExpectedResult()
-        {
-            var sut = new AnonymousProjectionBuilder<object>();
-
-            var result = sut.Handle<object>((_, __) => { });
-
-            Assert.That(result, Is.InstanceOf<AnonymousProjectionBuilder<object>>());
-        }
-
-        [Test]
-        public void HandleHandlerWithoutTokenIsPreservedUponBuild()
-        {
-            Func<CallRecordingConnection,object, Task> handler =
-                (connection, message) =>
+            [Test]
+            public void HandleWithCancellationTokenHasExpectedResult()
+            {
+                var task = Task.FromResult<object>(new object());
+                Func<CallRecordingConnection, object, CancellationToken, Task> handler = (connection, message, token) => 
                 {
-                    connection.RecordCall(1, message, CancellationToken.None);
-                    return TaskFactory();
+                    connection.RecordCall(message, token);
+                    return task;
                 };
-            
-            var result = _sut.Handle(handler).Build();
+                
+                _sut = _sut.Handle(handler);
 
-            Assert.That(
-                result.Count(_ =>
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message, _token) }));
+                Assert.That(result, Is.EquivalentTo(new [] { task }));
+            }
+
+            [Test]
+            public void HandleWithoutCancellationTokenHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => _sut.Handle((Func<CallRecordingConnection, object, Task>)null));
+            }
+
+            [Test]
+            public void HandleWithoutCancellationTokenHasExpectedResult()
+            {
+                var task = Task.FromResult<object>(new object());
+                Func<CallRecordingConnection, object, Task> handler = (connection, message) => 
                 {
-                    if (_.Message == typeof (object))
+                    connection.RecordCall(message);
+                    return task;
+                };
+                
+                _sut = _sut.Handle(handler);
+
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message) }));
+                Assert.That(result, Is.EquivalentTo(new [] { task }));
+            }
+
+            [Test]
+            public void HandleSyncHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => _sut.Handle((Action<CallRecordingConnection, object>)null));
+            }
+
+            [Test]
+            public void HandleSyncHasExpectedResult()
+            {
+                Action<CallRecordingConnection, object> handler = (connection, message) => 
+                {
+                    connection.RecordCall(message);
+                };
+                
+                _sut = _sut.Handle(handler);
+
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message) }));
+                Assert.That(result, Is.EquivalentTo(new [] { Task.CompletedTask }));
+            }
+        }
+
+        [TestFixture]
+        public class InstanceWithInjectedHandlersTests
+        {
+            private AnonymousProjectionBuilder<CallRecordingConnection> _sut;
+            private CallRecordingConnection _connection;
+            private object _message;
+            private CancellationToken _token;
+            private Task _task1;
+            private Task _task2;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _task1 = Task.FromResult<object>(new object());
+                _task2 = Task.FromResult<object>(new object());
+                _sut = new AnonymousProjectionBuilder<CallRecordingConnection>(new []
+                {
+                    new ProjectionHandler<CallRecordingConnection>(typeof(object), (connection, message, token) => 
                     {
-                        var msg = new object();
-                        var recorder = new CallRecordingConnection();
-                        _.Handler(recorder, msg, CancellationToken.None).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
-                        {
-                            new RecordedCall(1, msg, CancellationToken.None)
-                        });
-                    } 
-                    return false;
-                }),
-                Is.EqualTo(1));
-        }
-
-        [Test]
-        public void HandleSyncHandlerIsPreservedUponBuild()
-        {
-            Action<CallRecordingConnection, object> handler =
-                (connection, message) =>
-                {
-                    connection.RecordCall(1, message, CancellationToken.None);
-                };
-
-            var result = _sut.Handle(handler).Build();
-
-            Assert.That(
-                result.Count(_ =>
-                {
-                    if (_.Message == typeof(object))
+                        connection.RecordCall(message, token);
+                        return _task1;
+                    }),
+                    new ProjectionHandler<CallRecordingConnection>(typeof(object), (connection, message, token) => 
                     {
-                        var msg = new object();
-                        var recorder = new CallRecordingConnection();
-                        _.Handler(recorder, msg, CancellationToken.None).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
-                        {
-                            new RecordedCall(1, msg, CancellationToken.None)
-                        });
-                    }
-                    return false;
-                }),
-                Is.EqualTo(1));
+                        connection.RecordCall(message, token);
+                        return _task2;
+                    })
+                });
+                _connection = new CallRecordingConnection();
+                _message = new object();
+                _token = new CancellationToken();
+            }
+
+            [Test]
+            public void BuildReturnsExpectedResult()
+            {
+                var projection = _sut.Build();
+                Assert.That(projection, Is.InstanceOf<AnonymousProjection<CallRecordingConnection>>());
+
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message, _token), new RecordedCall(_message, _token) }));
+                Assert.That(result, Is.EquivalentTo(new [] { _task1, _task2 }));
+            }
+
+            [Test]
+            public void HandleWithCancellationTokenHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => _sut.Handle((Func<CallRecordingConnection, object, CancellationToken, Task>)null));
+            }
+
+            [Test]
+            public void HandleWithCancellationTokenHasExpectedResult()
+            {
+                var task = Task.FromResult<object>(new object());
+                Func<CallRecordingConnection, object, CancellationToken, Task> handler = (connection, message, token) => 
+                {
+                    connection.RecordCall(message, token);
+                    return task;
+                };
+                
+                _sut = _sut.Handle(handler);
+
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message, _token), new RecordedCall(_message, _token), new RecordedCall(_message, _token) }));
+                Assert.That(result, Is.EquivalentTo(new [] { _task1, _task2, task }));
+            }
+
+            [Test]
+            public void HandleWithoutCancellationTokenHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => _sut.Handle((Func<CallRecordingConnection, object, Task>)null));
+            }
+
+            [Test]
+            public void HandleWithoutCancellationTokenHasExpectedResult()
+            {
+                var task = Task.FromResult<object>(new object());
+                Func<CallRecordingConnection, object, Task> handler = (connection, message) => 
+                {
+                    connection.RecordCall(message);
+                    return task;
+                };
+                
+                _sut = _sut.Handle(handler);
+
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message, _token), new RecordedCall(_message, _token), new RecordedCall(_message) }));
+                Assert.That(result, Is.EquivalentTo(new [] { _task1, _task2, task }));
+            }
+
+            [Test]
+            public void HandleSyncHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => _sut.Handle((Action<CallRecordingConnection, object>)null));
+            }
+
+            [Test]
+            public void HandleSyncHasExpectedResult()
+            {
+                Action<CallRecordingConnection, object> handler = (connection, message) => 
+                {
+                    connection.RecordCall(message);
+                };
+                
+                _sut = _sut.Handle(handler);
+
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message, _token), new RecordedCall(_message, _token), new RecordedCall(_message) }));
+                Assert.That(result, Is.EquivalentTo(new [] { _task1, _task2, Task.CompletedTask }));
+            }
         }
 
-        [Test]
-        public void HandleHandlerWithTokenIsPreservedUponBuild()
+        [TestFixture]
+        public class InstanceWithHandlersTests
         {
-            Func<CallRecordingConnection, object, CancellationToken, Task> handler =
-                (connection, message, token) =>
-                {
-                    connection.RecordCall(1, message, token);
-                    return TaskFactory();
-                };
+            private AnonymousProjectionBuilder<CallRecordingConnection> _sut;
+            private CallRecordingConnection _connection;
+            private object _message;
+            private CancellationToken _token;
+            private Task _task1;
+            private Task _task2;
 
-            var result = _sut.Handle(handler).Build();
-
-            Assert.That(
-                result.Count(_ =>
-                {
-                    if (_.Message == typeof(object))
+            [SetUp]
+            public void SetUp()
+            {
+                _task1 = Task.FromResult<object>(new object());
+                _task2 = Task.FromResult<object>(new object());
+                _sut = new AnonymousProjectionBuilder<CallRecordingConnection>()
+                    .Handle<object>((connection, message) => 
                     {
-                        var msg = new object();
-                        var recorder = new CallRecordingConnection();
-                        var token = new CancellationToken();
-                        _.Handler(recorder, msg, token).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
-                        {
-                            new RecordedCall(1, msg, token)
-                        });
-                    }
-                    return false;
-                }),
-                Is.EqualTo(1));
-        }
-
-        [Test]
-        public void HandleHandlerWithTokenPreservesPreviouslyRegisteredHandlersUponBuild()
-        {
-            Func<CallRecordingConnection, object, CancellationToken, Task> handler1 =
-                (connection, message, token) =>
-                {
-                    connection.RecordCall(1, message, token);
-                    return TaskFactory();
-                };
-
-            Func<CallRecordingConnection, object, CancellationToken, Task> handler2 =
-                (connection, message, token) =>
-                {
-                    connection.RecordCall(2, message, token);
-                    return TaskFactory();
-                };
-
-            var result = _sut.Handle(handler1).Handle(handler2).Build();
-
-            Assert.That(
-                result.Count(_ =>
-                {
-                    if (_.Message == typeof(object))
+                        connection.RecordCall(message);
+                        return _task1;
+                    })
+                    .Handle<object>((connection, message, token) => 
                     {
-                        var msg = new object();
-                        var recorder = new CallRecordingConnection();
-                        var token = new CancellationToken();
-                        _.Handler(recorder, msg, token).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
-                        {
-                            new RecordedCall(1, msg, token)
-                        });
-                    }
-                    return false;
-                }),
-                Is.EqualTo(1));
-        }
+                        connection.RecordCall(message, token);
+                        return _task2;
+                    });
+                _connection = new CallRecordingConnection();
+                _message = new object();
+                _token = new CancellationToken();
+            }
 
-        [Test]
-        public void HandleSyncHandlerPreservesPreviouslyRegisteredHandlersUponBuild()
-        {
-            Func<CallRecordingConnection, object, CancellationToken, Task> handler1 =
-                (connection, message, token) =>
+            [Test]
+            public void BuildReturnsExpectedResult()
+            {
+                var projection = _sut.Build();
+                Assert.That(projection, Is.InstanceOf<AnonymousProjection<CallRecordingConnection>>());
+
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message), new RecordedCall(_message, _token) }));
+                Assert.That(result, Is.EquivalentTo(new [] { _task1, _task2 }));
+            }
+
+            [Test]
+            public void HandleWithCancellationTokenHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => _sut.Handle((Func<CallRecordingConnection, object, CancellationToken, Task>)null));
+            }
+
+            [Test]
+            public void HandleWithCancellationTokenHasExpectedResult()
+            {
+                var task = Task.FromResult<object>(new object());
+                Func<CallRecordingConnection, object, CancellationToken, Task> handler = (connection, message, token) => 
                 {
-                    connection.RecordCall(1, message, token);
-                    return TaskFactory();
+                    connection.RecordCall(message, token);
+                    return task;
                 };
+                
+                _sut = _sut.Handle(handler);
 
-            Action<CallRecordingConnection, object> handler2 =
-                (connection, message) =>
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message), new RecordedCall(_message, _token), new RecordedCall(_message, _token) }));
+                Assert.That(result, Is.EquivalentTo(new [] { _task1, _task2, task }));
+            }
+
+            [Test]
+            public void HandleWithoutCancellationTokenHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => _sut.Handle((Func<CallRecordingConnection, object, Task>)null));
+            }
+
+            [Test]
+            public void HandleWithoutCancellationTokenHasExpectedResult()
+            {
+                var task = Task.FromResult<object>(new object());
+                Func<CallRecordingConnection, object, Task> handler = (connection, message) => 
                 {
-                    connection.RecordCall(2, message, CancellationToken.None);
+                    connection.RecordCall(message);
+                    return task;
                 };
+                
+                _sut = _sut.Handle(handler);
 
-            var result = _sut.Handle(handler1).Handle(handler2).Build();
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message), new RecordedCall(_message, _token), new RecordedCall(_message) }));
+                Assert.That(result, Is.EquivalentTo(new [] { _task1, _task2, task }));
+            }
 
-            Assert.That(
-                result.Count(_ =>
+            [Test]
+            public void HandleSyncHandlerCanNotBeNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => _sut.Handle((Action<CallRecordingConnection, object>)null));
+            }
+
+            [Test]
+            public void HandleSyncHasExpectedResult()
+            {
+                Action<CallRecordingConnection, object> handler = (connection, message) => 
                 {
-                    if (_.Message == typeof(object))
-                    {
-                        var msg = new object();
-                        var recorder = new CallRecordingConnection();
-                        var token = new CancellationToken();
-                        _.Handler(recorder, msg, token).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
-                        {
-                            new RecordedCall(1, msg, token)
-                        });
-                    }
-                    return false;
-                }),
-                Is.EqualTo(1));
-        }
-
-        [Test]
-        public void HandleHandlerWithoutTokenPreservesPreviouslyRegisteredHandlersUponBuild()
-        {
-            Func<CallRecordingConnection, object, Task> handler1 =
-                (connection, message) =>
-                {
-                    connection.RecordCall(1, message, CancellationToken.None);
-                    return TaskFactory();
+                    connection.RecordCall(message);
                 };
+                
+                _sut = _sut.Handle(handler);
 
-            Func<CallRecordingConnection, object, Task> handler2 =
-                (connection, message) =>
-                {
-                    connection.RecordCall(2, message, CancellationToken.None);
-                    return TaskFactory();
-                };
-
-            var result = _sut.Handle(handler1).Handle(handler2).Build();
-
-            Assert.That(
-                result.Count(_ =>
-                {
-                    if (_.Message == typeof(object))
-                    {
-                        var msg = new object();
-                        var recorder = new CallRecordingConnection();
-                        _.Handler(recorder, msg, CancellationToken.None).Wait();
-                        return recorder.RecordedCalls.SequenceEqual(new[]
-                        {
-                            new RecordedCall(1, msg, CancellationToken.None)
-                        });
-                    }
-                    return false;
-                }),
-                Is.EqualTo(1));
-        }
-
-        private static Task TaskFactory()
-        {
-            return Task.CompletedTask;
+                var result = _sut.Build().Select(_ => _.Handler(_connection, _message, _token)).ToArray();
+                Assert.That(_connection.RecordedCalls, Is.EquivalentTo(new [] { new RecordedCall(_message), new RecordedCall(_message, _token), new RecordedCall(_message) }));
+                Assert.That(result, Is.EquivalentTo(new [] { _task1, _task2, Task.CompletedTask }));
+            }
         }
     }
 }
